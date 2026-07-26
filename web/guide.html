@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultra MAX · Setup Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080810;
+      --bg2:       #0d0d1a;
+      --card:      #12121f;
+      --border:    #1e1e36;
+      --border2:   #2a2a45;
+      --violet:    #7B2FFF;
+      --violet2:   #9B5FFF;
+      --coral:     #FF3D5A;
+      --teal:      #00D2BE;
+      --gold:      #F5C518;
+      --text:      #e8e8f0;
+      --muted:     #8888aa;
+      --faint:     #44445a;
+      --ok:        #34d399;
+      --sidebar-w: 260px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ──────────────────────────────────────────── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: rgba(8,8,16,.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 20px;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: .08em;
+      color: var(--text);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .topbar-logo span { background: linear-gradient(135deg,var(--violet),var(--coral)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .topbar-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+    .topbar-title { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .topbar-actions { margin-left: auto; display: flex; gap: 10px; }
+    .topbar-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      transition: all .18s;
+    }
+    .topbar-btn:hover { border-color: var(--violet); color: var(--text); }
+    .topbar-btn.primary {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff;
+    }
+    .topbar-btn.primary:hover { background: var(--violet2); }
+
+    /* ── Layout ───────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      padding-top: 56px;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 28px 0 40px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .nav-section {
+      margin-bottom: 28px;
+    }
+    .nav-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding: 0 20px;
+      margin-bottom: 6px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all .15s;
+      line-height: 1.3;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,.03); }
+    .nav-link.active { color: var(--violet2); border-left-color: var(--violet); background: rgba(123,47,255,.06); }
+    .nav-link .nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--faint);
+      flex-shrink: 0;
+      width: 16px;
+    }
+    .nav-link.active .nav-num { color: var(--violet2); }
+
+    /* ── Main content ─────────────────────────────────────── */
+    .content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      max-width: 860px;
+      padding: 56px 56px 100px;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .guide-hero {
+      margin-bottom: 64px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .guide-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--violet2);
+      background: rgba(123,47,255,.08);
+      border: 1px solid rgba(123,47,255,.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .guide-hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4rem);
+      letter-spacing: .04em;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .guide-hero h1 span {
+      background: linear-gradient(135deg, var(--violet), var(--coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .guide-hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+    .guide-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .guide-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .guide-meta-item strong { color: var(--text); }
+
+    /* ── Sections ─────────────────────────────────────────── */
+    .doc-section {
+      margin-bottom: 72px;
+      scroll-margin-top: 80px;
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      color: var(--faint);
+      flex-shrink: 0;
+      opacity: .4;
+      letter-spacing: .04em;
+    }
+    .section-title-wrap { flex: 1; }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: .04em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Content elements ─────────────────────────────────── */
+    .doc-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 28px 0 10px;
+    }
+    .doc-section h3:first-of-type { margin-top: 0; }
+    .doc-section p { margin-bottom: 14px; color: var(--muted); font-size: 14px; }
+    .doc-section p:last-child { margin-bottom: 0; }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 4px; margin: 20px 0; }
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color .18s;
+    }
+    .step:hover { border-color: rgba(123,47,255,.3); }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), #5b21b6);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-content { flex: 1; }
+    .step-title { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+    .step-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* Info boxes */
+    .info-box {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 16px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .info-box.tip { background: rgba(0,210,190,.06); border: 1px solid rgba(0,210,190,.2); color: #7eeee5; }
+    .info-box.note { background: rgba(123,47,255,.06); border: 1px solid rgba(123,47,255,.2); color: var(--violet2); }
+    .info-box.warn { background: rgba(245,197,24,.06); border: 1px solid rgba(245,197,24,.2); color: #f5c518; }
+    .info-box-icon { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+
+    /* Token/URL display */
+    .token-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 12px 0;
+    }
+    .token-display code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--teal);
+      flex: 1;
+      word-break: break-all;
+    }
+    .copy-hint { font-size: 10px; color: var(--faint); flex-shrink: 0; }
+
+    /* Feature cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      transition: border-color .18s;
+    }
+    .feature-card:hover { border-color: rgba(123,47,255,.3); }
+    .feature-card-icon { font-size: 1.4rem; margin-bottom: 8px; }
+    .feature-card-title { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+    .feature-card-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    .feature-card .badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .badge.optional { background: rgba(123,47,255,.12); color: var(--violet2); }
+    .badge.required { background: rgba(255,61,90,.12); color: var(--coral); }
+    .badge.new { background: rgba(0,210,190,.12); color: var(--teal); }
+
+    /* Comparison table */
+    .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    .compare-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--card);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      vertical-align: top;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(255,255,255,.02); }
+    .compare-table td:first-child { color: var(--text); font-weight: 500; }
+    .check { color: var(--ok); }
+    .cross { color: var(--faint); }
+
+    /* Troubleshoot items */
+    .trouble-item {
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .trouble-q {
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      user-select: none;
+    }
+    .trouble-q:hover { background: rgba(255,255,255,.04); }
+    .trouble-q .chev { color: var(--faint); transition: transform .2s; font-size: 11px; }
+    .trouble-item.open .trouble-q .chev { transform: rotate(180deg); }
+    .trouble-a {
+      display: none;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+    }
+    .trouble-item.open .trouble-a { display: block; }
+
+    /* Inline code */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(255,255,255,.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--violet2);
+    }
+
+    /* Platform pills */
+    .platform-pills { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+    .platform-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--border2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Install URL card */
+    .install-card {
+      background: linear-gradient(135deg, rgba(123,47,255,.08), rgba(255,61,90,.04));
+      border: 1px solid rgba(123,47,255,.22);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin: 16px 0;
+    }
+    .install-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--violet2);
+      margin-bottom: 8px;
+    }
+    .install-card-url {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--teal);
+      margin-bottom: 12px;
+      word-break: break-all;
+    }
+    .install-card p { font-size: 12px; color: var(--muted); margin: 0; }
+
+    /* Section divider */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    ul.doc-list, ol.doc-list {
+      padding-left: 20px;
+      margin: 12px 0;
+    }
+    ul.doc-list li, ol.doc-list li {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+    ul.doc-list li strong, ol.doc-list li strong { color: var(--text); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .content { margin-left: 0; padding: 32px 20px 80px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .section-num { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <a class="topbar-logo" href="/">ULTRA <span>MAX</span></a>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Setup Guide</span>
+  <div class="topbar-actions">
+    <a href="/setup.html" class="topbar-btn primary">Start Setup →</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <a href="#intro" class="nav-link active"><span class="nav-num">—</span> Introduction</a>
+      <a href="#prerequisites" class="nav-link"><span class="nav-num">—</span> Prerequisites</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Setup</div>
+      <a href="#api-keys" class="nav-link"><span class="nav-num">01</span> API Keys</a>
+      <a href="#wizard" class="nav-link"><span class="nav-num">02</span> Setup Wizard</a>
+      <a href="#install" class="nav-link"><span class="nav-num">03</span> Installing</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Features</div>
+      <a href="#optional" class="nav-link"><span class="nav-num">04</span> Optional Features</a>
+      <a href="#filters" class="nav-link"><span class="nav-num">05</span> Content Filters</a>
+      <a href="#badges" class="nav-link"><span class="nav-num">06</span> Stream Badges</a>
+      <a href="#android" class="nav-link"><span class="nav-num">07</span> Android App</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Reference</div>
+      <a href="#managing" class="nav-link"><span class="nav-num">—</span> Managing Your Setup</a>
+      <a href="#troubleshooting" class="nav-link"><span class="nav-num">—</span> Troubleshooting</a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="content">
+
+    <!-- Hero -->
+    <div class="guide-hero">
+      <div class="guide-eyebrow">Documentation</div>
+      <h1>ULTRA <span>MAX</span><br>SETUP GUIDE</h1>
+      <p>A complete reference for setting up and configuring Ultra MAX — from your first API key to a fully personalised home screen in Stremio and Nuvio.</p>
+      <div class="guide-meta">
+        <div class="guide-meta-item">📺 <strong>Stremio</strong> &amp; Nuvio compatible</div>
+        <div class="guide-meta-item">⚡ <strong>Free</strong> — no account required</div>
+        <div class="guide-meta-item">🕐 <strong>~10 minutes</strong> to complete</div>
+      </div>
+    </div>
+
+    <!-- Introduction -->
+    <section class="doc-section" id="intro">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-title">What is Ultra MAX?</div>
+          <div class="section-desc">Understanding what you're installing and how it works</div>
+        </div>
+      </div>
+
+      <p>Ultra MAX is a free, self-hosted catalog addon for Stremio and Nuvio. It provides a fully personalised home screen with over 240 catalog rows — covering trending content, streaming providers, genres, studios, decades, actor filmographies, director collections, MDBList curated lists, and more.</p>
+
+      <p>Everything runs on Ultra MAX's own servers. You do not need to host anything yourself — simply complete the setup wizard, copy your personal addon URL, and install it into Stremio or Nuvio. Your configuration is tied to a personal token that only you have access to.</p>
+
+      <div class="info-box note">
+        <span class="info-box-icon">ℹ</span>
+        <span>Ultra MAX is not a streaming source. It organises and presents content metadata from TMDB and MDBList. You still need your own streaming addons (such as a debrid service) to actually watch content.</span>
+      </div>
+
+      <h3>How it works</h3>
+      <p>When you complete the setup wizard, Ultra MAX generates a personalised manifest URL. This URL tells Stremio or Nuvio which catalog rows to show on your home screen and in what order. The manifest updates automatically when you make changes to your setup — you do not need to reinstall after every change.</p>
+    </section>
+
+    <!-- Prerequisites -->
+    <section class="doc-section" id="prerequisites">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-title">Prerequisites</div>
+          <div class="section-desc">What you need before you begin</div>
+        </div>
+      </div>
+
+      <h3>Required</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Stremio or Nuvio installed</div>
+            <div class="step-body">Ultra MAX works with both Stremio (stremio.com) and Nuvio (nuvio.tv). You need at least one of these installed on your device before you can install the addon. Nuvio users get additional features including native collections support and one-click profile push.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">A free MDBList account and API key</div>
+            <div class="step-body">MDBList powers the majority of Ultra MAX's curated catalog rows — trending lists, top-rated charts, and genre collections. Registration is free at mdblist.com. Your API key is found under Settings → API.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">A TMDB API Read Access Token</div>
+            <div class="step-body">TMDB provides all poster images, metadata, actor filmographies, and studio catalogs. Create a free account at themoviedb.org, then go to Settings → API and copy the long <strong>API Read Access Token</strong> (starts with <code>eyJ</code>). Do not use the short API key — it will not work.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Optional but recommended</h3>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="badge optional">Optional</div>
+          <div class="feature-card-title">Trakt account</div>
+          <div class="feature-card-body">Enables personal rows (watchlist, favourites, collection), hide watched titles, and AI recommendations based on your viewing history.</div>
+        </div>
+        <div class="feature-card">
+          <div class="badge optional">Optional</div>
+          <div class="feature-card-title">Simkl account</div>
+          <div class="feature-card-body">Alternative to Trakt. Syncs your Simkl plan-to-watch list and feeds AI recommendation rows.</div>
+        </div>
+        <div class="feature-card">
+          <div class="badge optional">Optional</div>
+          <div class="feature-card-title">RPDB API key</div>
+          <div class="feature-card-body">Enables rated poster overlays — posters with IMDb, TMDB, or AniList rating badges displayed on top. Free tier available at ratingposterdb.com.</div>
+        </div>
+        <div class="feature-card">
+          <div class="badge optional">Optional</div>
+          <div class="feature-card-title">Google Gemini API key</div>
+          <div class="feature-card-body">Powers the AI recommendation rows. Analyses your Trakt or Simkl history to generate two personalised rows — one for movies, one for series. Free tier available.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- API Keys -->
+    <section class="doc-section" id="api-keys">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Obtaining Your API Keys</div>
+          <div class="section-desc">Step-by-step instructions for MDBList and TMDB</div>
+        </div>
+      </div>
+
+      <h3>MDBList API Key</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Create a free account</div>
+            <div class="step-body">Go to <strong>mdblist.com</strong> and register. The free tier is sufficient — you do not need a paid subscription for Ultra MAX.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Find your API key</div>
+            <div class="step-body">Once logged in, click your profile icon → <strong>Settings</strong> → scroll to the <strong>API</strong> section. Copy the key shown there.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Verify in the setup wizard</div>
+            <div class="step-body">Paste the key into the MDBList field in Step 1 of the wizard and click <strong>Check</strong>. Your MDBList username should appear if the key is valid.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>TMDB API Read Access Token</h3>
+      <div class="info-box warn">
+        <span class="info-box-icon">⚠</span>
+        <span>TMDB provides two credentials on the same page — a short <strong>API Key</strong> and a long <strong>API Read Access Token</strong>. Ultra MAX requires the <strong>Read Access Token</strong> (the long one starting with <code>eyJ</code>). Using the short API key will cause verification to fail.</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Create a free TMDB account</div>
+            <div class="step-body">Go to <strong>themoviedb.org</strong> and register. Account creation is free.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Request API access</div>
+            <div class="step-body">Navigate to <strong>Settings → API</strong> from your profile menu. If you have not already requested API access, you will need to do so — select <strong>Developer</strong> and fill in the brief form. Approval is usually instant.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Copy the Read Access Token</div>
+            <div class="step-body">On the API settings page, find the <strong>API Read Access Token</strong> field (the long one, not the short API Key above it). Copy the entire token.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Setup Wizard -->
+    <section class="doc-section" id="wizard">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title-wrap">
+          <div class="section-title">The Setup Wizard</div>
+          <div class="section-desc">A walkthrough of all four steps</div>
+        </div>
+      </div>
+
+      <p>The setup wizard at <strong>ultramax.vip/setup</strong> guides you through four steps. You can return at any time to edit your setup using your personal token.</p>
+
+      <h3>Step 1 — Setup</h3>
+      <p>Step 1 covers the essentials: your API keys, optional integrations, content filters, and language preferences.</p>
+      <ul class="doc-list">
+        <li><strong>Password</strong> — set a password to protect your setup. Keep a note of this — you will need it to load your setup in future.</li>
+        <li><strong>MDBList API key</strong> — required. Enter and verify before continuing.</li>
+        <li><strong>TMDB API Read Access Token</strong> — required. Enter the long token starting with <code>eyJ</code>.</li>
+        <li><strong>Trakt / Simkl</strong> — optional. Click the respective connect button to link your account via OAuth. This never shares your password with Ultra MAX.</li>
+        <li><strong>Poster Providers</strong> — optional. Enter an RPDB key for rated poster overlays.</li>
+        <li><strong>AI Recommendations</strong> — optional. Select a provider (Google Gemini recommended) and enter an API key to enable personalised AI rows.</li>
+        <li><strong>Language</strong> — sets the metadata language for all catalogs. Does not affect content availability, only how titles and descriptions are displayed.</li>
+      </ul>
+
+      <h3>Step 2 — Home Rows</h3>
+      <p>Step 2 is where you choose which catalog rows appear on your home screen. Rows are grouped by category — streaming providers, genres, studios, decades, networks, and more.</p>
+      <ul class="doc-list">
+        <li>Use the <strong>preset buttons</strong> at the top to start with a sensible default selection, then customise from there.</li>
+        <li>Rows can be <strong>reordered</strong> by dragging them within the interface.</li>
+        <li>Toggle rows on or off individually using the eye icon on each row.</li>
+        <li>The live preview panel on the right shows an approximation of how your home screen will look in Nuvio.</li>
+        <li>Aim for 20–50 rows for good performance. Very large selections (100+) may result in slower catalog loading.</li>
+      </ul>
+
+      <div class="info-box tip">
+        <span class="info-box-icon">💡</span>
+        <span>Actor and director rows are available in the <strong>People</strong> section. Each adds a filmography row to your home screen showing that person's movies or series.</span>
+      </div>
+
+      <h3>Step 3 — Collections</h3>
+      <p>Collections are Nuvio-native folder structures that group your home rows into categories — for example a "Streaming" folder containing Netflix, Prime, and Disney+, or a "Decades" folder with rows for each decade.</p>
+      <ul class="doc-list">
+        <li>Use the <strong>preset collections</strong> to start with a curated structure.</li>
+        <li>Collections can be renamed, reordered, and customised.</li>
+        <li>This step is Nuvio-specific. Stremio users can skip it — all rows are installed flat.</li>
+        <li>The <strong>Community Gallery</strong> at ultramax.vip/gallery contains collections shared by other users that you can download and import.</li>
+      </ul>
+
+      <h3>Step 4 — Finalize</h3>
+      <p>Step 4 generates your final configuration and provides two things you need to install Ultra MAX:</p>
+      <ul class="doc-list">
+        <li><strong>Addon URL</strong> — your personal manifest URL. Install this into Stremio or Nuvio to add all your selected home rows.</li>
+        <li><strong>Nuvio Collections JSON</strong> — a separate file for Nuvio users that sets up your folder structure. Download and import it in Nuvio → Collections.</li>
+      </ul>
+
+      <div class="info-box note">
+        <span class="info-box-icon">ℹ</span>
+        <span>Your token is displayed in Step 4. Save it somewhere safe — it is the key to loading your existing setup in future. If you lose it and registered an email address, you can recover it at ultramax.vip/recover.</span>
+      </div>
+    </section>
+
+    <!-- Installing -->
+    <section class="doc-section" id="install">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Installing Ultra MAX</div>
+          <div class="section-desc">Adding the addon to Stremio or Nuvio</div>
+        </div>
+      </div>
+
+      <h3>Stremio</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Copy your addon URL from Step 4</div>
+            <div class="step-body">The URL follows the format shown below. It is unique to your configuration.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Open Stremio → Addons → Community addons</div>
+            <div class="step-body">Paste your URL into the search field at the top of the addons page and press enter.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Click Install</div>
+            <div class="step-body">Ultra MAX will appear as an installed addon. Your home screen rows will appear immediately.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="install-card">
+        <div class="install-card-label">Your addon URL format</div>
+        <div class="install-card-url">https://ultramax.vip/c/YOUR_TOKEN/manifest.json</div>
+        <p>Replace <code>YOUR_TOKEN</code> with the token shown in Step 4 of the wizard.</p>
+      </div>
+
+      <h3>Nuvio</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Install the addon URL</div>
+            <div class="step-body">In Nuvio, go to <strong>Settings → Streams → Addon URLs</strong>. Paste your Ultra MAX addon URL and tap Import.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Import your Collections JSON (recommended)</div>
+            <div class="step-body">Download the Nuvio Collections JSON from Step 4 of the wizard. In Nuvio, go to <strong>Collections → Import</strong> and select the downloaded file. This sets up your folder structure.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Or use one-click push (optional)</div>
+            <div class="step-body">If you link your Nuvio account in Step 4, you can push your entire setup directly to a Nuvio profile in one click — no manual file import needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Re-installing after changes</h3>
+      <p>Your addon URL does not change when you update your setup. Changes to your selected rows take effect automatically within a few minutes. You only need to re-install if you are adding Ultra MAX to a new device.</p>
+
+      <p>If you update your collections in Step 3, you will need to re-import the Nuvio Collections JSON file to update the folder structure in Nuvio.</p>
+    </section>
+
+    <!-- Optional Features -->
+    <section class="doc-section" id="optional">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Optional Features</div>
+          <div class="section-desc">Integrations that enhance your experience</div>
+        </div>
+      </div>
+
+      <h3>Trakt Integration</h3>
+      <p>Connecting Trakt unlocks several additional features:</p>
+      <ul class="doc-list">
+        <li><strong>Personal rows</strong> — your Trakt watchlist, favourites, and collection appear as catalog rows.</li>
+        <li><strong>Hide watched titles</strong> — movies and series you have watched are automatically filtered from all catalog rows.</li>
+        <li><strong>AI recommendations</strong> — your viewing history is used to generate personalised movie and series recommendation rows.</li>
+      </ul>
+      <p>Connect Trakt in Step 1 of the wizard by clicking <strong>Connect Trakt</strong>. You will be redirected to Trakt to authorise the connection — your Trakt password is never shared with Ultra MAX.</p>
+
+      <h3>Simkl Integration</h3>
+      <p>Simkl provides similar functionality to Trakt. Connect it in Step 1 via <strong>Connect Simkl</strong>. You can use both Trakt and Simkl simultaneously — Ultra MAX will merge data from both sources.</p>
+
+      <h3>BetterPosters</h3>
+      <p>BetterPosters overlays rating badges on poster images, showing scores from IMDb, TMDB, AniList, and other sources. Configure it in the Poster Providers section of Step 1. Select your preferred rating source and style.</p>
+
+      <h3>AI Recommendation Rows</h3>
+      <p>When enabled, Ultra MAX generates two additional rows — <strong>AI Movies for You</strong> and <strong>AI Series for You</strong> — based on your Trakt or Simkl watch history. Requires a Gemini API key (free tier available at aistudio.google.com).</p>
+
+      <div class="info-box tip">
+        <span class="info-box-icon">💡</span>
+        <span>AI rows are regenerated periodically. If the recommendations look stale, load your setup and save it again to trigger a refresh.</span>
+      </div>
+    </section>
+
+    <!-- Content Filters -->
+    <section class="doc-section" id="filters">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Content Filters</div>
+          <div class="section-desc">Controlling what appears in your catalogs</div>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-card-icon">🚫</div>
+          <div class="feature-card-title">Hide Unreleased Titles</div>
+          <div class="feature-card-body">Removes titles that have not yet been released. Applies across all catalog rows, search, and actor filmographies. Recommended for most users.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🎬</div>
+          <div class="feature-card-title">Digital Release Only</div>
+          <div class="feature-card-body">Only shows movies once a confirmed digital, physical, or TV release date has passed on TMDB. A good signal that a quality stream exists. Does not affect series.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">👁</div>
+          <div class="feature-card-title">Hide Watched Titles</div>
+          <div class="feature-card-body">Requires Trakt or Simkl. Filters out content you have already watched from all catalog rows. Movies are hidden if any watched entry exists; series only if fully completed.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🌍</div>
+          <div class="feature-card-title">Language &amp; Country Filters</div>
+          <div class="feature-card-body">Restrict catalog rows by origin country or exclude specific languages. Useful for filtering out K-dramas, anime, or other regional content you do not want to see.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stream Badges -->
+    <section class="doc-section" id="badges">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Stream Badges</div>
+          <div class="section-desc">Customising stream information display in Nuvio</div>
+        </div>
+      </div>
+
+      <p>Stream badges are small visual indicators that appear next to each stream in Nuvio's stream list, showing information such as resolution, codec, audio format, and streaming source. Ultra MAX hosts a collection of community badge packs and a visual builder to create your own.</p>
+
+      <h3>Using an existing badge pack</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Browse packs at ultramax.vip/badges</div>
+            <div class="step-body">The badges page lists all available packs with live previews. Find one you like and click <strong>Copy URL</strong>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Add it to Nuvio</div>
+            <div class="step-body">In Nuvio, go to <strong>Settings → Streams → Fusion Badge URLs</strong> (TV) or <strong>Settings → Streams → Badge URLs</strong> (Mobile). Paste the URL and tap Import. You can add up to three badge packs simultaneously.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Building a custom badge pack</h3>
+      <p>The Badge Builder at <strong>ultramax.vip/badge-builder</strong> allows you to mix and match badges from multiple packs, toggle individual badges on or off, reorder them, edit colors and patterns, and download a custom JSON pack to host yourself.</p>
+
+      <div class="platform-pills">
+        <div class="platform-pill">📱 Nuvio Mobile</div>
+        <div class="platform-pill">📺 Nuvio TV</div>
+      </div>
+      <p style="margin-top:8px;">Stream badges are a Nuvio-exclusive feature. They do not appear in Stremio.</p>
+    </section>
+
+    <!-- Android App -->
+    <section class="doc-section" id="android">
+      <div class="section-header">
+        <div class="section-num">07</div>
+        <div class="section-title-wrap">
+          <div class="section-title">Android App</div>
+          <div class="section-desc">The dedicated Ultra MAX companion app</div>
+        </div>
+      </div>
+
+      <p>The Ultra MAX Android app provides a native mobile and Android TV interface for accessing the setup wizard, managing your configuration, linking accounts, and checking for updates. It is separate from the addon itself — you do not need the app to use Ultra MAX, but it provides a more convenient experience on Android devices.</p>
+
+      <h3>Downloading the app</h3>
+      <div class="install-card">
+        <div class="install-card-label">Download</div>
+        <div class="install-card-url">ultramax.vip/downloads</div>
+        <p>Direct APK download. Enable "Install from unknown sources" in your Android settings if prompted.</p>
+      </div>
+
+      <h3>App features</h3>
+      <ul class="doc-list">
+        <li><strong>Setup wizard access</strong> — full access to all four setup steps within the app.</li>
+        <li><strong>OAuth deep linking</strong> — Trakt and Simkl OAuth flows open within the app and return you automatically after authentication.</li>
+        <li><strong>In-app update checker</strong> — the app notifies you when a new version is available and provides a direct download link.</li>
+        <li><strong>Android TV support</strong> — the app is compatible with Android TV and Fire Stick devices with D-pad navigation support.</li>
+      </ul>
+
+      <div class="info-box tip">
+        <span class="info-box-icon">💡</span>
+        <span>On Android TV, navigate to the app using your remote. D-pad navigation is fully supported throughout the setup wizard and all main sections.</span>
+      </div>
+    </section>
+
+    <!-- Managing Your Setup -->
+    <section class="doc-section" id="managing">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-title">Managing Your Setup</div>
+          <div class="section-desc">Tokens, passwords, and loading existing configurations</div>
+        </div>
+      </div>
+
+      <h3>Your token</h3>
+      <p>Your token is an 8-character code that identifies your configuration. It is displayed in Step 4 of the wizard and forms part of your addon URL. Keep it somewhere safe.</p>
+
+      <div class="token-display">
+        <code>ultramax.vip/setup?token=YOURTOKEN</code>
+        <span class="copy-hint">Load existing setup</span>
+      </div>
+
+      <h3>Loading an existing setup</h3>
+      <p>To edit your setup at any time, go to <strong>ultramax.vip/setup</strong> and click <strong>Load Existing Setup</strong>. Enter your token and password. Your previous configuration will be loaded and you can make changes.</p>
+
+      <h3>Passwords</h3>
+      <p>A password is set in Step 1 to protect your configuration. If you forget your password:</p>
+      <ul class="doc-list">
+        <li>On the token login screen, click <strong>Forgot password?</strong> to access the inline reset form.</li>
+        <li>Enter a new password and confirm it. The reset takes effect immediately.</li>
+        <li>If you have also lost your token, go to <strong>ultramax.vip/recover</strong> and enter your registered email address to have your token sent to you.</li>
+      </ul>
+
+      <h3>Registering an email address</h3>
+      <p>In Step 4 of the wizard, you can optionally register an email address against your token. This is used solely for token recovery — it is never used for marketing or shared with third parties.</p>
+
+      <h3>Multiple profiles</h3>
+      <p>Ultra MAX supports device profiles — separate configurations within the same token, each with its own addon URL. This allows you to maintain different home screen setups for different devices (for example, a 4K TV setup and a mobile setup) without managing multiple tokens.</p>
+      <p>Profiles are created in Step 4 under <strong>Device Profiles</strong>.</p>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section class="doc-section" id="troubleshooting">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <div class="section-title">Troubleshooting</div>
+          <div class="section-desc">Common issues and how to resolve them</div>
+        </div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">My catalog rows are showing but empty <span class="chev">▼</span></div>
+        <div class="trouble-a">Empty rows are most often caused by an invalid MDBList or TMDB key. Go back to Step 1 and verify both keys are accepted. Also check your content filters — Hide Unreleased Titles and Digital Release Only can reduce results significantly for newer content.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">My TMDB key fails verification <span class="chev">▼</span></div>
+        <div class="trouble-a">The most common cause is pasting the short TMDB API Key instead of the long API Read Access Token. The correct token starts with <code>eyJ</code> and is several hundred characters long. On the TMDB API settings page, look for the field labelled "API Read Access Token (v4 auth)".</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">Token not found when trying to load my setup <span class="chev">▼</span></div>
+        <div class="trouble-a">Check you are entering the token exactly as shown — tokens are 8 characters and case-sensitive. If you have lost your token entirely, use the recovery page at ultramax.vip/recover to have it sent to your registered email address. If you did not register an email, contact support via the subreddit.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">Trakt or Simkl connection shows as failed <span class="chev">▼</span></div>
+        <div class="trouble-a">Trakt and Simkl tokens expire after a period of inactivity. Go to Step 1, disconnect the integration, and reconnect it. This generates a fresh token. If the issue persists, check that you have not revoked Ultra MAX's access in your Trakt or Simkl account settings.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">Collections show "Addon not found: com.ultramax" in Nuvio <span class="chev">▼</span></div>
+        <div class="trouble-a">This means the Ultra MAX addon is not installed in the Nuvio profile where you imported the collection. Install your addon URL in Nuvio first (Settings → Streams → Addon URLs), then import the collection. Both must be in the same profile.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">Home screen rows are not updating after I made changes <span class="chev">▼</span></div>
+        <div class="trouble-a">Changes to your setup take effect within a few minutes as the manifest cache refreshes. If rows still appear incorrect after 5 minutes, force a refresh in Stremio by going to your addon settings and tapping the refresh button. In Nuvio, a full app restart usually resolves the issue.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">The AI rows show generic recommendations, not personalised ones <span class="chev">▼</span></div>
+        <div class="trouble-a">AI rows require a connected Trakt or Simkl account with meaningful watch history. Accounts with fewer than 20 watched titles may receive generic recommendations. Additionally, ensure your Gemini API key is valid and that the AI Recommendations toggle is enabled in Step 1.</div>
+      </div>
+
+      <div class="trouble-item" onclick="this.classList.toggle('open')">
+        <div class="trouble-q">Posters are not showing rating overlays <span class="chev">▼</span></div>
+        <div class="trouble-a">Rated poster overlays require a valid RPDB key entered in Step 1 under Poster Providers. Verify the key is correctly entered. Free-tier RPDB keys have a daily request limit — if overlays disappear mid-session you may have reached it. Also check that BetterPosters is enabled and the correct rating source is selected.</div>
+      </div>
+
+      <div style="margin-top:24px;" class="info-box tip">
+        <span class="info-box-icon">💬</span>
+        <span>Still stuck? The Ultra MAX community on Reddit at <strong>r/Ultra_Max</strong> is active and can help with most issues. When asking for help, include your token (it is safe to share) so the issue can be investigated directly.</span>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('.doc-section[id]');
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

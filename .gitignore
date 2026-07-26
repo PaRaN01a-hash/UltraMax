@@ -1,0 +1,24 @@
+# Secrets
+.env
+
+# Persisted runtime data — docker-compose.yml uses a named volume for the
+# actual running container's /data, so nothing here ever gets written to
+# by the app itself. These seed files are kept tracked so a fresh clone
+# has valid starting state; everything else under data/ stays ignored in
+# case you ever switch to a bind mount instead.
+data/*
+!data/.gitkeep
+!data/configs.json
+!data/shares.json
+
+# Dependencies
+node_modules/
+
+# Backup/scratch files
+*.bak
+*.bak.*
+*.backup-*
+
+# Logs
+logs/
+*.log

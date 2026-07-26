@@ -1,0 +1,21 @@
+services:
+  ultramax:
+    build: .
+    container_name: ultramax
+    restart: unless-stopped
+    ports:
+      - "${PORT:-7000}:7000"
+    env_file:
+      - .env
+    environment:
+      # Always 7000/​/data inside the container, regardless of what PORT/
+      # DATA_DIR are set to on the host side in .env (those control the
+      # host port mapping and host-side data path respectively).
+      - PORT=7000
+      - DATA_DIR=/data
+    volumes:
+      - ultramax_data:/data
+      - ./web:/app/web:ro
+
+volumes:
+  ultramax_data:
