@@ -332,6 +332,34 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       });
     }
 
+    // Require password if one is set — this endpoint returns sensitive data
+    // including API keys, debrid credentials and stream addon URLs.
+    if (baseConfig.passwordHash) {
+      const provided = req.headers["x-config-password"] || req.query.password || "";
+      if (!provided) {
+        return res.status(401).json({ error: "Password required" });
+      }
+      const crypto = require("crypto");
+      // Support both bcrypt (starts with $2) and legacy SHA-256
+      let valid = false;
+      if (baseConfig.passwordHash.startsWith("$2")) {
+        try {
+          const bcrypt = require("bcryptjs");
+          valid = bcrypt.compareSync(provided, baseConfig.passwordHash);
+        } catch(e) {
+          // bcryptjs not installed — fall back to SHA-256
+          const sha = crypto.createHash("sha256").update(provided).digest("hex");
+          valid = sha === baseConfig.passwordHash;
+        }
+      } else {
+        const sha = crypto.createHash("sha256").update(provided).digest("hex");
+        valid = sha === baseConfig.passwordHash;
+      }
+      if (!valid) {
+        return res.status(401).json({ error: "Incorrect password" });
+      }
+    }
+
     // ?profile=<id> returns this token's base settings with that profile's
     // overrides layered on top — lets the setup wizard "switch profile" by
     // loading a profile's full settings back into the form.
