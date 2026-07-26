@@ -53,6 +53,7 @@ const { registerStatsRoutes } = require("./services/stats-route-service");
 const { verifyHandler } = require("./key-verify");
 const { registerScrobbleRoute } = require("./services/scrobble-service");
 const { registerCacheWarmRoute } = require("./services/cache-warm-service");
+const { registerNuvioProxyRoutes } = require("./services/nuvio-proxy-service");
 
 if (!TMDB_KEY) { console.error("TMDB_KEY missing - exiting"); process.exit(1); }
 
@@ -1434,6 +1435,7 @@ registerCacheWarmRoute(app, {
   MDBLIST_KEY
 });
 registerAuthRoutes(app, { loadConfigs, saveConfigs });
+registerNuvioProxyRoutes(app);
 registerCollectionsAddon(app, { TMDB_KEY, fetchCached, resultsToMetas, filterByMaxRating, buildTmdbCatalogUrl, geminiAiRecommendations, tmdbResolveAiItems, handleSearch, handleQuickPicks, handleRelatedContent, handleTraktCatalog, handleCatalogSearch, mdblistToMetas });
 
 // Token recovery routes
