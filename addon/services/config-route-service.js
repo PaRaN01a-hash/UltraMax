@@ -332,28 +332,26 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       });
     }
 
-    // Require password if one is set — this endpoint returns sensitive data
-    // including API keys, debrid credentials and stream addon URLs.
+    // Require password — this endpoint returns sensitive data including
+    // API keys, debrid credentials and stream addon URLs.
+    // Only x-config-password header accepted (not query string — avoids logs/history).
     if (baseConfig.passwordHash) {
-      const provided = req.headers["x-config-password"] || req.query.password || "";
+      const provided = req.headers["x-config-password"] || "";
       if (!provided) {
         return res.status(401).json({ error: "Password required" });
       }
-      const crypto = require("crypto");
-      // Support both bcrypt (starts with $2) and legacy SHA-256
       let valid = false;
       if (baseConfig.passwordHash.startsWith("$2")) {
         try {
           const bcrypt = require("bcryptjs");
           valid = bcrypt.compareSync(provided, baseConfig.passwordHash);
         } catch(e) {
-          // bcryptjs not installed — fall back to SHA-256
-          const sha = crypto.createHash("sha256").update(provided).digest("hex");
-          valid = sha === baseConfig.passwordHash;
+          console.error("[auth] bcrypt verification unavailable:", e.message);
+          return res.status(500).json({ error: "Password verification unavailable" });
         }
       } else {
-        const sha = crypto.createHash("sha256").update(provided).digest("hex");
-        valid = sha === baseConfig.passwordHash;
+        // Legacy SHA-256 with salt — matches existing hashPassword() in utils/auth.js
+        valid = hashPassword(provided) === baseConfig.passwordHash;
       }
       if (!valid) {
         return res.status(401).json({ error: "Incorrect password" });
