@@ -6,11 +6,40 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     loadConfigs,
     saveConfigs,
     hashPassword,
+    verifyPassword,
     generateToken,
-    rateLimit
+    rateLimit,
+    checkAndRecord,
+    clearKey
   } = deps;
 
   const MAX_PROFILES_PER_TOKEN = 8;
+
+  // Verifies `provided` against configs[token]'s stored hash. On success
+  // against a legacy SHA-256 hash, transparently rehashes with bcrypt so
+  // the config migrates off the weaker scheme on next successful auth.
+  function verifyStoredPassword(configs, token, provided) {
+    const config = configs[token];
+    if (!config || !verifyPassword(provided, config.passwordHash)) return false;
+
+    if (config.passwordHash.startsWith("$2") === false) {
+      config.passwordHash = hashPassword(provided);
+      saveConfigs(configs);
+    }
+
+    return true;
+  }
+
+  // Password-attempt rate limiting, keyed per token (not per IP — a shared
+  // token can be attempted from many IPs). Returns a 429 and short-circuits
+  // the route if the key is currently limited.
+  function passwordRateLimited(req, res, token) {
+    if (!checkAndRecord(token)) {
+      res.status(429).json({ error: "Too many password attempts. Try again later." });
+      return true;
+    }
+    return false;
+  }
 
   app.post("/c/create", (req, res) => {
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
@@ -55,7 +84,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes720,
       debridRes480,
       debridMaxSizeGb,
-      streamFormat
+      streamFormat,
+      tmdbKey
     } = req.body;
 
     if (!password || !catalogs || !catalogs.length) {
@@ -119,7 +149,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       hiddenCatalogs: Array.isArray(hiddenCatalogs)
         ? hiddenCatalogs
         : [],
+      catalogOrder: Array.isArray(catalogOrder) ? catalogOrder.filter(Boolean) : [],
       streamFormat: sanitizeStreamFormat(streamFormat),
+      tmdbKey: tmdbKey || null,
       createdAt: new Date().toISOString()
     };
 
@@ -168,7 +200,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes720,
       debridRes480,
       debridMaxSizeGb,
-      streamFormat
+      streamFormat,
+      tmdbKey
     } = req.body;
 
     const configs = loadConfigs();
@@ -181,10 +214,14 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
 
     // For preauth configs (OAuth before setup), allow setting password
     const isPreauth = configs[token].preauth === true;
-    if (!isPreauth && configs[token].passwordHash !== hashPassword(password)) {
-      return res.status(401).json({
-        error: "Incorrect password"
-      });
+    if (!isPreauth) {
+      if (passwordRateLimited(req, res, token)) return;
+      if (!verifyStoredPassword(configs, token, password)) {
+        return res.status(401).json({
+          error: "Incorrect password"
+        });
+      }
+      clearKey(token);
     }
     if(isPreauth) {
       configs[token].preauth = false;
@@ -198,6 +235,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     configs[token].fanartKey = fanartKey || configs[token].fanartKey || null;
     configs[token].omdbKey = omdbKey || configs[token].omdbKey || null;
     configs[token].mdblistKey = mdblistKey || configs[token].mdblistKey || null;
+    configs[token].tmdbKey = tmdbKey || configs[token].tmdbKey || null;
     configs[token].traktUser =
       traktUser !== undefined
         ? traktUser
@@ -340,22 +378,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       if (!provided) {
         return res.status(401).json({ error: "Password required" });
       }
-      let valid = false;
-      if (baseConfig.passwordHash.startsWith("$2")) {
-        try {
-          const bcrypt = require("bcryptjs");
-          valid = bcrypt.compareSync(provided, baseConfig.passwordHash);
-        } catch(e) {
-          console.error("[auth] bcrypt verification unavailable:", e.message);
-          return res.status(500).json({ error: "Password verification unavailable" });
-        }
-      } else {
-        // Legacy SHA-256 with salt — matches existing hashPassword() in utils/auth.js
-        valid = hashPassword(provided) === baseConfig.passwordHash;
-      }
-      if (!valid) {
+      if (passwordRateLimited(req, res, token)) return;
+      if (!verifyStoredPassword(configs, token, provided)) {
         return res.status(401).json({ error: "Incorrect password" });
       }
+      clearKey(token);
     }
 
     // ?profile=<id> returns this token's base settings with that profile's
@@ -368,6 +395,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       catalogOrder: config.catalogOrder || [],
       collections: config.collections || [],
       mdblistKey: config.mdblistKey,
+      tmdbKey: config.tmdbKey || null,
       language: config.language,
       rpdbKey: config.rpdbKey,
       tpKey: config.tpKey,
@@ -424,9 +452,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const config = configs[token];
 
     if (!config) return res.status(404).json({ error: "Not found" });
-    if (config.passwordHash !== hashPassword(password)) {
+    if (passwordRateLimited(req, res, token)) return;
+    if (!verifyStoredPassword(configs, token, password)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
+    clearKey(token);
 
     const cleanName = String(name || "").trim().slice(0, 40);
     if (!cleanName) {
@@ -487,9 +517,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const config = configs[token];
 
     if (!config) return res.status(404).json({ error: "Not found" });
-    if (config.passwordHash !== hashPassword(password)) {
+    if (passwordRateLimited(req, res, token)) return;
+    if (!verifyStoredPassword(configs, token, password)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
+    clearKey(token);
     if (!config.profiles || !config.profiles[profileId]) {
       return res.status(404).json({ error: "Profile not found" });
     }
@@ -527,9 +559,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const config = configs[token];
 
     if (!config) return res.status(404).json({ error: "Not found" });
-    if (config.passwordHash !== hashPassword(password)) {
+    if (passwordRateLimited(req, res, token)) return;
+    if (!verifyStoredPassword(configs, token, password)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
+    clearKey(token);
     if (!config.profiles || !config.profiles[profileId]) {
       return res.status(404).json({ error: "Profile not found" });
     }
@@ -700,8 +734,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const { password } = req.body;
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).json({ error: "Not found" });
-    const hash = hashPassword(password);
-    if (configs[token].passwordHash === hash) {
+    if (passwordRateLimited(req, res, token)) return;
+    if (verifyStoredPassword(configs, token, password)) {
+      clearKey(token);
       return res.json({ ok: true });
     }
     return res.status(401).json({ error: "Incorrect password" });

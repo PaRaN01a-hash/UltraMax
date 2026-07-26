@@ -11,8 +11,9 @@ const { CATALOG_DEFS } = require("./catalogs/catalog-defs");
 const { QUICK_PICK_CATALOGS } = require("./catalogs/quick-picks");
 const { DYNAMIC_CATALOGS } = require("./catalogs/dynamic-catalogs");
 const { loadConfigs, saveConfigs } = require("./utils/config-store");
-const { hashPassword, generateToken } = require("./utils/auth");
+const { hashPassword, verifyPassword, generateToken } = require("./utils/auth");
 const { rateLimit } = require("./utils/rate-limit");
+const { checkAndRecord, clearKey } = require("./utils/rate-limit-store");
 const { fetchCached, fetchTrakt } = require("./services/api-helpers");
 const { streamBridgeResponse } = require("./services/stream-bridge");
 const { resolveConfigForProfile } = require("./utils/profiles");
@@ -164,8 +165,11 @@ registerConfigRoutes(app, {
   loadConfigs,
   saveConfigs,
   hashPassword,
+  verifyPassword,
   generateToken,
-  rateLimit
+  rateLimit,
+  checkAndRecord,
+  clearKey
 });
 
 registerStatsRoutes(app, {
