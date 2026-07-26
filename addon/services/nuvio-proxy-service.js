@@ -17,6 +17,7 @@ function buildUpstreamHeaders(req) {
 
 async function forward(req, res, method, upstreamPath, rawQuery) {
   const url = `${NUVIO_API_BASE}${upstreamPath}${rawQuery || ""}`;
+  const startedAt = Date.now();
   try {
     const response = await axios({
       method,
@@ -27,10 +28,12 @@ async function forward(req, res, method, upstreamPath, rawQuery) {
       responseType: "text",
       timeout: 15000
     });
+    console.log(`[nuvio-proxy] ${method} ${req.path} -> ${response.status} (${Date.now() - startedAt}ms)`);
     res.status(response.status)
       .set("Content-Type", response.headers["content-type"] || "application/json")
       .send(response.data);
   } catch (err) {
+    console.log(`[nuvio-proxy] ${method} ${req.path} -> ERROR (${Date.now() - startedAt}ms): ${err.message || err}`);
     res.status(502).json({ error: "Failed to reach Nuvio API", details: err.message || String(err) });
   }
 }
