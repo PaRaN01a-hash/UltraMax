@@ -10583,10 +10583,10 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="field-block" style="margin-top:16px">
                 <div class="field-label"><img src="https://myanimelist.net/favicon.ico" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;">MyAnimeList <span class="badge badge-optional" data-i18n="setup.badge.optional">Optional</span></div>
                 <div id="malConnectStatus" style="margin-bottom:10px;padding:10px;border-radius:8px;background:var(--bg2,#1a1a2e);border:1px solid var(--border2);font-size:13px;">
-                  <span id="malStatusText" data-i18n="setup.optional.mal.notConnected">Not connected</span>
+                  <span id="malStatusText">Not available on this server yet</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-                  <button type="button" id="malConnectBtn" onclick="connectMal()" style="padding:8px 16px;border-radius:8px;background:#2e51a2;border:none;color:white;font-weight:600;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;"><img src="https://myanimelist.net/favicon.ico" style="width:16px;height:16px;"><span data-i18n="setup.optional.mal.connectBtn">Connect with MyAnimeList</span></button>
+                  <button type="button" id="malConnectBtn" onclick="connectMal()" style="display:none;padding:8px 16px;border-radius:8px;background:#2e51a2;border:none;color:white;font-weight:600;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;"><img src="https://myanimelist.net/favicon.ico" style="width:16px;height:16px;"><span data-i18n="setup.optional.mal.connectBtn">Connect with MyAnimeList</span></button>
                   <button type="button" id="malDisconnectBtn" onclick="disconnectMal()" style="display:none;padding:8px 16px;border-radius:8px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);cursor:pointer;font-size:13px;" data-i18n="setup.optional.mal.disconnectBtn">Disconnect</button>
                 </div>
                 <input type="hidden" id="malUser" />
@@ -10596,10 +10596,10 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="field-block" style="margin-top:16px">
                 <div class="field-label"><img src="https://anilist.co/favicon.ico" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;">AniList <span class="badge badge-optional" data-i18n="setup.badge.optional">Optional</span></div>
                 <div id="anilistConnectStatus" style="margin-bottom:10px;padding:10px;border-radius:8px;background:var(--bg2,#1a1a2e);border:1px solid var(--border2);font-size:13px;">
-                  <span id="anilistStatusText" data-i18n="setup.optional.anilist.notConnected">Not connected</span>
+                  <span id="anilistStatusText">Not available on this server yet</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-                  <button type="button" id="anilistConnectBtn" onclick="connectAnilist()" style="padding:8px 16px;border-radius:8px;background:#2e51a2;border:none;color:white;font-weight:600;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;"><img src="https://anilist.co/favicon.ico" style="width:16px;height:16px;"><span data-i18n="setup.optional.anilist.connectBtn">Connect with AniList</span></button>
+                  <button type="button" id="anilistConnectBtn" onclick="connectAnilist()" style="display:none;padding:8px 16px;border-radius:8px;background:#2e51a2;border:none;color:white;font-weight:600;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;"><img src="https://anilist.co/favicon.ico" style="width:16px;height:16px;"><span data-i18n="setup.optional.anilist.connectBtn">Connect with AniList</span></button>
                   <button type="button" id="anilistDisconnectBtn" onclick="disconnectAnilist()" style="display:none;padding:8px 16px;border-radius:8px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);cursor:pointer;font-size:13px;" data-i18n="setup.optional.anilist.disconnectBtn">Disconnect</button>
                 </div>
                 <input type="hidden" id="anilistUser" />
@@ -11962,8 +11962,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div class="wizard-step" id="step-4">
         <div class="section-title" data-i18n="setup.step4.title">&#128640; Finalize</div>
-        <div style="margin-bottom:16px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
           <button class="nav-btn" onclick="setStep(3)" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:8px 16px;border-radius:10px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .18s;" onmouseover="this.style.borderColor='var(--violet)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">← Back to Collections</button>
+          <button class="nav-btn" type="button" onclick="setStep(1)">↤ Back to Step 1</button>
         </div>
 
           <div class="result-section" style="margin-bottom:16px;border-color:var(--border2);background:var(--card);">
@@ -13262,7 +13263,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 const BASE_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
-const API_BASE = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
+const API_BASE = window.location.origin;
 const DISPLAY_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
   const MAX_COLLECTION_FOLDERS = 8;
 let selected = new Set();
@@ -14029,16 +14030,21 @@ function s2ToggleHidden(cb){
   } else {
     hidden.delete(id);
   }
+  saveHiddenState();
   s2UpdatePillHiddenState(id);
 }
 
 function s2UpdatePillHiddenState(id){
-  var pill = document.getElementById('s2pill-' + id) || document.getElementById('s2rawpill-' + id);
-  if(!pill) return;
   var isHidden = hidden.has(id);
-  pill.classList.toggle('s2-hidden', isHidden);
-  var cb = pill.querySelector('[data-hid]');
-  if(cb) cb.checked = isHidden;
+  [
+    document.getElementById('s2pill-' + id),
+    document.getElementById('s2rawpill-' + id)
+  ].forEach(function(pill){
+    if(!pill) return;
+    pill.classList.toggle('s2-hidden', isHidden);
+    var cb = pill.querySelector('[data-hid]');
+    if(cb) cb.checked = isHidden;
+  });
 }
 
 var s2ReorderSortable = null;
@@ -16963,7 +16969,6 @@ function clearAllGlobal(silent){
     const eye = p.querySelector('.pill-eye');
     if(eye) eye.style.display = 'none';
 
-    hidden.delete(p.dataset.id);
     p.style.fontStyle = '';
   });
   selected.clear();
@@ -16972,6 +16977,7 @@ function clearAllGlobal(silent){
 }
 
 function refreshHomeRowUi(){
+  if(typeof saveHiddenState === 'function') saveHiddenState();
   if(typeof updateCounters === 'function') updateCounters();
   if(typeof updateCategoryCounts === 'function') updateCategoryCounts();
   if(typeof updateCounter === 'function') updateCounter();
@@ -17040,13 +17046,17 @@ function selectAll(groupId){
     if(allSelected){
       p.classList.remove('selected');
       selected.delete(p.dataset.id);
-      hidden.delete(p.dataset.id);
       p.style.fontStyle = '';
       if(eye) eye.style.display = 'none';
     } else {
       p.classList.add('selected');
       selected.add(p.dataset.id);
-      if(eye) eye.style.display = 'inline';
+      if(eye){
+        eye.style.display = 'inline';
+        eye.textContent = hidden.has(p.dataset.id) ? '🙈' : '👁';
+        eye.style.opacity = hidden.has(p.dataset.id) ? '1' : '0.9';
+      }
+      p.style.fontStyle = hidden.has(p.dataset.id) ? 'italic' : '';
     }
   });
   const btn = document.querySelector('[onclick="selectAll(\''+groupId+'\')"]');
@@ -17514,7 +17524,9 @@ async function verifyTokenPassword(){
   
   try {
     // Verify password by attempting to load config
-    var res = await fetch(API_BASE + '/c/' + _pendingToken + '/config');
+    var res = await fetch(API_BASE + '/c/' + _pendingToken + '/config', {
+      headers: { 'x-config-password': pass }
+    });
     if(!res.ok){ errEl.textContent = 'Token not found'; btn.textContent = 'Load My Setup →'; btn.disabled = false; return; }
     var data = await res.json();
     
@@ -17526,6 +17538,8 @@ async function verifyTokenPassword(){
     });
     
     if(checkRes.ok){
+      // Password good — store for authenticated config requests
+      _configPassword = pass;
       // Password good — close modal, autofill password, load config
       var modal = document.getElementById('tokenPasswordModal');
       if(modal) modal.style.display = 'none';
@@ -17572,7 +17586,9 @@ async function loadConfigByToken(token, profileId){
     // Loading a specific token means we don't want a stale local draft to clobber it later
     try{ sessionStorage.removeItem('um_form_state'); }catch(e){}
     const profileQS = profileId ? ('?profile=' + encodeURIComponent(profileId)) : '';
-    const res = await fetch(API_BASE+'/c/'+token+'/config'+profileQS);
+    const res = await fetch(API_BASE+'/c/'+token+'/config'+profileQS, {
+      headers: { 'x-config-password': _configPassword || '' }
+    });
     if(!res.ok) return;
       const raw = await res.text();
       let data = {};
@@ -17753,6 +17769,7 @@ async function loadConfigByToken(token, profileId){
         }
       }
     });
+    saveHiddenState();
 
     updateCounter();
     updateCategoryCounts();
@@ -18135,6 +18152,7 @@ function applyImportedSelections(selectedCatalogs, hiddenCatalogs){
       }
     }
   });
+  saveHiddenState();
 }
 
 function normalizeImportedCollections(collections){
@@ -18692,7 +18710,8 @@ function restoreDraftState(){
     updateCategoryCounts();
     renderCollections();
 
-    setStep(Number(data.currentStep) || 1);
+    // Restore the saved values, but every setup-page entry starts on Step 1.
+    setStep(1);
 
     if(typeof showBanner === 'function'){
       showBanner('💾 Draft restored from this browser.', 'success');
@@ -19598,13 +19617,17 @@ function selectAllParent(groupId, e){
     if(allSelected){
       p.classList.remove('selected');
       selected.delete(p.dataset.id);
-      hidden.delete(p.dataset.id);
       p.style.fontStyle = '';
       if(eye) eye.style.display = 'none';
     } else {
       p.classList.add('selected');
       selected.add(p.dataset.id);
-      if(eye) eye.style.display = 'inline';
+      if(eye){
+        eye.style.display = 'inline';
+        eye.textContent = hidden.has(p.dataset.id) ? '🙈' : '👁';
+        eye.style.opacity = hidden.has(p.dataset.id) ? '1' : '0.9';
+      }
+      p.style.fontStyle = hidden.has(p.dataset.id) ? 'italic' : '';
     }
   });
   const btn = document.querySelector('[onclick="selectAllParent(\''+groupId+'\', event)"]');
@@ -19781,17 +19804,18 @@ function restoreFormState(){
     }
 
     if(state.hidden) {
-      hidden = new Set(state.hidden);
+      hidden.clear();
+      state.hidden.forEach(function(id){ hidden.add(id); });
+      saveHiddenState();
     }
 
     if(typeof updateCounter === 'function') updateCounter();
     if(typeof updateCategoryCounts === 'function') updateCategoryCounts();
     if(typeof renderCollections === 'function') renderCollections();
-    if(typeof restoreHiddenState === 'function') restoreHiddenState();
-
-    if(state.currentStep && typeof setStep === 'function'){
+    if(typeof setStep === 'function'){
       setTimeout(function(){
-        setStep(Number(state.currentStep) || 1);
+        // OAuth restores account/form state without restoring the old screen.
+        setStep(1);
       }, 100);
     }
 
@@ -20190,7 +20214,10 @@ function restoreHiddenState(){
     const saved = sessionStorage.getItem('um_hidden');
     if(saved){
       const ids = JSON.parse(saved);
-      ids.forEach(function(id){ hidden.add(id); });
+      hidden.clear();
+      if(Array.isArray(ids)){
+        ids.forEach(function(id){ hidden.add(id); });
+      }
     }
   }catch(e){}
 }
@@ -20216,6 +20243,8 @@ document.querySelectorAll('.pill').forEach(function(pill){
       eye.style.opacity = '1';
       pill.style.fontStyle = 'italic';
     }
+    saveHiddenState();
+    if(typeof saveDraftState === 'function') saveDraftState();
   });
   pill.appendChild(eye);
   
@@ -20226,9 +20255,9 @@ document.querySelectorAll('.pill').forEach(function(pill){
       eye.style.display = 'inline';
       eye.textContent = hidden.has(pill.dataset.id) ? '🙈' : '👁';
       eye.style.opacity = hidden.has(pill.dataset.id) ? '1' : '0.9';
+      pill.style.fontStyle = hidden.has(pill.dataset.id) ? 'italic' : '';
     } else {
       selected.delete(pill.dataset.id);
-      hidden.delete(pill.dataset.id);
       eye.style.display = 'none';
       pill.style.fontStyle = '';
     }
@@ -23106,7 +23135,8 @@ window.openShareGallery = function(type){
             var raw = sessionStorage.getItem('um_import_setup');
             if(raw) applySetup(JSON.parse(raw));
           }
-          if(typeof setStep === 'function') setStep(type === 'setup' ? 2 : 3);
+          // Import the saved data without skipping the setup entry screen.
+          if(typeof setStep === 'function') setStep(1);
         }catch(e){ console.error('Import error:', e); }
         sessionStorage.removeItem('um_import_collections');
         sessionStorage.removeItem('um_import_setup');
@@ -24728,7 +24758,8 @@ body.um-app-mode #themeToggle {
 
 
 <style>
-  #umBackToTop {
+  #umBackToTop,
+  #umGoToBottom {
     position: fixed;
     left: 18px;
     bottom: 18px;
@@ -24761,6 +24792,11 @@ body.um-app-mode #themeToggle {
       background 0.18s ease;
   }
 
+  #umGoToBottom {
+    right: 18px;
+    left: auto;
+  }
+
   #umBackToTop.visible {
     opacity: 1;
     visibility: visible;
@@ -24768,8 +24804,17 @@ body.um-app-mode #themeToggle {
     transform: translateY(0);
   }
 
+  #umGoToBottom.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
   #umBackToTop:hover,
-  #umBackToTop:focus-visible {
+  #umBackToTop:focus-visible,
+  #umGoToBottom:hover,
+  #umGoToBottom:focus-visible {
     background: rgba(123, 47, 255, 0.24);
     border-color: rgba(155, 95, 255, 0.9);
     outline: 3px solid rgba(155, 95, 255, 0.28);
@@ -24788,8 +24833,21 @@ body.um-app-mode #themeToggle {
     line-height: 1;
   }
 
+  #umGoToBottom .um-top-arrow {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7b2fff, #ff3d5a);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+  }
+
   @media (max-width: 600px) {
-    #umBackToTop {
+    #umBackToTop,
+    #umGoToBottom {
       left: 12px;
       bottom: 12px;
       min-width: 56px;
@@ -24799,6 +24857,15 @@ body.um-app-mode #themeToggle {
 
     #umBackToTop .um-top-label {
       display: none;
+    }
+
+    #umGoToBottom .um-top-label {
+      display: none;
+    }
+
+    #umGoToBottom {
+      right: 12px;
+      left: auto;
     }
   }
 
@@ -24811,8 +24878,19 @@ body.um-app-mode #themeToggle {
     z-index: 10020;
   }
 
+  html.um-app-mode #umGoToBottom,
+  body.um-app-mode #umGoToBottom,
+  html.native-app #umGoToBottom,
+  body.native-app #umGoToBottom {
+    right: 18px;
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+    left: auto;
+    z-index: 10020;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    #umBackToTop {
+    #umBackToTop,
+    #umGoToBottom {
       transition: none;
     }
   }
@@ -24828,27 +24906,51 @@ body.um-app-mode #themeToggle {
   <span class="um-top-label">Back to top</span>
 </button>
 
+<button
+  id="umGoToBottom"
+  type="button"
+  aria-label="Go to bottom"
+  title="Go to bottom"
+>
+  <span class="um-top-arrow" aria-hidden="true">↓</span>
+  <span class="um-top-label">Go to bottom</span>
+</button>
+
 <script>
 (function () {
-  var button = document.getElementById('umBackToTop');
+  var topButton = document.getElementById('umBackToTop');
+  var bottomButton = document.getElementById('umGoToBottom');
 
-  if (!button) return;
+  if (!topButton || !bottomButton) return;
 
   var visibleAfter = 600;
   var ticking = false;
 
   function updateBackToTopVisibility() {
-    var shouldShow =
+    var shouldShowTop =
       window.scrollY > visibleAfter;
+    var remaining =
+      document.documentElement.scrollHeight -
+      window.innerHeight -
+      window.scrollY;
+    var shouldShowBottom = remaining > visibleAfter;
 
-    button.classList.toggle('visible', shouldShow);
-    button.setAttribute(
+    topButton.classList.toggle('visible', shouldShowTop);
+    topButton.setAttribute(
       'aria-hidden',
-      shouldShow ? 'false' : 'true'
+      shouldShowTop ? 'false' : 'true'
+    );
+    bottomButton.classList.toggle('visible', shouldShowBottom);
+    bottomButton.setAttribute(
+      'aria-hidden',
+      shouldShowBottom ? 'false' : 'true'
     );
 
-    if (!shouldShow && document.activeElement === button) {
-      button.blur();
+    if (!shouldShowTop && document.activeElement === topButton) {
+      topButton.blur();
+    }
+    if (!shouldShowBottom && document.activeElement === bottomButton) {
+      bottomButton.blur();
     }
 
     ticking = false;
@@ -24878,18 +24980,36 @@ body.um-app-mode #themeToggle {
     });
   }
 
-  button.addEventListener('click', returnToTop);
+  function goToBottom() {
+    var reduceMotion =
+      window.matchMedia &&
+      window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
 
-  button.addEventListener('keydown', function (event) {
-    if (
-      event.key === 'Enter' ||
-      event.key === ' ' ||
-      event.key === 'Select'
-    ) {
-      event.preventDefault();
-      returnToTop();
-    }
-  });
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      left: 0,
+      behavior: reduceMotion ? 'auto' : 'smooth'
+    });
+  }
+
+  function bindScrollButton(button, action) {
+    button.addEventListener('click', action);
+    button.addEventListener('keydown', function (event) {
+      if (
+        event.key === 'Enter' ||
+        event.key === ' ' ||
+        event.key === 'Select'
+      ) {
+        event.preventDefault();
+        action();
+      }
+    });
+  }
+
+  bindScrollButton(topButton, returnToTop);
+  bindScrollButton(bottomButton, goToBottom);
 
   window.addEventListener(
     'scroll',
@@ -25671,191 +25791,18 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 </script>
 
-</body>
-
-
-<style>
-@media (min-width:901px){
-  .s2-desktop-preview-btn{
-    display:inline-flex !important;
-  }
-}
-</style>
-
-<style id="ultramax-kids-mode-responsive">
-@media (max-width: 1050px) {
-  .um-mode-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 620px) {
-  .um-mode-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
-
-<style id="ultramax-kids-mode-banner-style">
-#ultramaxKidsModeBanner {
-  display: none;
-  margin-bottom: 18px;
-  padding: 14px 16px;
-  border: 1px solid rgba(245,158,11,.45);
-  border-radius: 14px;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(245,158,11,.12),
-      rgba(52,211,153,.07)
-    );
-  color: var(--text);
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-body.um-kids-mode #ultramaxKidsModeBanner {
-  display: block;
-}
-</style>
-
-<script id="ultramax-kids-mode-banner-script">
-(function () {
-  var advanced =
-    document.getElementById(
-      'advancedBuilderContainer'
-    );
-
-  if (
-    !advanced ||
-    document.getElementById(
-      'ultramaxKidsModeBanner'
-    )
-  ) {
-    return;
-  }
-
-  var banner =
-    document.createElement('div');
-
-  banner.id =
-    'ultramaxKidsModeBanner';
-
-  banner.innerHTML =
-    '<strong>🧸 Kids Setup active</strong><br>' +
-    'Safe catalogs are preselected, adult content is locked off, ' +
-    'and the default maximum age rating is PG.';
-
-  advanced.insertBefore(
-    banner,
-    advanced.firstChild
-  );
-})();
-</script>
-
-<style id="ultramax-folder-row-layout-fix">
-#step-3 .folder-row-entry {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 8px;
-
-  margin-bottom: 6px;
-  padding: 7px 10px;
-
-  background: #1a1a35;
-  border: 1px solid #2a2a45;
-  border-radius: 6px;
-}
-
-#step-3 .folder-row-label {
-  display: block !important;
-  flex: 1 1 auto !important;
-
-  width: auto !important;
-  min-width: 0 !important;
-
-  color: #e8e8f0 !important;
-  font-size: 13px !important;
-  line-height: 1.3 !important;
-
-  opacity: 1 !important;
-  visibility: visible !important;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#step-3 .folder-row-entry > .folder-row-remove {
-  display: inline-flex !important;
-  flex: 0 0 36px !important;
-
-  width: 36px !important;
-  min-width: 36px !important;
-  max-width: 36px !important;
-
-  height: 36px !important;
-  min-height: 36px !important;
-  max-height: 36px !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  font-size: 16px !important;
-  line-height: 1 !important;
-}
-</style>
 
 <script>
-function toggleModalForgotPassword(){
-  var box = document.getElementById('modalForgotBox');
-  if(!box) return;
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
-  document.getElementById('modalNewPassword').value = '';
-  document.getElementById('modalConfirmPassword').value = '';
-  document.getElementById('modalResetMsg').textContent = '';
-}
-
-async function resetPasswordFromModal(){
-  var token = _pendingToken;
-  if(!token){ document.getElementById('modalResetMsg').textContent = 'No token loaded — enter your token first.'; return; }
-  var np = document.getElementById('modalNewPassword').value;
-  var cp = document.getElementById('modalConfirmPassword').value;
-  var msg = document.getElementById('modalResetMsg');
-  if(!np || np.length < 4){ msg.style.color='#FF3D5A'; msg.textContent='Password must be at least 4 characters.'; return; }
-  if(np !== cp){ msg.style.color='#FF3D5A'; msg.textContent='Passwords do not match.'; return; }
-  msg.style.color='var(--muted)'; msg.textContent='Saving...';
-  try {
-    const r = await fetch(API_BASE+'/c/'+token+'/reset-password',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({newPassword:np})
-    });
-    const d = await r.json();
-    if(d.ok){
-      msg.style.color='#34d399';
-      msg.textContent='Password updated! You can now log in.';
-      setTimeout(function(){
-        document.getElementById('modalForgotBox').style.display='none';
-        document.getElementById('tokenModalPassword').value=np;
-      }, 1500);
-    } else {
-      msg.style.color='#FF3D5A';
-      msg.textContent = d.error || 'Reset failed.';
-    }
-  } catch(e){
-    msg.style.color='#FF3D5A';
-    msg.textContent='Network error — please try again.';
-  }
+function showToast(msg, kind) {
+  var existing = document.getElementById('um-toast');
+  if (existing) existing.remove();
+  var t = document.createElement('div');
+  t.id = 'um-toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:'+(kind==='error'?'#ef4444':'#7B2FFF')+';color:#fff;font-size:13px;font-weight:700;padding:10px 22px;border-radius:100px;z-index:9999;pointer-events:none;opacity:1;transition:opacity .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4);';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 300); }, 2500);
 }
 </script>
+</body>
+</html>

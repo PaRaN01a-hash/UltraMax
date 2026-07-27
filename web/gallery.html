@@ -738,7 +738,7 @@ async function doSubmit(){
     if(aName){
       var _slug = aName.toLowerCase().replace(/\s+/g,'-');
       var _isUltraMax = /^ultra\s*max$/i.test(aName.trim());
-      requiredAddons.push({name:aName, addonId:_isUltraMax?'com.ultramax':_slug, manifestUrl:_isUltraMax?(aUrl||'https://ultramax.vip/setup.html'):aUrl});
+      requiredAddons.push({name:aName, addonId:_isUltraMax?'com.ultramax':_slug, manifestUrl:_isUltraMax?(aUrl||(window.location.origin+'/setup.html')):aUrl});
     }
   });
   var btn=document.getElementById('sBtn');
