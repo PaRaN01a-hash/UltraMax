@@ -13177,32 +13177,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-  // Trakt / Simkl OAuth callback check
+document.addEventListener('DOMContentLoaded', async function(){
+  // Restore the authoritative token/profile before refreshing OAuth UI.
   const _tp = new URLSearchParams(window.location.search);
-  const _isOAuthReturn =
-    _tp.get('trakt') === 'connected' ||
-    _tp.get('simkl') === 'connected' ||
-    _tp.get('mal') === 'connected' ||
-    _tp.get('anilist') === 'connected';
+  const _oauthProvider = ['trakt','simkl','mal','anilist'].find(function(provider){
+    return _tp.has(provider);
+  }) || '';
+  const _isOAuthReturn = !!_oauthProvider;
+  const _oauthProfileId = _tp.get('profile') || '';
 
   if(_isOAuthReturn){
     const _oauthToken = _tp.get('token') || '';
     if(_oauthToken){
       editToken = _oauthToken;
       sessionStorage.setItem('um_setup_token', _oauthToken);
-
-      setTimeout(function(){
-        if(typeof checkTraktStatus === 'function') checkTraktStatus(_oauthToken);
-        if(typeof checkSimklStatus === 'function') checkSimklStatus(_oauthToken);
-        if(typeof checkMalStatus === 'function') checkMalStatus(_oauthToken);
-        if(typeof checkAnilistStatus === 'function') checkAnilistStatus(_oauthToken);
-      }, 800);
+      if(_oauthProfileId) window.activeDeviceProfileId = _oauthProfileId;
     }
   }
 
   const _st = sessionStorage.getItem('um_setup_token');
-  if(_st && !editToken){ editToken=_st; setTimeout(()=>{ if(typeof checkTraktStatus==='function') checkTraktStatus(_st); if(typeof checkSimklStatus==='function') checkSimklStatus(_st); if(typeof checkMalStatus==='function') checkMalStatus(_st); if(typeof checkAnilistStatus==='function') checkAnilistStatus(_st); },500); }
+  if(_st && !editToken) editToken = _st;
   const urlParams = new URLSearchParams(window.location.search);
   const urlToken = urlParams.get('token');
 
@@ -13213,9 +13207,16 @@ document.addEventListener('DOMContentLoaded', function(){
     !!localStorage.getItem('um_oauth_form_state');
 
   if(_hasOAuthFormState && (!urlToken || _isOAuthReturn)){
-    setTimeout(function(){
-      if(typeof restoreFormState === 'function') restoreFormState();
-    }, 300);
+    if(typeof restoreFormState === 'function') restoreFormState();
+  }
+
+  if(_isOAuthReturn && editToken){
+    if(typeof setStep === 'function') setStep(1);
+    if(typeof refreshAllIntegrationStatuses === 'function'){
+      await refreshAllIntegrationStatuses(editToken, _oauthProfileId);
+    }
+  } else if(!urlToken && editToken && typeof refreshAllIntegrationStatuses === 'function'){
+    await refreshAllIntegrationStatuses(editToken);
   }
 
   // OAuth callbacks also contain a token, but must not enter the normal
@@ -13313,7 +13314,6 @@ function setStep(n){
   window.scrollTo({top:0, behavior:'smooth'});
   applyPendingAssetPick();
   if(n === 2) {
-    restoreHiddenState();
     setTimeout(sortStep2PillsAZ, 60);
     setTimeout(refreshPillEyeStates, 80);
     setTimeout(renderCustomCatalogList, 100);
@@ -13494,6 +13494,11 @@ var MDB_LEGACY_ALIASES = {
   mdb_91300: "mdb_best_of_1990s",
   mdb_91301: "mdb_best_of_1980s"
 };
+
+function normalizeCatalogId(id){
+  var value = getCollectionRowId(id);
+  return MDB_LEGACY_ALIASES[value] || value;
+}
 
 // In-memory cache of names resolved via /api/mdblist-name/:id, for raw
 // "mdb_<numericId>" catalog ids that aren't covered by MDB_LEGACY_ALIASES
@@ -13863,7 +13868,9 @@ function s2ApplyPreset(id){
     card.classList.remove('s2-active');
     var ids = preset.ids==='__all__' ? Object.keys(S2_DEFS) : preset.ids;
     ids.forEach(function(i){ selected.delete(i); });
-    s2UpdateAll(); return;
+    s2UpdateAll();
+    persistStep2State();
+    return;
   }
   // Deactivate others, apply this
   document.querySelectorAll('.s2-preset').forEach(function(c){ c.classList.remove('s2-active'); });
@@ -13874,6 +13881,7 @@ function s2ApplyPreset(id){
     preset.ids.forEach(function(i){ if(S2_DEFS[i]) selected.add(i); });
   }
   s2UpdateAll();
+  persistStep2State();
 }
 
 function s2RenderCats(){
@@ -13987,6 +13995,7 @@ function s2SelectCat(catId, e){
   if(!cat) return;
   Object.keys(S2_DEFS).filter(cat.filter).forEach(function(id){ selected.add(id); });
   s2UpdateAll();
+  persistStep2State();
 }
 
 function s2ClearCat(catId, e){
@@ -13995,11 +14004,13 @@ function s2ClearCat(catId, e){
   if(!cat) return;
   Object.keys(S2_DEFS).filter(cat.filter).forEach(function(id){ selected.delete(id); });
   s2UpdateAll();
+  persistStep2State();
 }
 
 function s2TogglePill(id){
   if(selected.has(id)) selected.delete(id); else selected.add(id);
   s2UpdateAll();
+  persistStep2State();
 }
 
 function s2RenderRaw(){
@@ -14030,7 +14041,7 @@ function s2ToggleHidden(cb){
   } else {
     hidden.delete(id);
   }
-  saveHiddenState();
+  persistStep2State();
   s2UpdatePillHiddenState(id);
 }
 
@@ -14132,6 +14143,7 @@ function s2ClearAll(){
   selected.clear();
   document.querySelectorAll('.s2-preset').forEach(function(c){ c.classList.remove('s2-active'); });
   s2UpdateAll();
+  persistStep2State();
 }
 
 function s2ToggleRaw(){
@@ -15687,6 +15699,11 @@ const FOLDER_MEDIA = {
 };
 
 function applyFolderMedia(folder){
+  if(Array.isArray(folder.rows)){
+    folder.rows = folder.rows.map(normalizeCatalogId).filter(function(id, i, rows){
+      return id && rows.indexOf(id) === i;
+    });
+  }
   const folderId = folder.id || folder.catalogId || (folder.rows && folder.rows[0]) || '';
   const media = FOLDER_IMAGE_OVERRIDES[folderId] || FOLDER_MEDIA[folder.title];
 
@@ -16860,8 +16877,6 @@ function goToStep4(){
     if(grid){ grid.style.animation='none'; setTimeout(function(){ grid.style.animation='s2Pulse .6s ease 3'; },10); }
     return;
   }
-  restoreHiddenState();
-
   const collectionIds = new Set();
   v2Collections.forEach(function(coll){
     (coll.folders || []).forEach(function(folder){
@@ -16960,6 +16975,7 @@ function selectAllGlobal(){
   });
   document.querySelectorAll('.preset-btn').forEach(function(b){ b.classList.remove('active'); });
   updateCounter(); updateCategoryCounts();
+  persistStep2State();
 }
 
 function clearAllGlobal(silent){
@@ -16974,6 +16990,7 @@ function clearAllGlobal(silent){
   selected.clear();
   if(!silent) document.querySelectorAll('.preset-btn').forEach(function(b){ b.classList.remove('active'); });
   updateCounter(); updateCategoryCounts();
+  persistStep2State();
 }
 
 function refreshHomeRowUi(){
@@ -17062,6 +17079,7 @@ function selectAll(groupId){
   const btn = document.querySelector('[onclick="selectAll(\''+groupId+'\')"]');
   if(btn) btn.textContent = allSelected ? 'Select All' : 'Clear All';
   updateCounter(); updateCategoryCounts();
+  persistStep2State();
 }
 
 function updateCategoryCounts(){
@@ -17664,7 +17682,6 @@ async function loadConfigByToken(token, profileId){
     if(data.hideWatched){ const el2=document.getElementById('hideWatched'); if(el2) el2.checked = true; }
     if(data.maxRating){ const el=document.getElementById('maxRating'); if(el) el.value = data.maxRating; }
     if(data.excludeLanguages && typeof setExcludeLanguages === 'function') setExcludeLanguages(data.excludeLanguages);
-    checkTraktStatus(token);
     if(data.betterPostersStyle !== undefined){
       const el=document.getElementById('betterPostersStyle');
       if(el){
@@ -17821,6 +17838,8 @@ async function loadConfigByToken(token, profileId){
       updateCounter();
       updateCategoryCounts();
     }, 300);
+    await refreshAllIntegrationStatuses(token, profileId);
+    setStep(1);
   }catch(e){ 
     console.error('loadConfigByToken error:', e); 
     showToast('Failed to load config: ' + e.message);
@@ -17833,15 +17852,15 @@ function getGeneratedAddonId(){
 
 
 function getCatalogSourceType(id){
-  if(!id) return 'movie';
-  // Use S2_DEFS first for accurate type
-  if(typeof S2_DEFS !== 'undefined' && S2_DEFS[id]) return S2_DEFS[id].type || 'movie';
-  if(id.includes('_series')) return 'series';
-  if(id.includes('_tv_collection')) return 'series';
-  if(id === 'airing_series' || id === 'ontheair_series') return 'series';
-  if(id === 'top_series' || id === 'popular_series' || id === 'trending_series') return 'series';
-  if(id === 'search_series') return 'series';
-  return 'movie';
+  var canonicalId = normalizeCatalogId(id);
+  var def = typeof S2_DEFS !== 'undefined' ? S2_DEFS[canonicalId] : null;
+  if(def && (def.type === 'movie' || def.type === 'series')) return def.type;
+
+  var custom = (getCustomCatalogsFromForm() || []).concat(getCustomMdbListsFromForm() || [])
+    .find(function(item){ return item && item.id === canonicalId; });
+  if(custom && (custom.type === 'movie' || custom.type === 'series')) return custom.type;
+
+  throw new Error('Unable to resolve catalog type for "' + canonicalId + '".');
 }
 
 function getNuvioViewMode(){
@@ -17883,14 +17902,16 @@ function buildCollectionsExport(){
           coverImageUrl: folder.coverImageUrl || '',
           heroBackdropUrl: folder.heroBackdropUrl || '',
           sources: (folder.nativeSources || []).concat((folder.rows || []).map(function(id){
-            var sourceType = getCatalogSourceType(id);
-            return { type: sourceType, genre: '', addonId: getGeneratedAddonId(), provider: 'addon', catalogId: id };
+            var canonicalId = normalizeCatalogId(id);
+            var sourceType = getCatalogSourceType(canonicalId);
+            return { type: sourceType, genre: '', addonId: getGeneratedAddonId(), provider: 'addon', catalogId: canonicalId };
           })),
           catalogSources: (folder.rows || []).map(function(id){
-          const sourceType = getCatalogSourceType(id);
+          const canonicalId = normalizeCatalogId(id);
+          const sourceType = getCatalogSourceType(canonicalId);
           return {
             addonId: getGeneratedAddonId(),
-            catalogId: id,
+            catalogId: canonicalId,
             type: sourceType,
             showInHome: false
           };
@@ -18134,12 +18155,14 @@ function clearCurrentBuilderState(){
 
 function applyImportedSelections(selectedCatalogs, hiddenCatalogs){
   (selectedCatalogs || []).forEach(function(id){
+    id = normalizeCatalogId(id);
     selected.add(id);
     const pill = document.querySelector('.pill[data-id="' + id + '"]');
     if(pill) pill.classList.add('selected');
   });
 
   (hiddenCatalogs || []).forEach(function(id){
+    id = normalizeCatalogId(id);
     hidden.add(id);
     const p = document.querySelector('.pill[data-id="' + id + '"]');
     if(p){
@@ -18171,7 +18194,7 @@ function normalizeImportedCollections(collections){
             .concat((folder.catalogSources || []).filter(function(src){
               return src.catalogId && !/^(tmdb|tvdb|simkl)\.discover\./.test(src.catalogId) && (!src.addonId || src.addonId === "com.ultramax");
             }).map(function(src){ return src.catalogId; }));
-        addonRows = addonRows.filter(function(id, i, a){ return a.indexOf(id) === i; });
+        addonRows = addonRows.map(normalizeCatalogId).filter(function(id, i, a){ return id && a.indexOf(id) === i; });
           return {
           rows: addonRows,
           nativeSources: nativeSources,
@@ -19421,7 +19444,7 @@ async function saveDeviceProfile(){
   }
 }
 
-function setActiveDeviceProfile(id, name){
+function setActiveDeviceProfile(id, name, skipStatusRefresh){
   window.activeDeviceProfileId = id || null;
   window.activeDeviceProfileName = name || null;
   const banner = document.getElementById('deviceProfileEditingBanner');
@@ -19456,7 +19479,7 @@ function setActiveDeviceProfile(id, name){
   });
 
   const token = window.generatedToken || editToken;
-  if (token) refreshAllIntegrationStatuses(token);
+  if (token && !skipStatusRefresh) refreshAllIntegrationStatuses(token);
 }
 
 function clearActiveDeviceProfile(){
@@ -19469,9 +19492,9 @@ async function loadDeviceProfileIntoEditor(token, profileId, name){
   const resultEl = document.getElementById('deviceProfileResult');
   if (resultEl) resultEl.textContent = 'Loading "' + name + '"…';
   await loadConfigByToken(token, profileId);
-  setActiveDeviceProfile(profileId, name);
+  setActiveDeviceProfile(profileId, name, true);
   if (resultEl) resultEl.textContent = 'Editing "' + name + '" — change settings above, then Update Profile.';
-  document.getElementById('deviceProfileName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setStep(1);
 }
 
 async function loadDeviceProfilesList(token){
@@ -19633,6 +19656,7 @@ function selectAllParent(groupId, e){
   const btn = document.querySelector('[onclick="selectAllParent(\''+groupId+'\', event)"]');
   if(btn) btn.textContent = allSelected ? 'Select All' : 'Clear All';
   updateCounter(); updateCategoryCounts();
+  persistStep2State();
 }
 
 // Toggle individual sub-sections (Crime, Horror, UK, USA, etc.)
@@ -19799,8 +19823,9 @@ function restoreFormState(){
     setCheck('preserveKitsuIds', state.preserveKitsuIds);
     setCheck('includeAdult', state.includeAdult);
     if(state.excludeLanguages) setExcludeLanguages(state.excludeLanguages);
-    if(state.selectedCatalogs) {
-      selected = new Set(state.selectedCatalogs);
+    if(Array.isArray(state.selectedCatalogs)) {
+      selected.clear();
+      state.selectedCatalogs.forEach(function(id){ selected.add(id); });
     }
 
     if(state.hidden) {
@@ -19811,6 +19836,7 @@ function restoreFormState(){
 
     if(typeof updateCounter === 'function') updateCounter();
     if(typeof updateCategoryCounts === 'function') updateCategoryCounts();
+    if(typeof s2UpdateAll === 'function') s2UpdateAll();
     if(typeof renderCollections === 'function') renderCollections();
     if(typeof setStep === 'function'){
       setTimeout(function(){
@@ -19833,16 +19859,22 @@ function restoreFormState(){
 // MAL/AniList connect below act on that profile's own connection instead of
 // the base account's — see the profile* fields in resolveConfigForProfile
 // (utils/profiles.js) and the ?profile= handling in auth-service.js.
-function umProfileQuery(){
-  return window.activeDeviceProfileId ? ('?profile=' + encodeURIComponent(window.activeDeviceProfileId)) : '';
+function umProfileQuery(profileId){
+  const resolvedProfileId =
+    profileId !== undefined ? profileId : window.activeDeviceProfileId;
+  return resolvedProfileId ? ('?profile=' + encodeURIComponent(resolvedProfileId)) : '';
 }
 
-function refreshAllIntegrationStatuses(token){
-  if(!token) return;
-  if(typeof checkTraktStatus === 'function') checkTraktStatus(token);
-  if(typeof checkSimklStatus === 'function') checkSimklStatus(token);
-  if(typeof checkMalStatus === 'function') checkMalStatus(token);
-  if(typeof checkAnilistStatus === 'function') checkAnilistStatus(token);
+async function refreshAllIntegrationStatuses(token, profileId){
+  if(!token) return [];
+  const results = await Promise.allSettled([
+    checkTraktStatus(token, profileId),
+    checkSimklStatus(token, profileId),
+    checkMalStatus(token, profileId),
+    checkAnilistStatus(token, profileId)
+  ]);
+  updateIntegrationsSummary();
+  return results;
 }
 
 async function connectTrakt(){
@@ -19908,14 +19940,20 @@ async function disconnectTrakt(){
   if(d.ok){ document.getElementById('traktUser').value = ''; updateTraktUI(false, null); }
 }
 
-async function checkTraktStatus(token){
+async function checkTraktStatus(token, profileId){
   if(!token) return;
   try {
-    const r = await fetch('/auth/trakt/status/' + token + umProfileQuery());
+    const r = await fetch('/auth/trakt/status/' + token + umProfileQuery(profileId), {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     if(d.connected){ document.getElementById('traktUser').value = d.username||''; updateTraktUI(true, d.username, d.expired); }
     else { updateTraktUI(false, null); }
-  } catch(e) {}
+    return !!d.connected;
+  } catch(e) {
+    updateTraktUI(false, null);
+    console.warn('[OAuth status] Trakt refresh failed:', e.message || String(e));
+    throw e;
+  }
 }
 
 // "At a glance" connected-count shown in the Integrations section header —
@@ -19978,14 +20016,20 @@ async function disconnectSimkl(){
   if(d.ok){ document.getElementById('simklUser').value=''; updateSimklUI(false,null); }
 }
 
-async function checkSimklStatus(token){
+async function checkSimklStatus(token, profileId){
   if(!token) return;
   try {
-    const r = await fetch('/auth/simkl/status/'+token + umProfileQuery());
+    const r = await fetch('/auth/simkl/status/'+token + umProfileQuery(profileId), {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     if(d.connected){ document.getElementById('simklUser').value=d.username||''; updateSimklUI(true,d.username); }
     else updateSimklUI(false,null);
-  } catch(e){}
+    return !!d.connected;
+  } catch(e){
+    updateSimklUI(false,null);
+    console.warn('[OAuth status] Simkl refresh failed:', e.message || String(e));
+    throw e;
+  }
 }
 
 function updateSimklUI(connected, username){
@@ -20026,14 +20070,20 @@ async function disconnectMal(){
   if(d.ok){ document.getElementById('malUser').value=''; updateMalUI(false,null); }
 }
 
-async function checkMalStatus(token){
+async function checkMalStatus(token, profileId){
   if(!token) return;
   try {
-    const r = await fetch('/auth/mal/status/'+token);
+    const r = await fetch('/auth/mal/status/'+token + umProfileQuery(profileId), {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     if(d.connected){ document.getElementById('malUser').value=d.username||''; updateMalUI(true,d.username); }
     else updateMalUI(false,null, d.configured !== false);
-  } catch(e){}
+    return !!d.connected;
+  } catch(e){
+    updateMalUI(false,null,true);
+    console.warn('[OAuth status] MyAnimeList refresh failed:', e.message || String(e));
+    throw e;
+  }
 }
 
 function updateMalUI(connected, username, configured){
@@ -20075,14 +20125,20 @@ async function disconnectAnilist(){
   if(d.ok){ document.getElementById('anilistUser').value=''; updateAnilistUI(false,null); }
 }
 
-async function checkAnilistStatus(token){
+async function checkAnilistStatus(token, profileId){
   if(!token) return;
   try {
-    const r = await fetch('/auth/anilist/status/'+token);
+    const r = await fetch('/auth/anilist/status/'+token + umProfileQuery(profileId), {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     if(d.connected){ document.getElementById('anilistUser').value=d.username||''; updateAnilistUI(true,d.username); }
     else updateAnilistUI(false,null, d.configured !== false);
-  } catch(e){}
+    return !!d.connected;
+  } catch(e){
+    updateAnilistUI(false,null,true);
+    console.warn('[OAuth status] AniList refresh failed:', e.message || String(e));
+    throw e;
+  }
 }
 
 function updateAnilistUI(connected, username, configured){
@@ -20209,6 +20265,10 @@ function toggleManualStreams(){
 function saveHiddenState(){
   try{ sessionStorage.setItem('um_hidden', JSON.stringify(Array.from(hidden))); }catch(e){}
 }
+function persistStep2State(){
+  saveHiddenState();
+  if(typeof saveDraftState === 'function') saveDraftState();
+}
 function restoreHiddenState(){
   try{
     const saved = sessionStorage.getItem('um_hidden');
@@ -20243,8 +20303,7 @@ document.querySelectorAll('.pill').forEach(function(pill){
       eye.style.opacity = '1';
       pill.style.fontStyle = 'italic';
     }
-    saveHiddenState();
-    if(typeof saveDraftState === 'function') saveDraftState();
+    persistStep2State();
   });
   pill.appendChild(eye);
   
@@ -20263,6 +20322,7 @@ document.querySelectorAll('.pill').forEach(function(pill){
     }
     document.querySelectorAll('.preset-btn').forEach(function(b){ b.classList.remove('active'); });
     updateCounter(); updateCategoryCounts();
+    persistStep2State();
   });
 });
 
@@ -24899,11 +24959,11 @@ body.um-app-mode #themeToggle {
 <button
   id="umBackToTop"
   type="button"
-  aria-label="Back to top"
-  title="Back to top"
+  aria-label="Go to top"
+  title="Go to top"
 >
   <span class="um-top-arrow" aria-hidden="true">↑</span>
-  <span class="um-top-label">Back to top</span>
+  <span class="um-top-label">Go to top</span>
 </button>
 
 <button

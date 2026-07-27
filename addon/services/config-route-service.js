@@ -2,6 +2,7 @@ function registerConfigRoutes(app, deps) {
 const { getWatchedIds, filterWatched } = require("./watched-filter");
   const { sanitizeStreamFormat } = require("./stream-formatter");
   const { sanitiseProfileOverrides, resolveConfigForProfile, ProfileOverridesTooLargeError } = require("../utils/profiles");
+  const { CATALOG_DEFS, resolveCatalogId } = require("../catalogs/catalog-defs");
   const {
     loadConfigs,
     saveConfigs,
@@ -14,6 +15,41 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
   } = deps;
 
   const MAX_PROFILES_PER_TOKEN = 8;
+
+  function normalizeCollectionCatalogs(collections) {
+    if (!Array.isArray(collections)) return [];
+
+    const normalizeSource = source => {
+      if (!source || typeof source !== "object" || !source.catalogId) return source;
+      const catalogId = resolveCatalogId(String(source.catalogId));
+      const def = CATALOG_DEFS[catalogId];
+      return {
+        ...source,
+        catalogId,
+        ...(def && (def.type === "movie" || def.type === "series")
+          ? { type: def.type }
+          : {})
+      };
+    };
+
+    return collections.map(collection => ({
+      ...collection,
+      folders: Array.isArray(collection?.folders)
+        ? collection.folders.map(folder => ({
+            ...folder,
+            rows: Array.isArray(folder?.rows)
+              ? [...new Set(folder.rows.map(id => resolveCatalogId(String(id))))]
+              : folder?.rows,
+            sources: Array.isArray(folder?.sources)
+              ? folder.sources.map(normalizeSource)
+              : folder?.sources,
+            catalogSources: Array.isArray(folder?.catalogSources)
+              ? folder.catalogSources.map(normalizeSource)
+              : folder?.catalogSources
+          }))
+        : collection?.folders
+    }));
+  }
 
   // Verifies `provided` against configs[token]'s stored hash. On success
   // against a legacy SHA-256 hash, transparently rehashes with bcrypt so
@@ -393,7 +429,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     res.json({
       catalogs: config.catalogs,
       catalogOrder: config.catalogOrder || [],
-      collections: config.collections || [],
+      collections: normalizeCollectionCatalogs(config.collections),
       mdblistKey: config.mdblistKey,
       tmdbKey: config.tmdbKey || null,
       language: config.language,
@@ -679,12 +715,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const profile = profileId && config.profiles && config.profiles[profileId];
     const target = profile ? (profile.overrides || (profile.overrides = {})) : config;
 
-    const existing = Array.isArray(target.collections)
-      ? target.collections
-      : [];
+    const normalizedCollections = normalizeCollectionCatalogs(collections);
+    const existing = normalizeCollectionCatalogs(target.collections);
 
     if (replace === true) {
-      target.collections = collections;
+      target.collections = normalizedCollections;
     } else {
       const keyOf = c =>
         String(
@@ -701,7 +736,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         if (k) seen.set(k, i);
       });
 
-      for (const incoming of collections) {
+      for (const incoming of normalizedCollections) {
         const k = keyOf(incoming);
 
         if (k && seen.has(k)) {
@@ -724,7 +759,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       ok: true,
       mode: replace === true ? "replace" : "merge",
       before: existing.length,
-      incoming: collections.length,
+      incoming: normalizedCollections.length,
       after: target.collections.length
     });
   });
@@ -751,7 +786,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     }
 
     const config = resolveConfigForProfile(configs[token], req.query.profile);
-    res.json(config.collections || []);
+    res.json(normalizeCollectionCatalogs(config.collections));
   });
 }
 

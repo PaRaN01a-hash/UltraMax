@@ -55,6 +55,7 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
 
     const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
     if (profileId && !profile) return res.status(404).send('Profile not found');
+    const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
 
     try {
       const response = await axios.post('https://api.trakt.tv/oauth/token', {
@@ -90,14 +91,12 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
         configs[token].traktTokenExpiry = Date.now() + (data.expires_in * 1000);
         configs[token].traktUser = traktProfile.username || configs[token].traktUser;
       }
-      saveConfigs(configs);
+      await saveConfigs(configs);
 
       if (configs[token].hideWatched) {
         getWatchedIds(token, configs[token].traktAccessToken, configs[token].simklAccessToken, TRAKT_CLIENT_ID, SIMKL_CLIENT_ID)
           .catch(e => console.error('[watched-filter] prewarm failed:', e.message));
       }
-
-      const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
 
       // Redirect back — if preauth config, go to setup; otherwise configure
       if (configs[token].preauth) {
@@ -107,7 +106,7 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
       }
     } catch(e) {
       console.error('[Trakt OAuth]', e.message);
-      res.redirect(`/configure/${token}?trakt=error`);
+      res.redirect(`/configure/${token}?trakt=error${profileSuffix}`);
     }
   });
 
@@ -181,6 +180,7 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
 
     const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
     if (profileId && !profile) return res.status(404).send('Profile not found');
+    const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
 
     try {
       const response = await axios.post('https://api.simkl.com/oauth/token', {
@@ -208,14 +208,12 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
         configs[token].simklAccessToken = data.access_token;
         configs[token].simklUser = username;
       }
-      saveConfigs(configs);
+      await saveConfigs(configs);
 
       if (configs[token].hideWatched) {
         getWatchedIds(token, configs[token].traktAccessToken, configs[token].simklAccessToken, TRAKT_CLIENT_ID, SIMKL_CLIENT_ID)
           .catch(e => console.error('[watched-filter] prewarm failed:', e.message));
       }
-
-      const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
 
       if (configs[token].preauth) {
         res.redirect(`/setup.html?token=${token}&simkl=connected${profileSuffix}`);
@@ -225,9 +223,9 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
     } catch(e) {
       console.error('[Simkl OAuth]', e.message);
       if (configs[token] && configs[token].preauth) {
-        res.redirect(`/setup.html?token=${token}&simkl=error`);
+        res.redirect(`/setup.html?token=${token}&simkl=error${profileSuffix}`);
       } else {
-        res.redirect(`/configure/${token}?simkl=error`);
+        res.redirect(`/configure/${token}?simkl=error${profileSuffix}`);
       }
     }
   });
@@ -268,10 +266,10 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
   // MAL requires PKCE on top of the usual authorization-code flow, and only
   // supports the "plain" challenge method (challenge === verifier). The
   // verifier has to survive the redirect round-trip, so it's held in-memory
-  // here (short-lived, keyed by the setup token) rather than persisted.
+  // here (short-lived, keyed by the encoded OAuth state) rather than persisted.
   const MAL_CLIENT_ID = process.env.MAL_CLIENT_ID;
   const MAL_CLIENT_SECRET = process.env.MAL_CLIENT_SECRET;
-  const malPkceVerifiers = new Map(); // token -> { verifier, createdAt }
+  const malPkceVerifiers = new Map(); // state -> { verifier, createdAt }
   const MAL_PKCE_TTL = 10 * 60 * 1000; // 10 minutes — plenty for a login redirect
 
   function generateMalCodeVerifier() {
@@ -280,8 +278,12 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
 
   app.get('/auth/mal/connect/:token', (req, res) => {
     const { token } = req.params;
+    const profileId = String(req.query.profile || '');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).send('Config not found');
+    if (profileId && (!configs[token].profiles || !configs[token].profiles[profileId])) {
+      return res.status(404).send('Profile not found');
+    }
 
     if (!MAL_CLIENT_ID) {
       return res.status(503).send(
@@ -298,25 +300,32 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
     }
 
     const verifier = generateMalCodeVerifier();
-    malPkceVerifiers.set(token, { verifier, createdAt: now });
+    const state = profileId ? `${token}::${profileId}` : token;
+    malPkceVerifiers.set(state, { verifier, createdAt: now });
 
     const redirectUri = `${BASE_URL}/auth/mal/callback`;
-    const url = `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${MAL_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${token}&code_challenge=${encodeURIComponent(verifier)}&code_challenge_method=plain`;
+    const url = `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${MAL_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(verifier)}&code_challenge_method=plain`;
     res.redirect(url);
   });
 
   app.get('/auth/mal/callback', async (req, res) => {
-    const { code, state: token } = req.query;
-    if (!code || !token) return res.status(400).send('Missing code or state');
+    const { code, state: rawState } = req.query;
+    if (!code || !rawState) return res.status(400).send('Missing code or state');
 
+    const state = String(rawState);
+    const [token, profileId] = state.split('::');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).send('Config not found');
 
-    const pkce = malPkceVerifiers.get(token);
-    malPkceVerifiers.delete(token);
+    const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
+    if (profileId && !profile) return res.status(404).send('Profile not found');
+    const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
+
+    const pkce = malPkceVerifiers.get(state);
+    malPkceVerifiers.delete(state);
 
     if (!pkce) {
-      return res.redirect(configs[token].preauth ? `/setup.html?token=${token}&mal=error` : `/configure/${token}?mal=error`);
+      return res.redirect(configs[token].preauth ? `/setup.html?token=${token}&mal=error${profileSuffix}` : `/configure/${token}?mal=error${profileSuffix}`);
     }
 
     try {
@@ -335,46 +344,70 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
       const profileRes = await axios.get('https://api.myanimelist.net/v2/users/@me', {
         headers: { 'Authorization': `Bearer ${data.access_token}` }
       });
-      const profile = profileRes.data;
+      const malProfile = profileRes.data;
 
-      configs[token].malAccessToken = data.access_token;
-      configs[token].malRefreshToken = data.refresh_token;
-      configs[token].malTokenExpiry = Date.now() + (data.expires_in * 1000);
-      configs[token].malUser = profile?.name || configs[token].malUser;
-      saveConfigs(configs);
+      if (profile) {
+        profile.overrides = profile.overrides || {};
+        profile.overrides.profileMalToken = data.access_token;
+        profile.overrides.profileMalRefreshToken = data.refresh_token;
+        profile.overrides.profileMalTokenExpiry = Date.now() + (data.expires_in * 1000);
+        profile.overrides.profileMalUser = malProfile?.name || profile.overrides.profileMalUser;
+      } else {
+        configs[token].malAccessToken = data.access_token;
+        configs[token].malRefreshToken = data.refresh_token;
+        configs[token].malTokenExpiry = Date.now() + (data.expires_in * 1000);
+        configs[token].malUser = malProfile?.name || configs[token].malUser;
+      }
+      await saveConfigs(configs);
 
       if (configs[token].preauth) {
-        res.redirect(`/setup.html?token=${token}&mal=connected`);
+        res.redirect(`/setup.html?token=${token}&mal=connected${profileSuffix}`);
       } else {
-        res.redirect(`/configure/${token}?mal=connected`);
+        res.redirect(`/configure/${token}?mal=connected${profileSuffix}`);
       }
     } catch (e) {
-      console.error('[MAL OAuth]', e.response?.data || e.message);
+      console.error('[MAL OAuth]', e.message);
       if (configs[token] && configs[token].preauth) {
-        res.redirect(`/setup.html?token=${token}&mal=error`);
+        res.redirect(`/setup.html?token=${token}&mal=error${profileSuffix}`);
       } else {
-        res.redirect(`/configure/${token}?mal=error`);
+        res.redirect(`/configure/${token}?mal=error${profileSuffix}`);
       }
     }
   });
 
-  app.post('/auth/mal/disconnect/:token', (req, res) => {
+  app.post('/auth/mal/disconnect/:token', async (req, res) => {
     const { token } = req.params;
+    const profileId = String(req.query.profile || '');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).json({ ok: false });
-    delete configs[token].malAccessToken;
-    delete configs[token].malRefreshToken;
-    delete configs[token].malTokenExpiry;
-    delete configs[token].malUser;
-    saveConfigs(configs);
+
+    const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
+    if (profileId && !profile) {
+      return res.status(404).json({ ok: false, error: 'Profile not found' });
+    }
+    if (profile) {
+      if (profile.overrides) {
+        delete profile.overrides.profileMalToken;
+        delete profile.overrides.profileMalRefreshToken;
+        delete profile.overrides.profileMalTokenExpiry;
+        delete profile.overrides.profileMalUser;
+      }
+    } else {
+      delete configs[token].malAccessToken;
+      delete configs[token].malRefreshToken;
+      delete configs[token].malTokenExpiry;
+      delete configs[token].malUser;
+    }
+    await saveConfigs(configs);
     res.json({ ok: true });
   });
 
   app.get('/auth/mal/status/:token', (req, res) => {
     const { token } = req.params;
     const configs = loadConfigs();
-    const config = configs[token];
-    if (!config) return res.status(404).json({ ok: false });
+    const baseConfig = configs[token];
+    if (!baseConfig) return res.status(404).json({ ok: false });
+    const config = resolveConfigForProfile(baseConfig, req.query.profile);
     res.json({
       ok: true,
       connected: !!config.malAccessToken,
@@ -391,8 +424,12 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
 
   app.get('/auth/anilist/connect/:token', (req, res) => {
     const { token } = req.params;
+    const profileId = String(req.query.profile || '');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).send('Config not found');
+    if (profileId && (!configs[token].profiles || !configs[token].profiles[profileId])) {
+      return res.status(404).send('Profile not found');
+    }
 
     if (!ANILIST_CLIENT_ID) {
       return res.status(503).send(
@@ -403,16 +440,22 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
     }
 
     const redirectUri = `${BASE_URL}/auth/anilist/callback`;
-    const url = `https://anilist.co/api/v2/oauth/authorize?client_id=${ANILIST_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${token}`;
+    const state = profileId ? `${token}::${profileId}` : token;
+    const url = `https://anilist.co/api/v2/oauth/authorize?client_id=${ANILIST_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${encodeURIComponent(state)}`;
     res.redirect(url);
   });
 
   app.get('/auth/anilist/callback', async (req, res) => {
-    const { code, state: token } = req.query;
-    if (!code || !token) return res.status(400).send('Missing code or state');
+    const { code, state: rawState } = req.query;
+    if (!code || !rawState) return res.status(400).send('Missing code or state');
 
+    const [token, profileId] = String(rawState).split('::');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).send('Config not found');
+
+    const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
+    if (profileId && !profile) return res.status(404).send('Profile not found');
+    const profileSuffix = profileId ? `&profile=${encodeURIComponent(profileId)}` : '';
 
     try {
       const response = await axios.post('https://anilist.co/api/v2/oauth/token', {
@@ -428,42 +471,64 @@ function registerAuthRoutes(app, { loadConfigs, saveConfigs }) {
 
       const viewer = await getAnilistViewer(data.access_token);
 
-      configs[token].anilistAccessToken = data.access_token;
-      configs[token].anilistUserId = viewer?.id || null;
-      configs[token].anilistUser = viewer?.name || configs[token].anilistUser;
-      saveConfigs(configs);
+      if (profile) {
+        profile.overrides = profile.overrides || {};
+        profile.overrides.profileAnilistToken = data.access_token;
+        profile.overrides.profileAnilistUserId = viewer?.id || null;
+        profile.overrides.profileAnilistUser = viewer?.name || profile.overrides.profileAnilistUser;
+      } else {
+        configs[token].anilistAccessToken = data.access_token;
+        configs[token].anilistUserId = viewer?.id || null;
+        configs[token].anilistUser = viewer?.name || configs[token].anilistUser;
+      }
+      await saveConfigs(configs);
 
       if (configs[token].preauth) {
-        res.redirect(`/setup.html?token=${token}&anilist=connected`);
+        res.redirect(`/setup.html?token=${token}&anilist=connected${profileSuffix}`);
       } else {
-        res.redirect(`/configure/${token}?anilist=connected`);
+        res.redirect(`/configure/${token}?anilist=connected${profileSuffix}`);
       }
     } catch (e) {
-      console.error('[AniList OAuth]', e.response?.data || e.message);
+      console.error('[AniList OAuth]', e.message);
       if (configs[token] && configs[token].preauth) {
-        res.redirect(`/setup.html?token=${token}&anilist=error`);
+        res.redirect(`/setup.html?token=${token}&anilist=error${profileSuffix}`);
       } else {
-        res.redirect(`/configure/${token}?anilist=error`);
+        res.redirect(`/configure/${token}?anilist=error${profileSuffix}`);
       }
     }
   });
 
-  app.post('/auth/anilist/disconnect/:token', (req, res) => {
+  app.post('/auth/anilist/disconnect/:token', async (req, res) => {
     const { token } = req.params;
+    const profileId = String(req.query.profile || '');
     const configs = loadConfigs();
     if (!configs[token]) return res.status(404).json({ ok: false });
-    delete configs[token].anilistAccessToken;
-    delete configs[token].anilistUserId;
-    delete configs[token].anilistUser;
-    saveConfigs(configs);
+
+    const profile = profileId && configs[token].profiles && configs[token].profiles[profileId];
+    if (profileId && !profile) {
+      return res.status(404).json({ ok: false, error: 'Profile not found' });
+    }
+    if (profile) {
+      if (profile.overrides) {
+        delete profile.overrides.profileAnilistToken;
+        delete profile.overrides.profileAnilistUserId;
+        delete profile.overrides.profileAnilistUser;
+      }
+    } else {
+      delete configs[token].anilistAccessToken;
+      delete configs[token].anilistUserId;
+      delete configs[token].anilistUser;
+    }
+    await saveConfigs(configs);
     res.json({ ok: true });
   });
 
   app.get('/auth/anilist/status/:token', (req, res) => {
     const { token } = req.params;
     const configs = loadConfigs();
-    const config = configs[token];
-    if (!config) return res.status(404).json({ ok: false });
+    const baseConfig = configs[token];
+    if (!baseConfig) return res.status(404).json({ ok: false });
+    const config = resolveConfigForProfile(baseConfig, req.query.profile);
     res.json({
       ok: true,
       connected: !!config.anilistAccessToken,

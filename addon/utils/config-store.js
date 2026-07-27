@@ -55,6 +55,7 @@ function saveConfigs(c) {
       console.error("saveConfigs error:", e.message);
     }
   });
+  return configWriteQueue;
 }
 
 module.exports = {

@@ -123,9 +123,14 @@ function handleNuvioManifest(req, res, deps) {
   const config = resolveConfigForProfile(baseConfig, req.query.profile);
 
   // Apply user-defined catalog order if set
-  const rawCatalogIds = config.enableAiRecommended
-    ? Array.from(new Set([...(config.catalogs || []), "ai_recommended_movies", "ai_recommended_series"]))
+  const catalogIdsWithEnableAi = config.enableAiRecommended
+    ? [...(config.catalogs || []), "ai_recommended_movies", "ai_recommended_series"]
     : (config.catalogs || []);
+  const rawCatalogIds = Array.from(new Set(
+    config.anilistAccessToken
+      ? [...catalogIdsWithEnableAi, "ai_anime_anilist"]
+      : catalogIdsWithEnableAi
+  ));
 
   const orderedCatalogIds = (config.catalogOrder && config.catalogOrder.length)
     ? [
@@ -175,7 +180,12 @@ function handleNuvioManifest(req, res, deps) {
     logo: `${BASE_URL}/logo.svg`,
     types: ["movie", "series"],
     idPrefixes: ["tt", "tmdb"],
-    resources: ["catalog", "meta", "stream"],
+    resources: (() => {
+      const hasStream = (config.streamAddons && config.streamAddons.length > 0) ||
+        (Array.isArray(config.debridServices) && config.debridServices.length > 0) ||
+        (config.debridService && config.debridApiKey);
+      return hasStream ? ["catalog", "meta", "stream"] : ["catalog", "meta"];
+    })(),
     behaviorHints: {
       configurable: false,
       configurationRequired: false,
@@ -243,16 +253,16 @@ const {
 
   const config = resolveConfigForProfile(baseConfig, req.query.profile);
 
+  const mainCatalogIdsWithEnableAi = config.enableAiRecommended
+    ? [...(config.catalogs || []), "ai_recommended_movies", "ai_recommended_series"]
+    : (config.catalogs || []);
+
   const mainCatalogIds = filterUpcomingCatalogIds(
-    config.enableAiRecommended
-      ? Array.from(
-          new Set([
-            ...(config.catalogs || []),
-            "ai_recommended_movies",
-            "ai_recommended_series"
-          ])
-        )
-      : (config.catalogs || []),
+    Array.from(new Set(
+      config.anilistAccessToken
+        ? [...mainCatalogIdsWithEnableAi, "ai_anime_anilist"]
+        : mainCatalogIdsWithEnableAi
+    )),
     config.excludeUnreleased
   );
 
@@ -269,7 +279,12 @@ const {
     logo: `${BASE_URL}/logo.svg`,
     types: ["movie", "series"],
     idPrefixes: ["tt", "tmdb"],
-    resources: ["catalog", "meta", "stream"],
+    resources: (() => {
+      const hasStream = (config.streamAddons && config.streamAddons.length > 0) ||
+        (Array.isArray(config.debridServices) && config.debridServices.length > 0) ||
+        (config.debridService && config.debridApiKey);
+      return hasStream ? ["catalog", "meta", "stream"] : ["catalog", "meta"];
+    })(),
     behaviorHints: {
       configurable: true,
       configurationRequired: false,
