@@ -15,7 +15,6 @@ services:
       - DATA_DIR=/data
     volumes:
       - ultramax_data:/data
-      - ./web:/app/web:ro
 
 volumes:
   ultramax_data:

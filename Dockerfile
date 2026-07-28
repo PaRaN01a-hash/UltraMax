@@ -9,6 +9,7 @@ COPY addon/package*.json ./
 RUN npm install --omit=dev
 
 COPY addon/ .
+COPY web/ /app/web/
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
