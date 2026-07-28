@@ -651,9 +651,22 @@ document.querySelectorAll('button[data-url]').forEach(function(btn){
 });
 ;
 
-app.get("/configure", (req, res) => { res.setHeader("Cache-Control","public, max-age=300"); res.sendFile(path.join(__dirname,"configure.html")); });
-app.get("/configure/:token", (req, res) => { res.setHeader("Cache-Control","public, max-age=300"); res.sendFile(path.join(__dirname,"configure.html")); });
-app.get("/c/:token/configure", (req, res) => { res.redirect(`/configure/${req.params.token}`); });
+function redirectToSetup(req, res, token) {
+  const query = new URLSearchParams();
+  if (token !== undefined) query.set("token", String(token));
+  for (const [key, value] of Object.entries(req.query || {})) {
+    if (key === "token" && token !== undefined) continue;
+    for (const item of Array.isArray(value) ? value : [value]) {
+      if (item !== undefined && item !== null) query.append(key, String(item));
+    }
+  }
+  const suffix = query.toString();
+  res.redirect(302, `/setup.html${suffix ? `?${suffix}` : ""}`);
+}
+
+app.get("/configure", (req, res) => redirectToSetup(req, res));
+app.get("/configure/:token", (req, res) => redirectToSetup(req, res, req.params.token));
+app.get("/c/:token/configure", (req, res) => redirectToSetup(req, res, req.params.token));
 app.get("/logo.svg", (req, res) => { res.sendFile(path.join(__dirname,"logo.svg")); });
 app.get("/collections-builder", (req, res) => { res.sendFile(path.join(__dirname,"collections-builder.html")); });
 
