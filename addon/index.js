@@ -1456,7 +1456,7 @@ app.post("/api/register-email", registerEmail(loadConfigs));
 app.post("/api/recover-token", recoverToken());
 
 app.listen(PORT,"0.0.0.0", () => {
-  console.log(`Ultra MAX v7.0.0-beta running on port ${PORT}`);
+  console.log(`Ultra MAX v8.0.0 running on port ${PORT}`);
   console.log(`Total catalog defs: ${Object.keys(CATALOG_DEFS).length}`);
   console.log(`Static catalogs: ${staticIds.length}`);
 });

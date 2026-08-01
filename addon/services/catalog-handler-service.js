@@ -2,6 +2,15 @@ const { CATALOG_DEFS, resolveCatalogId } = require("../catalogs/catalog-defs");
 const { handleSimklCatalog } = require("./simkl-service");
 const { handleMalCatalog } = require("./mal-service");
 const { handleAnilistCatalog } = require("./anilist-service");
+const {
+  searchKitsuCatalogMetas,
+  resolveAnimeItemsToKitsuMetas
+} = require("./kitsu-id-service");
+const {
+  resolveMergedCatalogRoute,
+  executeMergedCatalog
+} = require("./merged-catalog-service");
+const { shouldIncludeAnimeRow, isAnimeCatalog, shouldIncludeIndianCinemaRow } = require("./content-filter-service");
 
 /**
  * Convert a string into a stable unsigned 32-bit seed.
@@ -192,6 +201,16 @@ async function handleCatalog(
   // manifest, to their current human-readable slug.
   catalogId = resolveCatalogId(catalogId);
 
+  // Defense in depth: the manifest route already omits dedicated anime
+  // catalogs when animeFilter is "hide" (see manifest-route-service.js), but
+  // a client with a stale cached manifest can still request the row id
+  // directly — short-circuit before doing any fetch work.
+  if (!shouldIncludeAnimeRow(catalogId, userConfig) || !shouldIncludeIndianCinemaRow(catalogId, userConfig)) {
+    return { metas: [] };
+  }
+
+  const isDedicatedAnimeRow = isAnimeCatalog(catalogId);
+
   const {
     TMDB_KEY,
     TRAKT_CLIENT_ID,
@@ -202,6 +221,7 @@ async function handleCatalog(
     handleCatalogSearch,
     buildTmdbCatalogUrl,
     geminiAiRecommendations,
+    geminiAnimeAnilistRecommendations,
     tmdbResolveAiItems,
     fetchCached,
     filterByMaxRating,
@@ -218,15 +238,69 @@ async function handleCatalog(
     "hidive_series"
   ]);
 
+  const animePresentationMode =
+    userConfig?.animePresentationMode === "anisync" ? "anisync" : "unified";
   const preserveKitsuIds =
-    !!userConfig?.preserveKitsuIds &&
+    (animePresentationMode === "anisync" || !!userConfig?.preserveKitsuIds) &&
     kitsuCatalogIds.has(catalogId);
 
+  // Content filters (anime/Indian-cinema/rating/year/country) are applied
+  // uniformly here so every caller downstream (search, quick picks, related
+  // content, simkl, the default tmdb path, etc — anything using this local
+  // resultsToMetas) gets them for free. skipAnimeFilter keeps a dedicated
+  // anime row's items intact under animeFilter:"reduce" — the row is 100%
+  // anime by definition, so item-filtering it would just empty it out.
   const resultsToMetas = (...args) =>
     baseResultsToMetas(
       ...args,
-      preserveKitsuIds
+      preserveKitsuIds,
+      userConfig,
+      { skipAnimeFilter: isDedicatedAnimeRow }
     );
+
+  const mergedRoute = resolveMergedCatalogRoute(
+    catalogId,
+    type,
+    userConfig?.mergedCatalogs || []
+  );
+  if (mergedRoute) {
+    return executeMergedCatalog({
+      definition: mergedRoute.definition,
+      type: mergedRoute.type,
+      skip: extra?.skip,
+      fetchSource: (source, sourceSkip) => handleCatalog(
+        source.catalogId,
+        source.type,
+        { skip: sourceSkip },
+        mdbKey,
+        filterLang,
+        language,
+        rpdbKey,
+        tpKey,
+        traktUser,
+        excludeUnreleased,
+        maxRating,
+        includeAdult,
+        customCatalogs,
+        googleAiKey,
+        fanartKey,
+        omdbKey,
+        deps,
+        excludeLanguages,
+        bpStyle,
+        traktAccessToken,
+        simklAccessToken,
+        userToken,
+        userConfig,
+        digitalReleaseOnly,
+        customMdbLists,
+        malAccessToken,
+        anilistAccessToken,
+        anilistUserId,
+        catalogOverrides
+      )
+    });
+  }
 
 console.log(
   "HANDLECATALOG:",
@@ -252,6 +326,24 @@ const searchableCatalogs = new Set([
     return { metas: [] };
   }
 if (extra && extra.search) {
+  if (
+    animePresentationMode === "anisync" &&
+    type === "series" &&
+    catalogId === "search_series"
+  ) {
+    try {
+      const metas = await searchKitsuCatalogMetas(extra.search, {
+        limit: 20,
+        minScore: 35,
+        requireExactAnchor: true
+      });
+      if (metas.length) return { metas };
+    } catch (error) {
+      console.warn(
+        `[Anime presentation] Kitsu search failed: error=${error.message}`
+      );
+    }
+  }
   return await handleSearch({
     catalogId,
     type,
@@ -300,6 +392,52 @@ if (extra && extra.search) {
     omdbKey,
     digitalReleaseOnly
   );
+
+    return { metas };
+  }
+  if (catalogId === "ai_anime_anilist") {
+
+  // self-host's index.js does not (yet) wire geminiAnimeAnilistRecommendations
+  // into deps — the supporting AniList-history lookup it depends on
+  // (getAnilistAiHistory) doesn't exist in self-host's anilist-service.js,
+  // so the dependency isn't safely portable here. Guard instead of letting
+  // a missing dependency throw a TypeError for any user who has connected
+  // AniList; degrade to an empty row rather than crashing the request.
+  if (typeof geminiAnimeAnilistRecommendations !== "function") {
+    console.warn(
+      "[Anime For You] geminiAnimeAnilistRecommendations unavailable in this self-host build — returning empty row"
+    );
+    return { metas: [] };
+  }
+
+  const items = await geminiAnimeAnilistRecommendations({
+    googleAiKey,
+    anilistAccessToken,
+    anilistUserId,
+    language,
+    userToken
+  });
+  let metas;
+  if (animePresentationMode === "anisync") {
+    const resolved = await resolveAnimeItemsToKitsuMetas(items);
+    metas = resolved.metas;
+    console.log(
+      `[Anime For You] diagnostics ${JSON.stringify(resolved.diagnostics)}`
+    );
+  } else {
+    metas = await tmdbResolveAiItems(
+      items,
+      "series",
+      language,
+      rpdbKey,
+      tpKey,
+      excludeUnreleased,
+      fanartKey,
+      omdbKey,
+      digitalReleaseOnly,
+      { anime: true }
+    );
+  }
 
     return { metas };
   }
@@ -558,7 +696,8 @@ if (hour >= 6 && hour < 12) {
         omdbKey,
         bpStyle,
         language,
-        digitalReleaseOnly
+        digitalReleaseOnly,
+        userConfig
       )
     };
   }
@@ -670,7 +809,8 @@ if (hour >= 6 && hour < 12) {
         omdbKey,
         bpStyle,
         language,
-        digitalReleaseOnly
+        digitalReleaseOnly,
+        userConfig
       )
     };
   }
@@ -712,7 +852,8 @@ switch(def.handler) {
         def.handler, type, simklAccessToken,
         rpdbKey, tpKey, excludeUnreleased,
         { resultsToMetas, fetchCached, TMDB_KEY },
-        userToken
+        userToken,
+        userConfig
       );
     case "mal_watching":
     case "mal_plantowatch":
@@ -728,7 +869,8 @@ switch(def.handler) {
     case "anilist_seasonal":
       return await handleAnilistCatalog(
         def.handler, anilistAccessToken, anilistUserId,
-        { fetchCached, TMDB_KEY }
+        { fetchCached, TMDB_KEY },
+        animePresentationMode
       );
     case "trakt_trending":
     case "trakt_popular":

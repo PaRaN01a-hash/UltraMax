@@ -1,5 +1,6 @@
 const { resolveConfigForProfile } = require("../utils/profiles");
 const { MDB_ID_ALIASES } = require("../catalogs/catalog-defs");
+const { shouldIncludeAnimeRow, shouldIncludeIndianCinemaRow } = require("./content-filter-service");
 
 const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 7000}`;
 
@@ -142,13 +143,14 @@ function handleNuvioManifest(req, res, deps) {
   const visibleCatalogIds = filterUpcomingCatalogIds(
     orderedCatalogIds,
     config.excludeUnreleased
-  );
+  ).filter(id => shouldIncludeAnimeRow(id, config) && shouldIncludeIndianCinemaRow(id, config));
 
   const catalogs = buildCatalogsFromIds(
     visibleCatalogIds,
     config.hiddenCatalogs || [],
     QUICK_PICK_CATALOGS,
-  CATALOG_DEFS
+    CATALOG_DEFS,
+    config.mergedCatalogs || []
   ).map(c => ({
     type: c.type,
     id: c.id,
@@ -179,7 +181,10 @@ function handleNuvioManifest(req, res, deps) {
     description: "Ultra MAX Nuvio compatible manifest",
     logo: `${BASE_URL}/logo.svg`,
     types: ["movie", "series"],
-    idPrefixes: ["tt", "tmdb"],
+    idPrefixes: (
+      config.preserveKitsuIds ||
+      config.animePresentationMode === "anisync"
+    ) ? ["tt", "tmdb", "kitsu"] : ["tt", "tmdb"],
     resources: (() => {
       const hasStream = (config.streamAddons && config.streamAddons.length > 0) ||
         (Array.isArray(config.debridServices) && config.debridServices.length > 0) ||
@@ -230,55 +235,52 @@ function handleCinemetaClone(req, res) {
   });
 }
 
-function handleMainManifest(req, res, deps) {
-const {
-  loadConfigs,
-  saveConfigs,
-  buildCatalogsFromIds,
-  QUICK_PICK_CATALOGS,
-  CATALOG_DEFS
-} = deps;
-
-  const { token } = req.params;
-  const configs = loadConfigs();
-  const baseConfig = configs[token];
-
-  if (!baseConfig) {
-    return res.status(404).json({ error: "Config not found" });
-  }
-
-  if (updateLastAccess(configs, token)) {
-    saveConfigs(configs);
-  }
-
-  const config = resolveConfigForProfile(baseConfig, req.query.profile);
+// Pure builder for the main Stremio/Nuvio-install manifest object — no
+// req/res, no config-store I/O. `config` must already be resolved for the
+// target profile (see resolveConfigForProfile in utils/profiles.js).
+// Extracted out of handleMainManifest so the installation-status fingerprint
+// system (services/manifest-fingerprint-service.js) can derive its
+// comparisons from the exact same manifest-generation code that serves real
+// clients, instead of a second, drift-prone copy of this logic.
+function buildMainManifestObject(config, token, profileId, deps) {
+  const { buildCatalogsFromIds, QUICK_PICK_CATALOGS, CATALOG_DEFS } = deps;
 
   const mainCatalogIdsWithEnableAi = config.enableAiRecommended
     ? [...(config.catalogs || []), "ai_recommended_movies", "ai_recommended_series"]
     : (config.catalogs || []);
 
+  const rawMainCatalogIds = Array.from(new Set(
+    config.anilistAccessToken
+      ? [...mainCatalogIdsWithEnableAi, "ai_anime_anilist"]
+      : mainCatalogIdsWithEnableAi
+  ));
+  const orderedMainCatalogIds =
+    Array.isArray(config.catalogOrder) && config.catalogOrder.length
+      ? [
+          ...config.catalogOrder.filter(id => rawMainCatalogIds.includes(id)),
+          ...rawMainCatalogIds.filter(id => !config.catalogOrder.includes(id))
+        ]
+      : rawMainCatalogIds;
   const mainCatalogIds = filterUpcomingCatalogIds(
-    Array.from(new Set(
-      config.anilistAccessToken
-        ? [...mainCatalogIdsWithEnableAi, "ai_anime_anilist"]
-        : mainCatalogIdsWithEnableAi
-    )),
+    orderedMainCatalogIds,
     config.excludeUnreleased
-  );
+  ).filter(id => shouldIncludeAnimeRow(id, config) && shouldIncludeIndianCinemaRow(id, config));
 
-  const profileId = req.query.profile;
   const profile = profileId && config.profiles && config.profiles[profileId];
   const idSuffix = profile ? "." + String(profileId).toLowerCase() : "";
   const nameSuffix = profile ? " — " + profile.name : "";
 
-  const manifest = {
+  return {
     id: "com.ultramax" + idSuffix,
     version: require("../package.json").version,
     name: "Ultra MAX" + nameSuffix,
-    description: `Ultra MAX setup with ${config.catalogs.length} curated rows. Built for cleaner discovery and smoother browsing.`,
+    description: `Ultra MAX setup with ${(config.catalogs || []).length} curated rows. Built for cleaner discovery and smoother browsing.`,
     logo: `${BASE_URL}/logo.svg`,
     types: ["movie", "series"],
-    idPrefixes: ["tt", "tmdb"],
+    idPrefixes: (
+      config.preserveKitsuIds ||
+      config.animePresentationMode === "anisync"
+    ) ? ["tt", "tmdb", "kitsu"] : ["tt", "tmdb"],
     resources: (() => {
       const hasStream = (config.streamAddons && config.streamAddons.length > 0) ||
         (Array.isArray(config.debridServices) && config.debridServices.length > 0) ||
@@ -295,7 +297,8 @@ const {
         mainCatalogIds,
         config.hiddenCatalogs || [],
         QUICK_PICK_CATALOGS,
-        CATALOG_DEFS
+        CATALOG_DEFS,
+        config.mergedCatalogs || []
       )
       .map(c => ({
         type: c.type,
@@ -349,6 +352,37 @@ const {
       );
     })()
   };
+}
+
+function handleMainManifest(req, res, deps) {
+const {
+  loadConfigs,
+  saveConfigs,
+  buildCatalogsFromIds,
+  QUICK_PICK_CATALOGS,
+  CATALOG_DEFS
+} = deps;
+
+  const { token } = req.params;
+  const configs = loadConfigs();
+  const baseConfig = configs[token];
+
+  if (!baseConfig) {
+    return res.status(404).json({ error: "Config not found" });
+  }
+
+  if (updateLastAccess(configs, token)) {
+    saveConfigs(configs);
+  }
+
+  const config = resolveConfigForProfile(baseConfig, req.query.profile);
+  const profileId = req.query.profile;
+
+  const manifest = buildMainManifestObject(config, token, profileId, {
+    buildCatalogsFromIds,
+    QUICK_PICK_CATALOGS,
+    CATALOG_DEFS
+  });
 
   return res.json(manifest);
 }
@@ -356,5 +390,6 @@ const {
 module.exports = {
   handleNuvioManifest,
   handleCinemetaClone,
-  handleMainManifest
+  handleMainManifest,
+  buildMainManifestObject
 };

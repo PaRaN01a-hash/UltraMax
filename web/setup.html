@@ -17592,7 +17592,24 @@ async function verifyTokenPassword(){
     var res = await fetch(API_BASE + '/c/' + _pendingToken + '/config', {
       headers: { 'x-config-password': pass }
     });
-    if(!res.ok){ errEl.textContent = 'Token not found'; btn.textContent = 'Load My Setup →'; btn.disabled = false; return; }
+    if(!res.ok){
+      var errorData = {};
+      try { errorData = await res.json(); } catch(parseError) {}
+
+      if(res.status === 404){
+        errEl.textContent = 'Token not found';
+      } else if(res.status === 401){
+        errEl.textContent = 'Incorrect password — please try again';
+      } else if(res.status === 429){
+        errEl.textContent = 'Too many attempts — wait a moment and try again';
+      } else {
+        errEl.textContent = errorData.error || 'Error checking password';
+      }
+
+      btn.textContent = 'Load My Setup →';
+      btn.disabled = false;
+      return;
+    }
     var data = await res.json();
     
     // Check password using bcrypt via the update endpoint with a dummy call

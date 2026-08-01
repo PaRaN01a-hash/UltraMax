@@ -1,8 +1,39 @@
+function normalizeAnimePresentationMode(value) {
+  return value === "anisync" ? "anisync" : "unified";
+}
+
+function normalizeAnimeFilter(value) {
+  return ["allow", "reduce", "hide"].includes(value) ? value : "allow";
+}
+
+function normalizeIndianCinemaFilter(value) {
+  return value === "hide" ? "hide" : "allow";
+}
+
+function normalizeYear(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 1888 && n < 2200 ? Math.round(n) : 0;
+}
+
+const COLLECTIONS_SCHEMA_VERSION = 2;
+
 function registerConfigRoutes(app, deps) {
 const { getWatchedIds, filterWatched } = require("./watched-filter");
   const { sanitizeStreamFormat } = require("./stream-formatter");
   const { sanitiseProfileOverrides, resolveConfigForProfile, ProfileOverridesTooLargeError } = require("../utils/profiles");
   const { CATALOG_DEFS, resolveCatalogId } = require("../catalogs/catalog-defs");
+  const {
+    validateMergedCatalogs,
+    MergedCatalogValidationError
+  } = require("./merged-catalog-service");
+  const { buildMainManifestObject } = require("./manifest-route-service");
+  const { buildCatalogsFromIds } = require("./manifest-service");
+  const { QUICK_PICK_CATALOGS } = require("../catalogs/quick-picks");
+  const {
+    normalizeManifestContract,
+    classifyInstallationStatus,
+    summarizeInstallationReasons
+  } = require("./manifest-fingerprint-service");
   const {
     loadConfigs,
     saveConfigs,
@@ -15,6 +46,65 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
   } = deps;
 
   const MAX_PROFILES_PER_TOKEN = 8;
+  const manifestBuildDeps = { buildCatalogsFromIds, QUICK_PICK_CATALOGS, CATALOG_DEFS };
+
+  // Fields that actually influence buildMainManifestObject's output. Used
+  // both to build a "candidate" config for the read-only preview endpoint
+  // (see /install-status/preview below) and as a mental checklist of
+  // everything the fingerprint is sensitive to — anything not in this list
+  // (API keys, filters, poster style, etc.) provably can't affect
+  // installation status, because it never reaches the manifest builder.
+  const MANIFEST_RELEVANT_FIELDS = [
+    "catalogs", "catalogOrder", "hiddenCatalogs", "mergedCatalogs",
+    "customCatalogs", "customMdbLists", "excludeUnreleased",
+    "enableAiRecommended", "anilistAccessToken", "preserveKitsuIds",
+    "animePresentationMode", "streamAddons", "debridServices",
+    "debridService", "debridApiKey", "animeFilter", "indianCinemaFilter"
+  ];
+
+  // Computes the manifest-contract fingerprint for an already
+  // profile-resolved config and classifies the transition away from
+  // `previousFingerprint`. Never throws: a fingerprint bug must never block
+  // a real save, so on failure this logs and returns nulls — callers must
+  // treat a null fingerprint as "leave the stored fingerprint untouched".
+  function computeInstallStatus(resolvedConfig, token, profileId, previousFingerprint) {
+    try {
+      const manifest = buildMainManifestObject(resolvedConfig, token, profileId, manifestBuildDeps);
+      const nextFingerprint = normalizeManifestContract(manifest);
+      const classification = classifyInstallationStatus(previousFingerprint, nextFingerprint);
+      const reasonSummary = classification.reason === "schema-version-mismatch"
+        ? { reasons: [{ code: "schemaVersionMismatch" }], remainingCount: 0, totalCount: 1 }
+        : summarizeInstallationReasons(classification.diff, { limit: 20 });
+
+      return {
+        fingerprint: nextFingerprint,
+        installStatus: {
+          status: classification.status,
+          reasons: reasonSummary.reasons,
+          remainingCount: reasonSummary.remainingCount,
+          totalCount: reasonSummary.totalCount
+        }
+      };
+    } catch (error) {
+      console.error("[install-status] fingerprint computation failed:", error.message);
+      return { fingerprint: null, installStatus: null };
+    }
+  }
+
+  // Builds a hypothetical config for fingerprinting purposes only — the
+  // stored config with just the manifest-relevant fields patched in from
+  // `patch`. Deliberately narrower than the full merge-patch semantics of
+  // POST /c/:token/update (which handles ~50 fields); only the fields that
+  // can actually change buildMainManifestObject's output are considered.
+  function buildFingerprintCandidateConfig(baseConfig, patch) {
+    const candidate = { ...baseConfig };
+    MANIFEST_RELEVANT_FIELDS.forEach(field => {
+      if (patch && patch[field] !== undefined) {
+        candidate[field] = patch[field];
+      }
+    });
+    return candidate;
+  }
 
   function normalizeCollectionCatalogs(collections) {
     if (!Array.isArray(collections)) return [];
@@ -97,18 +187,28 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeUnreleased,
       digitalReleaseOnly,
       preserveKitsuIds,
+      animePresentationMode,
       maxRating,
       excludeLanguages,
       betterPostersStyle,
       streamAddons,
       customCatalogs,
       customMdbLists,
+      mergedCatalogs,
       catalogOverrides,
       googleAiKey,
       enableAiRecommended,
       includeAdult,
       hiddenCatalogs,
       catalogOrder,
+      hideWatched,
+      animeFilter,
+      indianCinemaFilter,
+      minRating,
+      minVotes,
+      minYear,
+      maxYear,
+      excludeCountries,
       debridServices,
       debridService,
       debridApiKey,
@@ -121,7 +221,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes480,
       debridMaxSizeGb,
       streamFormat,
-      tmdbKey
+      tmdbKey,
+      collectionsSchemaVersion
     } = req.body;
 
     if (!password || !catalogs || !catalogs.length) {
@@ -135,7 +236,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     let token = generateToken();
     while (configs[token]) token = generateToken();
 
-    configs[token] = {
+    const pendingConfig = {
       passwordHash: hashPassword(password),
       catalogs,
       mdblistKey: mdblistKey || null,
@@ -148,6 +249,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeUnreleased: !!excludeUnreleased,
       digitalReleaseOnly: !!digitalReleaseOnly,
       preserveKitsuIds: !!preserveKitsuIds,
+      // Existing/missing configs remain unified. The setup UI recommends
+      // AniSync-compatible for a deliberate new selection, never silently.
+      animePresentationMode: normalizeAnimePresentationMode(animePresentationMode),
       maxRating: maxRating || null,
       excludeLanguages: excludeLanguages || [],
       betterPostersStyle: betterPostersStyle || null,
@@ -186,14 +290,50 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         ? hiddenCatalogs
         : [],
       catalogOrder: Array.isArray(catalogOrder) ? catalogOrder.filter(Boolean) : [],
+      hideWatched: !!hideWatched,
+      animeFilter: normalizeAnimeFilter(animeFilter),
+      indianCinemaFilter: normalizeIndianCinemaFilter(indianCinemaFilter),
+      minRating: Number.isFinite(Number(minRating)) ? Math.min(Math.max(Number(minRating), 0), 10) : 0,
+      minVotes: Number.isFinite(Number(minVotes)) && Number(minVotes) > 0 ? Math.round(Number(minVotes)) : 0,
+      minYear: normalizeYear(minYear),
+      maxYear: normalizeYear(maxYear),
+      excludeCountries: Array.isArray(excludeCountries)
+        ? excludeCountries.map(c => String(c || "").trim().toUpperCase()).filter(Boolean)
+        : [],
+      collectionsSchemaVersion:
+        collectionsSchemaVersion === COLLECTIONS_SCHEMA_VERSION
+          ? COLLECTIONS_SCHEMA_VERSION
+          : 1,
       streamFormat: sanitizeStreamFormat(streamFormat),
       tmdbKey: tmdbKey || null,
       createdAt: new Date().toISOString()
     };
+    try {
+      pendingConfig.mergedCatalogs = validateMergedCatalogs(mergedCatalogs, {
+        config: pendingConfig,
+        catalogDefs: CATALOG_DEFS,
+        resolveCatalogId
+      });
+    } catch (error) {
+      if (error instanceof MergedCatalogValidationError) {
+        return res.status(400).json({ error: error.message });
+      }
+      throw error;
+    }
+    // First-time setup for this token always has no prior fingerprint, so
+    // this trivially classifies as first-install — computed here (rather
+    // than hardcoded) so the response shape and reason-summarization logic
+    // stay identical to every other generate path.
+    const installResult = computeInstallStatus(pendingConfig, token, null, undefined);
+    if (installResult.fingerprint) {
+      pendingConfig.installFingerprint = installResult.fingerprint;
+    }
+
+    configs[token] = pendingConfig;
 
     saveConfigs(configs);
 
-    res.json({ token });
+    res.json({ token, installStatus: installResult.installStatus });
   });
 
   app.post("/c/:token/update", (req, res) => {
@@ -212,10 +352,12 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeUnreleased,
       digitalReleaseOnly,
       preserveKitsuIds,
+      animePresentationMode,
       maxRating,
       streamAddons,
       customCatalogs,
       customMdbLists,
+      mergedCatalogs,
       catalogOverrides,
       googleAiKey,
       enableAiRecommended,
@@ -225,6 +367,13 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeLanguages,
       betterPostersStyle,
       hideWatched,
+      animeFilter,
+      indianCinemaFilter,
+      minRating,
+      minVotes,
+      minYear,
+      maxYear,
+      excludeCountries,
       debridServices,
       debridService,
       debridApiKey,
@@ -237,7 +386,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes480,
       debridMaxSizeGb,
       streamFormat,
-      tmdbKey
+      tmdbKey,
+      collectionsSchemaVersion
     } = req.body;
 
     const configs = loadConfigs();
@@ -262,6 +412,31 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     if(isPreauth) {
       configs[token].preauth = false;
       configs[token].passwordHash = hashPassword(password);
+    }
+
+    let validatedMergedCatalogs;
+    try {
+      const pendingConfig = {
+        ...configs[token],
+        customCatalogs: Array.isArray(customCatalogs)
+          ? customCatalogs.filter(Boolean)
+          : (configs[token].customCatalogs || []),
+        customMdbLists: Array.isArray(customMdbLists)
+          ? customMdbLists.filter(Boolean)
+          : (configs[token].customMdbLists || [])
+      };
+      validatedMergedCatalogs = mergedCatalogs !== undefined
+        ? validateMergedCatalogs(mergedCatalogs, {
+            config: pendingConfig,
+            catalogDefs: CATALOG_DEFS,
+            resolveCatalogId
+          })
+        : (configs[token].mergedCatalogs || []);
+    } catch (error) {
+      if (error instanceof MergedCatalogValidationError) {
+        return res.status(400).json({ error: error.message });
+      }
+      throw error;
     }
 
     configs[token].catalogs = catalogs;
@@ -291,6 +466,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       preserveKitsuIds !== undefined
         ? !!preserveKitsuIds
         : (configs[token].preserveKitsuIds || false);
+
+    configs[token].animePresentationMode =
+      animePresentationMode !== undefined
+        ? normalizeAnimePresentationMode(animePresentationMode)
+        : normalizeAnimePresentationMode(configs[token].animePresentationMode);
 
     configs[token].maxRating =
       maxRating !== undefined
@@ -346,6 +526,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     configs[token].customMdbLists = Array.isArray(customMdbLists)
       ? customMdbLists.filter(Boolean)
       : (configs[token].customMdbLists || []);
+    configs[token].mergedCatalogs = validatedMergedCatalogs;
 
     configs[token].catalogOverrides =
       (catalogOverrides && typeof catalogOverrides === "object" && !Array.isArray(catalogOverrides))
@@ -365,6 +546,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         : !!configs[token].includeAdult;
 
     configs[token].catalogOrder = Array.isArray(catalogOrder) ? catalogOrder.filter(Boolean) : (configs[token].catalogOrder || []);
+    if (collectionsSchemaVersion === COLLECTIONS_SCHEMA_VERSION) {
+      configs[token].collectionsSchemaVersion = COLLECTIONS_SCHEMA_VERSION;
+    }
     configs[token].hiddenCatalogs = Array.isArray(hiddenCatalogs)
       ? hiddenCatalogs
       : (configs[token].hiddenCatalogs || []);
@@ -374,11 +558,51 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         ? !!hideWatched
         : (configs[token].hideWatched || false);
 
+    configs[token].animeFilter =
+      animeFilter !== undefined
+        ? normalizeAnimeFilter(animeFilter)
+        : normalizeAnimeFilter(configs[token].animeFilter);
+
+    configs[token].indianCinemaFilter =
+      indianCinemaFilter !== undefined
+        ? normalizeIndianCinemaFilter(indianCinemaFilter)
+        : normalizeIndianCinemaFilter(configs[token].indianCinemaFilter);
+
+    configs[token].minRating =
+      minRating !== undefined
+        ? (Number.isFinite(Number(minRating)) ? Math.min(Math.max(Number(minRating), 0), 10) : 0)
+        : (Number(configs[token].minRating) || 0);
+
+    configs[token].minVotes =
+      minVotes !== undefined
+        ? (Number.isFinite(Number(minVotes)) && Number(minVotes) > 0 ? Math.round(Number(minVotes)) : 0)
+        : (Number(configs[token].minVotes) || 0);
+
+    configs[token].minYear =
+      minYear !== undefined ? normalizeYear(minYear) : normalizeYear(configs[token].minYear);
+
+    configs[token].maxYear =
+      maxYear !== undefined ? normalizeYear(maxYear) : normalizeYear(configs[token].maxYear);
+
+    configs[token].excludeCountries = Array.isArray(excludeCountries)
+      ? excludeCountries.map(c => String(c || "").trim().toUpperCase()).filter(Boolean)
+      : (configs[token].excludeCountries || []);
+
     if (streamFormat !== undefined) {
       configs[token].streamFormat = sanitizeStreamFormat(streamFormat);
     }
 
     configs[token].updatedAt = new Date().toISOString();
+
+    // The base config's own previous fingerprint (never a device profile's
+    // — updating the base token always compares against the base token's
+    // own install history, per the "don't compare one device profile
+    // against another" rule).
+    const previousFingerprint = configs[token].installFingerprint;
+    const installResult = computeInstallStatus(configs[token], token, null, previousFingerprint);
+    if (installResult.fingerprint) {
+      configs[token].installFingerprint = installResult.fingerprint;
+    }
 
     saveConfigs(configs);
 
@@ -392,7 +616,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       ).catch(e => console.error('[watched-filter] prewarm failed:', e.message));
     }
 
-    res.json({ token });
+    res.json({ token, installStatus: installResult.installStatus });
   });
 
   app.get("/c/:token/config", (req, res) => {
@@ -430,6 +654,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       catalogs: config.catalogs,
       catalogOrder: config.catalogOrder || [],
       collections: normalizeCollectionCatalogs(config.collections),
+      collectionsSchemaVersion: config.collectionsSchemaVersion || 1,
       mdblistKey: config.mdblistKey,
       tmdbKey: config.tmdbKey || null,
       language: config.language,
@@ -441,17 +666,27 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeUnreleased: config.excludeUnreleased || false,
       digitalReleaseOnly: config.digitalReleaseOnly || false,
       preserveKitsuIds: config.preserveKitsuIds || false,
+      animeFilter: normalizeAnimeFilter(config.animeFilter),
+      indianCinemaFilter: normalizeIndianCinemaFilter(config.indianCinemaFilter),
+      minRating: Number(config.minRating) || 0,
+      minVotes: Number(config.minVotes) || 0,
+      minYear: normalizeYear(config.minYear),
+      maxYear: normalizeYear(config.maxYear),
+      excludeCountries: config.excludeCountries || [],
+      animePresentationMode: normalizeAnimePresentationMode(config.animePresentationMode),
       maxRating: config.maxRating || null,
       excludeLanguages: config.excludeLanguages || [],
       betterPostersStyle: config.betterPostersStyle || null,
       streamAddons: config.streamAddons || [],
       customCatalogs: config.customCatalogs || [],
       customMdbLists: config.customMdbLists || [],
+      mergedCatalogs: config.mergedCatalogs || [],
       catalogOverrides: config.catalogOverrides || {},
       googleAiKey: config.googleAiKey || null,
       enableAiRecommended: !!config.enableAiRecommended,
       includeAdult: !!config.includeAdult,
       hiddenCatalogs: config.hiddenCatalogs || [],
+      hideWatched: !!config.hideWatched,
       debridServices: config.debridServices || [],
       debridCachedOnly: !!config.debridCachedOnly,
       debridEnglishOnly: config.debridEnglishOnly !== false,
@@ -469,6 +704,65 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         overrides: p.overrides || {},
         createdAt: p.createdAt || null
       }))
+    });
+  });
+
+  // ── INSTALLATION STATUS ──
+  // Read-only: predicts what generating right now would do to an already
+  // -installed add-on, without saving anything. Compares a hypothetical
+  // manifest built from the current in-editor form state (patched onto the
+  // stored config — see buildFingerprintCandidateConfig) against the last
+  // *successfully persisted* fingerprint for this token/profile. The
+  // authoritative result — what actually happened — is only ever produced
+  // by the real save routes above (/c/create, /update, /profiles...),
+  // which derive their own fingerprint the same way rather than trusting
+  // whatever this preview last returned.
+  //
+  // No password required: like GET /c/:token/profiles, this is read-only
+  // and never returns secrets — only catalog identities/names and reason
+  // codes, all of which are already implicitly public via the manifest
+  // itself.
+  const MAX_PREVIEW_BODY_BYTES = 200 * 1024;
+
+  app.post("/c/:token/install-status/preview", (req, res) => {
+    const { token } = req.params;
+    const configs = loadConfigs();
+    const baseConfig = configs[token];
+
+    if (!baseConfig) return res.status(404).json({ error: "Not found" });
+
+    if (Buffer.byteLength(JSON.stringify(req.body || {})) > MAX_PREVIEW_BODY_BYTES) {
+      return res.status(413).json({ error: "Payload too large" });
+    }
+
+    const profileId = req.query.profile || req.body.profile || null;
+    const storedProfile = profileId && baseConfig.profiles && baseConfig.profiles[profileId];
+    const previousFingerprint = profileId
+      ? (storedProfile ? storedProfile.installFingerprint : undefined)
+      : baseConfig.installFingerprint;
+
+    const candidateConfig = buildFingerprintCandidateConfig(baseConfig, req.body);
+    // A profile being previewed for the first time (not yet created) still
+    // needs to resolve against *some* base — falls back to the base config
+    // itself, matching what creating that profile with these overrides
+    // would actually produce.
+    const resolvedCandidate = profileId
+      ? resolveConfigForProfile({ ...candidateConfig, profiles: baseConfig.profiles }, profileId)
+      : candidateConfig;
+
+    const manifest = buildMainManifestObject(resolvedCandidate, token, profileId, manifestBuildDeps);
+    const nextFingerprint = normalizeManifestContract(manifest);
+    const classification = classifyInstallationStatus(previousFingerprint, nextFingerprint);
+    const reasonSummary = classification.reason === "schema-version-mismatch"
+      ? { reasons: [{ code: "schemaVersionMismatch" }], remainingCount: 0, totalCount: 1 }
+      : summarizeInstallationReasons(classification.diff, { limit: 20 });
+
+    res.json({
+      readOnly: true,
+      status: classification.status,
+      reasons: reasonSummary.reasons,
+      remainingCount: reasonSummary.remainingCount,
+      totalCount: reasonSummary.totalCount
     });
   });
 
@@ -509,14 +803,32 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     while (config.profiles[profileId]) profileId = generateToken();
 
     try {
+      const safeOverrides = sanitiseProfileOverrides(overrides);
+      if (safeOverrides.mergedCatalogs !== undefined) {
+        safeOverrides.mergedCatalogs = validateMergedCatalogs(safeOverrides.mergedCatalogs, {
+          config: { ...config, ...safeOverrides },
+          catalogDefs: CATALOG_DEFS,
+          resolveCatalogId
+        });
+      }
       config.profiles[profileId] = {
         name: cleanName,
-        overrides: sanitiseProfileOverrides(overrides),
+        overrides: safeOverrides,
         createdAt: new Date().toISOString()
       };
     } catch (e) {
       if (e instanceof ProfileOverridesTooLargeError) return res.status(400).json({ error: e.message });
+      if (e instanceof MergedCatalogValidationError) return res.status(400).json({ error: e.message });
       throw e;
+    }
+
+    // A newly-created profile has no prior fingerprint of its own — always
+    // first-install, and always compared against this profile's own
+    // history, never the base config's or another profile's.
+    const resolvedProfileConfig = resolveConfigForProfile(config, profileId);
+    const installResult = computeInstallStatus(resolvedProfileConfig, token, profileId, undefined);
+    if (installResult.fingerprint) {
+      config.profiles[profileId].installFingerprint = installResult.fingerprint;
     }
 
     saveConfigs(configs);
@@ -524,7 +836,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     res.json({
       id: profileId,
       name: config.profiles[profileId].name,
-      overrides: config.profiles[profileId].overrides
+      overrides: config.profiles[profileId].overrides,
+      installStatus: installResult.installStatus
     });
   });
 
@@ -570,20 +883,38 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
 
     if (overrides !== undefined) {
       try {
-        config.profiles[profileId].overrides = sanitiseProfileOverrides(overrides);
+        const safeOverrides = sanitiseProfileOverrides(overrides);
+        if (safeOverrides.mergedCatalogs !== undefined) {
+          safeOverrides.mergedCatalogs = validateMergedCatalogs(safeOverrides.mergedCatalogs, {
+            config: { ...config, ...safeOverrides },
+            catalogDefs: CATALOG_DEFS,
+            resolveCatalogId
+          });
+        }
+        config.profiles[profileId].overrides = safeOverrides;
       } catch (e) {
         if (e instanceof ProfileOverridesTooLargeError) return res.status(400).json({ error: e.message });
+        if (e instanceof MergedCatalogValidationError) return res.status(400).json({ error: e.message });
         throw e;
       }
     }
 
     config.profiles[profileId].updatedAt = new Date().toISOString();
+
+    const previousFingerprint = config.profiles[profileId].installFingerprint;
+    const resolvedProfileConfig = resolveConfigForProfile(config, profileId);
+    const installResult = computeInstallStatus(resolvedProfileConfig, token, profileId, previousFingerprint);
+    if (installResult.fingerprint) {
+      config.profiles[profileId].installFingerprint = installResult.fingerprint;
+    }
+
     saveConfigs(configs);
 
     res.json({
       id: profileId,
       name: config.profiles[profileId].name,
-      overrides: config.profiles[profileId].overrides
+      overrides: config.profiles[profileId].overrides,
+      installStatus: installResult.installStatus
     });
   });
 
@@ -658,6 +989,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         excludeUnreleased: !!config.excludeUnreleased,
         digitalReleaseOnly: !!config.digitalReleaseOnly,
         preserveKitsuIds: !!config.preserveKitsuIds,
+        animePresentationMode:
+          config.animePresentationMode === "anisync" ? "anisync" : "unified",
         maxRating: config.maxRating || null,
         excludeLanguages: config.excludeLanguages || [],
         betterPostersStyle: config.betterPostersStyle || null,
@@ -752,6 +1085,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
 
       target.collections = merged;
     }
+    target.collectionsSchemaVersion = COLLECTIONS_SCHEMA_VERSION;
 
     saveConfigs(configs);
 
@@ -791,5 +1125,6 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
 }
 
 module.exports = {
-  registerConfigRoutes
+  registerConfigRoutes,
+  normalizeAnimePresentationMode
 };

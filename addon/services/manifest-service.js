@@ -1,4 +1,5 @@
 const { resolveCatalogId } = require("../catalogs/catalog-defs");
+const { buildMergedManifestCatalogs } = require("./merged-catalog-service");
 
 function getStaticIds(CATALOG_DEFS, FILTER_ENABLED) {
   return Object.keys(CATALOG_DEFS).filter(id => {
@@ -48,7 +49,8 @@ function buildCatalogsFromIds(
   selectedIds,
   hiddenIds = [],
   QUICK_PICK_CATALOGS,
-  CATALOG_DEFS
+  CATALOG_DEFS,
+  mergedCatalogs = []
 ) {
   // Resolve legacy MDBList catalog ids (e.g. "mdb_88328") saved in older
   // user configs to their current human-readable slug, so both lists agree
@@ -57,6 +59,9 @@ function buildCatalogsFromIds(
 
   const quickMap = new Map(
     QUICK_PICK_CATALOGS.map(c => [c.id, c])
+  );
+  const mergedMap = new Map(
+    buildMergedManifestCatalogs(mergedCatalogs).map(c => [c.id, c])
   );
 
   return selectedIds.map(rawId => {
@@ -71,6 +76,16 @@ function buildCatalogsFromIds(
         name: quick.name,
         showInHome: !isHidden,
         extra: [{ name:"skip", isRequired: isHidden ? true : false }]
+      };
+    }
+
+    const merged = mergedMap.get(id);
+    if (merged) {
+      const isHidden = hiddenSet.has(id);
+      return {
+        ...merged,
+        showInHome: !isHidden,
+        extra: [{ name: "skip", isRequired: isHidden }]
       };
     }
 

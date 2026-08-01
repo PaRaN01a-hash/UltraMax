@@ -2,14 +2,17 @@ const KITSU_API_BASE = "https://kitsu.io/api/edge";
 const KITSU_TIMEOUT_MS = 8000;
 
 function parseKitsuId(id) {
-  const match = /^kitsu:(\d+)(?::(\d+):(\d+))?$/i.exec(String(id || "").trim());
+  const match = /^kitsu:(\d+)(?::(\d+)(?::(\d+))?)?$/i.exec(String(id || "").trim());
 
   if (!match) return null;
 
+  // AniSync-style video ids are kitsu:<anime>:<absolute episode>. Ultra
+  // MAX's existing unified ids are kitsu:<anime>:<season>:<episode>.
   return {
     animeId: match[1],
-    season: match[2] ? Number(match[2]) : null,
-    episode: match[3] ? Number(match[3]) : null
+    season: match[3] ? Number(match[2]) : null,
+    episode: match[3] ? Number(match[3]) : (match[2] ? Number(match[2]) : null),
+    absoluteEpisode: match[2] && !match[3] ? Number(match[2]) : null
   };
 }
 
@@ -36,12 +39,12 @@ function cleanDescription(value) {
     .trim();
 }
 
-async function fetchJson(url) {
+async function fetchJson(url, fetchImpl = fetch) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), KITSU_TIMEOUT_MS);
 
   try {
-    const response = await fetch(url, {
+    const response = await fetchImpl(url, {
       signal: controller.signal,
       headers: {
         Accept: "application/vnd.api+json",
@@ -57,6 +60,156 @@ async function fetchJson(url) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+function normaliseAnimeTitle(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function kitsuResourceYear(resource) {
+  const value = resource?.attributes?.startDate;
+  const year = Number.parseInt(String(value || "").slice(0, 4), 10);
+  return Number.isInteger(year) ? year : null;
+}
+
+function kitsuResourceToCatalogMeta(resource, alternateIds = {}) {
+  const attributes = resource?.attributes || {};
+  const subtype = String(attributes.subtype || "").toLowerCase();
+  const poster = absoluteImageUrl(attributes.posterImage);
+  const background = absoluteImageUrl(attributes.coverImage);
+  const kitsuId = String(resource?.id || "").trim();
+
+  if (!kitsuId || subtype === "movie") return null;
+
+  const animeIds = {
+    kitsu: kitsuId,
+    ...(alternateIds.anilist ? { anilist: String(alternateIds.anilist) } : {}),
+    ...(alternateIds.mal ? { mal: String(alternateIds.mal) } : {})
+  };
+
+  return {
+    id: `kitsu:${kitsuId}`,
+    type: "series",
+    name: animeTitle(attributes),
+    poster,
+    background: background || poster,
+    releaseInfo: kitsuResourceYear(resource)
+      ? String(kitsuResourceYear(resource))
+      : null,
+    genres: subtype === "special" ? ["Anime", "Special"] : ["Anime"],
+    behaviorHints: { animeIds }
+  };
+}
+
+function scoreKitsuResource(resource, query, year) {
+  const attributes = resource?.attributes || {};
+  const titles = [
+    attributes.canonicalTitle,
+    ...Object.values(attributes.titles || {})
+  ].filter(Boolean).map(normaliseAnimeTitle);
+  const wanted = normaliseAnimeTitle(query);
+  let score = titles.includes(wanted) ? 100 : 0;
+  if (!score && titles.some(title => title.includes(wanted) || wanted.includes(title))) score = 35;
+  const candidateYear = kitsuResourceYear(resource);
+  if (year && candidateYear) {
+    const difference = Math.abs(Number(year) - candidateYear);
+    score += difference === 0 ? 50 : (difference === 1 ? 10 : -Math.min(difference * 5, 30));
+  }
+  return score;
+}
+
+async function searchKitsuAnime(query, options = {}) {
+  const title = String(query || "").trim();
+  if (!title) return [];
+  const limit = Math.max(1, Math.min(Number(options.limit) || 20, 20));
+  const params = new URLSearchParams({
+    "filter[text]": title,
+    "page[limit]": String(limit)
+  });
+  const payload = await fetchJson(
+    `${KITSU_API_BASE}/anime?${params.toString()}`,
+    options.fetchImpl || fetch
+  );
+  const resources = Array.isArray(payload?.data) ? payload.data : [];
+  return resources
+    .filter(resource => String(resource?.attributes?.subtype || "").toLowerCase() !== "movie")
+    .sort((a, b) =>
+      scoreKitsuResource(b, title, options.year) -
+      scoreKitsuResource(a, title, options.year)
+    );
+}
+
+async function searchKitsuCatalogMetas(query, options = {}) {
+  const resources = await searchKitsuAnime(query, options);
+  if (
+    options.requireExactAnchor &&
+    !resources.some(resource => scoreKitsuResource(resource, query, options.year) >= 100)
+  ) {
+    return [];
+  }
+  const seen = new Set();
+  return resources
+    .filter(resource =>
+      options.minScore == null ||
+      scoreKitsuResource(resource, query, options.year) >= Number(options.minScore)
+    )
+    .map(resource =>
+    kitsuResourceToCatalogMeta(resource, options.alternateIds)
+  ).filter(meta => {
+    if (!meta || seen.has(meta.id)) return false;
+    seen.add(meta.id);
+    return true;
+  });
+}
+
+async function resolveAnimeItemsToKitsuMetas(items, options = {}) {
+  const diagnostics = {
+    seeds: Array.isArray(options.seeds) ? options.seeds.length : 0,
+    recommendationsFetched: Array.isArray(items) ? items.length : 0,
+    excludedWatched: 0,
+    duplicatesRemoved: 0,
+    mappingFailures: 0,
+    finalResults: 0
+  };
+  const metas = [];
+  const seen = new Set();
+
+  for (const item of items || []) {
+    try {
+      const matches = await searchKitsuCatalogMetas(item?.title, {
+        year: item?.year,
+        limit: 10,
+        minScore: 35,
+        requireExactAnchor: true,
+        fetchImpl: options.fetchImpl,
+        alternateIds: {
+          anilist: item?.anilistId || item?.id,
+          mal: item?.malId || item?.idMal
+        }
+      });
+      const meta = matches[0];
+      if (!meta) {
+        diagnostics.mappingFailures += 1;
+        continue;
+      }
+      if (seen.has(meta.id)) {
+        diagnostics.duplicatesRemoved += 1;
+        continue;
+      }
+      seen.add(meta.id);
+      metas.push(meta);
+    } catch {
+      // Per-item fail-open: one unavailable mapping must not collapse a row.
+      diagnostics.mappingFailures += 1;
+    }
+  }
+
+  diagnostics.finalResults = metas.length;
+  return { metas, diagnostics };
 }
 
 async function fetchKitsuAnime(animeId) {
@@ -101,7 +254,7 @@ function animeTitle(attributes) {
   );
 }
 
-function buildEpisodeVideos(originalId, episodeResources) {
+function buildEpisodeVideos(originalId, episodeResources, animePresentationMode = "unified") {
   return episodeResources
     .map(resource => {
       const attributes = resource?.attributes || {};
@@ -118,12 +271,17 @@ function buildEpisodeVideos(originalId, episodeResources) {
       const thumbnail = absoluteImageUrl(attributes.thumbnail);
 
       return {
-        id: `${originalId}:1:${episodeNumber}`,
+        id: animePresentationMode === "anisync"
+          ? `${originalId}:${episodeNumber}`
+          : `${originalId}:1:${episodeNumber}`,
         title:
           attributes.canonicalTitle ||
           `Episode ${episodeNumber}`,
         season: 1,
         episode: episodeNumber,
+        ...(animePresentationMode === "anisync"
+          ? { behaviorHints: { absoluteEpisode: episodeNumber } }
+          : {}),
         overview: cleanDescription(
           attributes.synopsis || attributes.description
         ),
@@ -137,7 +295,7 @@ function buildEpisodeVideos(originalId, episodeResources) {
     .sort((a, b) => a.episode - b.episode);
 }
 
-async function buildKitsuMeta({ id, type }) {
+async function buildKitsuMeta({ id, type, animePresentationMode = "unified" }) {
   const parsed = parseKitsuId(id);
 
   if (!parsed) return null;
@@ -177,7 +335,7 @@ async function buildKitsuMeta({ id, type }) {
 
   try {
     const episodes = await fetchKitsuEpisodes(parsed.animeId);
-    const videos = buildEpisodeVideos(id, episodes);
+    const videos = buildEpisodeVideos(id, episodes, animePresentationMode);
 
     if (videos.length) {
       meta.videos = videos;
@@ -516,10 +674,9 @@ async function resolveKitsuStreamId(id, deps) {
       return null;
     }
 
-    const resolvedId =
-      parsed.season && parsed.episode
-        ? `${imdbId}:${parsed.season}:${parsed.episode}`
-        : imdbId;
+    const resolvedId = parsed.episode
+      ? `${imdbId}:${parsed.season || 1}:${parsed.episode}`
+      : imdbId;
 
     streamIdCache.set(cacheKey, resolvedId);
 
@@ -549,5 +706,10 @@ module.exports = {
   isKitsuId,
   buildKitsuMeta,
   resolveKitsuStreamId,
-  resolveTmdbAnimeToKitsuId
+  resolveTmdbAnimeToKitsuId,
+  searchKitsuAnime,
+  searchKitsuCatalogMetas,
+  resolveAnimeItemsToKitsuMetas,
+  kitsuResourceToCatalogMeta,
+  buildEpisodeVideos
 };
