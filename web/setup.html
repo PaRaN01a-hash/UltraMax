@@ -13310,9 +13310,9 @@ document.addEventListener('DOMContentLoaded', async function(){
 });
 
 
-const BASE_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
+const BASE_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : window.location.origin;
 const API_BASE = window.location.origin;
-const DISPLAY_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
+const DISPLAY_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : window.location.origin;
   const MAX_COLLECTION_FOLDERS = 8;
 let selected = new Set();
 let editToken = null;
@@ -23694,7 +23694,7 @@ window.addEventListener('pageshow', function(event){
 </script>
 <script>
 (function(){
-  const DISPLAY_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : 'https://ultramax.vip';
+  const DISPLAY_URL = window.location.hostname === 'ultramax.vip' ? 'https://ultramax.vip' : window.location.origin;
   let qrGenerated = false;
   const toggle = document.getElementById('nuvio-qr-toggle');
   const qrDiv = document.getElementById('nuvio-qr-code');
