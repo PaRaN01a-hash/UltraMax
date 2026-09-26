@@ -1,6 +1,32 @@
 const axios = require("axios");
+const crypto = require("crypto");
 
 const cache = new Map();
+const inflight = new Map();
+
+function cacheIdentity(url) {
+  const rawUrl = String(url);
+  let publicIdentity = rawUrl;
+
+  /*
+   * TMDB API keys authenticate the caller but do not change public metadata.
+   * Ignore only api_key when building the cache identity so equivalent TMDB
+   * requests from different Ultra MAX users share cache and in-flight work.
+   * Session/user-specific parameters remain part of the identity.
+   */
+  try {
+    const parsed = new URL(rawUrl);
+    if (parsed.hostname === "api.themoviedb.org") {
+      parsed.searchParams.delete("api_key");
+      parsed.searchParams.sort();
+      publicIdentity = parsed.toString();
+    }
+  } catch {
+    // Non-URL cache keys keep their exact existing behaviour.
+  }
+
+  return `url:${crypto.createHash("sha256").update(publicIdentity).digest("hex")}`;
+}
 
 // ── TMDB request queue ──────────────────────────────────────────
 // TMDB responds with 429 when too many requests land at once (catalog
@@ -63,17 +89,30 @@ async function tmdbGetWithRetry(url) {
 // ─────────────────────────────────────────────────────────────────
 
 async function fetchCached(url) {
-  if (cache.has(url)) return cache.get(url);
+  const cacheKey = cacheIdentity(url);
+  if (cache.has(cacheKey)) return cache.get(cacheKey);
+  if (inflight.has(cacheKey)) return inflight.get(cacheKey);
 
-  const res = isTmdbUrl(url)
-    ? await enqueueTmdb(() => tmdbGetWithRetry(url))
-    : await axios.get(url, { timeout: 5000 });
+  const request = (async () => {
+    const res = isTmdbUrl(url)
+      ? await enqueueTmdb(() => tmdbGetWithRetry(url))
+      : await axios.get(url, { timeout: 5000 });
 
-  cache.set(url, res.data);
+    cache.set(cacheKey, res.data);
 
-  setTimeout(() => cache.delete(url), 300000);
+    const expiry = setTimeout(() => cache.delete(cacheKey), 300000);
+    expiry.unref?.();
 
-  return res.data;
+    return res.data;
+  })();
+
+  inflight.set(cacheKey, request);
+
+  try {
+    return await request;
+  } finally {
+    if (inflight.get(cacheKey) === request) inflight.delete(cacheKey);
+  }
 }
 
 async function fetchTrakt(path, traktClientId, customHeaders = null) {
@@ -92,7 +131,8 @@ async function fetchTrakt(path, traktClientId, customHeaders = null) {
     const res = await axios.get(url, { timeout: 5000, headers });
     if (!customHeaders) {
       cache.set(url, res.data);
-      setTimeout(() => cache.delete(url), 300000);
+      const expiry = setTimeout(() => cache.delete(url), 300000);
+      expiry.unref?.();
     }
     return res.data;
   } catch (e) {
@@ -104,5 +144,8 @@ async function fetchTrakt(path, traktClientId, customHeaders = null) {
 
 module.exports = {
   fetchCached,
-  fetchTrakt
+  fetchTrakt,
+  cacheIdentity,
+  _cache: cache,
+  _inflight: inflight
 };

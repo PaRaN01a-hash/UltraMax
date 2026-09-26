@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Unlock Ultra MAX for UltraPlay</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 70% 20%,#43277a55,transparent 36%),#070914;color:#f4f1ff;font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.card{width:min(460px,100%);padding:28px;border:1px solid #826de25c;border-radius:22px;background:linear-gradient(145deg,#12152a,#090b17);box-shadow:0 28px 90px #000a}.eyebrow{margin:0 0 8px;color:#9f8ce3;font-size:11px;letter-spacing:.16em}.mark{width:48px;height:48px;margin-bottom:18px;display:grid;place-items:center;border:1px solid #826de25c;border-radius:14px;background:#191633;color:#c7b5ff;font-weight:900;font-size:22px}h1{margin:0 0 10px;font-size:30px;line-height:1.1}p{margin:0 0 20px;color:#969db7}label{display:block;margin-bottom:8px;color:#858da8;font-size:10px;letter-spacing:.12em}input{width:100%;min-height:48px;padding:0 13px;border:1px solid #62699b66;border-radius:11px;background:#090c19;color:#f6f3ff;font:inherit;outline:none}input:focus{border-color:#8a70e8;box-shadow:0 0 0 3px #8a70e81c}button{width:100%;min-height:48px;margin-top:12px;border:0;border-radius:11px;background:linear-gradient(100deg,#7447f8,#55c7f5);color:white;font-weight:800;font-size:15px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.status{min-height:22px;margin-top:13px;color:#9aa2ba;font-size:12px}.status.error{color:#f0a4ad}.small{margin-top:18px;padding-top:16px;border-top:1px solid #ffffff10;color:#747c98;font-size:11px}.small strong{color:#aeb5ca}
+</style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+<main class="card">
+<div class="mark">U</div>
+<p class="eyebrow">ULTRA MAX · ULTRAPLAY+</p>
+<h1>Unlock this setup</h1>
+<p>Enter your Ultra MAX setup password here. It is sent only to Ultra MAX and is never handed to UltraPlay.</p>
+<form id="form">
+<label for="password">ULTRA MAX PASSWORD</label>
+<input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+<button id="submit" type="submit">Unlock for 10 minutes</button>
+</form>
+<div id="status" class="status" role="status"></div>
+<div class="small"><strong>Short-lived access only.</strong> UltraPlay receives a temporary management capability, not your password or setup token.</div>
+</main>
+<script>
+(() => {
+  'use strict';
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code') || '';
+  const form = document.getElementById('form');
+  const password = document.getElementById('password');
+  const submit = document.getElementById('submit');
+  const status = document.getElementById('status');
+  function show(message,error=false){ status.textContent=message; status.className='status'+(error?' error':''); }
+  function storeBadgeClaim(claim){
+    if(typeof claim!=='string'||!/^[A-Za-z0-9_-]{20,1200}\.[A-Za-z0-9_-]{43,100}$/.test(claim))return;
+    try{
+      const raw=claim.split('.')[0].replace(/-/g,'+').replace(/_/g,'/');
+      const padded=raw+'='.repeat((4-raw.length%4)%4);
+      const payload=JSON.parse(atob(padded));
+      if(payload?.v===1&&payload?.tier==='plus'&&/^[A-Za-z0-9_-]{43}$/.test(payload.setup))localStorage.setItem('um_playplus_badge_v1:'+payload.setup,claim);
+    }catch{}
+  }
+  if(!/^[A-Za-z0-9_-]{32,200}$/.test(code)){ form.hidden=true; show('This unlock link is invalid or expired. Return to UltraPlay and try again.',true); return; }
+  form.addEventListener('submit', async event => {
+    event.preventDefault(); submit.disabled=true; show('Checking with Ultra MAX…');
+    try {
+      const response = await fetch('/api/ultraplay/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,password:password.value})});
+      const data = await response.json().catch(()=>({}));
+      if(!response.ok) throw new Error(data.error || 'Ultra MAX could not unlock this setup.');
+      if(typeof data.capability!=='string'||typeof data.origin!=='string') throw new Error('Ultra MAX returned an invalid management session.');
+      storeBadgeClaim(data.badgeClaim);
+      if(window.opener){
+        window.opener.postMessage({type:'ultramax-manager-unlocked',capability:data.capability,expiresAt:data.expiresAt,host:location.host},data.origin);
+        show('Unlocked. Returning to UltraPlay…');
+        password.value='';
+        setTimeout(()=>window.close(),450);
+      } else {
+        show('Unlocked. Return to UltraPlay to continue.');
+      }
+    } catch(error){ show(error.message || 'Unlock failed.',true); }
+    finally{ submit.disabled=false; }
+  });
+})();
+</script>
+</body>
+</html>

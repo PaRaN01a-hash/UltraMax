@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var queryNative = params.get('native') === '1';
+    var storedNative = false;
+
+    try {
+      storedNative =
+        sessionStorage.getItem('ultramax_native_app') === '1';
+    } catch (error) {}
+
+    if (queryNative) {
+      try {
+        sessionStorage.setItem('ultramax_native_app', '1');
+      } catch (error) {}
+    }
+
+    if (queryNative || storedNative) {
+      document.documentElement.classList.add('native-app');
+    }
+  })();
+  </script>
+
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Ultra MAX · Settings</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="/nav.css?v=20260922-nav3">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #080810;
+      --card: #12121f;
+      --border: #23233a;
+      --border2: #30304b;
+      --violet: #7b2fff;
+      --violet2: #9b5fff;
+      --coral: #ff3d5a;
+      --green: #34d399;
+      --text: #eeeeF7;
+      --muted: #8d8da8;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(123,47,255,.25),
+          transparent 34%
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+    }
+
+    body {
+      padding-bottom:
+        calc(104px + env(safe-area-inset-bottom));
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 5000;
+      display: flex;
+      min-height:
+        calc(62px + env(safe-area-inset-top));
+      padding:
+        calc(8px + env(safe-area-inset-top))
+        14px
+        8px;
+      align-items: center;
+      gap: 12px;
+      background: rgba(8,8,16,.96);
+      border-bottom: 1px solid rgba(155,95,255,.18);
+      box-shadow: 0 12px 34px rgba(0,0,0,.34);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(155,95,255,.28);
+      border-radius: 14px;
+      background: rgba(255,255,255,.045);
+      color: #fff;
+      text-decoration: none;
+      font-size: 22px;
+    }
+
+    .header-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .eyebrow {
+      color: var(--violet2);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .header-title {
+      margin-top: 2px;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 24px 16px 30px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .logo {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 38px;
+      letter-spacing: .06em;
+    }
+
+    .logo span {
+      background:
+        linear-gradient(135deg, var(--violet), var(--coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section-label {
+      margin: 24px 4px 10px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid rgba(155,95,255,.22);
+      border-radius: 20px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(123,47,255,.11),
+          rgba(255,255,255,.025)
+        );
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .row {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px 15px;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row-icon {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 13px;
+      background: rgba(123,47,255,.15);
+      color: var(--violet2);
+    }
+
+    .row-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .row-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-title {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .row-sub {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .value {
+      flex-shrink: 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lang-select {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border2);
+      background: rgba(255,255,255,.04);
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button,
+    .action-link {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border2);
+      background: rgba(255,255,255,.04);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .primary {
+      border: 0;
+      background:
+        linear-gradient(135deg, var(--violet), var(--coral));
+      box-shadow: 0 10px 28px rgba(123,47,255,.24);
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      padding: 15px;
+    }
+
+    .status {
+      min-height: 18px;
+      padding: 0 15px 15px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .status.good {
+      color: var(--green);
+    }
+
+    .status.update {
+      color: #fbbf24;
+    }
+
+    .status.error {
+      color: #ff7a8f;
+    }
+
+    .legal {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: center;
+    }
+  </style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+
+<body>
+  <header class="app-header">
+    <a
+      href="/app.html?native=1"
+      class="back-button"
+      aria-label="Back to Ultra MAX"
+      data-i18n-aria-label="settings.backAriaLabel"
+    >‹</a>
+
+    <div class="header-copy">
+      <div class="eyebrow">
+        Ultra MAX ·
+        <span id="settingsHeaderVersion">detecting</span>
+      </div>
+      <div class="header-title" data-i18n="settings.headerTitle">Settings &amp; About</div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="brand">
+      <div class="logo">ULTRA <span>MAX</span></div>
+      <div class="subtitle" data-i18n="settings.subtitle">
+        App information, updates and useful links
+      </div>
+    </div>
+
+    <div class="section-label" data-i18n="settings.sections.appInfo">App information</div>
+
+    <section class="card">
+      <div class="row">
+        <div class="row-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="5" y="2" width="14" height="20" rx="3"/>
+            <line x1="9" y1="18" x2="15" y2="18"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.rows.installedVersion.title">Installed version</div>
+          <div class="row-sub" id="installedBuild">
+            Detecting app version…
+          </div>
+        </div>
+
+        <div class="value" id="installedVersion">Detecting…</div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.rows.latestVersion.title">Latest published version</div>
+          <div class="row-sub" id="latestBuild">
+            Checking release information…
+          </div>
+        </div>
+
+        <div class="value" id="latestVersion">–</div>
+      </div>
+    </section>
+
+    <div class="section-label" data-i18n="settings.sections.language">Language</div>
+
+    <section class="card">
+      <div class="row">
+        <div class="row-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18"/>
+            <path d="M12 3a15 15 0 010 18"/>
+            <path d="M12 3a15 15 0 000 18"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.language.title">App Language</div>
+          <div class="row-sub" data-i18n="settings.language.sub">Changes text throughout the app</div>
+        </div>
+
+        <select id="languageSelect" class="lang-select"></select>
+      </div>
+    </section>
+
+    <div class="section-label" data-i18n="settings.sections.updates">Updates</div>
+
+    <section class="card">
+      <div class="actions">
+        <button
+          type="button"
+          class="primary"
+          id="checkUpdateBtn"
+          data-i18n="settings.updates.checkBtn"
+        >
+          Check for updates
+        </button>
+
+        <a
+          href="https://ultramax.vip/downloads/UltraMax.apk?v=16"
+          class="action-link"
+          id="downloadBtn"
+          data-i18n="settings.updates.downloadBtn"
+        >
+          Download latest APK
+        </a>
+      </div>
+
+      <div class="status" id="updateStatus">
+        Ultra MAX checks the published version against the installed app.
+      </div>
+    </section>
+
+    <div class="section-label" data-i18n="settings.sections.links">Links</div>
+
+    <section class="card">
+      <a
+        href="https://ultramax.vip/"
+        class="row"
+        style="text-decoration:none;color:inherit;"
+      >
+        <div class="row-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18"/>
+            <path d="M12 3a15 15 0 010 18"/>
+            <path d="M12 3a15 15 0 000 18"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.links.website.title">Ultra MAX website</div>
+          <div class="row-sub" data-i18n="settings.links.website.sub">Open ultramax.vip</div>
+        </div>
+
+        <div class="value">›</div>
+      </a>
+
+      <!-- ULTRAMAX KOFI LINK START -->
+      <a
+        href="https://ko-fi.com/ultramaxaddon"
+        class="row"
+        target="_blank"
+        rel="noopener"
+        style="text-decoration:none;color:inherit;"
+      >
+        <div class="row-icon" style="color:#ff5f5f;background:rgba(255,95,95,.13);">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M4 6h13v8a5 5 0 01-5 5H9a5 5 0 01-5-5V6z"/>
+            <path d="M17 8h1.5a2.5 2.5 0 010 5H17"/>
+            <path d="M8.5 10.5c1.5-2 4.5-1 4.5 1 0 1.7-2.1 3-4.5 4.5C6.1 14.5 4 13.2 4 11.5c0-2 3-3 4.5-1z"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.links.support.title">Support Ultra MAX</div>
+          <div class="row-sub" data-i18n="settings.links.support.sub">
+            Buy Kris a coffee on Ko-fi
+          </div>
+        </div>
+
+        <div class="value">›</div>
+      </a>
+      <!-- ULTRAMAX KOFI LINK END -->
+
+      <a
+        href="https://reddit.com/r/Ultra_Max"
+        class="row"
+        style="text-decoration:none;color:inherit;"
+      >
+        <div class="row-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="13" r="8"/>
+            <circle cx="9" cy="12" r="1"/>
+            <circle cx="15" cy="12" r="1"/>
+            <path d="M8 16c2 1.4 6 1.4 8 0"/>
+            <path d="M14 5l1-3 3 1"/>
+          </svg>
+        </div>
+
+        <div class="row-copy">
+          <div class="row-title" data-i18n="settings.links.community.title">Ultra MAX community</div>
+          <div class="row-sub" data-i18n="settings.links.community.sub">Visit r/Ultra_Max</div>
+        </div>
+
+        <div class="value">›</div>
+      </a>
+    </section>
+
+    <div class="section-label">Privacy &amp; data</div>
+
+    <section class="card">
+      <a href="/privacy.html" class="row" style="text-decoration:none;color:inherit;">
+        <div class="row-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="row-copy">
+          <div class="row-title">Privacy policy</div>
+          <div class="row-sub">How Ultra MAX handles your data</div>
+        </div>
+        <div class="value">›</div>
+      </a>
+
+      <a href="/delete-account.html" class="row" style="text-decoration:none;color:inherit;">
+        <div class="row-icon" style="color:#ff667d;background:rgba(255,102,125,.10);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16"/>
+            <path d="M9 7V4h6v3"/>
+            <path d="M7 7l1 13h8l1-13"/>
+            <path d="M10 11v5M14 11v5"/>
+          </svg>
+        </div>
+        <div class="row-copy">
+          <div class="row-title" style="color:#ff8799;">Delete Ultra MAX setup</div>
+          <div class="row-sub">Permanently remove your setup and associated account data</div>
+        </div>
+        <div class="value">›</div>
+      </a>
+    </section>
+
+    <div class="legal" data-i18n="settings.legal">
+      Ultra MAX is an independent community project.<br>
+      Nuvio and other referenced services remain the property of their
+      respective owners.
+    </div>
+  
+<section class="card">
+  <button
+    type="button"
+    class="row"
+    id="showWelcomeAgain"
+    style="width:100%;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;"
+  >
+    <div>
+      <div class="row-title" data-i18n="settings.showWelcomeAgain.title">Show welcome screen again</div>
+      <div class="row-sub" data-i18n="settings.showWelcomeAgain.sub">
+        Reopen the first-run setup choices on the home screen
+      </div>
+    </div>
+  </button>
+</section>
+
+</main>
+
+  <div id="umNavMount"></div>
+  <script src="/nav.js?v=20260923-nav6"></script>
+  <script src="/i18n.js"></script>
+
+  <script>
+  (function () {
+    var select = document.getElementById('languageSelect');
+    if (!select) return;
+
+    var FALLBACK_LANGUAGES = [
+      { code: 'en', flag: '🇬🇧', label: 'English' },
+      { code: 'es', flag: '🇪🇸', label: 'Español' }
+    ];
+
+    function populate(languages) {
+      select.innerHTML = languages.map(function (lang) {
+        return '<option value="' + lang.code + '">' + lang.flag + ' ' + lang.label + '</option>';
+      }).join('');
+      select.value = window.umLocale || 'en';
+    }
+
+    fetch('/i18n/languages.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { populate(data.supported || FALLBACK_LANGUAGES); })
+      .catch(function () { populate(FALLBACK_LANGUAGES); });
+
+    select.addEventListener('change', function () {
+      if (window.umSetLocale) window.umSetLocale(select.value);
+    });
+  })();
+  </script>
+
+  <script>
+  (function () {
+    var installedCode = 0;
+    var installedName = '1.1';
+    var releaseData = null;
+
+    var installedVersion =
+      document.getElementById('installedVersion');
+
+    var installedBuild =
+      document.getElementById('installedBuild');
+
+    var latestVersion =
+      document.getElementById('latestVersion');
+
+    var latestBuild =
+      document.getElementById('latestBuild');
+
+    var status =
+      document.getElementById('updateStatus');
+
+    var downloadBtn =
+      document.getElementById('downloadBtn');
+
+    // These three fields get overwritten with real data moments after
+    // load, so their initial text is set here (rather than data-i18n)
+    // to avoid a race where the translator's pass could stomp real
+    // detected version info that already landed first.
+    installedVersion.textContent = window.umT
+      ? window.umT('settings.rows.installedVersion.detectingValue', 'Detecting…')
+      : 'Detecting…';
+    installedBuild.textContent = window.umT
+      ? window.umT('settings.rows.installedVersion.detecting', 'Detecting app version…')
+      : 'Detecting app version…';
+    latestBuild.textContent = window.umT
+      ? window.umT('settings.rows.latestVersion.checking', 'Checking release information…')
+      : 'Checking release information…';
+    status.textContent = window.umT
+      ? window.umT('settings.updates.statusDefault', 'Ultra MAX checks the published version against the installed app.')
+      : 'Ultra MAX checks the published version against the installed app.';
+
+    function setStatus(message, className) {
+      status.textContent = message;
+      status.className = 'status' +
+        (className ? ' ' + className : '');
+    }
+
+    function getBridgedVersion() {
+      var params = new URLSearchParams(location.search);
+
+      return {
+        version: params.get('appversion') || '',
+        build:
+          parseInt(params.get('appbuild'), 10) || 0
+      };
+    }
+
+    async function detectInstalledVersion() {
+      try {
+        var AppPlugin =
+          window.Capacitor &&
+          window.Capacitor.Plugins &&
+          window.Capacitor.Plugins.App;
+
+        if (!AppPlugin) {
+          var params = new URLSearchParams(location.search);
+
+          var fallbackVersion =
+            params.get('appversion') || '';
+
+          if (!fallbackVersion) {
+            try {
+              fallbackVersion =
+                sessionStorage.getItem(
+                  'ultramax_installed_version'
+                ) || '';
+            } catch (error) {}
+          }
+
+          var fallbackBuild = params.get('appbuild');
+
+          if (!fallbackBuild) {
+            try {
+              fallbackBuild = sessionStorage.getItem(
+                'ultramax_installed_build'
+              );
+            } catch (error) {}
+          }
+
+          installedCode =
+            parseInt(fallbackBuild, 10) || 0;
+
+          if (fallbackVersion) {
+            installedName = fallbackVersion;
+
+            installedVersion.textContent =
+              installedName;
+          } else {
+            var knownVersionNames = {
+              1: '1.0',
+              2: '1.1',
+              3: '1.2'
+            };
+
+            if (knownVersionNames[installedCode]) {
+              installedName =
+                knownVersionNames[installedCode];
+
+              installedVersion.textContent =
+                installedName;
+            }
+          }
+
+          if (installedCode > 0) {
+            installedBuild.textContent =
+              umT('settings.buildPrefix', 'Build {n}', { n: installedCode });
+          } else {
+            installedBuild.textContent =
+              umT('settings.installedBuildUnavailable', 'Installed build unavailable');
+          }
+
+          return;
+        }
+
+        var info = await AppPlugin.getInfo();
+
+        installedCode =
+          parseInt(info.build, 10) || 0;
+
+        installedName =
+          info.version || installedName;
+
+        installedVersion.textContent =
+          installedName;
+
+        installedBuild.textContent =
+          umT('settings.buildPrefix', 'Build {n}', { n: installedCode });
+      } catch (error) {
+        var bridged = getBridgedVersion();
+
+        if (bridged.version) {
+          installedVersion.textContent =
+            bridged.version;
+        }
+
+        if (bridged.build) {
+          installedCode = bridged.build;
+
+          installedBuild.textContent =
+            umT('settings.buildPrefix', 'Build {n}', { n: bridged.build });
+        } else {
+          installedBuild.textContent =
+            umT('settings.couldNotReadBuild', 'Could not read installed build');
+        }
+      }
+    }
+
+    async function loadReleaseData(showResult) {
+      try {
+        setStatus(umT('settings.checkingForUpdates', 'Checking for updates…'));
+
+        var response = await fetch(
+          '/app-version.json?fresh=' + Date.now(),
+          { cache: 'no-store' }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            'Update service returned ' + response.status
+          );
+        }
+
+        releaseData = await response.json();
+
+        var latestCode =
+          parseInt(releaseData.latestVersionCode, 10) || 0;
+
+        latestVersion.textContent =
+          releaseData.latestVersionName || umT('settings.unknownVersion', 'Unknown');
+
+        latestBuild.textContent =
+          umT('settings.buildPrefix', 'Build {n}', { n: latestCode });
+
+        if (releaseData.downloadUrl) {
+          downloadBtn.href =
+            releaseData.downloadUrl;
+        }
+
+        if (latestCode > installedCode && installedCode > 0) {
+          setStatus(
+            umT('settings.updateAvailable', 'A newer version is available: {name}.', {
+              name: releaseData.latestVersionName || latestCode
+            }),
+            'update'
+          );
+        } else if (installedCode > 0) {
+          setStatus(
+            umT('settings.upToDate', 'Ultra MAX is up to date.'),
+            'good'
+          );
+        } else if (showResult) {
+          setStatus(
+            umT('settings.latestLoadedNoBuild', 'Latest release loaded. Installed build could not be detected.')
+          );
+        } else {
+          setStatus(
+            umT('settings.latestLoaded', 'Latest release information loaded.')
+          );
+        }
+      } catch (error) {
+        latestVersion.textContent = umT('settings.unavailable', 'Unavailable');
+        latestBuild.textContent =
+          umT('settings.couldNotReachUpdateService', 'Could not reach update service');
+
+        setStatus(
+          umT('settings.updateCheckFailed', 'Update check failed. Please try again.'),
+          'error'
+        );
+      }
+    }
+
+    document
+      .getElementById('checkUpdateBtn')
+      .addEventListener('click', function () {
+        loadReleaseData(true);
+      });
+
+
+    document
+      .querySelectorAll('a[href]')
+      .forEach(function (link) {
+        var rawHref = link.getAttribute('href');
+
+        if (!rawHref || rawHref.startsWith('#')) return;
+
+        try {
+          var url = new URL(rawHref, location.origin);
+
+          if (url.origin !== location.origin) return;
+
+          url.searchParams.set('native', '1');
+
+          link.setAttribute(
+            'href',
+            url.pathname + url.search + url.hash
+          );
+        } catch (error) {}
+      });
+
+    Promise.resolve()
+      .then(detectInstalledVersion)
+      .then(function () {
+        return loadReleaseData(false);
+      });
+  })();
+  </script>
+
+<script>
+(function () {
+  var headerVersion =
+    document.getElementById('settingsHeaderVersion');
+
+  var installedVersion =
+    document.getElementById('installedVersion');
+
+  var installedBuild =
+    document.getElementById('installedBuild');
+
+  if (
+    !headerVersion ||
+    !installedVersion ||
+    !installedBuild
+  ) {
+    return;
+  }
+
+  function refreshSettingsHeader() {
+    var version =
+      installedVersion.textContent.trim();
+
+    var build =
+      installedBuild.textContent.trim();
+
+    if (
+      !version ||
+      version === 'Detecting…' ||
+      version === 'Unknown'
+    ) {
+      return;
+    }
+
+    headerVersion.textContent =
+      version +
+      (build && build !== 'Detecting…'
+        ? ' · ' + build
+        : '');
+  }
+
+  new MutationObserver(refreshSettingsHeader)
+    .observe(installedVersion, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+
+  new MutationObserver(refreshSettingsHeader)
+    .observe(installedBuild, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+
+  refreshSettingsHeader();
+})();
+</script>
+
+
+<script>
+(function () {
+  var button =
+    document.getElementById('showWelcomeAgain');
+
+  if (!button) return;
+
+  button.addEventListener('click', function () {
+    try {
+      localStorage.removeItem(
+        'um_dev_onboarding_seen_v2'
+      );
+    } catch (error) {}
+
+    window.location.href = '/app.html?native=1';
+  });
+})();
+</script>
+
+</body>
+</html>

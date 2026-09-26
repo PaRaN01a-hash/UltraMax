@@ -137,7 +137,7 @@ async function scrobbleAnilist(config, { type, imdbId, episode }, deps) {
 }
 
 function registerScrobbleRoute(app, deps) {
-  const { loadConfigs, TMDB_KEY, fetchCached } = deps;
+  const { loadConfigs, readConfig = async token => loadConfigs()[token], TMDB_KEY, fetchCached } = deps;
 
   app.post('/c/:token/scrobble', async (req, res) => {
     const { token } = req.params;
@@ -147,8 +147,7 @@ function registerScrobbleRoute(app, deps) {
       return res.status(400).json({ error: 'Missing or invalid imdbId' });
     }
 
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
     if (!config) return res.status(404).json({ error: 'Token not found' });
 
     const normalisedType = type === 'movie' ? 'movie' : 'series';
@@ -183,5 +182,6 @@ function registerScrobbleRoute(app, deps) {
 
 module.exports = {
   registerScrobbleRoute,
-  scrobbleState
+  scrobbleState,
+  resolveImdbTitle
 };

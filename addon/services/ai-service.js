@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const { fetchCached } = require("./api-helpers");
 const { resultsToMetas } = require("./metadata-service");
 const { buildDailyAiFallback } = require("./ai-daily-fallback-service");
+const { getAnilistAiHistory } = require("./anilist-service");
 
 const TMDB_KEY = process.env.TMDB_KEY;
 const FILTER_ENABLED = process.env.FILTER_MODE !== "off";
@@ -69,6 +70,29 @@ const SERIES_FALLBACK = [
   { title: "Narcos", year: 2015 }
 ];
 
+const ANIME_FALLBACK = [
+  { title: "Fullmetal Alchemist: Brotherhood", year: 2009 },
+  { title: "Attack on Titan", year: 2013 },
+  { title: "Steins;Gate", year: 2011 },
+  { title: "Hunter x Hunter", year: 2011 },
+  { title: "Death Note", year: 2006 },
+  { title: "Cowboy Bebop", year: 1998 },
+  { title: "Vinland Saga", year: 2019 },
+  { title: "Demon Slayer: Kimetsu no Yaiba", year: 2019 },
+  { title: "Jujutsu Kaisen", year: 2020 },
+  { title: "One Punch Man", year: 2015 },
+  { title: "Mob Psycho 100", year: 2016 },
+  { title: "Made in Abyss", year: 2017 },
+  { title: "Violet Evergarden", year: 2018 },
+  { title: "Spy x Family", year: 2022 },
+  { title: "Chainsaw Man", year: 2022 },
+  { title: "Frieren: Beyond Journey's End", year: 2023 },
+  { title: "Monster", year: 2004 },
+  { title: "Code Geass: Lelouch of the Rebellion", year: 2006 },
+  { title: "Re:Zero - Starting Life in Another World", year: 2016 },
+  { title: "The Promised Neverland", year: 2019 }
+];
+
 function getFallback(type) {
   return type === "series"
     ? SERIES_FALLBACK.map(item => ({ ...item }))
@@ -112,7 +136,8 @@ function makeCacheKey({
   googleAiKey,
   traktUser,
   language,
-  userToken
+  userToken,
+  flavor = ""
 }) {
   const keyHash = crypto
     .createHash("sha256")
@@ -121,6 +146,7 @@ function makeCacheKey({
     .slice(0, 12);
 
   return [
+    flavor,
     type || "movie",
     language || "en-US",
     userToken || traktUser || "general",
@@ -220,80 +246,10 @@ JSON shape:
 No markdown. No explanation.
 `;
 
-  const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/" +
-    `${GEMINI_MODEL}:generateContent`;
-
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": googleAiKey
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.8
-        }
-      })
-    });
+    const items = await callGemini(prompt, googleAiKey);
 
-    if (!response.ok) {
-      const errorBody = await response.text().catch(() => "");
-
-      console.error(
-        `[AI rows] Gemini failed: status=${response.status}, ` +
-        `type=${type}, fallback=${getFallback(type).length}`,
-        errorBody.slice(0, 500)
-      );
-
-      const fallback = await getSmartFallback({
-        type,
-        language,
-        userToken,
-        traktUser
-      });
-      writeCache(cacheKey, fallback, FAILURE_CACHE_MS);
-      return fallback;
-    }
-
-    const data = await response.json();
-    const text =
-      data?.candidates?.[0]?.content?.parts
-        ?.map(part => part.text || "")
-        .join("\n") || "";
-
-    try {
-      const cleanedText = text.replace(/```json|```/gi, "").trim();
-      const parsed = JSON.parse(cleanedText);
-      const items = cleanAiItems(parsed.items);
-
-      if (!items.length) {
-        const fallback = await getSmartFallback({
-        type,
-        language,
-        userToken,
-        traktUser
-      });
-
-        console.error(
-          `[AI rows] Gemini returned no usable items: ` +
-          `type=${type}, fallback=${fallback.length}`
-        );
-
-        writeCache(cacheKey, fallback, FAILURE_CACHE_MS);
-        return fallback;
-      }
-
-      console.log(
-        `[AI rows] Gemini candidates: type=${type}, count=${items.length}`
-      );
-
-      writeCache(cacheKey, items, SUCCESS_CACHE_MS);
-      return items;
-    } catch (error) {
+    if (!items.length) {
       const fallback = await getSmartFallback({
         type,
         language,
@@ -302,20 +258,27 @@ No markdown. No explanation.
       });
 
       console.error(
-        `[AI rows] Gemini JSON parse failed: type=${type}, ` +
-        `fallback=${fallback.length}, response=${text.slice(0, 300)}`
+        `[AI rows] Gemini returned no usable items: ` +
+        `type=${type}, fallback=${fallback.length}`
       );
 
       writeCache(cacheKey, fallback, FAILURE_CACHE_MS);
       return fallback;
     }
+
+    console.log(
+      `[AI rows] Gemini candidates: type=${type}, count=${items.length}`
+    );
+
+    writeCache(cacheKey, items, SUCCESS_CACHE_MS);
+    return items;
   } catch (error) {
     const fallback = await getSmartFallback({
-        type,
-        language,
-        userToken,
-        traktUser
-      });
+      type,
+      language,
+      userToken,
+      traktUser
+    });
 
     console.error(
       `[AI rows] Gemini request error: type=${type}, ` +
@@ -327,12 +290,177 @@ No markdown. No explanation.
   }
 }
 
+// Raw Gemini call shared by every AI-row flavour: sends the prompt, expects
+// strict JSON back, returns cleaned {title,year} items. Throws on any
+// non-2xx response or unparsable output — callers decide their own fallback.
+async function callGemini(prompt, googleAiKey) {
+  const url =
+    "https://generativelanguage.googleapis.com/v1beta/models/" +
+    `${GEMINI_MODEL}:generateContent`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": googleAiKey
+    },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.8
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "");
+    throw new Error(
+      `Gemini request failed: status=${response.status} body=${errorBody.slice(0, 500)}`
+    );
+  }
+
+  const data = await response.json();
+  const text =
+    data?.candidates?.[0]?.content?.parts
+      ?.map(part => part.text || "")
+      .join("\n") || "";
+
+  const cleanedText = text.replace(/```json|```/gi, "").trim();
+  const parsed = JSON.parse(cleanedText);
+  return cleanAiItems(parsed.items);
+}
+
+const ANIME_AI_TARGET_COUNT = 20;
+
+async function geminiAnimeAnilistRecommendations({
+  googleAiKey,
+  anilistAccessToken = null,
+  anilistUserId = null,
+  language = "en-US",
+  userToken = null
+}) {
+  const fallback = () => ANIME_FALLBACK.map(item => ({ ...item }));
+
+  if (!googleAiKey || !anilistAccessToken || !anilistUserId) {
+    return fallback();
+  }
+
+  const cacheKey = makeCacheKey({
+    type: "series",
+    googleAiKey,
+    traktUser: null,
+    language,
+    userToken,
+    flavor: "anime-anilist"
+  });
+
+  const cached = readCache(cacheKey);
+  if (cached) {
+    console.log(`[AI rows] Cache hit: anime-anilist, candidates=${cached.length}`);
+    return cached;
+  }
+
+  const history = await getAnilistAiHistory(anilistAccessToken, anilistUserId);
+  if (!history.length) {
+    console.log("[Anime For You] diagnostics " + JSON.stringify({
+      seeds: 0,
+      recommendationsFetched: 0,
+      excludedWatched: 0,
+      duplicatesRemoved: 0,
+      mappingFailures: 0,
+      finalResults: ANIME_FALLBACK.length
+    }));
+    return fallback();
+  }
+
+  const historyLines = history.slice(0, 60).map(item => {
+    const bits = [item.title];
+    if (item.year) bits.push(`(${item.year})`);
+    if (item.score) bits.push(`- rated ${item.score}/100`);
+    if (item.genres.length) bits.push(`- genres: ${item.genres.join(", ")}`);
+    return bits.join(" ");
+  }).join("\n");
+
+  const genreCounts = {};
+  for (const item of history) {
+    for (const genre of item.genres) {
+      genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+    }
+  }
+  const topGenres = Object.entries(genreCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([genre]) => genre);
+
+  const prompt = `
+Return ONLY valid JSON.
+Based on this user's AniList watch history:
+${historyLines}
+
+Recommend ${ANIME_AI_TARGET_COUNT} anime series they haven't seen yet.
+Focus on anime only — no live-action adaptations or live-action content of any kind.
+Consider their preferred genres: ${topGenres.join(", ") || "varied"}.
+Weigh genres, themes, studios and ratings from their history above.
+Avoid duplicate titles and return the original release year.
+
+JSON shape:
+{"items":[{"title":"Fullmetal Alchemist: Brotherhood","year":2009}]}
+No markdown. No explanation.
+`;
+
+  try {
+    const generatedItems = await callGemini(prompt, googleAiKey);
+    const filtered = filterAnimeRecommendationsByHistory(
+      generatedItems,
+      history
+    );
+    const items = filtered.items;
+    const excludedWatched = filtered.excludedWatched;
+
+    if (!items.length) {
+      console.error(`[AI rows] Gemini returned no usable anime-anilist items, using fallback`);
+      const fb = fallback();
+      writeCache(cacheKey, fb, FAILURE_CACHE_MS);
+      return fb;
+    }
+
+    console.log(`[AI rows] Gemini candidates: anime-anilist, count=${items.length}`);
+    console.log("[Anime For You] seed summary " + JSON.stringify({
+      seeds: history.length,
+      recommendationsFetched: generatedItems.length,
+      excludedWatched,
+      finalCandidates: items.length
+    }));
+    writeCache(cacheKey, items, SUCCESS_CACHE_MS);
+    return items;
+  } catch (error) {
+    console.error(`[AI rows] Gemini request error: anime-anilist, error=${error.message}`);
+    const fb = fallback();
+    writeCache(cacheKey, fb, FAILURE_CACHE_MS);
+    return fb;
+  }
+}
+
 function normaliseTitle(value) {
   return String(value || "")
     .toLowerCase()
     .replace(/&/g, "and")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function filterAnimeRecommendationsByHistory(items, history) {
+  const watchedTitles = new Set(
+    (history || []).map(item => normaliseTitle(item?.title)).filter(Boolean)
+  );
+  const filtered = (items || []).filter(
+    item => !watchedTitles.has(normaliseTitle(item?.title))
+  );
+  return {
+    items: filtered,
+    excludedWatched: Math.max(0, (items || []).length - filtered.length)
+  };
 }
 
 function resultYear(result, type) {
@@ -409,9 +537,14 @@ async function tmdbResolveAiItems(
   excludeUnreleased,
   fanartKey = null,
   omdbKey = null,
-  digitalReleaseOnly = false
+  digitalReleaseOnly = false,
+  options = {}
 ) {
   const tmdbType = type === "series" ? "tv" : "movie";
+  const tmdbKey = String(options.tmdbKey || TMDB_KEY || "").trim();
+  const resultsMapper = typeof options.resultsToMetas === "function"
+    ? options.resultsToMetas
+    : resultsToMetas;
   const found = [];
   const seenIds = new Set();
 
@@ -436,7 +569,7 @@ async function tmdbResolveAiItems(
 
       const data = await fetchCached(
         `https://api.themoviedb.org/3/search/${tmdbType}` +
-        `?api_key=${TMDB_KEY}` +
+        `?api_key=${tmdbKey}` +
         `&query=${query}` +
         `&include_adult=false` +
         `&language=${searchLanguage}` +
@@ -461,24 +594,25 @@ async function tmdbResolveAiItems(
     }
   }
 
-  const metas = await resultsToMetas(
+  const metas = await resultsMapper(
     found,
     type,
-    FILTER_ENABLED,
+    options.anime ? false : FILTER_ENABLED,
     language,
     rpdbKey,
     tpKey,
     excludeUnreleased,
     fanartKey,
     omdbKey,
-    null,
+    options.bpStyle || null,
     digitalReleaseOnly
   );
 
   console.log(
     `[AI rows] Resolution summary: type=${type}, ` +
     `candidates=${(items || []).length}, ` +
-    `tmdb=${found.length}, metas=${metas.length}`
+    `tmdb=${found.length}, mappingFailures=${Math.max(0, (items || []).length - found.length)}, ` +
+    `duplicatesRemoved=${Math.max(0, found.length - metas.length)}, metas=${metas.length}`
   );
 
   return metas;
@@ -486,5 +620,7 @@ async function tmdbResolveAiItems(
 
 module.exports = {
   geminiAiRecommendations,
-  tmdbResolveAiItems
+  geminiAnimeAnilistRecommendations,
+  tmdbResolveAiItems,
+  filterAnimeRecommendationsByHistory
 };

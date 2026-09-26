@@ -1,0 +1,944 @@
+/* Ultra MAX Cosmic UI
+ * DEV-first visual layer. Loaded after existing styles so functionality and
+ * page structure remain untouched. App/native selectors only.
+ */
+
+:root {
+  --um-cosmic-bg: #05040d;
+  --um-cosmic-bg2: #090713;
+  --um-glass: rgba(14, 12, 31, .78);
+  --um-glass-strong: rgba(16, 13, 36, .90);
+  --um-glass-soft: rgba(24, 18, 50, .62);
+  --um-glass-border: rgba(164, 104, 255, .26);
+  --um-glass-border-strong: rgba(177, 119, 255, .50);
+  --um-neon-violet: #8b5cf6;
+  --um-neon-pink: #f04cff;
+  --um-neon-coral: #ff4d78;
+  --um-neon-cyan: #56e6df;
+  --um-cosmic-text: #f5f2ff;
+  --um-cosmic-muted: #a8a3c3;
+  --um-cosmic-shadow: 0 18px 48px rgba(0,0,0,.34);
+}
+
+/* =========================================================
+   NATIVE HOME / APP SHELL
+   ========================================================= */
+
+html.native-app,
+html.native-app body {
+  min-height: 100%;
+  background-color: var(--um-cosmic-bg) !important;
+}
+
+html.native-app body {
+  position: relative;
+  color: var(--um-cosmic-text);
+  background:
+    radial-gradient(circle at 13% 4%, rgba(90,70,210,.28), transparent 24%),
+    radial-gradient(circle at 88% 16%, rgba(220,51,255,.18), transparent 26%),
+    radial-gradient(circle at 72% 78%, rgba(36,217,207,.09), transparent 28%),
+    linear-gradient(180deg, #090617 0%, #060510 42%, #05040d 100%) !important;
+  background-attachment: fixed !important;
+}
+
+html.native-app body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: .78;
+  background-image:
+    radial-gradient(circle at 7% 14%, rgba(255,255,255,.90) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 23% 31%, rgba(176,160,255,.65) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 61% 12%, rgba(255,255,255,.70) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 79% 29%, rgba(217,181,255,.80) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 91% 8%, rgba(255,255,255,.78) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 32% 74%, rgba(162,220,255,.55) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 53% 62%, rgba(255,255,255,.55) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 84% 71%, rgba(255,194,255,.55) 0 1px, transparent 1.5px);
+  background-size:
+    180px 180px, 240px 240px, 210px 210px, 290px 290px,
+    330px 330px, 260px 260px, 220px 220px, 310px 310px;
+}
+
+html.native-app body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at -5% 18%,
+      rgba(23,18,59,.98) 0 14%,
+      rgba(83,59,157,.52) 14.4% 14.9%,
+      rgba(153,76,255,.20) 15.2% 16.4%,
+      transparent 17%),
+    radial-gradient(ellipse at 88% 24%,
+      rgba(246,72,255,.17) 0,
+      rgba(116,56,229,.14) 18%,
+      transparent 46%),
+    radial-gradient(ellipse at 58% 100%,
+      rgba(70,40,145,.16) 0,
+      transparent 46%);
+  filter: saturate(112%);
+}
+
+html.native-app #particles,
+html.native-app #cursorGlow {
+  opacity: .34;
+}
+
+html.native-app .hero-orb {
+  top: -210px;
+  width: 900px;
+  height: 690px;
+  opacity: .72;
+  background: radial-gradient(circle, rgba(132,71,255,.25) 0%, rgba(106,45,220,.08) 40%, transparent 70%);
+  filter: blur(72px);
+}
+
+html.native-app .hero-orb-2 {
+  opacity: .48;
+  background: radial-gradient(circle, rgba(236,59,255,.20) 0%, transparent 69%);
+}
+
+html.native-app .hero-orb-3 {
+  opacity: .34;
+  background: radial-gradient(circle, rgba(56,224,204,.18) 0%, transparent 70%);
+}
+
+html.native-app .wrap {
+  width: min(100%, 680px);
+  max-width: 680px;
+  padding: calc(28px + env(safe-area-inset-top)) 18px calc(112px + env(safe-area-inset-bottom));
+}
+
+html.native-app .header {
+  margin-bottom: 24px;
+  padding-top: 4px;
+}
+
+html.native-app .app-icon {
+  width: 102px;
+  height: 102px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 28px;
+  box-shadow:
+    0 18px 54px rgba(88,46,210,.44),
+    0 0 38px rgba(223,76,255,.16),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+html.native-app .logo {
+  margin-bottom: 4px;
+  color: #fff;
+  font-size: 43px;
+  line-height: 1;
+  text-shadow: 0 2px 28px rgba(0,0,0,.40);
+}
+
+html.native-app .logo span {
+  background: linear-gradient(115deg, #a68bff 0%, #c34cff 46%, #ff4f86 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html.native-app .tagline {
+  color: #b9b4cf;
+  font-size: 14px;
+  letter-spacing: .01em;
+}
+
+html.native-app .dev-build-badge {
+  margin: 0 auto 12px;
+  background: rgba(9,8,20,.55);
+  border-color: rgba(255,195,82,.32);
+  box-shadow: 0 8px 24px rgba(0,0,0,.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html.native-app .continue-card,
+html.native-app .tile,
+html.native-app .playplus-promo,
+html.native-app .um-supporter-home-card {
+  background:
+    radial-gradient(circle at 8% 0%, rgba(139,92,246,.11), transparent 36%),
+    linear-gradient(145deg, rgba(20,16,43,.84), rgba(8,9,24,.76)) !important;
+  border-color: var(--um-glass-border) !important;
+  box-shadow:
+    var(--um-cosmic-shadow),
+    0 0 30px rgba(124,58,237,.09),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+  backdrop-filter: blur(16px) saturate(118%);
+  -webkit-backdrop-filter: blur(16px) saturate(118%);
+}
+
+html.native-app .continue-card {
+  border-radius: 20px;
+  padding: 18px 20px;
+}
+
+html.native-app .continue-icon {
+  background: linear-gradient(145deg, #7c3cff, #a44dff);
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(124,60,255,.30);
+}
+
+html.native-app .continue-icon svg {
+  stroke: #fff;
+}
+
+html.native-app .continue-eyebrow {
+  color: #ab83ff;
+}
+
+html.native-app .tiles {
+  gap: 14px;
+}
+
+html.native-app .tile {
+  min-height: 220px;
+  padding: 26px 18px;
+  border-radius: 24px;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+
+html.native-app .tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.035), transparent 30%),
+    radial-gradient(circle at 85% 90%, rgba(72,45,152,.12), transparent 44%);
+}
+
+html.native-app .tile:active,
+html.native-app .tile:focus-visible {
+  border-color: var(--um-glass-border-strong) !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(139,92,246,.17), transparent 36%),
+    linear-gradient(145deg, rgba(25,20,52,.90), rgba(10,10,27,.84)) !important;
+}
+
+html.native-app .tile-badge {
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 20px;
+  box-shadow:
+    0 12px 28px color-mix(in srgb, var(--tile-clr) 27%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+html.native-app .tile-name {
+  position: relative;
+  z-index: 1;
+  font-size: 17px;
+}
+
+html.native-app .tile-desc {
+  position: relative;
+  z-index: 1;
+  color: #9f9ab7;
+}
+
+html.native-app .tile-wide {
+  min-height: 96px;
+  padding: 18px 20px;
+  justify-content: flex-start;
+}
+
+html.native-app .playplus-promo {
+  border-radius: 26px;
+}
+
+html.native-app .um-supporter-home-card {
+  border-color: rgba(247,215,122,.27) !important;
+}
+
+html.native-app .um-onboarding {
+  background:
+    radial-gradient(circle at 16% 8%, rgba(112,77,221,.26), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(232,69,255,.16), transparent 30%),
+    rgba(4,3,12,.86);
+}
+
+html.native-app .um-onboarding-card {
+  border-color: rgba(168,109,255,.36);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(139,92,246,.13), transparent 34%),
+    linear-gradient(155deg, rgba(28,22,58,.94), rgba(8,8,21,.95));
+  box-shadow: 0 34px 100px rgba(0,0,0,.62), 0 0 60px rgba(124,58,237,.14);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+html.native-app #umSidebarNav {
+  background:
+    linear-gradient(180deg, rgba(16,12,35,.92), rgba(7,8,20,.90));
+  border-color: rgba(161,101,255,.30);
+  box-shadow: 14px 0 48px rgba(0,0,0,.42), 0 0 30px rgba(124,58,237,.10);
+}
+
+/* =========================================================
+   NATIVE BUILD / SETUP
+   ========================================================= */
+
+html.um-app-mode,
+html.um-app-mode body {
+  min-height: 100%;
+  background-color: var(--um-cosmic-bg) !important;
+}
+
+html.um-app-mode body {
+  position: relative;
+  --bg: #06050f;
+  --bg2: rgba(12,10,28,.86);
+  --card: rgba(20,16,43,.80);
+  --card2: rgba(24,19,50,.88);
+  --border: rgba(151,102,235,.18);
+  --border2: rgba(164,104,255,.30);
+  --surface-soft: rgba(255,255,255,.035);
+  --hover: rgba(142,82,255,.10);
+  --muted: #a6a0bd;
+  --text: #f1eefb;
+  --violet: #8657ff;
+  --violet2: #b18cff;
+  --violet-strong: #c1a4ff;
+  --coral: #f44f8a;
+  --green: #55e3c1;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 4%, rgba(91,66,211,.24), transparent 24%),
+    radial-gradient(circle at 90% 18%, rgba(226,58,255,.15), transparent 25%),
+    radial-gradient(circle at 70% 82%, rgba(45,207,196,.07), transparent 30%),
+    linear-gradient(180deg, #090617 0%, #060510 44%, #05040d 100%) !important;
+  background-attachment: fixed !important;
+}
+
+html.um-app-mode body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .58;
+  background-image:
+    radial-gradient(circle at 11% 18%, rgba(255,255,255,.8) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 34% 9%, rgba(197,179,255,.65) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 64% 25%, rgba(255,255,255,.66) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 82% 11%, rgba(243,185,255,.70) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 93% 37%, rgba(255,255,255,.58) 0 1px, transparent 1.5px);
+  background-size: 230px 230px, 290px 290px, 260px 260px, 330px 330px, 270px 270px;
+}
+
+html.um-app-mode body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at -7% 16%,
+      rgba(21,18,56,.94) 0 14%,
+      rgba(87,58,164,.42) 14.3% 14.8%,
+      rgba(152,77,255,.15) 15.1% 16.1%,
+      transparent 16.8%),
+    radial-gradient(ellipse at 93% 27%, rgba(221,55,255,.12), transparent 38%);
+}
+
+html.um-app-mode .um-app,
+html.um-app-mode .um-main,
+html.um-app-mode .wizard-step {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+}
+
+html.um-app-mode .um-sidebar {
+  background: rgba(8,8,20,.80);
+  border-right-color: rgba(153,95,255,.20);
+  box-shadow: 14px 0 44px rgba(0,0,0,.22);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+html.um-app-mode .um-step-header {
+  margin: 12px 12px 0;
+  padding: 28px 24px 22px;
+  border: 1px solid rgba(157,102,244,.19);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(24,18,51,.72), rgba(9,10,25,.66)) !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+html.um-app-mode .um-step-header h1 {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 3px 26px rgba(0,0,0,.26);
+}
+
+html.um-app-mode .um-step-eyebrow,
+html.um-app-mode .um-section-label {
+  color: #b08cff;
+}
+
+html.um-app-mode .um-mode-chooser,
+html.um-app-mode #advancedBuilderContainer,
+html.um-app-mode #quickSetupV3 {
+  position: relative;
+}
+
+html.um-app-mode .um-card,
+html.um-app-mode .um-mode-card,
+html.um-app-mode .mobile-setup-card,
+html.um-app-mode .step1-option-group,
+html.um-app-mode .category,
+html.um-app-mode .guided-card,
+html.um-app-mode .guided-page-card,
+html.um-app-mode .s2-preset,
+html.um-app-mode .s2-family-card,
+html.um-app-mode .s2-selection-card,
+html.um-app-mode .collection-card,
+html.um-app-mode .s3-preset-card,
+html.um-app-mode .final-summary-card,
+html.um-app-mode .result-section,
+html.um-app-mode .info-box {
+  border-color: rgba(161,104,255,.22) !important;
+  background:
+    radial-gradient(circle at 6% 0%, rgba(132,80,255,.09), transparent 36%),
+    linear-gradient(145deg, rgba(20,17,43,.82), rgba(9,10,25,.79)) !important;
+  box-shadow:
+    0 14px 38px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+html.um-app-mode .um-mode-card,
+html.um-app-mode .mobile-setup-card,
+html.um-app-mode .step1-option-group,
+html.um-app-mode .s2-preset {
+  border-radius: 18px !important;
+}
+
+html.um-app-mode .um-mode-card:hover,
+html.um-app-mode .um-mode-card:focus-visible,
+html.um-app-mode .mobile-setup-card.is-open,
+html.um-app-mode .step1-option-group[open],
+html.um-app-mode .s2-preset:hover {
+  border-color: rgba(179,124,255,.50) !important;
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.28),
+    0 0 24px rgba(126,71,255,.10),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+html.um-app-mode input[type="text"],
+html.um-app-mode input[type="password"],
+html.um-app-mode input[type="email"],
+html.um-app-mode input[type="number"],
+html.um-app-mode select,
+html.um-app-mode textarea,
+html.um-app-mode .search-box {
+  color: #f5f2ff !important;
+  background: rgba(7,8,20,.70) !important;
+  border-color: rgba(158,104,242,.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+html.um-app-mode input:focus,
+html.um-app-mode select:focus,
+html.um-app-mode textarea:focus,
+html.um-app-mode .search-box:focus {
+  border-color: rgba(180,129,255,.70) !important;
+  box-shadow: 0 0 0 3px rgba(139,92,246,.10) !important;
+}
+
+html.um-app-mode .nav-btn.primary,
+html.um-app-mode .next-btn,
+html.um-app-mode #genBtn,
+html.um-app-mode .guided-next {
+  color: #fff !important;
+  border-color: rgba(183,122,255,.60) !important;
+  background: linear-gradient(120deg, #7358f0 0%, #a347ef 54%, #e24f9a 100%) !important;
+  box-shadow: 0 10px 28px rgba(117,65,219,.25), inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+html.um-app-mode .nav-btn:not(.primary),
+html.um-app-mode .global-btn,
+html.um-app-mode .verify-btn,
+html.um-app-mode .rbtn {
+  background: rgba(12,11,29,.64) !important;
+  border-color: rgba(157,103,240,.23) !important;
+}
+
+html.um-app-mode .pill {
+  background: rgba(10,10,24,.62);
+  border-color: rgba(154,103,231,.19);
+}
+
+html.um-app-mode .pill.selected {
+  color: #fff !important;
+  background: linear-gradient(125deg, rgba(117,79,240,.96), rgba(176,72,222,.94)) !important;
+  border-color: rgba(196,149,255,.70) !important;
+  box-shadow: 0 6px 18px rgba(109,56,211,.20);
+}
+
+html.um-app-mode .um-build-bottom-nav {
+  background:
+    linear-gradient(180deg, rgba(16,13,36,.92), rgba(7,8,20,.91)) !important;
+  border-color: rgba(169,108,255,.30) !important;
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.48),
+    0 0 26px rgba(128,70,255,.10) !important;
+}
+
+html.um-app-mode .um-build-bottom-nav a.active {
+  color: #bd9aff;
+  background: rgba(133,82,255,.13);
+  box-shadow: inset 0 0 0 1px rgba(177,119,255,.10);
+}
+
+html.um-app-mode .counter-bar {
+  background: rgba(9,9,21,.90) !important;
+  border-top-color: rgba(155,99,243,.22) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+html.um-app-mode #umBackToTop,
+html.um-app-mode #umGoToBottom {
+  background: rgba(14,12,33,.86);
+  border-color: rgba(166,105,255,.34);
+  box-shadow: 0 10px 28px rgba(0,0,0,.34), 0 0 18px rgba(123,47,255,.10);
+}
+
+@media (max-width: 720px) {
+  html.native-app .wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  html.native-app .app-icon {
+    width: 88px;
+    height: 88px;
+    border-radius: 24px;
+  }
+
+  html.native-app .logo {
+    font-size: 38px;
+  }
+
+  html.native-app .tile {
+    min-height: 196px;
+    padding: 22px 14px;
+  }
+
+  html.native-app .tile-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+
+  html.um-app-mode .um-step-header {
+    margin: 8px 8px 0;
+    padding: 22px 17px 18px;
+    border-radius: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.native-app .hero-orb,
+  html.native-app .hero-orb-2,
+  html.native-app .hero-orb-3 {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   CINEMATIC PASS 2 — app + setup visual uplift
+   Presentation only. No layout/logic dependencies.
+   ========================================================= */
+
+html.native-app body,
+html.um-app-mode body {
+  isolation: isolate;
+}
+
+/* A soft horizon glow gives the native pages the same richer depth as
+   the current Ultra MAX promo artwork without requiring a new asset. */
+html.native-app body::after,
+html.um-app-mode body::after {
+  opacity: .96;
+  background:
+    radial-gradient(ellipse 115% 44% at 50% -8%,
+      rgba(112,70,245,.30) 0%,
+      rgba(97,52,210,.13) 32%,
+      transparent 67%),
+    radial-gradient(circle at -9% 20%,
+      rgba(24,18,62,.98) 0 13.5%,
+      rgba(104,68,196,.54) 13.8% 14.3%,
+      rgba(184,88,255,.18) 14.7% 16.3%,
+      transparent 17%),
+    radial-gradient(ellipse at 104% 17%,
+      rgba(238,67,255,.20) 0%,
+      rgba(119,58,226,.13) 25%,
+      transparent 49%),
+    radial-gradient(ellipse at 48% 112%,
+      rgba(58,220,205,.095) 0%,
+      rgba(49,121,207,.05) 28%,
+      transparent 58%);
+}
+
+/* Native home hero */
+html.native-app .header {
+  position: relative;
+  isolation: isolate;
+  padding: 22px 16px 18px;
+  margin: 0 0 18px;
+  border: 1px solid rgba(177,119,255,.14);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 50% -18%, rgba(155,91,255,.25), transparent 42%),
+    linear-gradient(155deg, rgba(20,16,45,.60), rgba(8,8,21,.32));
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.055);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  overflow: hidden;
+}
+
+html.native-app .header::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  left: 50%;
+  top: -155px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: 1px solid rgba(211,178,255,.16);
+  box-shadow:
+    0 0 50px rgba(147,78,255,.24),
+    inset 0 0 70px rgba(201,82,255,.10);
+  pointer-events: none;
+  z-index: -1;
+}
+
+html.native-app .header::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(156,105,255,.16),
+    rgba(240,76,255,.34),
+    rgba(156,105,255,.16),
+    transparent);
+  pointer-events: none;
+}
+
+html.native-app .app-icon {
+  position: relative;
+  transform: translateZ(0);
+  box-shadow:
+    0 22px 56px rgba(88,46,210,.48),
+    0 0 42px rgba(223,76,255,.22),
+    0 0 0 6px rgba(126,83,235,.055),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+html.native-app .logo {
+  letter-spacing: .075em;
+}
+
+html.native-app .tagline {
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.45;
+  color: #b9b5cc;
+}
+
+/* Home cards feel like product surfaces rather than plain menu tiles. */
+html.native-app .tile,
+html.native-app .continue-card,
+html.native-app .playplus-promo,
+html.native-app .um-supporter-home-card {
+  position: relative;
+  overflow: hidden;
+}
+
+html.native-app .tile::after,
+html.native-app .continue-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,.055), transparent 24% 72%, rgba(157,94,255,.035)),
+    radial-gradient(circle at 92% 6%, color-mix(in srgb, var(--tile-clr, #8b5cf6) 16%, transparent), transparent 31%);
+  opacity: .92;
+}
+
+html.native-app .tile {
+  border-color: rgba(170,111,255,.22) !important;
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.28),
+    0 0 30px color-mix(in srgb, var(--tile-clr, #8b5cf6) 8%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+@media (hover: hover) {
+  html.native-app .tile:hover {
+    transform: translateY(-2px);
+    border-color: rgba(190,143,255,.44) !important;
+    box-shadow:
+      0 24px 54px rgba(0,0,0,.34),
+      0 0 38px color-mix(in srgb, var(--tile-clr, #8b5cf6) 13%, transparent),
+      inset 0 1px 0 rgba(255,255,255,.075) !important;
+  }
+}
+
+html.native-app .tile-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+html.native-app .tile-badge::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(145deg, rgba(255,255,255,.22), transparent 40%);
+  mix-blend-mode: screen;
+  opacity: .55;
+}
+
+html.native-app .tile-name {
+  letter-spacing: -.01em;
+}
+
+html.native-app .tile-desc {
+  max-width: 230px;
+  line-height: 1.5;
+}
+
+/* Setup shell gets stronger hierarchy and less "old admin panel". */
+html.um-app-mode .um-sidebar {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(121,74,226,.13), transparent 28%),
+    linear-gradient(180deg, rgba(11,9,28,.93), rgba(6,7,18,.90));
+  border-right: 1px solid rgba(164,104,255,.18);
+}
+
+html.um-app-mode .um-step-header {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(172,112,255,.24);
+  background:
+    radial-gradient(circle at 83% -14%, rgba(221,76,255,.13), transparent 37%),
+    radial-gradient(circle at 4% 0%, rgba(109,77,234,.15), transparent 35%),
+    linear-gradient(145deg, rgba(25,19,53,.84), rgba(8,9,24,.72)) !important;
+  box-shadow:
+    0 20px 55px rgba(0,0,0,.28),
+    0 0 32px rgba(117,65,219,.06),
+    inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+html.um-app-mode .um-step-header::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(145,94,242,.18),
+    rgba(234,83,246,.24),
+    transparent);
+}
+
+html.um-app-mode .um-step-header h1 {
+  letter-spacing: -.025em;
+}
+
+html.um-app-mode .um-card,
+html.um-app-mode .um-mode-card,
+html.um-app-mode .mobile-setup-card,
+html.um-app-mode .step1-option-group,
+html.um-app-mode .category,
+html.um-app-mode .guided-card,
+html.um-app-mode .guided-page-card,
+html.um-app-mode .s2-preset,
+html.um-app-mode .s2-family-card,
+html.um-app-mode .s2-selection-card,
+html.um-app-mode .collection-card,
+html.um-app-mode .s3-preset-card,
+html.um-app-mode .final-summary-card,
+html.um-app-mode .result-section,
+html.um-app-mode .info-box {
+  border-color: rgba(166,107,255,.21) !important;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.025), transparent 34%),
+    radial-gradient(circle at 94% -7%, rgba(215,69,255,.055), transparent 30%),
+    radial-gradient(circle at 4% 0%, rgba(132,80,255,.09), transparent 36%),
+    linear-gradient(145deg, rgba(20,17,43,.85), rgba(8,9,24,.82)) !important;
+  box-shadow:
+    0 17px 44px rgba(0,0,0,.245),
+    inset 0 1px 0 rgba(255,255,255,.045);
+  backdrop-filter: blur(11px) saturate(112%);
+  -webkit-backdrop-filter: blur(11px) saturate(112%);
+}
+
+html.um-app-mode .category,
+html.um-app-mode .step1-option-group,
+html.um-app-mode .collection-card {
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+html.um-app-mode .category:hover,
+html.um-app-mode .step1-option-group:hover,
+html.um-app-mode .collection-card:hover {
+  border-color: rgba(183,126,255,.36) !important;
+}
+
+/* Inputs/buttons now match the premium surfaces instead of floating as legacy controls. */
+html.um-app-mode input[type="text"],
+html.um-app-mode input[type="password"],
+html.um-app-mode input[type="email"],
+html.um-app-mode input[type="number"],
+html.um-app-mode select,
+html.um-app-mode textarea,
+html.um-app-mode .search-box {
+  border-radius: 12px !important;
+  background:
+    linear-gradient(180deg, rgba(8,8,22,.88), rgba(11,10,27,.75)) !important;
+  border-color: rgba(164,107,246,.25) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 7px 20px rgba(0,0,0,.08);
+}
+
+html.um-app-mode .nav-btn,
+html.um-app-mode .next-btn,
+html.um-app-mode .global-btn,
+html.um-app-mode .verify-btn,
+html.um-app-mode .rbtn,
+html.um-app-mode #genBtn,
+html.um-app-mode .guided-next {
+  min-height: 42px;
+  border-radius: 12px !important;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+@media (hover: hover) {
+  html.um-app-mode .nav-btn:hover,
+  html.um-app-mode .next-btn:hover,
+  html.um-app-mode .global-btn:hover,
+  html.um-app-mode .verify-btn:hover,
+  html.um-app-mode .rbtn:hover,
+  html.um-app-mode #genBtn:hover,
+  html.um-app-mode .guided-next:hover {
+    transform: translateY(-1px);
+  }
+}
+
+html.um-app-mode .nav-btn.primary,
+html.um-app-mode .next-btn,
+html.um-app-mode #genBtn,
+html.um-app-mode .guided-next {
+  background:
+    linear-gradient(110deg, #6757e9 0%, #9c47ed 48%, #ef4c95 100%) !important;
+  border-color: rgba(207,165,255,.54) !important;
+  box-shadow:
+    0 10px 28px rgba(102,61,211,.27),
+    0 0 22px rgba(221,68,238,.075),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+html.um-app-mode .pill {
+  border-radius: 999px !important;
+  background: rgba(11,10,27,.72) !important;
+  border-color: rgba(158,106,234,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+}
+
+html.um-app-mode .pill.selected {
+  background:
+    linear-gradient(115deg, rgba(104,81,232,.98), rgba(168,70,224,.96) 60%, rgba(231,76,155,.94)) !important;
+  border-color: rgba(210,166,255,.68) !important;
+  box-shadow:
+    0 7px 19px rgba(105,57,207,.23),
+    inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+/* Bottom navigation is part of the visual frame, not an afterthought. */
+html.um-app-mode .um-build-bottom-nav {
+  background:
+    linear-gradient(180deg, rgba(18,14,40,.92), rgba(7,7,19,.95)) !important;
+  border-color: rgba(170,111,255,.31) !important;
+  box-shadow:
+    0 24px 65px rgba(0,0,0,.52),
+    0 0 30px rgba(135,72,255,.11) !important;
+  backdrop-filter: blur(20px) saturate(125%);
+  -webkit-backdrop-filter: blur(20px) saturate(125%);
+}
+
+html.um-app-mode .counter-bar {
+  background:
+    linear-gradient(180deg, rgba(13,11,31,.94), rgba(8,8,20,.96)) !important;
+  border-top-color: rgba(166,107,255,.26) !important;
+  box-shadow: 0 -12px 32px rgba(0,0,0,.16);
+}
+
+@media (max-width: 720px) {
+  html.native-app .header {
+    padding: 18px 12px 16px;
+    border-radius: 24px;
+  }
+
+  html.native-app .tile {
+    border-radius: 22px;
+  }
+
+  html.native-app .tile-wide {
+    min-height: 90px;
+  }
+
+  html.um-app-mode .um-step-header {
+    margin: 7px 7px 0;
+    border-radius: 20px;
+  }
+
+  html.um-app-mode .um-card,
+  html.um-app-mode .mobile-setup-card,
+  html.um-app-mode .step1-option-group,
+  html.um-app-mode .category,
+  html.um-app-mode .collection-card,
+  html.um-app-mode .result-section {
+    border-radius: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.native-app .tile,
+  html.um-app-mode .nav-btn,
+  html.um-app-mode .next-btn,
+  html.um-app-mode .global-btn,
+  html.um-app-mode .verify-btn,
+  html.um-app-mode .rbtn {
+    transition: none !important;
+  }
+}

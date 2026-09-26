@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090815">
+  <title>Help & Recovery · Ultra MAX</title>
+  <link rel="icon" href="/icons/icon-192.png">
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:#080812;
+      --panel:#11111d;
+      --panel2:#171424;
+      --border:rgba(255,255,255,.09);
+      --text:#f7f7fb;
+      --muted:#9f9caf;
+      --violet:#7b2fff;
+      --coral:#ff3d70;
+      --green:#34d399;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:
+      radial-gradient(circle at 20% 0%,rgba(123,47,255,.20),transparent 33%),
+      radial-gradient(circle at 100% 100%,rgba(52,211,153,.10),transparent 28%),
+      var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{min-height:100vh}
+    .shell{width:min(760px,100%);margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(34px + env(safe-area-inset-bottom))}
+    .topbar{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+    .back{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.035);color:#fff;text-decoration:none;font-size:24px}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand img{width:42px;height:42px;border-radius:12px;box-shadow:0 10px 28px rgba(123,47,255,.28)}
+    .brand-copy small{display:block;color:#a98cff;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+    .brand-copy strong{display:block;font-size:18px;margin-top:2px}
+    .hero{padding:24px 2px 18px}
+    .eyebrow{color:#55ddb0;font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+    h1{font-size:34px;line-height:1.05;margin:0 0 10px;letter-spacing:-.025em}
+    .intro{margin:0;color:var(--muted);font-size:15px;line-height:1.6;max-width:620px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+    .card{position:relative;min-height:185px;padding:20px;border:1px solid var(--border);border-radius:24px;background:
+      linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+      text-decoration:none;color:var(--text);overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.20)}
+    .card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 5%,var(--glow),transparent 42%);opacity:.22;pointer-events:none}
+    .icon{position:relative;width:58px;height:58px;display:grid;place-items:center;border-radius:17px;background:var(--icon);box-shadow:0 12px 30px var(--shadow);margin-bottom:28px}
+    .icon svg{width:29px;height:29px}
+    .title{position:relative;font-size:20px;font-weight:850;letter-spacing:-.015em;margin-bottom:7px}
+    .desc{position:relative;color:var(--muted);font-size:13px;line-height:1.45;max-width:250px}
+    .arrow{position:absolute;right:18px;bottom:18px;color:#fff9;font-size:20px}
+    .guide{--icon:linear-gradient(135deg,#7b2fff,#a855f7);--shadow:rgba(123,47,255,.28);--glow:#7b2fff}
+    .recover{--icon:linear-gradient(135deg,#22c55e,#34d399);--shadow:rgba(52,211,153,.24);--glow:#34d399}
+    .inspector{--icon:linear-gradient(135deg,#0ea5e9,#38bdf8);--shadow:rgba(56,189,248,.24);--glow:#38bdf8}
+    .support{--icon:linear-gradient(135deg,#ff3d70,#fb7185);--shadow:rgba(255,61,112,.24);--glow:#ff3d70}
+    .note{margin:22px 2px 0;padding:15px 16px;border:1px solid rgba(255,255,255,.07);border-radius:16px;background:rgba(255,255,255,.025);color:#aaa7b8;font-size:12px;line-height:1.5}
+    @media(max-width:560px){
+      .shell{padding-left:14px;padding-right:14px}
+      h1{font-size:29px}
+      .grid{gap:11px}
+      .card{min-height:170px;padding:16px;border-radius:20px}
+      .icon{width:52px;height:52px;margin-bottom:24px}
+      .title{font-size:16px}
+      .desc{font-size:11px}
+    }
+  </style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="back" href="/app.html" aria-label="Back to Ultra MAX">‹</a>
+      <div class="brand">
+        <img src="/icons/icon-192.png" alt="">
+        <div class="brand-copy">
+          <small>Ultra MAX</small>
+          <strong>Help & Recovery</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Support centre</div>
+      <h1>Find the right tool quickly.</h1>
+      <p class="intro">Guidance, account recovery and diagnostics live here, away from the main setup flow.</p>
+    </section>
+
+    <section class="grid" aria-label="Help and recovery tools">
+      <a class="card guide" href="/setup.html?shortcut=setup-guide">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5z"/><path d="M8 7h8M8 11h6"/></svg>
+        </div>
+        <div class="title">Setup Guide</div>
+        <div class="desc">A short walkthrough of the Ultra MAX setup process.</div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="card recover" href="/recover">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M15 4h4v4"/></svg>
+        </div>
+        <div class="title">Recover Token</div>
+        <div class="desc">Recover a setup token using your registered recovery email.</div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="card inspector" href="/token_check.html">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/><path d="M8 11h6M11 8v6"/></svg>
+        </div>
+        <div class="title">Token Inspector</div>
+        <div class="desc">See what Ultra MAX is actually using for a setup token.</div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="card support" href="/setup.html?shortcut=support">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/><path d="M8 9h8M8 13h5"/></svg>
+        </div>
+        <div class="title">Contact Support</div>
+        <div class="desc">Open the built-in support form when you need a human to look at it.</div>
+        <div class="arrow">›</div>
+      </a>
+    </section>
+
+    <div class="note">Ultra MAX setup tools stay separate from your Nuvio connection. Opening Help & Recovery does not change your active profile or setup.</div>
+  </main>
+</body>
+</html>

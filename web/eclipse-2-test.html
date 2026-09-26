@@ -1,0 +1,1412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050506">
+<title>UltraMAX Music 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    color-scheme: dark;
+    --bg: #050506;
+    --panel: rgba(19, 20, 23, 0.82);
+    --panel-strong: rgba(30, 31, 36, 0.92);
+    --line: rgba(255, 255, 255, 0.11);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --text: #f6f3ed;
+    --muted: #a7a29a;
+    --subtle: #716d66;
+    --green: #61d394;
+    --amber: #f0c56d;
+    --red: #ff7b7b;
+    --cyan: #7dd9df;
+    --rose: #ff7aa9;
+    --ink: #0a0b0d;
+    --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 18% 10%, rgba(125, 217, 223, 0.13), transparent 28rem),
+      radial-gradient(circle at 82% 4%, rgba(255, 122, 169, 0.12), transparent 24rem),
+      linear-gradient(180deg, #050506 0%, #08090a 48%, #050506 100%);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow-x: hidden;
+  }
+  body.nav-open {
+    overflow: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
+  }
+  a { color: inherit; }
+  button, input, select { font: inherit; }
+  button { -webkit-tap-highlight-color: transparent; }
+  .shell {
+    width: min(1180px, calc(100% - 36px));
+    margin: 0 auto;
+  }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(18px);
+    background: rgba(5, 5, 6, 0.72);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .nav {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: #061113;
+    background: linear-gradient(135deg, var(--cyan), #f2e8c9 48%, var(--rose));
+    box-shadow: 0 0 30px rgba(125, 217, 223, 0.22);
+  }
+  .brand-mark svg { width: 21px; height: 21px; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .menu-btn {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+  }
+  .menu-btn svg { width: 20px; height: 20px; }
+  .hero {
+    min-height: calc(100vh - 68px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(340px, 0.98fr);
+    gap: 46px;
+    align-items: center;
+    padding: 76px 0 56px;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--cyan);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 18px;
+  }
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 0 rgba(97, 211, 148, 0.38);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    70% { box-shadow: 0 0 0 14px rgba(97, 211, 148, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(97, 211, 148, 0); }
+  }
+  h1 {
+    margin: 0;
+    max-width: 700px;
+    font-size: clamp(44px, 7.2vw, 82px);
+    line-height: 0.96;
+    letter-spacing: 0;
+  }
+  .hero-lede {
+    margin: 24px 0 0;
+    max-width: 640px;
+    color: #d1cbc0;
+    font-size: clamp(17px, 2vw, 21px);
+    line-height: 1.55;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  .btn {
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 800;
+    color: #061113;
+    background: linear-gradient(135deg, #eaf7f5, var(--cyan));
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.secondary {
+    color: var(--text);
+    background: rgba(255,255,255,0.055);
+    border-color: var(--line);
+  }
+  .btn.secondary:hover { border-color: var(--line-strong); background: rgba(255,255,255,0.08); }
+  .btn.danger {
+    color: var(--text);
+    background: rgba(255, 123, 123, 0.14);
+    border-color: rgba(255, 123, 123, 0.3);
+  }
+  .btn:disabled {
+    opacity: 0.56;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn svg, .icon-btn svg { width: 18px; height: 18px; flex: 0 0 auto; }
+  .hero-visual {
+    position: relative;
+    min-height: 510px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+      #0b0c0e;
+    box-shadow: var(--shadow);
+  }
+  .album-stack {
+    position: absolute;
+    inset: 0;
+    opacity: 0.9;
+    overflow: hidden;
+  }
+  .cover {
+    position: absolute;
+    width: 182px;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.17);
+    box-shadow: 0 20px 70px rgba(0,0,0,0.45);
+    animation: floatCover 8s ease-in-out infinite;
+  }
+  .cover:nth-child(1) {
+    left: 9%;
+    top: 10%;
+    background: linear-gradient(135deg, #e8f8f6 0%, #75dce4 32%, #12181d 33%, #12181d 68%, #ff87aa 69%);
+  }
+  .cover:nth-child(2) {
+    right: 9%;
+    top: 18%;
+    width: 154px;
+    animation-delay: -2s;
+    background: radial-gradient(circle at 30% 28%, #f1e1a9 0 16%, transparent 17%), linear-gradient(135deg, #171719, #4b2834 46%, #e86f9d);
+  }
+  .cover:nth-child(3) {
+    left: 18%;
+    bottom: 10%;
+    width: 146px;
+    animation-delay: -4s;
+    background: linear-gradient(90deg, #0e1214 0 20%, #f4f0e8 20% 26%, #0e1214 26% 52%, #7dd9df 52% 62%, #0e1214 62% 100%);
+  }
+  @keyframes floatCover {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+    50% { transform: translate3d(0, -13px, 0) rotate(1deg); }
+  }
+  .resolution-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(420px, calc(100% - 42px));
+    transform: translate(-50%, -50%);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 18px;
+    background: rgba(10, 11, 13, 0.74);
+    backdrop-filter: blur(22px);
+  }
+  .resolution-top {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .resolution-art {
+    width: 96px;
+    aspect-ratio: 1;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    background:
+      radial-gradient(circle at 50% 31%, #f2efe4 0 14%, transparent 15%),
+      linear-gradient(90deg, #121315 0 19%, #f0ece2 19% 24%, #121315 24% 44%, #b32335 44% 59%, #121315 59% 100%);
+    box-shadow: 0 20px 54px rgba(0,0,0,0.42);
+  }
+  .resolution-meta small {
+    color: var(--cyan);
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .resolution-meta h2 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .resolution-meta p {
+    margin: 0;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .provider-matches {
+    display: grid;
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+  .provider-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 46px;
+    padding: 11px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: #eee9df;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .provider-row::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: -6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 0 rgba(97,211,148,0.34);
+    animation: connectPulse 2.7s ease-out infinite;
+  }
+  .provider-row:nth-child(2)::after { animation-delay: 0.8s; }
+  .provider-row span:last-child {
+    color: #dcd5ca;
+    font-weight: 700;
+  }
+  .resolution-result {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+  .resolution-pill {
+    min-height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+  .resolution-pill.match {
+    color: #081112;
+    background: linear-gradient(135deg, #eaf7f5, var(--cyan));
+  }
+  .resolution-pill.best {
+    color: #151008;
+    background: linear-gradient(135deg, #f4e9bd, var(--amber));
+  }
+  @keyframes connectPulse {
+    70% { box-shadow: 0 0 0 10px rgba(97,211,148,0); }
+    100% { box-shadow: 0 0 0 0 rgba(97,211,148,0); }
+  }
+  .wave {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+    height: 70px;
+    display: flex;
+    align-items: end;
+    gap: 5px;
+    opacity: 0.7;
+  }
+  .wave i {
+    flex: 1;
+    max-width: 10px;
+    height: var(--h);
+    border-radius: 999px;
+    background: linear-gradient(to top, rgba(125,217,223,0.25), rgba(125,217,223,0.9));
+    animation: bar 1.8s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  @keyframes bar {
+    0%, 100% { transform: scaleY(0.55); opacity: 0.45; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+  section { padding: 70px 0; }
+  .section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 24px;
+  }
+  .section-head h2 {
+    margin: 0;
+    max-width: 620px;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+  .section-head p {
+    margin: 0;
+    max-width: 440px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .setup-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.96fr) minmax(360px, 1.04fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .panel {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 18px 70px rgba(0,0,0,0.24);
+  }
+  .panel.pad { padding: 22px; }
+  .panel h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    letter-spacing: 0;
+  }
+  .panel p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .feature-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .feature {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.035);
+  }
+  .feature svg {
+    width: 20px;
+    height: 20px;
+    margin: 3px auto 0;
+    color: var(--cyan);
+  }
+  .feature strong { display: block; margin-bottom: 3px; }
+  .feature span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+  .form {
+    display: grid;
+    gap: 18px;
+  }
+  .field {
+    display: grid;
+    gap: 8px;
+  }
+  .label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  label, .label {
+    color: #ebe5da;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .micro {
+    color: var(--subtle);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .control, select {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 13px;
+    background: rgba(5, 5, 6, 0.64);
+    color: var(--text);
+    outline: none;
+  }
+  .control:focus, select:focus {
+    border-color: rgba(125,217,223,0.66);
+    box-shadow: 0 0 0 3px rgba(125,217,223,0.13);
+  }
+  .secret-wrap {
+    position: relative;
+  }
+  .secret-wrap .control {
+    padding-right: 52px;
+  }
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--muted);
+    background: transparent;
+    cursor: pointer;
+  }
+  .secret-wrap .icon-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+  .icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .switches {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .switch {
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.035);
+  }
+  .switch input {
+    appearance: none;
+    width: 44px;
+    height: 26px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.13);
+    position: relative;
+    flex: 0 0 auto;
+    cursor: pointer;
+  }
+  .switch input::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.18s ease;
+  }
+  .switch input:checked { background: var(--green); }
+  .switch input:checked::after { transform: translateX(18px); }
+  .select-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .status {
+    min-height: 42px;
+    padding: 12px 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.035);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .status.ok { color: #c8f4d9; border-color: rgba(97,211,148,0.34); background: rgba(97,211,148,0.08); }
+  .status.err { color: #ffd0d0; border-color: rgba(255,123,123,0.36); background: rgba(255,123,123,0.08); }
+  .result {
+    display: none;
+    gap: 12px;
+    padding-top: 4px;
+  }
+  .result.visible { display: grid; }
+  .url-box {
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(125,217,223,0.28);
+    border-radius: 8px;
+    padding: 13px;
+    color: #d7fbff;
+    background: rgba(125,217,223,0.06);
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+    font-size: 13px;
+  }
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .health {
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .health.visible { display: grid; }
+  .health-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 13px;
+    background: rgba(255,255,255,0.035);
+  }
+  .health-card strong {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    background: rgba(255,255,255,0.08);
+  }
+  .pill.ok { color: #0a2415; background: var(--green); }
+  .pill.warn { color: #2a1d04; background: var(--amber); }
+  .pill.off { color: #e4ded2; background: rgba(255,255,255,0.13); }
+  .providers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .provider {
+    position: relative;
+    min-height: 210px;
+    padding: 22px;
+    overflow: hidden;
+  }
+  .provider::before {
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    right: -42px;
+    top: -52px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent), transparent 68%);
+    opacity: 0.28;
+  }
+  .provider .tag {
+    position: relative;
+    display: inline-flex;
+    min-height: 30px;
+    align-items: center;
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 40px;
+  }
+  .provider h3 { position: relative; font-size: 26px; }
+  .provider p { position: relative; max-width: 430px; }
+  .explain {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+  .steps-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    align-items: center;
+  }
+  .flow-step {
+    min-height: 92px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: #eee8dc;
+    background: rgba(255,255,255,0.04);
+    font-weight: 800;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    width: 10px;
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .example-track {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .example-art {
+    width: 112px;
+    aspect-ratio: 1;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background:
+      radial-gradient(circle at 50% 32%, #f2efe4 0 13%, transparent 14%),
+      linear-gradient(90deg, #121315 0 18%, #f0ece2 18% 22%, #121315 22% 42%, #b32335 42% 58%, #121315 58% 100%);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.38);
+  }
+  .track-meta small {
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+  }
+  .track-meta h3 {
+    margin: 8px 0 4px;
+    font-size: 28px;
+  }
+  .track-meta p { margin: 0 0 14px; }
+  .linked {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .legacy {
+    display: grid;
+    grid-template-columns: 1fr minmax(320px, 0.72fr);
+    gap: 18px;
+    align-items: start;
+    padding: 22px;
+  }
+  .legacy h2 {
+    margin: 0 0 6px;
+    font-size: clamp(24px, 3vw, 34px);
+  }
+  .legacy p { margin: 0; color: var(--muted); line-height: 1.55; }
+  .legacy-upgrade {
+    display: grid;
+    gap: 10px;
+  }
+  .legacy-upgrade .actions {
+    grid-template-columns: 1fr;
+  }
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 28px 0 44px;
+    color: var(--subtle);
+    font-size: 13px;
+  }
+  footer .shell {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (max-width: 900px) {
+    .hero, .setup-grid, .explain {
+      grid-template-columns: 1fr;
+    }
+    .hero {
+      min-height: auto;
+      padding-top: 52px;
+    }
+    .hero-visual { min-height: 380px; }
+    .section-head {
+      display: grid;
+      gap: 12px;
+    }
+    .providers, .security-grid { grid-template-columns: 1fr; }
+    .steps-flow { grid-template-columns: 1fr; }
+    .flow-step { min-height: 58px; }
+    .flow-step:not(:last-child)::after {
+      right: auto;
+      left: 50%;
+      top: auto;
+      bottom: -10px;
+      width: 1px;
+      height: 10px;
+    }
+  }
+  @media (max-width: 720px) {
+    .shell { width: min(100% - 28px, 1180px); }
+    .nav { min-height: 62px; }
+    .menu-btn { display: grid; place-items: center; }
+    .nav-links {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: 62px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(12, 13, 15, 0.96);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+    }
+    .nav-links.open {
+      display: grid;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      pointer-events: auto;
+    }
+    .nav-links a { padding: 13px; }
+    section { padding: 46px 0; }
+    .hero {
+      gap: 22px;
+      padding: 36px 0 34px;
+    }
+    h1 {
+      max-width: 360px;
+      font-size: clamp(38px, 12vw, 54px);
+      line-height: 0.98;
+    }
+    .hero-lede { font-size: 16px; }
+    .hero-actions, .actions {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+    .btn { width: 100%; }
+    .hero-visual {
+      min-height: 286px;
+      order: 2;
+    }
+    .resolution-card {
+      width: min(330px, calc(100% - 28px));
+      padding: 14px;
+    }
+    .resolution-top {
+      grid-template-columns: 74px 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .resolution-art { width: 74px; }
+    .resolution-meta small { font-size: 9px; margin-bottom: 6px; }
+    .resolution-meta h2 { font-size: 21px; }
+    .provider-row {
+      min-height: 38px;
+      padding: 9px 10px;
+      font-size: 12px;
+    }
+    .resolution-result { grid-template-columns: 1fr 1fr; }
+    .resolution-pill {
+      min-height: 34px;
+      font-size: 10px;
+    }
+    .wave {
+      height: 42px;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+    }
+    .cover { width: 132px; }
+    .cover:nth-child(2) { width: 118px; }
+    .cover:nth-child(3) { width: 116px; }
+    .switches, .select-row, .health { grid-template-columns: 1fr; }
+    .panel.pad { padding: 18px; }
+    .example-track { grid-template-columns: 86px 1fr; gap: 14px; }
+    .example-art { width: 86px; }
+    .track-meta h3 { font-size: 22px; }
+    .legacy { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+<header class="topbar">
+  <nav class="shell nav" aria-label="Primary navigation">
+    <a class="brand" href="#top" aria-label="UltraMAX Music home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </span>
+      <span>UltraMAX Music</span>
+    </a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#setup">Create</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#providers">Providers</a>
+      <a href="#legacy">Existing users</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="shell hero">
+    <div>
+      <div class="kicker"><span class="pulse-dot"></span> UltraMAX Music 2.0</div>
+      <h1>One search.<br>Multiple sources.<br>Best playback.</h1>
+      <p class="hero-lede">Qobuz and Deezer work together through ISRC matching, duplicate removal, and smart quality/source selection so a single track resolves to the best playable source.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#setup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          Create UltraMAX Music
+        </a>
+        <a class="btn secondary" href="#legacy">Already using it?</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-label="Example track resolution for Billie Jean by Michael Jackson">
+      <div class="album-stack" aria-hidden="true">
+        <div class="cover"></div>
+        <div class="cover"></div>
+        <div class="cover"></div>
+      </div>
+      <div class="resolution-card">
+        <div class="resolution-top">
+          <div class="resolution-art" aria-hidden="true"></div>
+          <div class="resolution-meta">
+            <small>Example resolution</small>
+            <h2>Billie Jean</h2>
+            <p>Michael Jackson</p>
+          </div>
+        </div>
+        <div class="provider-matches">
+          <div class="provider-row"><strong>Qobuz</strong><span>24-bit / 176.4 kHz</span></div>
+          <div class="provider-row"><strong>Deezer</strong><span>Matched</span></div>
+        </div>
+        <div class="resolution-result" aria-label="ISRC match chooses the best source">
+          <div class="resolution-pill match">ISRC MATCH</div>
+          <div class="resolution-pill best">BEST SOURCE</div>
+        </div>
+      </div>
+      <div class="wave" aria-hidden="true">
+        <i style="--h:42%;--d:-.1s"></i><i style="--h:74%;--d:-.4s"></i><i style="--h:38%;--d:-.9s"></i><i style="--h:92%;--d:-.2s"></i><i style="--h:58%;--d:-.7s"></i><i style="--h:84%;--d:-1s"></i><i style="--h:46%;--d:-.35s"></i><i style="--h:67%;--d:-.8s"></i><i style="--h:31%;--d:-.6s"></i><i style="--h:76%;--d:-.15s"></i><i style="--h:52%;--d:-.55s"></i><i style="--h:88%;--d:-.95s"></i><i style="--h:39%;--d:-.3s"></i><i style="--h:70%;--d:-.75s"></i><i style="--h:48%;--d:-.45s"></i><i style="--h:81%;--d:-1.1s"></i>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell reveal" id="setup">
+    <div class="section-head">
+      <h2>Create your private 2.0 install link.</h2>
+      <p>New installs use an opaque config ID. Your Deezer credential is sent in the request body, stored server-side, encrypted at rest, and never placed in the addon URL.</p>
+    </div>
+    <div class="setup-grid">
+      <div class="panel pad">
+        <h3>What changes in 2.0</h3>
+        <p>The install link points to a stored configuration instead of embedding a Deezer ARL in the path.</p>
+        <div class="feature-list">
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h12M4 17h8"/></svg>
+            <div><strong>Provider merge</strong><span>Qobuz and Deezer results are merged into one cleaner music view.</span></div>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <div><strong>ISRC matching</strong><span>Duplicate recordings collapse into one track when providers identify the same release.</span></div>
+          </div>
+          <div class="feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+            <div><strong>Quality-aware playback</strong><span>Use automatic routing or prefer Qobuz or Deezer with a supported maximum quality setting.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <form class="panel pad form" id="configForm" autocomplete="off" novalidate>
+        <div class="field">
+          <div class="label-row">
+            <label for="deezerArl">Deezer credential</label>
+            <span class="micro">Required for creation</span>
+          </div>
+          <div class="secret-wrap">
+            <input class="control" id="deezerArl" name="deezerArl" type="password" inputmode="text" autocomplete="off" spellcheck="false" placeholder="Paste Deezer ARL">
+            <button class="icon-btn" id="toggleSecret" type="button" aria-label="Show or hide Deezer credential" title="Show or hide credential">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="micro">The credential is never shown after saving and is cleared from this form after a successful create.</div>
+        </div>
+
+        <div class="switches" aria-label="Provider controls">
+          <label class="switch">
+            <span><span class="label">Qobuz</span><br><span class="micro">Server provider</span></span>
+            <input id="qobuzEnabled" type="checkbox" checked>
+          </label>
+          <label class="switch">
+            <span><span class="label">Deezer</span><br><span class="micro">Credential backed</span></span>
+            <input id="deezerEnabled" type="checkbox" checked>
+          </label>
+        </div>
+
+        <div class="select-row">
+          <div class="field">
+            <label for="preferredSource">Preferred source</label>
+            <select id="preferredSource">
+              <option value="AUTO">Automatic</option>
+              <option value="QOBUZ">Qobuz</option>
+              <option value="DEEZER">Deezer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="quality">Maximum quality</label>
+            <select id="quality">
+              <option value="HIRES">Hi-Res where available</option>
+              <option value="LOSSLESS">Lossless</option>
+              <option value="MP3_320">MP3 320</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn" id="createBtn" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Create UltraMAX Music
+        </button>
+        <div class="status" id="formStatus" role="status" aria-live="polite">Ready to create a private 2.0 config.</div>
+
+        <div class="result" id="result">
+          <div>
+            <div class="label">Your private install link</div>
+            <output class="url-box" id="installUrl"></output>
+          </div>
+          <div class="actions">
+            <button class="btn secondary" id="copyBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+            <a class="btn secondary" id="openBtn" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+              Open install link
+            </a>
+          </div>
+          <div class="health" id="healthPanel" aria-live="polite"></div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="shell reveal" id="how-it-works">
+    <div class="section-head">
+      <h2>How 2.0 picks the track.</h2>
+      <p>A single search can connect provider results, remove duplicates, and route playback through the best source available for your settings.</p>
+    </div>
+    <div class="explain">
+      <div class="panel pad">
+        <div class="steps-flow" aria-label="Search, match by ISRC, merge providers, pick best source, play">
+          <div class="flow-step">Search</div>
+          <div class="flow-step">Match by ISRC</div>
+          <div class="flow-step">Merge providers</div>
+          <div class="flow-step">Pick best source</div>
+          <div class="flow-step">Play</div>
+        </div>
+      </div>
+      <div class="panel pad example-track">
+        <div class="example-art" aria-hidden="true"></div>
+        <div class="track-meta">
+          <small>Example, not live provider data</small>
+          <h3>Billie Jean</h3>
+          <p>Michael Jackson</p>
+          <div class="linked">
+            <span class="pill ok">24-bit / 176.4 kHz FLAC</span>
+            <span class="pill">Qobuz + Deezer linked</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell reveal" id="providers">
+    <div class="section-head">
+      <h2>Provider coverage without the clutter.</h2>
+      <p>2.0 keeps the provider model visible enough to understand, but the listening experience stays focused on one clean track.</p>
+    </div>
+    <div class="providers">
+      <article class="panel provider" style="--accent:#7dd9df">
+        <span class="tag">Server provider</span>
+        <h3>Qobuz</h3>
+        <p>Used for high-resolution source matching and playback where the server-side provider is configured and healthy.</p>
+      </article>
+      <article class="panel provider" style="--accent:#ff7aa9">
+        <span class="tag">Credential backed</span>
+        <h3>Deezer</h3>
+        <p>Uses your saved Deezer credential server-side. The credential is stored encrypted and does not appear in your 2.0 install URL.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="shell reveal" id="legacy">
+    <div class="panel legacy">
+      <div>
+        <h2>Already using UltraMAX Music?</h2>
+        <p>Your current setup will keep working. No reinstall is required for existing <code>/:arl/manifest.json</code> installs.</p>
+        <p id="upgradeCopy" style="margin-top:8px;">A safe explicit upgrade endpoint is available. Upgrading creates a new private 2.0 config and leaves your current install unchanged.</p>
+      </div>
+      <form class="legacy-upgrade" id="legacyUpgradeForm" autocomplete="off">
+        <label for="legacyArl">Optional upgrade</label>
+        <input class="control" id="legacyArl" type="password" autocomplete="off" spellcheck="false" placeholder="Paste current Deezer ARL">
+        <button class="btn secondary" id="upgradeBtn" type="submit">Upgrade my setup</button>
+        <div class="status" id="upgradeStatus" role="status" aria-live="polite">Creates a new 2.0 link. Your current setup remains active.</div>
+        <div class="result" id="upgradeResult">
+          <output class="url-box" id="upgradeUrl"></output>
+          <div class="actions">
+            <button class="btn secondary" id="copyUpgradeBtn" type="button">Copy upgrade link</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="shell reveal" id="security">
+    <div class="security-grid">
+      <div class="panel pad">
+        <h3>Opaque config ID</h3>
+        <p>New links use <code>/c/&lt;configId&gt;/manifest.json</code> instead of putting a Deezer credential in the path.</p>
+      </div>
+      <div class="panel pad">
+        <h3>Encrypted at rest</h3>
+        <p>The server stores the credential in an encrypted config record and returns only public config state.</p>
+      </div>
+      <div class="panel pad">
+        <h3>Body-only credential</h3>
+        <p>The API rejects credential query parameters for stored config routes.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell">
+    <span>UltraMAX Music 2.0</span>
+    <span><a href="https://ultramax.vip" target="_blank" rel="noopener">ultramax.vip</a> · <a href="https://ko-fi.com/ultramaxaddon" target="_blank" rel="noopener">Support on Ko-fi</a></span>
+  </div>
+</footer>
+
+<script>
+  const DEFAULT_API_BASE = 'https://eclipse.ultramax.vip';
+  const params = new URLSearchParams(window.location.search);
+  const API_BASE = (params.get('apiBase') || DEFAULT_API_BASE).replace(/\/+$/, '');
+  const EYE_OPEN = '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>';
+  const EYE_CLOSED = '<path d="M3 3l18 18"/><path d="M10.6 10.6A2 2 0 0 0 12 14a2 2 0 0 0 1.4-.6"/><path d="M9.9 5.2A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a13.8 13.8 0 0 1-3 4.1"/><path d="M6.7 6.7C3.7 8.5 2 12 2 12s3.5 7 10 7c1.6 0 3-.4 4.2-1"/>';
+
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  const form = document.getElementById('configForm');
+  const secretInput = document.getElementById('deezerArl');
+  const toggleSecret = document.getElementById('toggleSecret');
+  const eyeIcon = document.getElementById('eyeIcon');
+  const formStatus = document.getElementById('formStatus');
+  const createBtn = document.getElementById('createBtn');
+  const result = document.getElementById('result');
+  const installUrl = document.getElementById('installUrl');
+  const copyBtn = document.getElementById('copyBtn');
+  const openBtn = document.getElementById('openBtn');
+  const healthPanel = document.getElementById('healthPanel');
+  const legacyUpgradeForm = document.getElementById('legacyUpgradeForm');
+  const legacyArl = document.getElementById('legacyArl');
+  const upgradeBtn = document.getElementById('upgradeBtn');
+  const upgradeStatus = document.getElementById('upgradeStatus');
+  const upgradeResult = document.getElementById('upgradeResult');
+  const upgradeUrl = document.getElementById('upgradeUrl');
+  const copyUpgradeBtn = document.getElementById('copyUpgradeBtn');
+
+  let currentInstallUrl = '';
+  let currentUpgradeUrl = '';
+  let secretShown = false;
+
+  function setStatus(message, type) {
+    formStatus.textContent = message;
+    formStatus.className = 'status' + (type ? ' ' + type : '');
+  }
+
+  function setUpgradeStatus(message, type) {
+    upgradeStatus.textContent = message;
+    upgradeStatus.className = 'status' + (type ? ' ' + type : '');
+  }
+
+  function configPayload() {
+    return {
+      deezerArl: secretInput.value.trim(),
+      preferredSource: document.getElementById('preferredSource').value,
+      quality: document.getElementById('quality').value,
+      providers: {
+        qobuz: { enabled: document.getElementById('qobuzEnabled').checked },
+        deezer: { enabled: document.getElementById('deezerEnabled').checked }
+      }
+    };
+  }
+
+  function publicMessage(errorText, fallback) {
+    const clean = String(errorText || fallback || 'Request failed').replace(/[A-Za-z0-9_-]{80,}/g, '[redacted]');
+    if (/invalid config/i.test(clean)) return 'Check the credential and selected providers, then try again.';
+    if (/config create failed/i.test(clean)) return 'The config service could not create this setup right now.';
+    return clean;
+  }
+
+  async function requestJson(path, options) {
+    const response = await fetch(API_BASE + path, {
+      ...options,
+      headers: {
+        'content-type': 'application/json',
+        ...(options && options.headers ? options.headers : {})
+      }
+    });
+    let body = {};
+    try { body = await response.json(); } catch {}
+    if (!response.ok) {
+      throw new Error(publicMessage(body.error, 'Request failed'));
+    }
+    return body;
+  }
+
+  function renderHealth(payload) {
+    const providers = Array.isArray(payload.providers) ? payload.providers : [];
+    if (!providers.length) return;
+    healthPanel.innerHTML = providers.map((provider) => {
+      const configured = provider.configured ? 'Configured' : 'Not configured';
+      const stateClass = provider.healthy ? 'ok' : provider.configured ? 'warn' : 'off';
+      const stateText = provider.healthy ? 'Healthy' : provider.configured ? 'Unavailable' : 'Off';
+      const name = String(provider.provider || 'provider').replace(/^\w/, (c) => c.toUpperCase());
+      const mode = String(provider.mode || configured);
+      return '<div class="health-card"><strong>' + escapeHtml(name) + '<span class="pill ' + stateClass + '">' + stateText + '</span></strong><span class="micro">' + escapeHtml(mode) + '</span></div>';
+    }).join('');
+    healthPanel.classList.add('visible');
+  }
+
+  async function refreshHealth(configId) {
+    try {
+      const payload = await requestJson('/c/' + encodeURIComponent(configId) + '/provider-health', { method: 'GET', headers: {} });
+      renderHealth(payload);
+    } catch {
+      healthPanel.innerHTML = '<div class="health-card"><strong>Provider health<span class="pill warn">Pending</span></strong><span class="micro">Health could not be checked from this page.</span></div>';
+      healthPanel.classList.add('visible');
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  menuBtn.addEventListener('click', () => {
+    const open = !navLinks.classList.contains('open');
+    navLinks.classList.toggle('open', open);
+    document.body.classList.toggle('nav-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+
+  navLinks.addEventListener('click', (event) => {
+    if (event.target.closest('a')) {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 720 && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  toggleSecret.addEventListener('click', () => {
+    secretShown = !secretShown;
+    secretInput.type = secretShown ? 'text' : 'password';
+    eyeIcon.innerHTML = secretShown ? EYE_CLOSED : EYE_OPEN;
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const payload = configPayload();
+    if (!payload.deezerArl) {
+      setStatus('Paste your Deezer credential to create a 2.0 config.', 'err');
+      secretInput.focus();
+      return;
+    }
+    createBtn.disabled = true;
+    setStatus('Creating encrypted server-side config...', '');
+    result.classList.remove('visible');
+    healthPanel.classList.remove('visible');
+    healthPanel.innerHTML = '';
+
+    try {
+      const body = await requestJson('/configs', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const config = body.config || {};
+      currentInstallUrl = body.manifestUrl || (API_BASE + '/c/' + encodeURIComponent(config.id) + '/manifest.json');
+      installUrl.textContent = currentInstallUrl;
+      openBtn.href = currentInstallUrl;
+      secretInput.value = '';
+      secretInput.type = 'password';
+      secretShown = false;
+      eyeIcon.innerHTML = EYE_OPEN;
+      result.classList.add('visible');
+      setStatus('Config created. Your credential is saved server-side and is not in the install URL.', 'ok');
+      if (config.id) refreshHealth(config.id);
+    } catch (error) {
+      setStatus(error.message || 'Could not create config.', 'err');
+    } finally {
+      createBtn.disabled = false;
+    }
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    if (!currentInstallUrl) return;
+    try {
+      await navigator.clipboard.writeText(currentInstallUrl);
+      copyBtn.lastChild.textContent = ' Copied';
+      setTimeout(() => { copyBtn.lastChild.textContent = ' Copy'; }, 1800);
+    } catch {
+      setStatus('Copy failed. Select and copy the install link manually.', 'err');
+    }
+  });
+
+  legacyUpgradeForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const arl = legacyArl.value.trim();
+    if (!arl) {
+      setUpgradeStatus('Paste your current Deezer ARL to create an upgraded 2.0 link.', 'err');
+      legacyArl.focus();
+      return;
+    }
+    upgradeBtn.disabled = true;
+    upgradeResult.classList.remove('visible');
+    setUpgradeStatus('Creating upgraded 2.0 config...', '');
+    try {
+      const body = await requestJson('/legacy/upgrade', {
+        method: 'POST',
+        body: JSON.stringify({
+          arl,
+          preferredSource: 'AUTO',
+          quality: 'HIRES',
+          providers: {
+            qobuz: { enabled: true },
+            deezer: { enabled: true }
+          }
+        })
+      });
+      currentUpgradeUrl = body.manifestUrl || '';
+      upgradeUrl.textContent = currentUpgradeUrl;
+      legacyArl.value = '';
+      upgradeResult.classList.add('visible');
+      setUpgradeStatus('Upgrade link created. Your current setup was not changed.', 'ok');
+    } catch (error) {
+      setUpgradeStatus(error.message || 'Could not create upgrade link.', 'err');
+    } finally {
+      upgradeBtn.disabled = false;
+    }
+  });
+
+  copyUpgradeBtn.addEventListener('click', async () => {
+    if (!currentUpgradeUrl) return;
+    try {
+      await navigator.clipboard.writeText(currentUpgradeUrl);
+      copyUpgradeBtn.textContent = 'Copied';
+      setTimeout(() => { copyUpgradeBtn.textContent = 'Copy upgrade link'; }, 1800);
+    } catch {
+      setUpgradeStatus('Copy failed. Select and copy the upgrade link manually.', 'err');
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.16 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+  }
+</script>
+</body>
+</html>

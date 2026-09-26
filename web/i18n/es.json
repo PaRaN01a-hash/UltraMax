@@ -1,0 +1,1429 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "build": "Crear",
+    "nuvio": "Nuvio",
+    "updates": "Novedades"
+  },
+  "home": {
+    "tagline": "Tu centro de catálogos, colecciones y descubrimiento",
+    "sectionNewTrending": "Nuevo y popular",
+    "continue": {
+      "eyebrow": "Continuar",
+      "title": "Reanudar tu configuración"
+    },
+    "tiles": {
+      "build": {
+        "name": "Nueva configuración",
+        "desc": "Crea una nueva configuración de Ultra MAX desde cero"
+      },
+      "nuvio": {
+        "name": "Cuenta de Nuvio",
+        "desc": "Sube y gestiona addons directamente"
+      },
+      "avatars": {
+        "name": "Galería de avatares",
+        "desc": "226 fotos de perfil de personajes"
+      },
+      "badges": {
+        "name": "Insignias de calidad",
+        "desc": "Paquetes de etiquetas de calidad"
+      },
+      "gallery": {
+        "name": "Galería comunitaria",
+        "desc": "Comparte e importa configuraciones de otros usuarios"
+      },
+      "whatsNew": {
+        "name": "Novedades",
+        "desc": "Últimas actualizaciones y funciones"
+      },
+      "settings": {
+        "name": "Ajustes y acerca de",
+        "desc": "Versión de la app, actualizaciones y enlaces útiles"
+      },
+      "playPlus": {
+        "name": "UltraPlay+",
+        "desc": "Finder, Nuvio Manager, Max Picks, Watch Hub y el Arcade completo",
+        "price": "Complemento opcional · £1 al mes · £12 al año · £25 de por vida"
+      },
+      "help": {
+        "name": "Ayuda y recuperación",
+        "desc": "Guía, recuperación de token, diagnósticos y soporte"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "Compañero opcional",
+      "headline": "Ultra MAX sigue siendo gratis. UltraPlay+ ayuda a que siga así.",
+      "copy": "Saca más partido a Ultra MAX mientras ayudas a cubrir los servidores, las API y los costes del proyecto.",
+      "featuresAria": "Funciones de UltraPlay Plus",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Arcade completo",
+      "instantAccess": "Acceso instantáneo",
+      "pricingAria": "Precios de UltraPlay Plus",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "lifetime": "De por vida",
+      "cta": "Explorar UltraPlay+",
+      "footnote": "UltraPlay+ mejora Ultra MAX. Ultra MAX sigue siendo gratuito."
+    },
+    "stats": {
+      "catalogs": "Catálogos",
+      "activeUsers": "Usuarios activos",
+      "selfHosted": "Autoalojado"
+    },
+    "footer": {
+      "website": "Sitio web",
+      "support": "Apoyar"
+    },
+    "onboarding": {
+      "kicker": "Bienvenido a Ultra MAX",
+      "title": "Vamos a crear tu configuración",
+      "copy": "Crea algo nuevo, restaura una configuración existente o echa un vistazo antes de tocar nada.",
+      "continueBtn": "Continuar configuración guardada",
+      "continueSub": "Retoma justo donde lo dejaste",
+      "createBtn": "Crear una nueva configuración",
+      "createSub": "Elige catálogos, servicios y preferencias",
+      "restoreBtn": "Restaurar con un token",
+      "restoreSub": "Abre una configuración que creaste antes",
+      "tokenPlaceholder": "Token de configuración",
+      "tokenError": "Introduce un token válido.",
+      "openBtn": "Abrir",
+      "exploreBtn": "Explorar la app primero"
+    }
+  },
+  "update": {
+    "kicker": "Actualización disponible",
+    "title": "Una nueva versión de Ultra MAX está lista",
+    "defaultNotes": "Hay una nueva versión de Ultra MAX disponible.",
+    "now": "Actualizar ahora",
+    "viewSettings": "Ver ajustes de la app",
+    "later": "Ahora no"
+  },
+  "back": {
+    "exitToast": "Pulsa atrás de nuevo para salir"
+  },
+  "account": {
+    "subtitle": "Gestor de cuenta de Nuvio",
+    "backLink": "← Volver a Ultra MAX",
+    "header": {
+      "title": "Cuenta de Nuvio",
+      "backAriaLabel": "Volver a Ultra MAX"
+    },
+    "login": {
+      "emailPlaceholder": "Correo de Nuvio",
+      "passwordPlaceholder": "Contraseña de Nuvio",
+      "remember": "Recordarme en este dispositivo",
+      "continueBtn": "Continuar",
+      "missingFields": "Introduce tu correo y contraseña de Nuvio.",
+      "loggingIn": "Iniciando sesión...",
+      "failed": "Error al iniciar sesión."
+    },
+    "profilePicker": {
+      "title": "Selecciona un perfil"
+    },
+    "status": {
+      "loading": "Cargando...",
+      "loadFailed": "No se pudieron cargar los datos del perfil."
+    },
+    "manager": {
+      "switchBtn": "Cambiar",
+      "addonsTitle": "Addons",
+      "addonsInstalled": "{n} instalados",
+      "noAddons": "No hay addons instalados en este perfil.",
+      "addonUrlPlaceholder": "Pega la URL del manifiesto del addon...",
+      "addBtn": "Añadir",
+      "addonUrlRequired": "Pega una URL de manifiesto.",
+      "addonDuplicate": "Ese addon ya está en la lista.",
+      "checkingAddon": "Comprobando addon...",
+      "addonAdded": "Se añadió \"{name}\" — pulsa Guardar abajo para enviarlo a Nuvio.",
+      "collectionsTitle": "Colecciones",
+      "collectionsCount": "{n} colecciones",
+      "noCollections": "No hay colecciones en este perfil.",
+      "folderSingular": "carpeta",
+      "folderPlural": "carpetas",
+      "saveBtn": "Guardar cambios",
+      "savingAddons": "Guardando addons...",
+      "savingCollections": "Guardando colecciones...",
+      "saved": "Guardado ✓",
+      "saveFailed": "No se pudieron guardar los cambios.",
+      "unnamedAddon": "Addon sin nombre",
+      "untitledCollection": "Colección sin título"
+    }
+  },
+  "settings": {
+    "headerTitle": "Ajustes y acerca de",
+    "backAriaLabel": "Volver a Ultra MAX",
+    "subtitle": "Información de la app, actualizaciones y enlaces útiles",
+    "sections": {
+      "appInfo": "Información de la app",
+      "language": "Idioma",
+      "updates": "Actualizaciones",
+      "links": "Enlaces"
+    },
+    "language": {
+      "title": "Idioma de la app",
+      "sub": "Cambia el texto en toda la app"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "Versión instalada",
+        "detecting": "Detectando versión de la app…",
+        "detectingValue": "Detectando…"
+      },
+      "latestVersion": {
+        "title": "Última versión publicada",
+        "checking": "Consultando información de la versión…"
+      }
+    },
+    "updates": {
+      "checkBtn": "Buscar actualizaciones",
+      "downloadBtn": "Descargar último APK",
+      "statusDefault": "Ultra MAX compara la versión publicada con la app instalada."
+    },
+    "links": {
+      "website": {
+        "title": "Sitio web de Ultra MAX",
+        "sub": "Abrir ultramax.vip"
+      },
+      "support": {
+        "title": "Apoyar a Ultra MAX",
+        "sub": "Invita a Kris a un café en Ko-fi"
+      },
+      "community": {
+        "title": "Comunidad de Ultra MAX",
+        "sub": "Visita r/Ultra_Max"
+      }
+    },
+    "legal": "Ultra MAX es un proyecto comunitario independiente. Nuvio y otros servicios mencionados siguen siendo propiedad de sus respectivos dueños.",
+    "showWelcomeAgain": {
+      "title": "Mostrar la pantalla de bienvenida de nuevo",
+      "sub": "Vuelve a abrir las opciones iniciales en la pantalla de inicio"
+    },
+    "buildPrefix": "Build {n}",
+    "installedBuildUnavailable": "Build instalado no disponible",
+    "couldNotReadBuild": "No se pudo leer el build instalado",
+    "checkingForUpdates": "Buscando actualizaciones…",
+    "unknownVersion": "Desconocida",
+    "updateAvailable": "Hay una nueva versión disponible: {name}.",
+    "upToDate": "Ultra MAX está actualizado.",
+    "latestLoadedNoBuild": "Última versión cargada. No se pudo detectar el build instalado.",
+    "latestLoaded": "Información de la última versión cargada.",
+    "unavailable": "No disponible",
+    "couldNotReachUpdateService": "No se pudo contactar con el servicio de actualizaciones",
+    "updateCheckFailed": "Error al buscar actualizaciones. Inténtalo de nuevo."
+  },
+  "changelog": {
+    "backToHome": "← Volver al inicio",
+    "heroBadge": "📋 Novedades",
+    "heroTitleLine1": "QUÉ HAY",
+    "heroTitleLine2": "DE NUEVO",
+    "heroSub": "Cada actualización, mejora y función nueva — registrada desde el principio.",
+    "tabs": {
+      "app": "App de Android"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "Anónimo"
+    },
+    "header": {
+      "home": "← Inicio",
+      "submit": "+ Compartir"
+    },
+    "hero": {
+      "eyebrow": "Galería comunitaria",
+      "titlePrefix": "Comparte tus",
+      "titleHighlight": "Colecciones",
+      "sub": "Descarga paquetes de colecciones de Nuvio creados por la comunidad. Importa el JSON directamente en Nuvio → Colecciones → Importar.",
+      "submitBtn": "+ Comparte tu colección"
+    },
+    "stats": {
+      "collections": "Colecciones",
+      "downloads": "Descargas",
+      "likes": "Me gusta"
+    },
+    "search": {
+      "placeholder": "Buscar colecciones, etiquetas, autores…"
+    },
+    "sort": {
+      "recent": "Más recientes",
+      "popular": "Más descargadas",
+      "liked": "Con más me gusta"
+    },
+    "tabs": {
+      "all": "Todas",
+      "ready": "✅ Sin addons",
+      "needs": "⚠️ Necesita addon"
+    },
+    "feed": {
+      "loading": "Cargando colecciones de la comunidad…",
+      "failedTitle": "Error al cargar",
+      "failedSub": "Intenta recargar la página",
+      "emptyTitle": "No se encontraron colecciones",
+      "emptySub": "¡Sé el primero en compartir una!"
+    },
+    "card": {
+      "noAddons": "✓ Sin addons",
+      "addonsNeeded": "⚠ Necesita {n} {addonWord}",
+      "byAuthor": "por {author}",
+      "folders": "{n} carpetas"
+    },
+    "addon": {
+      "singular": "addon",
+      "plural": "addons"
+    },
+    "time": {
+      "justNow": "justo ahora",
+      "minutesAgo": "hace {n}m",
+      "hoursAgo": "hace {n}h",
+      "daysAgo": "hace {n}d",
+      "weeksAgo": "hace {n}sem"
+    },
+    "detail": {
+      "about": "Acerca de",
+      "tags": "Etiquetas",
+      "requiredAddons": "Addons necesarios",
+      "addonsHint": "Instala estos addons antes de importar esta colección.",
+      "extraFiles": "Archivos adicionales",
+      "extraFilesHint": "Archivos de configuración adicionales incluidos con esta colección.",
+      "howToImport": "Cómo importar",
+      "step1": "1. Descarga el archivo JSON de abajo",
+      "step2": "2. Abre Nuvio → Colecciones → Importar",
+      "step3": "3. Selecciona el archivo descargado",
+      "downloadBtn": "⬇️ Descargar JSON",
+      "closeBtn": "Cerrar",
+      "noAddonsNeeded": "✓ Sin addons necesarios",
+      "addonsRequired": "⚠ Necesita {n} {addonWord}",
+      "statFolders": "carpetas",
+      "statDownloads": "descargas",
+      "statLikes": "me gusta",
+      "installLink": "Instalar →",
+      "downloadFileBtn": "Descargar"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ Esta colección tiene un token fijo ({token}) incrustado.\n\nSi la importas tal cual, usará la configuración de catálogo de otra persona.\n\nIntroduce TU token de Ultra MAX para corregirlo automáticamente, o cancela para descargarlo tal cual:",
+      "tokenReplaced": "✅ Token reemplazado por {token} — descargando archivo corregido",
+      "originalToken": "⚠️ Descargando con el token original — es posible que las carpetas no funcionen para ti",
+      "downloaded": "¡Descargado! Impórtalo en Nuvio → Colecciones → Importar",
+      "downloadedFile": "Descargado {filename}",
+      "failed": "Error al descargar"
+    },
+    "like": {
+      "already": "¡Ya te gusta!",
+      "liked": "¡Te gusta! ♥",
+      "failed": "Error al dar me gusta"
+    },
+    "submit": {
+      "title": "Comparte tu colección",
+      "sub": "Sube un JSON de colecciones de Nuvio. Otros podrán descargarlo e importarlo directamente en Nuvio.",
+      "nameLabel": "Nombre de la colección *",
+      "namePlaceholder": "p. ej. Colecciones de terror recientes",
+      "authorLabel": "Tu nombre",
+      "authorPlaceholder": "Anónimo",
+      "descLabel": "Descripción",
+      "descPlaceholder": "¿Qué incluye esta colección? ¿Para quién es?",
+      "tagsLabel": "Etiquetas",
+      "tagsHint": "(pulsa Enter o coma para añadir)",
+      "tagsPlaceholder": "terror, películas, series…",
+      "addonsLabel": "Addons necesarios",
+      "addonsHint": "(déjalo en blanco si no hace falta ninguno)",
+      "addAddonBtn": "+ Añadir addon necesario",
+      "addonNamePlaceholder": "Nombre del addon (p. ej. ScaryOnly)",
+      "addonUrlPlaceholder": "URL del manifiesto (opcional)",
+      "jsonLabel": "JSON de colecciones de Nuvio *",
+      "uploadHint": "📂 Toca para subir o arrastra y suelta",
+      "exportHint": "Exporta desde Nuvio → Colecciones → Exportar JSON",
+      "extraFilesLabel": "Archivos adicionales",
+      "extraFilesHint": "(opcional — p. ej. JSON de catálogo de AIOMetadata)",
+      "extraFileNamePlaceholder": "Nombre del archivo (p. ej. aiometadata-catalogs.json)",
+      "uploadLabel": "Subir",
+      "loadedLabel": "✓ Cargado",
+      "addExtraFileBtn": "+ Añadir archivo adicional",
+      "cancelBtn": "Cancelar",
+      "submitBtn": "🚀 Compartir en la galería",
+      "submitting": "Enviando…",
+      "successBtn": "✅ ¡Enviado!",
+      "success": "✅ ¡Enviado! Tu colección ya está disponible en la galería.",
+      "failed": "Error al enviar.",
+      "networkError": "Error de red — inténtalo de nuevo.",
+      "invalidJsonFile": "Archivo JSON no válido — comprueba el archivo e inténtalo de nuevo.",
+      "invalidJsonFileNamed": "Archivo JSON no válido: {filename}",
+      "errors": {
+        "nameRequired": "Introduce un nombre para la colección.",
+        "fileRequired": "Sube tu JSON de colecciones de Nuvio.",
+        "invalidFormat": "El JSON debe ser un array de colecciones de Nuvio (el archivo debe empezar con [)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← Volver al inicio"
+    },
+    "hero": {
+      "eyebrow": "Insignias de Nuvio",
+      "titleLine1": "INSIGNIAS",
+      "titleLine2": "DE CALIDAD",
+      "sub": "Elige un paquete de insignias y pega la URL en Nuvio. Combina hasta 3 paquetes a la vez para la mejor cobertura.",
+      "howToLabel": "Cómo añadirlas:",
+      "howToSteps": "Nuvio → Ajustes → Streams → URL de insignias Fusion → pegar → Importar"
+    },
+    "sections": {
+      "signature": "Paquetes exclusivos",
+      "community": "Paquetes de la comunidad",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visual"
+    },
+    "preview": {
+      "loading": "Cargando…",
+      "textOnly": "Solo texto",
+      "unavailable": "Vista previa no disponible"
+    },
+    "copyBtn": "Copiar URL",
+    "copiedBtn": "Copiado ✓",
+    "toastCopied": "Copiado ✓",
+    "install": {
+      "title": "Cómo añadir insignias en Nuvio",
+      "stepsHtml": "1. Toca <strong>Copiar URL</strong> en cualquier paquete de arriba<br>2. Abre <strong>Nuvio</strong> → <strong>Ajustes</strong> → <strong>Streams</strong><br>3. Ve a <strong>URL de insignias Fusion</strong><br>4. Toca el campo de URL, pega, y luego toca <strong>Importar</strong><br>5. Verás <strong>\"1/3 URLs importadas\"</strong> — ¡funcionó!<br>💡 Nuvio admite hasta <strong>3 paquetes de insignias a la vez</strong> — combínalos para la mejor cobertura"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← Volver al inicio"
+    },
+    "hero": {
+      "eyebrow": "Perfiles de Nuvio",
+      "titleLine1": "GALERÍA DE",
+      "titleLine2": "AVATARES",
+      "sub": "226 avatares de personajes para tu perfil de Nuvio. Toca cualquier avatar para copiar su URL y pégala en Nuvio → Perfil → Avatar."
+    },
+    "banner": {
+      "linkTitle": "🔗 Vincula tu cuenta de Nuvio",
+      "linkSub": "Vincula tu cuenta para establecer avatares directamente — solo toca cualquier avatar de abajo en lugar de copiar URLs manualmente.",
+      "manageLink": "⚙️ ¿Ya vinculada? Gestiona tus addons y colecciones →",
+      "emailPlaceholder": "Correo de Nuvio",
+      "passwordPlaceholder": "Contraseña de Nuvio",
+      "continueBtn": "Continuar",
+      "selectProfile": "Selecciona un perfil para establecer avatares",
+      "logoutBtn": "Cerrar sesión",
+      "tapToSet": "Toca cualquier avatar de abajo para establecerlo para",
+      "changeBtn": "Cambiar",
+      "checkingSession": "Buscando una sesión de Nuvio guardada...",
+      "missingFields": "Introduce tu correo y contraseña de Nuvio.",
+      "loggingIn": "Iniciando sesión...",
+      "loginFailed": "Error al iniciar sesión."
+    },
+    "search": {
+      "placeholder": "Buscar avatares…"
+    },
+    "tabs": {
+      "all": "Todos ✦",
+      "other": "🎭 Otros"
+    },
+    "count": "{n} avatares",
+    "copiedBadge": "Copiado ✓",
+    "push": {
+      "settingAvatar": "Estableciendo avatar...",
+      "avatarSet": "Avatar establecido ✓",
+      "setFailed": "Error al establecer el avatar."
+    },
+    "uploader": {
+      "kicker": "Avatar personalizado",
+      "title": "Crea el tuyo propio",
+      "sub": "Elige una foto, arrástrala para colocarla, y luego envíala directamente al perfil de Nuvio seleccionado.",
+      "choosePhotoBtn": "Elegir foto",
+      "zoomLabel": "Zoom",
+      "privacyNote": "Los avatares subidos se almacenan en una URL pública generada aleatoriamente. La imagen se redimensiona y recodifica antes de subirla, eliminando el nombre de archivo original y los metadatos incrustados.",
+      "saveBtn": "Subir y establecer avatar",
+      "cancelBtn": "Cancelar",
+      "uploadYourOwnBtn": "Sube el tuyo propio",
+      "selectProfileFirst": "Selecciona primero un perfil de Nuvio.",
+      "invalidFileType": "Elige una imagen JPG, PNG o WebP.",
+      "fileTooLarge": "Elige una imagen de menos de 12 MB.",
+      "imageOpenFailed": "No se pudo abrir esa imagen.",
+      "imageReadFailed": "No se pudo leer la imagen seleccionada.",
+      "dragToPosition": "Arrastra la imagen para colocarla.",
+      "preparing": "Preparando avatar…",
+      "uploading": "Subiendo avatar…",
+      "uploadFailed": "Error al subir el avatar.",
+      "updatingProfile": "Actualizando perfil de Nuvio…",
+      "uploadedSet": "Avatar subido y establecido ✓",
+      "customAvatarSetToast": "Avatar personalizado establecido ✓",
+      "setFailed": "No se pudo establecer el avatar."
+    },
+    "recent": {
+      "title": "Subidas recientes",
+      "subtitle": "Toca uno para volver a usarlo",
+      "clearBtn": "Borrar todo",
+      "useAriaLabel": "Usar este avatar reciente",
+      "altText": "Avatar personalizado reciente",
+      "removeAriaLabel": "Eliminar de avatares recientes"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "Proveedores de descubrimiento",
+      "atLeastOne": "TMDB o MDBList obligatorio · TVDB y OMDb opcionales",
+      "oneRequired": "Proveedor principal obligatorio",
+      "atLeastOneShort": "AL MENOS UNO",
+      "tmdbLabel": "Clave de API v3 de TMDB",
+      "tmdbPlaceholder": "Pega tu clave de API v3 de TMDB",
+      "tmdbHelp": "Una clave de API v3 de TMDB permite el descubrimiento basado en TMDB, pero no los catálogos ni herramientas exclusivos de MDBList.",
+      "mdblistHelp": "MDBList habilita catálogos específicos, búsqueda de listas y herramientas de importación.",
+      "bothHelp": "Añade ambos proveedores para disfrutar de la experiencia Ultra MAX más completa.",
+      "getTmdbKey": "Obtener clave v3 de TMDB →",
+      "tmdbAttribution": "Este producto utiliza la API de TMDB, pero no está respaldado ni certificado por TMDB.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ Solo TMDB",
+      "statusMdblist": "✓ Solo MDBList",
+      "statusRequired": "Se requiere TMDB o MDBList",
+      "validation": "Añade una clave de API v3 de TMDB o una clave de API de MDBList en el paso 1.",
+      "savedKey": "Clave guardada",
+      "mdblistPresetUnavailable": "Requiere una clave de API de MDBList.",
+      "unsupportedManualImdb": "ID de IMDb (no admitidos en este creador)",
+      "unsupportedManualMdblist": "URL / ID de MDBList (usa búsqueda/importación)",
+      "statusConnectedCount": "{count} conectados",
+      "statusSupplementalOnly": "{count} conectados · añade TMDB o MDBList"
+    },
+    "badge": {
+      "required": "OBLIGATORIO",
+      "optional": "Opcional"
+    },
+    "verifyBtn": "Comprobar",
+    "step1": {
+      "eyebrow": "Paso 01 de 04",
+      "title": "Configura tu Ultra MAX",
+      "sub": "Completa lo esencial y luego personaliza lo que quieras."
+    },
+    "modeChooser": {
+      "kicker": "Elige tu ruta",
+      "title": "¿Cómo quieres empezar?",
+      "copy": "Toma la ruta rápida, personalízalo todo tú mismo, o reabre una configuración existente con su token.",
+      "quick": {
+        "name": "Configuración rápida",
+        "desc": "Elige un estilo y deja que Ultra MAX escoja una colección de filas limpia y equilibrada."
+      },
+      "custom": {
+        "name": "Configuración personalizada",
+        "desc": "Elige claves, catálogos, colecciones, streams y cada opción avanzada tú mismo."
+      },
+      "kids": {
+        "name": "Configuración infantil",
+        "desc": "Crea un perfil infantil restringido con límites de edad, catálogos seguros y addons de Nuvio aislados."
+      },
+      "restore": {
+        "name": "Restaurar existente",
+        "desc": "Introduce un token de configuración y sigue editando una configuración de Ultra MAX existente."
+      },
+      "changeRoute": "← Elegir otra ruta de configuración"
+    },
+    "toolbar": {
+      "newSetup": "🚀 Nueva configuración",
+      "loadToken": "🔑 Cargar token",
+      "save": "💾 Guardar",
+      "draftSaved": "Borrador guardado.",
+      "more": "••• Más",
+      "import": "📦 Importar",
+      "recoverToken": "📧 Recuperar token",
+      "restore": "↩ Restaurar",
+      "help": "❓ Ayuda",
+      "assets": "🖼 Recursos",
+      "clear": "🗑 Borrar"
+    },
+    "support": {
+      "title": "Contactar con soporte",
+      "intro": "Envíanos un mensaje y te responderemos.",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "¿De qué se trata?",
+      "messageLabel": "Mensaje",
+      "messagePlaceholder": "Describe el problema o la pregunta...",
+      "emailLabel": "Correo de respuesta (opcional)",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "emailHint": "Solo se usa si quieres una respuesta.",
+      "sendBtn": "Enviar mensaje",
+      "sendingBtn": "Enviando...",
+      "cancelBtn": "Cancelar",
+      "successMsg": "¡Mensaje enviado! Gracias por contactarnos.",
+      "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+      "errorEmptySubject": "Por favor, introduce un asunto.",
+      "errorEmptyMessage": "Por favor, introduce un mensaje.",
+      "errorInvalidEmail": "Introduce un correo electrónico válido o déjalo en blanco.",
+      "errorRateLimit": "Demasiadas solicitudes. Inténtalo de nuevo más tarde.",
+      "closeAria": "Cerrar formulario de soporte"
+    },
+    "returning": {
+      "title": "Cargar configuración existente",
+      "placeholder": "Pega tu token aquí",
+      "loadBtn": "Cargar →"
+    },
+    "quick": {
+      "label": "Configuración rápida",
+      "title": "Crea una configuración limpia en segundos",
+      "sub": "Elige un estilo — Ultra MAX selecciona las filas. O salta al Generador avanzado de abajo.",
+      "balanced": {
+        "name": "Equilibrado",
+        "desc": "El mejor valor por defecto. Filas rápidas, ordenadas y útiles."
+      },
+      "movies": {
+        "name": "Amante del cine",
+        "desc": "Películas primero. Tendencias, populares, proveedores y colecciones."
+      },
+      "series": {
+        "name": "Maratonista de series",
+        "desc": "Enfocado en series. Ideal para shows en curso y temporadas completas."
+      },
+      "quality": {
+        "name": "Configuración de calidad",
+        "desc": "Filas más limpias y con aspecto premium, con menos desorden."
+      },
+      "summaryDefault": "Elige un estilo arriba para previsualizar qué filas seleccionará Ultra MAX.",
+      "generateBtn": "🚀 Generar configuración rápida",
+      "advancedBtn": "🔧 Generador avanzado",
+      "backBtn": "← Volver a Configuración rápida"
+    },
+    "requiredMarker": "● Obligatorio",
+    "tiles": {
+      "requiredStatus": "Obligatorio",
+      "password": {
+        "name": "Contraseña"
+      },
+      "mdblist": {
+        "name": "Clave de MDBList"
+      },
+      "optional": {
+        "name": "Mejoras opcionales",
+        "desc": "Pósters, idioma, filtros"
+      },
+      "streams": {
+        "name": "Streams",
+        "desc": "Proveedores debrid y enlaces manuales"
+      },
+      "backToOverview": "← Volver al resumen"
+    },
+    "password": {
+      "label": "🔐 Contraseña",
+      "placeholder": "Crea una contraseña",
+      "confirmPlaceholder": "Confirma la contraseña",
+      "mismatchError": "Las contraseñas no coinciden",
+      "hint": "Guarda esto — lo necesitarás para editar tu configuración más adelante.",
+      "rememberMe": "Recordarme en este dispositivo",
+      "forgotQuestion": "¿Olvidaste tu contraseña?",
+      "resetBtn": "🔑 Restablecer contraseña",
+      "newPlaceholder": "Nueva contraseña",
+      "confirmNewPlaceholder": "Confirma la nueva contraseña",
+      "setNewBtn": "Establecer nueva contraseña"
+    },
+    "mdblist": {
+      "label": "Clave API de MDBList",
+      "placeholder": "Pega tu clave API gratuita de MDBList",
+      "hint": "Impulsa todas las listas seleccionadas, gráficos de tendencias y estrenos. Gratis, tarda 30 segundos.",
+      "getKeyLink": "Obtén tu clave gratis →",
+      "howToGetKey": "ℹ ¿Cómo consigo una clave?",
+      "guide": {
+        "title": "Cómo obtener tu clave API gratuita de MDBList",
+        "step1Html": "Paso 1 — Ve a <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> y crea una cuenta gratuita.",
+        "step2": "Paso 2 — Revisa tu correo y confirma tu cuenta.",
+        "step3Html": "Paso 3 — Ve a <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> y copia tu clave.",
+        "step4": "Paso 4 — Pégala arriba. ¡Listo!",
+        "freeTier": "Nivel gratuito: 1.000 peticiones/día — más que suficiente."
+      }
+    },
+    "optional": {
+      "toggle": "Mejoras opcionales",
+      "sub": "Pósters, filtro de idioma, filas personales y filtros.",
+      "aiRows": {
+        "summary": "🤖 Filas recomendadas por IA",
+        "placeholder": "Pega tu clave API de Google Gemini",
+        "hint": "Añade las filas de Películas recomendadas por IA y Series recomendadas por IA.",
+        "enableLabel": "Activar filas recomendadas por IA"
+      },
+      "language": {
+        "summary": "🌐 Idioma de los metadatos",
+        "hint": "Los títulos y descripciones aparecerán en el idioma elegido."
+      },
+      "posterKeys": {
+        "summary": "🖼️ Claves de proveedores de pósters"
+      },
+      "rpdb": {
+        "label": "Clave API de RPDB",
+        "placeholder": "Tu clave API de RPDB para pósters con valoración",
+        "link": "Obtén tu clave de RPDB →"
+      },
+      "topPosters": {
+        "label": "Clave API de TOP Posters",
+        "placeholder": "Tu clave API de TOP Posters",
+        "link": "Obtén tu clave de TOP Posters →"
+      },
+      "fanart": {
+        "label": "Clave API de Fanart.tv",
+        "placeholder": "Clave API de Fanart.tv para pósters de alta calidad",
+        "link": "Obtén tu clave de Fanart.tv →"
+      },
+      "omdb": {
+        "label": "Clave API de OMDb",
+        "placeholder": "Clave API de OMDb",
+        "link": "Obtén tu clave de OMDb →"
+      },
+      "betterPosters": {
+        "summary": "Better Posters e integraciones",
+        "label": "Better Posters",
+        "descHtml": "Añade overlays inteligentes a cada póster — valoraciones, género, etiquetas de tendencia, insignias de calidad y más. Con tecnología de <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Solo Nuvio</span>",
+        "enableTitle": "Activar BetterPosters",
+        "enableSub": "Sustituye los pósters de TMDB por defecto",
+        "ratingSourceLabel": "⭐ Fuente de valoración",
+        "noRating": "Sin valoración",
+        "overlaysLabel": "🏷️ Overlays",
+        "trendTagsTitle": "Etiquetas de tendencia",
+        "trendTagsSub": "Tendencia, Nuevo, #3",
+        "qualityTagsTitle": "Etiquetas de calidad",
+        "qualityTagsSub": "4K, DV, Atmos",
+        "genreTitle": "Género",
+        "genreSub": "Etiqueta en la parte inferior",
+        "ageRatingTitle": "Clasificación por edad",
+        "ageRatingSub": "PG-13, TV-MA, R",
+        "urlPatternLabel": "Patrón de URL de póster generado:",
+        "testUrlBtn": "🧪 Probar URL",
+        "manualUrlLabelHtml": "🔗 O pega tu propia URL de <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>",
+        "manualUrlHint": "Si la URL autogenerada no funciona, visita btttr.cc, configura tu estilo y pega aquí el patrón de URL.",
+        "manualUrlFallback": "Déjalo en blanco para usar la URL autogenerada de arriba.",
+        "disabledPreview": "— desactivado",
+        "testing": "Probando...",
+        "testOk": "✅ ¡Funciona! El póster se cargó correctamente.",
+        "testFailed": "❌ No se pudo cargar — revisa tu URL o pruébalo manualmente en btttr.cc."
+      },
+      "languageFilter": {
+        "label": "🌍 Filtro de idioma",
+        "desc": "Oculta contenido cuyo idioma original coincida. Útil para filtrar Bollywood, K-dramas, contenido tailandés, etc."
+      },
+      "trakt": {
+        "notConnected": "No conectado",
+        "connectBtn": "Conectar con Trakt",
+        "disconnectBtn": "Desconectar",
+        "info": "Conecta tu cuenta de Trakt para acceder a tus Favoritos, Lista de seguimiento, Colección e Historial. Funciona con perfiles privados."
+      },
+      "simkl": {
+        "notConnected": "No conectado",
+        "connectBtn": "Conectar con Simkl",
+        "disconnectBtn": "Desconectar",
+        "info": "Conecta tu cuenta de Simkl para acceder a tu Lista de seguimiento, Historial y Valoraciones como catálogos personales."
+      },
+      "contentFilters": {
+        "summary": "🎚️ Filtros de contenido",
+        "hideUnreleasedLabel": "🚫 Ocultar títulos no estrenados",
+        "hideUnreleasedInfo": "Filtra películas y series que aún no se han estrenado.",
+        "preserveKitsuLabel": "🌸 Conservar IDs originales de Kitsu para anime",
+        "preserveKitsuInfo": "Publica los IDs originales de Kitsu para los catálogos de anime compatibles, para que los addons de streaming solo-Kitsu puedan responder. Los títulos sin una coincidencia segura de Kitsu siguen usando IDs de IMDb.",
+        "digitalOnlyLabel": "📀 Solo estrenos digitales",
+        "digitalOnlyInfo": "Solo muestra películas con un estreno digital confirmado disponible hoy. Las series no se ven afectadas.",
+        "hideWatchedLabel": "👁️ Ocultar títulos vistos",
+        "hideWatchedInfo": "Oculta películas que has visto y series que has completado del todo, según tu historial de Trakt/Simkl conectado.",
+        "includeAdultLabel": "🔞 Incluir contenido para adultos",
+        "includeAdultInfo": "Si está desactivado, el contenido para adultos y hentai se oculta de todos los catálogos. Recomendado para configuraciones familiares.",
+        "maxRatingLabel": "👥 Clasificación de edad máxima",
+        "maxRatingInfo": "Oculta contenido por encima de esta clasificación. Usa certificaciones de EE. UU. También bloquea contenido sin clasificar — recomendado para filtrar anime y hentai para adultos de los catálogos.",
+        "ratingNone": "Sin restricción",
+        "ratingG": "G - Audiencia general",
+        "ratingPG": "PG - Se recomienda supervisión de los padres",
+        "ratingPG13": "PG-13 - Se recomienda encarecidamente supervisión de los padres",
+        "ratingR": "R - Restringido",
+        "ratingNC17": "NC-17 - Solo adultos"
+      },
+      "timezone": {
+        "label": "🕰️ Zona horaria",
+        "hint": "Detectada automáticamente desde este dispositivo. Se usa para estrenos de episodios, premieres y eventos en directo."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ Streams",
+      "sub": "Proveedores debrid y enlaces de streaming manuales.",
+      "debridLabel": "🎯 Proveedores debrid",
+      "addProvider": "Añadir proveedor…",
+      "apiKeyPlaceholder": "Pega tu clave API aquí",
+      "checkAddBtn": "Comprobar y añadir",
+      "optionsLabel": "Opciones de streaming",
+      "cachedOnlyLabel": "⚡ Solo en caché",
+      "cachedOnlySub": "(más rápido, streams instantáneos)",
+      "englishOnlyLabel": "🇬🇧 Solo streams en inglés",
+      "removeTrashLabel": "🗑️ Eliminar resultados basura",
+      "maxQualityLabel": "Calidad máxima",
+      "maxFileSizeLabel": "Tamaño máximo de archivo",
+      "noLimit": "Sin límite",
+      "maxSizeHint": "Oculta streams más grandes que este límite, sin importar la resolución.",
+      "poweredByHtml": "Los streams funcionan gracias a <strong>Comet</strong> y se entregan directamente a través de Ultra MAX. No se necesitan URLs de manifiesto.",
+      "manualLinksLabel": "🔗 Enlaces de streaming manuales",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "Agregador de streams todo en uno con soporte debrid.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "Proxy y almacén debrid.",
+      "configureLink": "Configurar →",
+      "pasteOwnUrl": "O pega tu propia URL",
+      "wizardUrlPlaceholder": "https://tu-addon/.../manifest.json",
+      "checkAddonBtn": "Comprobar addon",
+      "addedAddonsLabel": "Addons añadidos",
+      "noAddonsYet": "Aún no se han añadido addons.",
+      "torboxTitle": "¿Necesitas un servicio debrid?",
+      "torboxDescHtml": "TorBox es la base sobre la que se construye Ultra MAX. Usa el enlace de abajo y obtén <strong>3 meses gratis</strong> además de tu suscripción.",
+      "torboxBtn": "Consigue TorBox — 3 meses gratis →",
+      "enterYourPasswordToSaveChanges": "Introduce tu contraseña para guardar los cambios",
+      "pasteYourConfiguredAiostreamsManifestJsonUrlPlaceholder": "Pega la URL de tu manifest.json de AIOStreams configurado",
+      "pasteYourConfiguredCometManifestJsonUrlPlaceholder": "Pega la URL de tu manifest.json de Comet configurado",
+      "loadingPleaseTryAgain": "Cargando, inténtalo de nuevo",
+      "preserveSourceBrandingLabel": "Mostrar la fuente original del stream",
+      "preserveSourceBrandingInfo": "Mantén nombres como Comet o el proveedor original del addon en lugar de sustituirlos por la marca Ultra MAX."
+    },
+    "nav": {
+      "backHome": "← Volver al inicio",
+      "nextStep2": "Continuar a Catálogos →"
+    },
+    "step2": {
+      "eyebrow": "Paso 02",
+      "title": "Crea tu pantalla de inicio",
+      "sub": "Elige un punto de partida y luego ajústalo por categoría. Tu inicio de Nuvio se actualiza en vivo.",
+      "startWithPreset": "Empieza con un preajuste",
+      "hideAll": {
+        "title": "Ocultar todo del inicio",
+        "sub": "Mantener filas seleccionadas pero ocultas",
+        "tooltip": "Mantiene las filas seleccionadas, pero las oculta de tu inicio de Nuvio"
+      },
+      "showAll": {
+        "title": "Mostrar todo en el inicio",
+        "sub": "Restaurar todas las filas seleccionadas",
+        "tooltip": "Hace visible en tu inicio de Nuvio cada fila seleccionada"
+      },
+      "clearAll": {
+        "title": "Borrar toda la selección",
+        "sub": "Eliminar cada fila elegida",
+        "tooltip": "Elimina cada fila seleccionada"
+      },
+      "loading": "Cargando...",
+      "fineTune": "Ajusta por categoría",
+      "searchPlaceholder": "Buscar en todos los catálogos...",
+      "manageSetup": "Gestiona tu configuración",
+      "showAllRows": {
+        "title": "Mostrar todas las filas",
+        "sub": "Explora cada catálogo disponible"
+      },
+      "allRows": "Todas las filas",
+      "reorder": {
+        "title": "Reordenar filas",
+        "sub": "Controla el orden mostrado en Nuvio y Stremio",
+        "note": "Arrastra las filas al orden que prefieras."
+      },
+      "customRows": {
+        "title": "Filas personalizadas",
+        "sub": "Crea filas desde IMDb, MDBList, Trakt o TMDB",
+        "note": "Añade shows, franquicias y listas no cubiertas por los catálogos integrados."
+      },
+      "preview": {
+        "mobile": "📱 Móvil",
+        "desktop": "🖥️ Escritorio",
+        "deviceGroupLabel": "Dispositivo de vista previa",
+        "modalLabel": "Vista previa del inicio de Nuvio",
+        "closeLabel": "Cerrar vista previa"
+      },
+      "review": {
+        "kicker": "Comprobación final",
+        "title": "Revisa tu inicio",
+        "sub": "Comprueba tus filas seleccionadas o previsualiza cómo aparecerán en Nuvio."
+      },
+      "stremioWarning": {
+        "prefix": "Usuarios de Stremio:",
+        "textHtml": "Más de 200 catálogos pueden superar el límite de tamaño del manifiesto de Stremio. Nuvio sí puede manejar la configuración más grande. Considera ocultar las filas que no uses en lugar de eliminarlas."
+      },
+      "summaryBtn": "📋 Resumen",
+      "previewBtn": "📺 Vista previa",
+      "back": {
+        "title": "Atrás",
+        "sub": "Volver a la configuración"
+      },
+      "selection": {
+        "title": "Filas seleccionadas",
+        "sub": "Listas para tu pantalla de inicio"
+      },
+      "next": {
+        "title": "Colecciones",
+        "sub": "Continuar al paso 03"
+      },
+      "catalogTools": {
+        "addAtLeastOneSourceOrder": "<div class=\"s2-tool-panel-note\">Añade al menos una fuente. El orden controla la prioridad de mezcla.</div>",
+        "addCatalog": "Añadir catálogo",
+        "addMergedCatalog": "＋ Añadir catálogo combinado",
+        "availableSourceCatalogs": "Catálogos de origen disponibles",
+        "blend": "Mezclar",
+        "blendUpToEightExistingMovie": "Combina hasta ocho filas existentes de películas o series",
+        "cancel": "Cancelar",
+        "continueToStep03": "Organiza las filas seleccionadas",
+        "eGAnime": "p. ej. Anime",
+        "finaliseGenerate": "Colecciones",
+        "findAnyPublicMdblistByName": "Busca cualquier MDBList pública por nombre y añádela como fila activable. Requiere tu clave de API de MDBList del Paso 1.",
+        "interleave": "Intercalar",
+        "mergedCatalogs": "Catálogos combinados",
+        "mixed": "Mixto",
+        "movies": "Películas",
+        "name": "Nombre",
+        "noPreviewAvailableYet": "<div style=\"grid-column:1/-1;font-size:11px;color:#888;text-align:center;padding:14px 0;\">Aún no hay vista previa disponible</div>",
+        "previewNuvioHome": "<span>📺 Vista previa de inicio de Nuvio</span>",
+        "reviewYourCurrentChoices": "Revisa tus opciones actuales",
+        "save": "Guardar",
+        "searchCatalogues": "Buscar catálogos...",
+        "searchMdblist": "🔎 Buscar en MDBList",
+        "searchPublicMdblistsByName": "Buscar MDBLists públicas por nombre...",
+        "sequential": "Secuencial",
+        "series": "Series",
+        "setupSummary": "Resumen de configuración",
+        "step04": "Paso 03",
+        "type": "Tipo",
+        "clickToHideFromHome": "Haz clic para ocultar del Inicio (sigue disponible en Ultra MAX)"
+      }
+    },
+    "step3": {
+      "eyebrow": "Paso 03",
+      "title": "Colecciones",
+      "sub": "Agrupa las filas de tu inicio en colecciones de Nuvio",
+      "quickStart": "⚡ Inicio rápido — toca para añadir una colección",
+      "tapToExpand": "toca para expandir",
+      "quickStartLabel": "Inicio rápido — toca para añadir una colección",
+      "quickStartDesc": "Cada preajuste crea al instante una nueva colección abajo. Toca tantos como quieras — de uno en uno.",
+      "addCollectionBtn": "+ Añadir colección",
+      "presets": {
+        "streaming": "Streaming",
+        "trending": "Tendencias",
+        "genres": "Géneros",
+        "themed": "Temáticas",
+        "filmCollections": "Colecciones de películas",
+        "studios": "Estudios",
+        "directors": "Directores",
+        "actors": "Actores",
+        "trakt": "Trakt",
+        "byDecade": "Por década",
+        "kidsFamily": "Infantil y familiar",
+        "uk": "Reino Unido",
+        "anime": "Anime",
+        "documentaries": "Documentales",
+        "bollywood": "Bollywood",
+        "sports": "Deportes",
+        "universes": "Universos"
+      },
+      "displayStyle": "Estilo de visualización",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "Cuadrícula con pestañas",
+          "desc": "Recomendado"
+        },
+        "grid": {
+          "name": "Cuadrícula",
+          "desc": "Diseño simple"
+        },
+        "rows": {
+          "name": "Filas",
+          "desc": "Vista de lista"
+        }
+      },
+      "yourCollections": "Tus colecciones",
+      "searchPlaceholder": "Buscar colecciones y carpetas…",
+      "importJsonBtn": "📦 Importar JSON",
+      "addCollectionMainBtn": "+ Añadir colección",
+      "backToCollections": "← Volver a Colecciones",
+      "emptyState": {
+        "textHtml": "Aún no hay colecciones<br>Toca un preajuste de arriba para empezar al instante,<br>o pulsa <strong style=\"color:var(--text);\">+ Añadir colección</strong> para crear una desde cero."
+      },
+      "back": "← Atrás",
+      "collectionsLabel": "colecciones",
+      "foldersLabel": "carpetas",
+      "next": "Siguiente — Finalizar →",
+      "actions": {
+        "usingTheNuvioProfileSelectedIn": "Usando el perfil de Nuvio seleccionado en el Paso 1. Puedes seleccionar perfiles adicionales aquí."
+      },
+      "misc": {
+        "noProfilesYet": "Aún no hay perfiles"
+      },
+      "finaliseGenerateBtn": "Finalizar / Generar →",
+      "artworkCreditHtml": "Un agradecimiento especial a <strong style=\"color:var(--text);\">Shadowfrom88</strong> en Reddit por el arte de colecciones usado en Ultra MAX."
+    },
+    "step4": {
+      "title": "🚀 Finalizar",
+      "installInstructions": {
+        "label": "Instrucciones de instalación importantes",
+        "html": "<strong style=\"color:#fff;\">Ultra MAX tiene dos partes separadas:</strong><br><br><strong style=\"color:#fff;\">1. URL del addon</strong><br>Después de pulsar <strong>🚀 Generar<br>configuración final</strong>, copia la URL final y úsala para añadir/instalar Ultra MAX en Nuvio o Stremio.<br><br><strong style=\"color:#fff;\">2. JSON de colecciones de Nuvio</strong><br>Pulsa <strong>📦 Exportar<br>JSON de Nuvio</strong> para descargar tu archivo de colecciones. Luego abre Nuvio, ve a la página de Colecciones e impórtalo allí.<br><br><strong style=\"color:#fff;\">Regla simple:</strong><br>URL del addon = catálogos. JSON de Nuvio = carpetas y colecciones."
+      },
+      "summary": {
+        "label": "Resumen final de la configuración",
+        "homeRowsKept": "Filas de inicio conservadas:",
+        "hiddenFromHome": "Ocultas del inicio:",
+        "collectionsCreated": "Colecciones creadas:",
+        "rowsMovedToCollections": "Filas movidas a Colecciones:",
+        "performance": "Rendimiento:",
+        "perf": {
+          "excellent": "Excelente",
+          "good": "Bueno",
+          "heavy": "Pesado",
+          "veryHeavy": "Muy pesado"
+        },
+        "hint": {
+          "excellent": "Diseño de inicio ligero. Ideal para móvil, TV y navegación rápida.",
+          "good": "Configuración equilibrada. Debería funcionar bien en la mayoría de dispositivos.",
+          "heavy": "Tienes muchas filas de inicio. Las Colecciones ayudarán una vez que completes el Paso 3.",
+          "veryHeavy": "Esta configuración puede sentirse recargada. Querrás mover más filas a Colecciones."
+        }
+      },
+      "generateBtn": "🚀 Generar configuración final",
+      "generating": "Generando tu addon...",
+      "part1": {
+        "stepLabel": "Paso 1 · Instalar",
+        "title": "📡 URL del addon",
+        "desc": "Copia esta URL e instálala en Nuvio o Stremio. Esto te da todas tus filas de catálogo.",
+        "copyBtn": "📋 Copiar URL",
+        "stremioInstallBtn": "Instalar en Stremio",
+        "stremioInstallTitle": "Instalar directamente en la app de Stremio",
+        "howTo": "<strong style=\"color:var(--muted);\">Stremio:</strong> toca ⚡ Instalar en Stremio para una configuración con un toque.<br>\n              <strong style=\"color:var(--muted);\">Nuvio:</strong> pega la URL copiada en Ajustes → Complementos → Añadir complemento por URL."
+      },
+      "part2": {
+        "stepLabel": "Paso 2 · Colecciones",
+        "title": "🗂 JSON de Nuvio",
+        "desc": "Exporta este archivo e impórtalo en la página de Colecciones de Nuvio. Esto te da carpetas y colecciones.",
+        "exportBtn": "📦 Exportar JSON de Nuvio"
+      },
+      "pushCard": {
+        "title": "🚀 Enviar directamente a Nuvio",
+        "desc": "Sáltate los pasos manuales — vincula tu cuenta de Nuvio y añadiremos Ultra MAX y tus colecciones directamente a un perfil.",
+        "manageLink": "⚙️ ¿Ya vinculada? Gestiona tus addons y colecciones →",
+        "emailPlaceholder": "Correo de Nuvio",
+        "passwordPlaceholder": "Contraseña de Nuvio",
+        "continueBtn": "Continuar",
+        "profileStageNote": "Esto instala el addon y sustituye las colecciones en el perfil seleccionado.",
+        "catalogsCheckbox": "Catálogos",
+        "collectionsCheckbox": "Colecciones",
+        "cancelBtn": "Cancelar",
+        "pushBtn": "Enviar a Nuvio",
+        "pushBtnMulti": "Enviar a Nuvio ({n} perfiles)",
+        "selectAll": "Seleccionar todo",
+        "selectNone": "Deseleccionar todo"
+      },
+      "qrCard": {
+        "title": "📱 Envía desde tu móvil",
+        "desc": "Escanea esto con la cámara de tu móvil para enviarlo directamente, sin necesidad de escribir.",
+        "showBtn": "Mostrar código QR"
+      },
+      "token": {
+        "saveHint": "Tu token — ¡guárdalo!",
+        "copyBtn": "Copiar token"
+      },
+      "registerEmail": {
+        "label": "📧 Registra tu correo",
+        "desc": "Así podrás recuperar tu token si lo pierdes. Nunca se usa para marketing.",
+        "placeholder": "tu@correo.com",
+        "registerBtn": "Registrar"
+      },
+      "exports": {
+        "projectFile": "💾 Archivo del proyecto",
+        "catalogCsv": "📊 CSV del catálogo"
+      },
+      "back": "← Atrás",
+      "cacheWarm": {
+        "message": "Calentando tus catálogos…"
+      },
+      "profiles": {
+        "desc": "Guarda una configuración alternativa completa — catálogos, colecciones, transmisiones, todo lo anterior — como un perfil con nombre, p. ej. \"4K TV\" frente a \"Móvil\". Cada uno obtiene su propia URL de instalación.",
+        "hint": "Guarda todo lo configurado arriba (catálogos, colecciones, transmisiones, pantalla) como un perfil. Hasta 8 por token.",
+        "label": "📱 Perfiles de dispositivo",
+        "namePlaceholder": "Nombre del perfil, p. ej. 4K TV",
+        "saveBtn": "Guardar perfil"
+      }
+    },
+    "nuvioPush": {
+      "missingFields": "Introduce tu correo y contraseña de Nuvio.",
+      "generateFirst": "Genera tu configuración primero antes de enviarla a Nuvio.",
+      "loggingIn": "Iniciando sesión...",
+      "selectProfiles": "Selecciona a qué perfil(es) enviar.",
+      "loginFailed": "Error al iniciar sesión.",
+      "selectAtLeastOne": "Selecciona al menos Catálogos o Colecciones para enviar.",
+      "selectAtLeastOneProfile": "Selecciona al menos un perfil.",
+      "somethingWrong": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "Los seis espacios de perfil de Nuvio ya están en uso.",
+      "profileNotVerified": "Nuvio aceptó la actualización del perfil, pero no se pudo verificar el perfil infantil.",
+      "notIsolated": "El perfil infantil existe, pero no está aislado del perfil principal.",
+      "noKidsCollection": "La configuración generada no contiene la colección Ultra MAX Kids.",
+      "generateFirst": "Genera la configuración infantil antes de enviarla a Nuvio.",
+      "confirmPrompt": "¿Configurar un perfil infantil aislado en Nuvio?\n\nUltra MAX creará o actualizará el perfil infantil, desactivará los addons y plugins compartidos, y luego sustituirá los addons y colecciones de ese perfil por la configuración infantil restringida.\n\nSe guardará primero en este navegador una copia de seguridad de los addons y colecciones infantiles existentes.",
+      "cancelled": "Configuración infantil cancelada. No se realizó ningún cambio.",
+      "creatingProfile": "Creando o verificando el perfil infantil aislado...",
+      "backingUp": "Haciendo copia de seguridad del perfil infantil actual...",
+      "addonNotVerified": "El addon infantil se envió, pero la verificación no coincidió con el manifiesto generado.",
+      "installingAddon": "Instalando el addon restringido Ultra MAX Kids...",
+      "installingCollection": "Instalando la colección Ultra MAX Kids...",
+      "collectionsNotVerified": "Las colecciones infantiles se enviaron, pero el resultado de la verificación no coincidió.",
+      "verifying": "Verificando el perfil infantil...",
+      "ready": "Perfil infantil listo. Está aislado y solo contiene Ultra MAX Kids."
+    },
+    "step2Local": {
+      "manageSelected": "Gestionar catálogos seleccionados",
+      "showAllSelected": "Mostrar todos los seleccionados",
+      "showAllSelectedCopy": "Haz visibles en la pantalla de inicio todos los catálogos seleccionados.",
+      "showAllSelectedTooltip": "Haz visibles en la pantalla de inicio todos los catálogos seleccionados",
+      "hideAllSelected": "Ocultar todos los seleccionados",
+      "hideAllSelectedCopy": "Mantén los catálogos seleccionados para buscar, pero oculta sus filas del inicio.",
+      "hideAllSelectedTooltip": "Mantén los catálogos seleccionados para buscar, pero oculta sus filas del inicio",
+      "clearAllSelected": "Borrar todos los seleccionados",
+      "clearAllSelectedCopy": "Elimina de esta configuración todos los catálogos seleccionados.",
+      "clearAllSelectedTooltip": "Elimina de esta configuración todos los catálogos seleccionados",
+      "allHiddenTitle": "Todos los catálogos seleccionados están ocultos de la pantalla de inicio.",
+      "allHiddenCopy": "Seguirán disponibles para buscar, pero no aparecerán filas de Ultra MAX.",
+      "keepHidden": "Mantener ocultos",
+      "deleteMergedRow": "Eliminar fila combinada",
+      "removeMergedTitle": "¿Eliminar fila combinada?",
+      "removeMergedCopy": "Esto eliminará “{name}” de esta configuración. Los catálogos originales usados para crearlo no se eliminarán.",
+      "removeRow": "Eliminar fila",
+      "restoreRemovedRows": "Restaurar filas eliminadas",
+      "restoreMergedTitle": "¿Restaurar filas combinadas eliminadas?",
+      "restoreMergedCopy": "Esto restaurará las filas combinadas predefinidas eliminadas anteriormente de esta configuración. Las filas combinadas personalizadas eliminadas no se pueden restaurar.",
+      "restoreRows": "Restaurar filas",
+      "cancel": "Cancelar",
+      "noMerged": "Todavía no hay catálogos combinados.",
+      "edit": "Editar",
+      "show": "Mostrar",
+      "hide": "Ocultar",
+      "visible": "Visible",
+      "hidden": "Oculto",
+      "movie": "Película",
+      "series": "Serie",
+      "mixed": "Mixto",
+      "delete": "Eliminar",
+      "preview": "Vista previa"
+    },
+    "step3Local": {
+      "instructionsTitle": "INSTRUCCIONES IMPORTANTES DE INSTALACIÓN",
+      "instructionsIntro": "Esto es lo que hace cada parte del Paso 3.",
+      "instruction1Title": "1. Generar configuración final",
+      "instruction1Body": "Genera tu complemento Ultra MAX personalizado con los catálogos y ajustes seleccionados en los Pasos 1 y 2.",
+      "instruction2Title": "2. URL del complemento",
+      "instruction2Body1": "Instala la URL generada del complemento en Nuvio o Stremio.",
+      "instruction2Body2": "Esto añade las filas de catálogos Ultra MAX seleccionadas y las funciones de metadatos.",
+      "instruction3Title": "3. Instalar en Nuvio — Opcional",
+      "instruction3Body1": "Si tu cuenta de Nuvio está conectada, elige uno o más perfiles y Ultra MAX podrá instalar el complemento generado.",
+      "collectionsStep4": "Las colecciones se configuran en el Paso 3 antes de este paso final de generación.",
+      "instruction4Title": "4. Perfiles de dispositivo — Opcional",
+      "instruction4Body1": "Crea versiones alternativas de la configuración para distintos dispositivos, como TV, móvil o un perfil simplificado.",
+      "instruction4Body2": "Cada perfil de dispositivo recibe su propia URL de instalación.",
+      "instruction5Title": "5. Registrar correo electrónico — Opcional",
+      "instruction5Body1": "Añade un correo electrónico para poder recuperar el token de configuración si lo pierdes.",
+      "instruction5Body2": "No se utiliza para marketing.",
+      "instruction6Title": "6. Token de configuración",
+      "instruction6Body1": "Tu token de configuración identifica esta configuración.",
+      "instruction6Body2": "Guarda de forma segura el token y la contraseña de configuración para poder volver y editarla más tarde.",
+      "instruction7Title": "7. Exportaciones opcionales",
+      "instruction7Body1": "Archivo del proyecto guarda una copia editable de la configuración.",
+      "instruction7Body2": "CSV de catálogos exporta una lista de los catálogos seleccionados compatible con hojas de cálculo.",
+      "instruction7Body3": "El JSON de colecciones de Nuvio se crea y gestiona por separado en el Paso 4.",
+      "instructionsClosing": "Los usuarios de Stremio solo necesitan la URL generada del complemento.",
+      "nuvioInstallTitle": "Instalar Ultra MAX en Nuvio",
+      "nuvioInstallDescription": "Elige los perfiles donde se debe instalar el complemento Ultra MAX generado.",
+      "nuvioProfilePrompt": "Elige los perfiles donde se debe instalar el complemento Ultra MAX generado.",
+      "installAddonAction": "Instalar complemento",
+      "installAddonProfilesAction": "Instalar complemento ({count} perfiles)",
+      "selectInstallProfiles": "Selecciona los perfiles donde se debe instalar el complemento.",
+      "step4CollectionsLabel": "PASO 3 · COLECCIONES",
+      "nuvioJsonDescription": "Esta exportación utiliza las colecciones configuradas en el Paso 3.",
+      "optionalExports": "Exportaciones opcionales",
+      "projectFileTitle": "Archivo del proyecto",
+      "projectFileDescription": "Descarga una copia editable de esta configuración de Ultra MAX.",
+      "catalogCsvTitle": "CSV de catálogos",
+      "catalogCsvDescription": "Exporta la lista de catálogos seleccionados para hojas de cálculo o consulta.",
+      "notGenerated": "Aún no generado",
+      "generateFirst": "Genera primero tu configuración",
+      "jsonFormat": "JSON",
+      "csvFormat": "CSV"
+    },
+    "collectionSync": {
+      "compareWithNuvio": "Comparar con Nuvio",
+      "checkDifferencesAndSyncCollections": "Revisa diferencias y sincroniza colecciones",
+      "guidedCollectionSync": "Sincronización guiada de colecciones",
+      "chooseAProfileCompareItsCollections": "Elige un perfil, compara sus colecciones y revisa qué añadir o actualizar.",
+      "allProfiles": "Todos los perfiles",
+      "allProfilesCount": "Todos los perfiles · {count} perfiles",
+      "allProfilesHelp": "Compara cada perfil conectado de Nuvio y aplica los cambios aprobados a todos.",
+      "checkingProfile": "Comprobando perfil {current} de {total}: {name}",
+      "syncUpdated": "Actualizado",
+      "syncUpToDate": "Al día",
+      "syncFailed": "Error",
+      "retryFailedProfiles": "Reintentar perfiles con error",
+      "pushToAllProfiles": "Enviar a todos los perfiles",
+      "preview": "👁 Vista previa",
+      "backToFinalise": "← Volver a Catálogos",
+      "pushConfirm": "¿Aplicar secuencialmente las adiciones de colecciones revisadas a {count} perfiles de Nuvio?",
+      "pushToProfileCount": "Enviar a los {count} perfiles",
+      "addCollection": "+ Añadir colección",
+      "addCollections": "Añadir colecciones",
+      "addCollectionsToNuvio": "¿Añadir colecciones a Nuvio?",
+      "addNewCollections": "Añadir nuevas colecciones",
+      "addOnlyPlanSummary": "Resumen del plan de Solo Añadir",
+      "advancedComparisonDetails": "Detalles avanzados de comparación",
+      "advancedSafetyOptions": "Opciones avanzadas de seguridad",
+      "allAvailableAdditionsAreSelectedYou": "Todas las adiciones disponibles están seleccionadas. Puedes ajustar la lista antes de enviarla.",
+      "automaticDecisions": "Decisiones automáticas",
+      "back": "Atrás",
+      "backToCatalogs": "← Volver a Catálogos",
+      "backToStep1": "↤ Volver al Paso 1",
+      "cancel": "Cancelar",
+      "cancel2": "Cancelar",
+      "cancel3": "Cancelar",
+      "changeNuvioProfile": "Cambiar perfil de Nuvio",
+      "checkAgain": "Comprobar de nuevo",
+      "checkAgain2": "Comprobar de nuevo",
+      "checkAgainBeforeContinuing": "Comprueba de nuevo antes de continuar.",
+      "checkNuvio": "Comprobar Nuvio",
+      "clearSelection": "Borrar selección",
+      "close": "Cerrar",
+      "close2": "Cerrar",
+      "close3": "Cerrar",
+      "close4": "Cerrar",
+      "close5": "Cerrar",
+      "close6": "Cerrar",
+      "closeCollectionSync": "Cerrar sincronización de colecciones",
+      "collectionsAddedSuccessfully": "Colecciones añadidas correctamente",
+      "compareWithNuvioCheckDifferencesAnd": "Comparar con Nuvio. Revisa diferencias y sincroniza colecciones",
+      "comparisonSummary": "Resumen de la comparación",
+      "connectNuvio": "Conectar Nuvio",
+      "connectNuvio2": "Conectar Nuvio",
+      "done": "Hecho",
+      "downloadAddOnlyJson": "Descargar JSON de Solo Añadir",
+      "downloadComparisonReport": "Descargar informe de comparación",
+      "downloadMergeBase": "Descargar base de fusión",
+      "downloadMergePlanReport": "Descargar informe del plan de fusión",
+      "downloadPlanReport": "Descargar informe del plan",
+      "downloadRollbackPackage": "Descargar paquete de reversión",
+      "downloadSafeMergeJson": "Descargar JSON de Fusión Segura",
+      "downloadVerifiedBackup": "Descargar copia de seguridad verificada",
+      "everyConflictRequiresAnExplicitPlan": "Cada conflicto requiere una resolución explícita en el plan antes de exportar.",
+      "excellent": "Excelente",
+      "excludedEntries": "Entradas excluidas",
+      "existingNuvioCollectionsWillBePreserved": "Las colecciones existentes en Nuvio se conservarán.",
+      "exportOnlyPreviewNothingWillBe": "Vista previa solo de exportación. No se cambiará nada en Nuvio.",
+      "finaliseGenerate": "🚀 Finalizar / Generar",
+      "followLayout": "Seguir diseño",
+      "forSafetyConfirmTheReviewedRestore": "Por seguridad, confirma la restauración revisada escribiendo",
+      "generateMergeBase": "Generar base de fusión",
+      "importCollectionsFromAJsonFile": "Importar colecciones desde un archivo JSON",
+      "loadMergeBase": "Cargar base de fusión",
+      "managedEntriesUseConservativeThreeWay": "Las entradas gestionadas usan reglas conservadoras de tres vías. Las entradas desconocidas de Nuvio se conservan.",
+      "newCollections": "Nuevas colecciones",
+      "newCollectionsFromUltraMax": "Nuevas colecciones de Ultra MAX",
+      "nextCollections": "Siguiente — Colecciones →",
+      "nuvioEmail": "Correo de Nuvio",
+      "nuvioOnlyCollections0": "Colecciones solo en Nuvio (0)",
+      "nuvioPassword": "Contraseña de Nuvio",
+      "nuvioProfile": "Perfil de Nuvio",
+      "openSafeMerge": "Abrir Fusión Segura",
+      "optionalDownloadsAndRecoveryToolsNone": "Descargas y herramientas de recuperación opcionales. Ninguna es necesaria para añadir colecciones.",
+      "orClick": "o haz clic",
+      "prepareRollback": "Preparar reversión",
+      "prepareRollback2": "Preparar Reversión",
+      "prepareWritePlan": "Preparar plan de escritura",
+      "pushToNuvio": "Enviar a Nuvio",
+      "readOnlyComparison": "Comparación de solo lectura",
+      "readyToAdd": "Listo para añadir",
+      "refreshComparison": "Actualizar comparación",
+      "refreshComparison2": "Actualizar comparación",
+      "rememberThisNuvioSessionOnThis": "Recordar esta sesión de Nuvio en este dispositivo",
+      "restoreNuvioBackup": "Restaurar copia de seguridad de Nuvio",
+      "restoreNuvioBackup2": "RESTAURAR COPIA DE SEGURIDAD DE NUVIO",
+      "restoreNuvioBackup3": "Restaurar copia de seguridad de Nuvio",
+      "returnToComparison": "Volver a la comparación",
+      "reviewChanges": "Revisar cambios",
+      "rollbackConfirmationPhrase": "Frase de confirmación de reversión",
+      "rows": "Filas",
+      "safeMergeIsForReviewedThree": "Fusión Segura es para cambios revisados de tres vías en colecciones existentes.",
+      "safeMergePreview": "Vista previa de Fusión Segura",
+      "safeMergeSummary": "Resumen de Fusión Segura",
+      "selectANuvioProfile": "Selecciona un perfil de Nuvio",
+      "selectAllEligible": "Seleccionar todos los elegibles",
+      "signIn": "Iniciar sesión",
+      "signInToNuvioToPerform": "Inicia sesión en Nuvio para realizar una comparación de solo lectura.",
+      "step03": "Paso 04",
+      "tabbedGrid": "Cuadrícula con pestañas",
+      "tapAPresetAboveToGet": "Toca un preajuste arriba para empezar al instante,",
+      "theseCollectionsAlreadyExistInNuvio": "Estas colecciones ya existen en Nuvio y no se modificarán.",
+      "theseEntriesAreShownForReview": "Estas entradas se muestran solo para revisión y no se pueden seleccionar.",
+      "undoThisChange": "Deshacer este cambio",
+      "undoThisChange2": "Deshacer este cambio",
+      "unresolvedConflicts": "Conflictos sin resolver",
+      "verifyLatestNuvioState": "Verificar el estado más reciente de Nuvio",
+      "yourExistingCollectionsWereKept": "Tus colecciones existentes se conservaron.",
+      "yourExistingCollectionsWillBeKept": "Tus colecciones existentes se conservarán.",
+      "yourExistingNuvioCollectionsWillBe": "Tus colecciones existentes de Nuvio se conservarán.",
+      "yourNuvioCollectionsChangedSinceThe": "Tus colecciones de Nuvio cambiaron desde la última comprobación.",
+      "yourSetupLooksCleanAndReady": "Tu configuración se ve limpia y lista para generar."
+    },
+    "collectionEditor": {
+      "folders": "carpetas",
+      "folder": "carpeta",
+      "rows": "filas",
+      "row": "fila",
+      "addFolder": "+ Carpeta",
+      "rename": "Renombrar",
+      "duplicate": "Duplicar",
+      "remove": "Eliminar",
+      "editCollection": "Editar colección",
+      "collectionActions": "Acciones de colección",
+      "expandCollection": "Expandir colección",
+      "collapseCollection": "Contraer colección",
+      "expandFolder": "Expandir carpeta",
+      "collapseFolder": "Contraer carpeta",
+      "visuals": "Visuales",
+      "coverSet": "Portada definida",
+      "noCover": "Sin portada",
+      "gifOn": "GIF activado",
+      "gifOff": "GIF desactivado",
+      "coverImage": "Imagen de portada",
+      "focusGif": "GIF de enfoque",
+      "tileShape": "Forma de mosaico",
+      "landscape": "Horizontal",
+      "portrait": "Vertical",
+      "browse": "Explorar",
+      "noGif": "Sin GIF",
+      "noRows": "Aún no hay filas",
+      "searchRows": "Buscar filas para añadir…",
+      "selectRow": "Selecciona una fila para añadir…",
+      "addRow": "+ Añadir fila",
+      "removeRow": "Eliminar fila",
+      "dragCollection": "Arrastrar colección para reordenar",
+      "dragFolder": "Arrastrar carpeta para reordenar",
+      "expandVisuals": "Expandir visuales",
+      "collapseVisuals": "Contraer visuales",
+      "heroBackdrop": "Fondo heroico",
+      "heroHelper": "Imagen panorámica de fondo detrás del encabezado de la colección en diseños compatibles de Nuvio.",
+      "noHero": "Sin fondo heroico",
+      "backdropSet": "Fondo definido",
+      "clearBackdrop": "Borrar fondo"
+    },
+    "customCatalogBuilder": {
+      "actor": {
+        "help": "Ultra MAX buscará la coincidencia del actor en TMDB.",
+        "label": "Nombre del actor",
+        "placeholder": "Ejemplo: Keanu Reeves"
+      },
+      "empty": {
+        "aiPowered": "Con IA — describe lo que quieres, sin necesidad de clave",
+        "catalogBuilder": "✨ Constructor de catálogos →",
+        "createCustom": "+ Crear catálogo personalizado",
+        "manualHelp": "Manual — crea con filtros TMDB compatibles",
+        "noRows": "Aún no hay filas personalizadas."
+      },
+      "generic": {
+        "rowIdsLabel": "IDs de filas existentes, una por línea"
+      },
+      "imdb": {
+        "idsLabel": "IDs de IMDb, uno por línea, o haz clic en un resultado de búsqueda arriba",
+        "searchLabel": "🔍 Buscar un título",
+        "searchPlaceholder": "Escribe el nombre de una película o serie..."
+      },
+      "mdblist": {
+        "label": "URL o ID de lista de MDBList"
+      },
+      "mdblistList": {
+        "addedHeader": "MDBLists públicas añadidas"
+      },
+      "mdblistSearch": {
+        "byUser": "por {user}",
+        "itemsSuffix": "{count} elementos",
+        "noResults": "No se encontraron listas públicas para \"{query}\".",
+        "untitledList": "Lista sin título"
+      },
+      "regions": {
+        "au": "Australia",
+        "ca": "Canadá",
+        "gb": "Reino Unido",
+        "ie": "Irlanda",
+        "us": "Estados Unidos"
+      },
+      "streaming": {
+        "help": "IDs comunes: Netflix 8, Prime Video 9, Disney+ 337, Apple TV+ 350 y Paramount+ 531.",
+        "providerLabel": "ID de proveedor de TMDB",
+        "regionLabel": "Región"
+      },
+      "tmdb": {
+        "genreLabel": "ID de género",
+        "ratingLabel": "Puntuación mínima",
+        "yearFromLabel": "Año desde",
+        "yearToLabel": "Año hasta"
+      },
+      "trakt": {
+        "label": "URL de lista de Trakt"
+      }
+    },
+    "guidedPages": {
+      "catalogWrap": {
+        "help": "Usa Selecciones Rápidas para ir más rápido, o expande las secciones de abajo para un control total. Más filas implican más potencia, pero también más tiempo de carga.",
+        "step": "3 · Elige el contenido",
+        "title": "Elige lo que los usuarios pueden explorar"
+      },
+      "page2Controls": {
+        "help": "Busca catálogos, selecciona filas u oculta filas de la pantalla de inicio sin dejar de tenerlas disponibles dentro de Ultra MAX.",
+        "step": "2 · Ajustar",
+        "title": "Buscar y editar filas"
+      },
+      "page2Intro": {
+        "help": "Empieza con un preajuste y luego ajusta las filas de abajo. Mantenlo sencillo para ir rápido, o actívalo todo si lo quieres completo.",
+        "step": "Paso 2 · Constructor de catálogos",
+        "title": "Elige qué aparece en la pantalla de inicio"
+      },
+      "page2Next": {
+        "help": "Cuando las filas de inicio se vean bien, continúa y agrúpalas en colecciones al estilo Nuvio.",
+        "step": "3 · Continuar",
+        "title": "¿Listo para las colecciones?"
+      },
+      "page2Preset": {
+        "help": "Esto ofrece a los usuarios un punto de partida limpio antes de elegir filas individuales.",
+        "step": "1 · Punto de partida",
+        "title": "Elige un preajuste"
+      },
+      "page3Intro": {
+        "help": "Elige un estilo de visualización, carga colecciones predefinidas y luego edita carpetas, portadas y GIFs antes de finalizar.",
+        "step": "Paso 3 · Colecciones",
+        "title": "Crea el diseño de colección de Nuvio"
+      },
+      "page3ViewMode": {
+        "help": "Cuadrícula con pestañas es la opción predeterminada. Cuadrícula y Filas están disponibles si prefieres diseños más simples.",
+        "step": "1 · Estilo de visualización",
+        "title": "Elige cómo se muestran las colecciones"
+      },
+      "sectionLocked": "Bloqueado"
+    },
+    "summaryModal": {
+      "allCollections": "— Todas las colecciones —",
+      "cancel": "Cancelar",
+      "close": "✕ Cerrar",
+      "close2": "✕ Cerrar",
+      "everythingYouVeConfigured": "Todo lo que has configurado",
+      "failed": "Error",
+      "generateYourSetupFirst": "Genera primero tu configuración",
+      "networkError": "✗ Error de red",
+      "noFolders": "<div style=\"color:#333;text-align:center;padding:40px;\">Sin carpetas</div>",
+      "pleaseEnterYourEmail": "Introduce tu correo electrónico",
+      "register": "Registrar",
+      "register2": "Registrar",
+      "register3": "Registrar",
+      "registered": "Registrado ✓",
+      "registering": "Registrando...",
+      "setupSummary": "Resumen de configuración",
+      "yesReplaceIt": "Sí, reemplazarlo"
+    },
+    "deviceProfiles": {
+      "leaveBlankToKeep": "Déjalo en blanco para conservar \"{name}\""
+    },
+    "shareModal": {
+      "linkCopied": "¡Enlace copiado!"
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "UltraPlay+ verificado para esta configuración de Ultra MAX",
+      "aria": "UltraPlay Plus verificado"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "Más de 500 catálogos para crear tu configuración"
+    }
+  }
+}

@@ -1,8 +1,6 @@
 const { CATALOG_DEFS } = require('../catalogs/catalog-defs');
 const { handleCatalog } = require('./catalog-handler-service');
 
-const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 7000}`;
-
 // Exclude per-user catalogs and search/related/quick picks
 const EXCLUDED_HANDLERS = new Set(['trakt_user_favorites','trakt_user_watchlist','trakt_user_collection','trakt_user_history']);
 const EXCLUDED_PREFIXES = ['search_','similar_','recommended_','collection_','quick_','rightnow_','ai_'];
@@ -22,7 +20,7 @@ const COLLECTIONS_MANIFEST = {
   version: '1.0.0-dev',
   name: 'Ultra MAX Collections',
   description: '180+ film and TV franchise collections. No setup required.',
-  logo: `${BASE_URL}/logo.svg`,
+  logo: 'https://ultramax.vip/logo.png',
   resources: ['catalog'],
   types: ['movie', 'series'],
   idPrefixes: ['tt', 'tmdb'],

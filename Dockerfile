@@ -5,6 +5,13 @@ RUN addgroup -S ultramax && adduser -S -G ultramax ultramax \
 
 WORKDIR /app
 
+ENV ULTRAMAX_WEB_ROOT=/app/web \
+    IMAGES_DIR=/app/web/images \
+    ULTRAMAX_ARTWORK_ROOT=/app/web/images \
+    DATA_DIR=/data \
+    PROFILE_STORE_ENABLED=false \
+    ULTRAMAX_LIVE_SPORTS_ENABLED=false
+
 COPY addon/package*.json ./
 RUN npm install --omit=dev
 

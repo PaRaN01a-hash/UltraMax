@@ -1,5 +1,9 @@
 const { fetchCached } = require("./api-helpers");
 const { applyStreamFormat } = require("./stream-formatter");
+const {
+  applyStreamFilters,
+  sortStreams
+} = require("./stream-filter-service");
 
 const STREAM_BRIDGE_TIMEOUT_MS = 8000;
 
@@ -32,12 +36,19 @@ async function fetchStreamAddonName(manifestUrl) {
   }
 }
 
-async function fetchStreamsFromAddon(manifestUrl, type, id) {
+async function fetchStreamsFromAddon(
+  manifestUrl,
+  type,
+  id,
+  preserveStreamSourceBranding = false,
+  addonLabel = ""
+) {
   const cleanManifest = normaliseManifestUrl(manifestUrl);
   if (!cleanManifest) return [];
 
   const url = streamUrlFromManifest(cleanManifest, type, id);
-  const addonName = await fetchStreamAddonName(cleanManifest);
+  const customAddonName = String(addonLabel || "").trim();
+  const addonName = customAddonName || await fetchStreamAddonName(cleanManifest);
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), STREAM_BRIDGE_TIMEOUT_MS);
@@ -53,7 +64,19 @@ async function fetchStreamsFromAddon(manifestUrl, type, id) {
 
     const isCometAuto = cleanManifest.includes('comet.feels.legal');
     return streams.map(stream => {
-      if(isCometAuto && stream.name) {
+      if (customAddonName) {
+        return {
+          ...stream,
+          _umAddonName: customAddonName,
+          _umCustomAddonLabel: customAddonName
+        };
+      }
+
+      if (
+        isCometAuto &&
+        stream.name &&
+        !preserveStreamSourceBranding
+      ) {
         return {
           ...stream,
           name: stream.name.replace(/Comet/gi, 'Ultra MAX').replace(/\[TB[^\]]*\]\s*/g, '⚡ '),
@@ -68,6 +91,75 @@ async function fetchStreamsFromAddon(manifestUrl, type, id) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function probeStreamsFromAddon(manifestUrl, type, id) {
+  const cleanManifest = normaliseManifestUrl(manifestUrl);
+  if (!cleanManifest) {
+    return { responded: false, streams: [] };
+  }
+
+  const url = streamUrlFromManifest(cleanManifest, type, id);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), STREAM_BRIDGE_TIMEOUT_MS);
+
+  try {
+    const resp = await fetch(url, { signal: controller.signal });
+    if (!resp.ok) {
+      return { responded: false, streams: [] };
+    }
+
+    const data = await resp.json();
+    if (!data || !Array.isArray(data.streams)) {
+      return { responded: false, streams: [] };
+    }
+
+    return {
+      responded: true,
+      streams: data.streams
+    };
+  } catch {
+    return { responded: false, streams: [] };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function probeStreamBridgeAvailability(streamAddons, type, id) {
+  const addons = (streamAddons || [])
+    .map(normaliseManifestUrl)
+    .filter(Boolean)
+    .slice(0, 8);
+
+  if (!addons.length) {
+    return {
+      streams: [],
+      complete: false,
+      sourceCount: 0,
+      respondedCount: 0
+    };
+  }
+
+  const results = await Promise.allSettled(
+    addons.map(url => probeStreamsFromAddon(url, type, id))
+  );
+
+  const fulfilled = results
+    .filter(result => result.status === "fulfilled")
+    .map(result => result.value);
+
+  const streams = fulfilled.flatMap(result =>
+    result.responded ? result.streams : []
+  );
+
+  const respondedCount = fulfilled.filter(result => result.responded).length;
+
+  return {
+    streams,
+    complete: respondedCount === addons.length,
+    sourceCount: addons.length,
+    respondedCount
+  };
 }
 
 
@@ -194,24 +286,56 @@ function sortNuvioFriendlyStreams(a, b){
   return streamRankForNuvio(b) - streamRankForNuvio(a);
 }
 
-async function streamBridgeResponse(streamAddons, type, id, formatConfig) {
-  const addons = (streamAddons || [])
-    .map(normaliseManifestUrl)
-    .filter(Boolean)
-    .slice(0, 8);
+async function streamBridgeResponse(
+  streamAddons,
+  type,
+  id,
+  formatConfig,
+  preserveStreamSourceBranding = false,
+  bridgeConfig = {}
+) {
+  const addonLabels =
+    bridgeConfig.streamAddonLabels &&
+    typeof bridgeConfig.streamAddonLabels === "object" &&
+    !Array.isArray(bridgeConfig.streamAddonLabels)
+      ? bridgeConfig.streamAddonLabels
+      : {};
+
+  const addons = [];
+  const seenAddonUrls = new Set();
+  for (const rawAddon of (streamAddons || [])) {
+    const rawUrl = String(rawAddon || "").trim();
+    const url = normaliseManifestUrl(rawUrl);
+    if (!url || seenAddonUrls.has(url)) continue;
+    seenAddonUrls.add(url);
+    addons.push({
+      url,
+      label: addonLabels[rawUrl] || addonLabels[url] || ""
+    });
+    if (addons.length >= 8) break;
+  }
 
   if (!addons.length) return { streams: [] };
 
   const results = await Promise.allSettled(
-    addons.map(url => fetchStreamsFromAddon(url, type, id))
+    addons.map(entry =>
+      fetchStreamsFromAddon(
+        entry.url,
+        type,
+        id,
+        preserveStreamSourceBranding,
+        entry.label
+      )
+    )
   );
 
   const streams = results.flatMap(r => r.status === "fulfilled" ? r.value : []);
+  const filteredStreams = applyStreamFilters(streams, bridgeConfig);
 
   // Basic dedupe by URL/infoHash/title
   const seen = new Set();
   const deduped = [];
-  for (const s of streams) {
+  for (const s of filteredStreams) {
     const key = s.url || s.infoHash || s.externalUrl || s.title || JSON.stringify(s).slice(0, 200);
     if (seen.has(key)) continue;
     seen.add(key);
@@ -219,16 +343,32 @@ async function streamBridgeResponse(streamAddons, type, id, formatConfig) {
 deduped.push(s);
   }
 
+  const orderedStreams = sortStreams(deduped, bridgeConfig);
+
   // Apply the user's stream formatter (if configured) last, then strip the
   // internal _um-prefixed bookkeeping fields before handing back to Stremio/Nuvio.
-  const formatted = deduped.slice(0, 50).map(s => {
-    const { _umAddonName, ...rest } = applyStreamFormat(s, formatConfig, s._umAddonName);
-    return rest;
+  const formatted = orderedStreams.slice(0, 50).map(s => {
+    const customAddonLabel = String(s._umCustomAddonLabel || "").trim();
+    const formattedStream = applyStreamFormat(
+      s,
+      formatConfig,
+      s._umAddonName,
+      preserveStreamSourceBranding
+    );
+    const {
+      _umAddonName,
+      _umCustomAddonLabel,
+      ...rest
+    } = formattedStream;
+    return customAddonLabel
+      ? { ...rest, name: customAddonLabel }
+      : rest;
   });
 
   return { streams: formatted };
 }
 
 module.exports = {
-  streamBridgeResponse
+  streamBridgeResponse,
+  probeStreamBridgeAvailability
 };

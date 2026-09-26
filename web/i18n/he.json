@@ -1,0 +1,996 @@
+{
+  "nav": {
+    "home": "בית",
+    "build": "בנייה",
+    "nuvio": "Nuvio",
+    "updates": "עדכונים"
+  },
+  "home": {
+    "tagline": "המרכז שלך לקטלוגים, אוספים וגילוי",
+    "sectionNewTrending": "חדש וטרנדי",
+    "continue": {
+      "eyebrow": "המשך",
+      "title": "המשך את ההגדרה שלך"
+    },
+    "tiles": {
+      "build": {
+        "name": "הגדרה חדשה",
+        "desc": "צור הגדרת Ultra MAX חדשה מאפס"
+      },
+      "nuvio": {
+        "name": "חשבון Nuvio",
+        "desc": "שלח ונהל תוספים ישירות"
+      },
+      "avatars": {
+        "name": "כספת אווטארים",
+        "desc": "226 תמונות פרופיל של דמויות"
+      },
+      "badges": {
+        "name": "תגי סטרימינג",
+        "desc": "חבילות שכבת איכות"
+      },
+      "gallery": {
+        "name": "גלריית קהילה",
+        "desc": "שתף וייבא הגדרות ממשתמשים אחרים"
+      },
+      "whatsNew": {
+        "name": "מה חדש",
+        "desc": "העדכונים והתכונות האחרונים"
+      },
+      "settings": {
+        "name": "הגדרות ואודות",
+        "desc": "גרסת האפליקציה, עדכונים וקישורים שימושיים"
+      },
+      "help": {
+        "name": "עזרה ושחזור",
+        "desc": "מדריך, שחזור אסימון, אבחון ותמיכה"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "תוספת אופציונלית",
+      "headline": "Ultra MAX נשאר בחינם. UltraPlay+ עוזר לשמור עליו כך.",
+      "copy": "קבלו יותר מ-Ultra MAX ובמקביל עזרו לכסות את עלויות השרתים, ה-API והתפעול של הפרויקט.",
+      "featuresAria": "תכונות UltraPlay Plus",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Arcade מלא",
+      "instantAccess": "גישה מיידית",
+      "pricingAria": "מחירי UltraPlay Plus",
+      "monthly": "חודשי",
+      "yearly": "שנתי",
+      "lifetime": "לכל החיים",
+      "cta": "גלו את UltraPlay+",
+      "footnote": "UltraPlay+ משפר את Ultra MAX. Ultra MAX עצמו נשאר בחינם."
+    },
+    "stats": {
+      "catalogs": "קטלוגים",
+      "activeUsers": "משתמשים פעילים",
+      "selfHosted": "אירוח עצמי"
+    },
+    "footer": {
+      "website": "אתר",
+      "support": "תמיכה"
+    },
+    "onboarding": {
+      "kicker": "ברוכים הבאים ל-Ultra MAX",
+      "title": "בואו נגדיר את ההתקנה שלך",
+      "copy": "צור משהו חדש, שחזר הגדרה קיימת, או פשוט הסתכל מסביב לפני שתשנה משהו.",
+      "continueBtn": "המשך הגדרה שמורה",
+      "continueSub": "המשך בדיוק מהמקום שבו הפסקת",
+      "createBtn": "צור הגדרה חדשה",
+      "createSub": "בחר קטלוגים, שירותים והעדפות",
+      "restoreBtn": "שחזר באמצעות טוקן",
+      "restoreSub": "פתח הגדרה שיצרת בעבר",
+      "tokenPlaceholder": "טוקן הגדרה",
+      "tokenError": "הזן טוקן הגדרה תקין.",
+      "openBtn": "פתח",
+      "exploreBtn": "חקור את האפליקציה קודם"
+    }
+  },
+  "update": {
+    "kicker": "עדכון זמין",
+    "title": "גרסה חדשה של Ultra MAX מוכנה",
+    "defaultNotes": "גרסה חדשה יותר של Ultra MAX זמינה.",
+    "now": "עדכן עכשיו",
+    "viewSettings": "צפה בהגדרות האפליקציה",
+    "later": "לא עכשיו"
+  },
+  "back": {
+    "exitToast": "לחץ שוב על 'חזרה' כדי לצאת"
+  },
+  "account": {
+    "subtitle": "מנהל חשבון Nuvio",
+    "backLink": "← חזרה ל-Ultra MAX",
+    "header": {
+      "title": "חשבון Nuvio",
+      "backAriaLabel": "חזרה ל-Ultra MAX"
+    },
+    "login": {
+      "emailPlaceholder": "אימייל Nuvio",
+      "passwordPlaceholder": "סיסמת Nuvio",
+      "remember": "זכור אותי במכשיר זה",
+      "continueBtn": "המשך",
+      "missingFields": "אנא הזן את האימייל והסיסמה שלך ב-Nuvio.",
+      "loggingIn": "מתחבר...",
+      "failed": "ההתחברות נכשלה."
+    },
+    "profilePicker": {
+      "title": "בחר פרופיל"
+    },
+    "status": {
+      "loading": "טוען...",
+      "loadFailed": "טעינת נתוני הפרופיל נכשלה."
+    },
+    "manager": {
+      "switchBtn": "החלף",
+      "addonsTitle": "תוספים",
+      "addonsInstalled": "{n} מותקנים",
+      "noAddons": "אין תוספים מותקנים בפרופיל זה.",
+      "addonUrlPlaceholder": "הדבק את כתובת ה-URL של מניפסט התוסף...",
+      "addBtn": "הוסף",
+      "addonUrlRequired": "אנא הדבק כתובת URL של מניפסט.",
+      "addonDuplicate": "תוסף זה כבר ברשימה.",
+      "checkingAddon": "בודק את התוסף...",
+      "addonAdded": "\"{name}\" נוסף — לחץ על שמור למטה כדי לשלוח אותו ל-Nuvio.",
+      "collectionsTitle": "אוספים",
+      "collectionsCount": "{n} אוספים",
+      "noCollections": "אין אוספים בפרופיל זה.",
+      "folderSingular": "תיקייה",
+      "folderPlural": "תיקיות",
+      "saveBtn": "שמור שינויים",
+      "savingAddons": "שומר תוספים...",
+      "savingCollections": "שומר אוספים...",
+      "saved": "נשמר ✓",
+      "saveFailed": "שמירת השינויים נכשלה.",
+      "unnamedAddon": "תוסף ללא שם",
+      "untitledCollection": "אוסף ללא כותרת"
+    }
+  },
+  "settings": {
+    "headerTitle": "הגדרות ואודות",
+    "backAriaLabel": "חזרה ל-Ultra MAX",
+    "subtitle": "מידע על האפליקציה, עדכונים וקישורים שימושיים",
+    "sections": {
+      "appInfo": "מידע על האפליקציה",
+      "language": "שפה",
+      "updates": "עדכונים",
+      "links": "קישורים"
+    },
+    "language": {
+      "title": "שפת האפליקציה",
+      "sub": "משנה את הטקסט בכל האפליקציה"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "גרסה מותקנת",
+        "detecting": "מזהה את גרסת האפליקציה…",
+        "detectingValue": "מזהה…"
+      },
+      "latestVersion": {
+        "title": "הגרסה האחרונה שפורסמה",
+        "checking": "בודק מידע על גרסה…"
+      }
+    },
+    "updates": {
+      "checkBtn": "בדוק עדכונים",
+      "downloadBtn": "הורד את ה-APK האחרון",
+      "statusDefault": "Ultra MAX משווה את הגרסה שפורסמה לאפליקציה המותקנת."
+    },
+    "links": {
+      "website": {
+        "title": "אתר Ultra MAX",
+        "sub": "פתח את ultramax.vip"
+      },
+      "support": {
+        "title": "תמכו ב-Ultra MAX",
+        "sub": "קנו לקריס קפה ב-Ko-fi"
+      },
+      "community": {
+        "title": "קהילת Ultra MAX",
+        "sub": "בקרו ב-r/Ultra_Max"
+      }
+    },
+    "legal": "‏Ultra MAX הוא פרויקט קהילתי עצמאי. Nuvio ושירותים אחרים המוזכרים נותרים בבעלות בעליהם המתאימים.",
+    "showWelcomeAgain": {
+      "title": "הצג שוב את מסך הפתיחה",
+      "sub": "פותח מחדש את אפשרויות ההגדרה הראשונית במסך הבית"
+    },
+    "buildPrefix": "בילד {n}",
+    "installedBuildUnavailable": "הבילד המותקן אינו זמין",
+    "couldNotReadBuild": "לא ניתן היה לקרוא את הבילד המותקן",
+    "checkingForUpdates": "בודק עדכונים…",
+    "unknownVersion": "לא ידוע",
+    "updateAvailable": "גרסה חדשה יותר זמינה: {name}.",
+    "upToDate": "‏Ultra MAX מעודכן.",
+    "latestLoadedNoBuild": "הגרסה האחרונה נטענה. לא ניתן היה לזהות את הבילד המותקן.",
+    "latestLoaded": "מידע על הגרסה האחרונה נטען.",
+    "unavailable": "לא זמין",
+    "couldNotReachUpdateService": "לא ניתן היה להגיע לשירות העדכונים",
+    "updateCheckFailed": "בדיקת העדכון נכשלה. אנא נסה שוב."
+  },
+  "changelog": {
+    "backToHome": "← חזרה לדף הבית",
+    "heroBadge": "📋 יומן שינויים",
+    "heroTitleLine1": "מה",
+    "heroTitleLine2": "חדש",
+    "heroSub": "כל עדכון, שיפור ותכונה חדשה — במעקב מתחילת הדרך.",
+    "tabs": {
+      "app": "אפליקציית אנדרואיד"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "אנונימי"
+    },
+    "header": {
+      "home": "← בית",
+      "submit": "+ שלח"
+    },
+    "hero": {
+      "eyebrow": "גלריית קהילה",
+      "titlePrefix": "שתפו את",
+      "titleHighlight": "האוספים שלכם",
+      "sub": "הורידו חבילות אוספי Nuvio שנוצרו על ידי הקהילה. ייבאו את קובץ ה-JSON ישירות ב-Nuvio ← אוספים ← ייבוא.",
+      "submitBtn": "+ שלח את האוסף שלך"
+    },
+    "stats": {
+      "collections": "אוספים",
+      "downloads": "הורדות",
+      "likes": "לייקים"
+    },
+    "search": {
+      "placeholder": "חפש אוספים, תגיות, יוצרים…"
+    },
+    "sort": {
+      "recent": "החדשים ביותר",
+      "popular": "המורדים ביותר",
+      "liked": "המדורגים ביותר"
+    },
+    "tabs": {
+      "all": "הכול",
+      "ready": "✅ ללא תוספים",
+      "needs": "⚠️ נדרש תוסף"
+    },
+    "feed": {
+      "loading": "טוען אוספי קהילה…",
+      "failedTitle": "הטעינה נכשלה",
+      "failedSub": "אנא נסה לרענן את הדף",
+      "emptyTitle": "לא נמצאו אוספים",
+      "emptySub": "היה הראשון לשלוח אחד!"
+    },
+    "card": {
+      "noAddons": "✓ ללא תוספים",
+      "addonsNeeded": "⚠ נדרשים {n} {addonWord}",
+      "byAuthor": "מאת {author}",
+      "folders": "{n} תיקיות"
+    },
+    "addon": {
+      "singular": "תוסף",
+      "plural": "תוספים"
+    },
+    "time": {
+      "justNow": "ממש עכשיו",
+      "minutesAgo": "לפני {n} דקות",
+      "hoursAgo": "לפני {n} שעות",
+      "daysAgo": "לפני {n} ימים",
+      "weeksAgo": "לפני {n} שבועות"
+    },
+    "detail": {
+      "about": "אודות",
+      "tags": "תגיות",
+      "requiredAddons": "תוספים נדרשים",
+      "addonsHint": "התקן תוספים אלו לפני ייבוא אוסף זה.",
+      "extraFiles": "קבצים נוספים",
+      "extraFilesHint": "קבצי תצורה נוספים הכלולים באוסף זה.",
+      "howToImport": "כיצד לייבא",
+      "step1": "1. הורד את קובץ ה-JSON למטה",
+      "step2": "2. פתח Nuvio ← אוספים ← ייבוא",
+      "step3": "3. בחר את הקובץ שהורד",
+      "downloadBtn": "⬇️ הורד JSON",
+      "closeBtn": "סגור",
+      "noAddonsNeeded": "✓ לא נדרשים תוספים",
+      "addonsRequired": "⚠ נדרשים {n} {addonWord}",
+      "statFolders": "תיקיות",
+      "statDownloads": "הורדות",
+      "statLikes": "לייקים",
+      "installLink": "התקן ←",
+      "downloadFileBtn": "הורד"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ אוסף זה מכיל טוקן מקודד ({token}).\n\nאם תייבא אותו כפי שהוא, הוא ישתמש בהגדרת הקטלוג של מישהו אחר.\n\nהזן את הטוקן שלך ב-Ultra MAX כדי לתקן זאת אוטומטית, או בטל כדי להוריד כפי שהוא:",
+      "tokenReplaced": "✅ הטוקן הוחלף ב-{token} — מוריד את הקובץ המתוקן",
+      "originalToken": "⚠️ מוריד עם הטוקן המקורי — התיקיות עשויות שלא לעבוד עבורך",
+      "downloaded": "הורד! ייבא ב-Nuvio ← אוספים ← ייבוא",
+      "downloadedFile": "{filename} הורד",
+      "failed": "ההורדה נכשלה"
+    },
+    "like": {
+      "already": "כבר סומן כמועדף!",
+      "liked": "סומן כמועדף! ♥",
+      "failed": "הסימון כמועדף נכשל"
+    },
+    "submit": {
+      "title": "שתף את האוסף שלך",
+      "sub": "העלה קובץ JSON של אוספי Nuvio. אחרים יוכלו להוריד אותו ולייבא אותו ישירות ל-Nuvio.",
+      "nameLabel": "שם האוסף *",
+      "namePlaceholder": "לדוגמה: אוספי אימה חדשים",
+      "authorLabel": "השם שלך",
+      "authorPlaceholder": "אנונימי",
+      "descLabel": "תיאור",
+      "descPlaceholder": "מה יש באוסף הזה? למי הוא מיועד?",
+      "tagsLabel": "תגיות",
+      "tagsHint": "(לחץ Enter או פסיק כדי להוסיף)",
+      "tagsPlaceholder": "אימה, סרטים, סדרות…",
+      "addonsLabel": "תוספים נדרשים",
+      "addonsHint": "(השאר ריק אם אין צורך)",
+      "addAddonBtn": "+ הוסף תוסף נדרש",
+      "addonNamePlaceholder": "שם התוסף (לדוגמה: ScaryOnly)",
+      "addonUrlPlaceholder": "כתובת URL של המניפסט (אופציונלי)",
+      "jsonLabel": "קובץ JSON של אוספי Nuvio *",
+      "uploadHint": "📂 לחץ להעלאה או גרור ושחרר",
+      "exportHint": "ייצא מ-Nuvio ← אוספים ← ייצוא JSON",
+      "extraFilesLabel": "קבצים נוספים",
+      "extraFilesHint": "(אופציונלי — לדוגמה: קובץ JSON של קטלוג AIOMetadata)",
+      "extraFileNamePlaceholder": "שם הקובץ (לדוגמה: aiometadata-catalogs.json)",
+      "uploadLabel": "העלה",
+      "loadedLabel": "✓ נטען",
+      "addExtraFileBtn": "+ הוסף קובץ נוסף",
+      "cancelBtn": "ביטול",
+      "submitBtn": "🚀 שלח לגלריה",
+      "submitting": "שולח…",
+      "successBtn": "✅ נשלח!",
+      "success": "✅ נשלח! האוסף שלך גלוי כעת בגלריה.",
+      "failed": "השליחה נכשלה.",
+      "networkError": "שגיאת רשת — אנא נסה שוב.",
+      "invalidJsonFile": "קובץ JSON לא תקין — אנא בדוק את הקובץ ונסה שוב.",
+      "invalidJsonFileNamed": "קובץ JSON לא תקין: {filename}",
+      "errors": {
+        "nameRequired": "אנא הזן שם לאוסף.",
+        "fileRequired": "אנא העלה את קובץ ה-JSON של אוספי Nuvio שלך.",
+        "invalidFormat": "קובץ ה-JSON חייב להיות מערך של אוספי Nuvio (הקובץ צריך להתחיל ב-[)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← חזרה לדף הבית"
+    },
+    "hero": {
+      "eyebrow": "תגי Nuvio",
+      "titleLine1": "תגי",
+      "titleLine2": "סטרימינג",
+      "sub": "בחר ערכת תגים והדבק את כתובת ה-URL ב-Nuvio. שלב עד 3 ערכות בו-זמנית לכיסוי הטוב ביותר.",
+      "howToLabel": "כיצד להוסיף:",
+      "howToSteps": "Nuvio ← הגדרות ← סטרימינג ← כתובת URL של תגי Fusion ← הדבק ← ייבוא"
+    },
+    "sections": {
+      "signature": "חבילות חתימה",
+      "community": "חבילות קהילה",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visual"
+    },
+    "preview": {
+      "loading": "טוען…",
+      "textOnly": "טקסט בלבד",
+      "unavailable": "התצוגה המקדימה אינה זמינה"
+    },
+    "copyBtn": "העתק כתובת URL",
+    "copiedBtn": "הועתק ✓",
+    "toastCopied": "הועתק ✓",
+    "install": {
+      "title": "כיצד להוסיף תגים ב-Nuvio",
+      "stepsHtml": "1. הקש על <strong>העתק כתובת URL</strong> על כל ערכה למעלה<br>2. פתח את <strong>Nuvio</strong> ← <strong>הגדרות</strong> ← <strong>סטרימינג</strong><br>3. גלול אל <strong>כתובת URL של תגי Fusion</strong><br>4. הקש על שדה ה-URL, הדבק, ולאחר מכן הקש על <strong>ייבוא</strong><br>5. תראה <strong>\"1/3 כתובות URL יובאו\"</strong> — זה עבד!<br>💡 ‏Nuvio תומך בעד <strong>3 ערכות תגים בו-זמנית</strong> — שלב ערכות לכיסוי הטוב ביותר"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← חזרה לדף הבית"
+    },
+    "hero": {
+      "eyebrow": "פרופילי Nuvio",
+      "titleLine1": "כספת",
+      "titleLine2": "אווטארים",
+      "sub": "226 אווטארים של דמויות עבור פרופיל ה-Nuvio שלך. הקש על אווטאר כדי להעתיק את כתובת ה-URL שלו, ולאחר מכן הדבק אותה ב-Nuvio ← פרופיל ← אווטאר."
+    },
+    "banner": {
+      "linkTitle": "🔗 קשר את חשבון ה-Nuvio שלך",
+      "linkSub": "קשר את חשבונך כדי להגדיר אווטארים ישירות — פשוט הקש על אווטאר למטה במקום להעתיק כתובות URL באופן ידני.",
+      "manageLink": "⚙️ כבר מקושר? נהל את התוספים והאוספים שלך ←",
+      "emailPlaceholder": "אימייל Nuvio",
+      "passwordPlaceholder": "סיסמת Nuvio",
+      "continueBtn": "המשך",
+      "selectProfile": "בחר פרופיל שעבורו להגדיר אווטארים",
+      "logoutBtn": "התנתק",
+      "tapToSet": "הקש על אווטאר למטה כדי להגדיר אותו עבור",
+      "changeBtn": "שנה",
+      "checkingSession": "מחפש הפעלת Nuvio שמורה...",
+      "missingFields": "אנא הזן את האימייל והסיסמה שלך ב-Nuvio.",
+      "loggingIn": "מתחבר...",
+      "loginFailed": "ההתחברות נכשלה."
+    },
+    "search": {
+      "placeholder": "חפש אווטארים…"
+    },
+    "tabs": {
+      "all": "הכול ✦",
+      "other": "🎭 אחר"
+    },
+    "count": "{n} אווטארים",
+    "copiedBadge": "הועתק ✓",
+    "push": {
+      "settingAvatar": "מגדיר אווטאר...",
+      "avatarSet": "האווטאר הוגדר ✓",
+      "setFailed": "הגדרת האווטאר נכשלה."
+    },
+    "uploader": {
+      "kicker": "אווטאר מותאם אישית",
+      "title": "צור משלך",
+      "sub": "בחר תמונה, גרור אותה למיקום הרצוי, ולאחר מכן שלח אותה ישירות לפרופיל ה-Nuvio הנבחר.",
+      "choosePhotoBtn": "בחר תמונה",
+      "zoomLabel": "זום",
+      "privacyNote": "אווטארים שהועלו מאוחסנים בכתובת URL ציבורית שנוצרת באקראי. התמונה משנה גודל ומקודדת מחדש לפני ההעלאה, מה שמסיר את שם הקובץ המקורי ואת המטא-נתונים המוטמעים.",
+      "saveBtn": "העלה והגדר אווטאר",
+      "cancelBtn": "ביטול",
+      "uploadYourOwnBtn": "העלה משלך",
+      "selectProfileFirst": "בחר פרופיל Nuvio תחילה.",
+      "invalidFileType": "בחר תמונת JPG, PNG או WebP.",
+      "fileTooLarge": "בחר תמונה קטנה מ-12 מגה-בייט.",
+      "imageOpenFailed": "לא ניתן היה לפתוח תמונה זו.",
+      "imageReadFailed": "לא ניתן היה לקרוא את התמונה שנבחרה.",
+      "dragToPosition": "גרור את התמונה כדי למקם אותה.",
+      "preparing": "מכין אווטאר…",
+      "uploading": "מעלה אווטאר…",
+      "uploadFailed": "העלאת האווטאר נכשלה.",
+      "updatingProfile": "מעדכן פרופיל Nuvio…",
+      "uploadedSet": "האווטאר הועלה והוגדר ✓",
+      "customAvatarSetToast": "האווטאר המותאם אישית הוגדר ✓",
+      "setFailed": "לא ניתן היה להגדיר את האווטאר."
+    },
+    "recent": {
+      "title": "העלאות אחרונות",
+      "subtitle": "הקש על אחד כדי להשתמש בו שוב",
+      "clearBtn": "נקה הכול",
+      "useAriaLabel": "השתמש באווטאר האחרון הזה",
+      "altText": "אווטאר מותאם אישית אחרון",
+      "removeAriaLabel": "הסר מהאווטארים האחרונים"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "ספקי גילוי",
+      "atLeastOne": "נדרש TMDB או MDBList · TVDB ו-OMDb אופציונליים",
+      "oneRequired": "נדרש ספק ליבה",
+      "atLeastOneShort": "לפחות אחד",
+      "tmdbLabel": "מפתח API v3 של TMDB",
+      "tmdbPlaceholder": "הדבק מפתח API v3 של TMDB",
+      "tmdbHelp": "מפתח API v3 של TMDB מאפשר גילוי מבוסס TMDB, אך אינו פותח קטלוגים או כלים ייחודיים ל-MDBList.",
+      "mdblistHelp": "MDBList מאפשר קטלוגים ייחודיים, חיפוש רשימות וכלי ייבוא.",
+      "bothHelp": "הוסף את שני הספקים לחוויית Ultra MAX המלאה ביותר.",
+      "getTmdbKey": "קבל מפתח TMDB v3 ←",
+      "tmdbAttribution": "מוצר זה משתמש ב-API של TMDB אך אינו מאושר או מוסמך על ידי TMDB.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ TMDB בלבד",
+      "statusMdblist": "✓ MDBList בלבד",
+      "statusRequired": "נדרש TMDB או MDBList",
+      "validation": "הוסף מפתח API v3 של TMDB או מפתח API של MDBList בשלב 1.",
+      "savedKey": "מפתח שמור",
+      "mdblistPresetUnavailable": "נדרש מפתח API של MDBList.",
+      "unsupportedManualImdb": "מזהי IMDb (אינם נתמכים בבונה זה)",
+      "unsupportedManualMdblist": "כתובת / מזהה MDBList (השתמש בחיפוש/ייבוא)",
+      "statusConnectedCount": "מחוברים: {count}",
+      "statusSupplementalOnly": "מחוברים: {count} · הוסף TMDB או MDBList"
+    },
+    "collectionSync": {
+      "backToStep1": "↤ חזרה לשלב 1"
+    },
+    "badge": {
+      "required": "נדרש",
+      "optional": "אופציונלי"
+    },
+    "verifyBtn": "בדוק",
+    "step1": {
+      "eyebrow": "שלב 01 מתוך 04",
+      "title": "הגדרת Ultra MAX",
+      "sub": "השלימו את הדברים החיוניים ואז התאימו כל מה שתרצו."
+    },
+    "modeChooser": {
+      "kicker": "בחר את הדרך שלך",
+      "title": "כיצד תרצה להתחיל?",
+      "copy": "בחר בדרך המהירה, התאם הכול בעצמך, או פתח מחדש הגדרה קיימת עם הטוקן שלה.",
+      "quick": {
+        "name": "הגדרה מהירה",
+        "desc": "בחר סגנון ותן ל-Ultra MAX לבחור אוסף שורות נקי ומאוזן."
+      },
+      "custom": {
+        "name": "הגדרה מותאמת אישית",
+        "desc": "בחר בעצמך מפתחות, קטלוגים, אוספים, סטרימינג וכל האפשרויות המתקדמות."
+      },
+      "kids": {
+        "name": "הגדרה לילדים",
+        "desc": "בנה פרופיל ילדים מוגבל עם הגבלות גיל, קטלוגים בטוחים ותוספי Nuvio מבודדים."
+      },
+      "restore": {
+        "name": "שחזר הגדרה קיימת",
+        "desc": "הזן טוקן הגדרה והמשך לערוך תצורת Ultra MAX קיימת."
+      },
+      "changeRoute": "← בחר דרך הגדרה אחרת"
+    },
+    "toolbar": {
+      "newSetup": "🚀 הגדרה חדשה",
+      "loadToken": "🔑 טען טוקן",
+      "save": "💾 שמור",
+      "draftSaved": "הטיוטה נשמרה.",
+      "more": "••• עוד",
+      "import": "📦 ייבוא",
+      "recoverToken": "📧 שחזר טוקן",
+      "restore": "↩ שחזר",
+      "help": "❓ עזרה",
+      "assets": "🖼 נכסים",
+      "clear": "🗑 נקה"
+    },
+    "returning": {
+      "title": "טען הגדרה קיימת",
+      "placeholder": "הדבק כאן את הטוקן שלך",
+      "loadBtn": "טען ←"
+    },
+    "quick": {
+      "label": "הגדרה מהירה",
+      "title": "בנה הגדרה נקייה תוך שניות",
+      "sub": "בחר סגנון — Ultra MAX בוחר את השורות. או דלג ישירות לבנאי המתקדם למטה.",
+      "balanced": {
+        "name": "מאוזן",
+        "desc": "הבחירה המומלצת ביותר. שורות מהירות, מסודרות ושימושיות."
+      },
+      "movies": {
+        "name": "אוהב סרטים",
+        "desc": "סרטים תחילה. טרנדים, פופולריות, ספקים ואוספים."
+      },
+      "series": {
+        "name": "צופה סדרות ברצף",
+        "desc": "מתמקד בסדרות. מצוין לסדרות מתמשכות ולסטים מלאים."
+      },
+      "quality": {
+        "name": "הגדרת איכות",
+        "desc": "שורות נקיות ואיכותיות יותר עם פחות עומס."
+      },
+      "summaryDefault": "בחר סגנון למעלה כדי לראות תצוגה מקדימה של השורות ש-Ultra MAX יבחר.",
+      "generateBtn": "🚀 צור הגדרה מהירה",
+      "advancedBtn": "🔧 בנאי מתקדם",
+      "backBtn": "← חזרה להגדרה המהירה"
+    },
+    "requiredMarker": "● נדרש",
+    "tiles": {
+      "requiredStatus": "נדרש",
+      "password": {
+        "name": "סיסמה"
+      },
+      "mdblist": {
+        "name": "מפתח MDBList"
+      },
+      "optional": {
+        "name": "שיפורים אופציונליים",
+        "desc": "פוסטרים, שפה, מסננים"
+      },
+      "streams": {
+        "name": "סטרימינג",
+        "desc": "ספקי Debrid וקישורים ידניים"
+      },
+      "backToOverview": "← חזרה לסקירה הכללית"
+    },
+    "password": {
+      "label": "🔐 סיסמה",
+      "placeholder": "צור סיסמה",
+      "confirmPlaceholder": "אשר סיסמה",
+      "mismatchError": "הסיסמאות אינן תואמות",
+      "hint": "שמור את זה — תזדקק לו כדי לערוך את ההגדרה שלך מאוחר יותר.",
+      "rememberMe": "זכור אותי במכשיר זה",
+      "forgotQuestion": "שכחת את הסיסמה שלך?",
+      "resetBtn": "🔑 אפס סיסמה",
+      "newPlaceholder": "סיסמה חדשה",
+      "confirmNewPlaceholder": "אשר סיסמה חדשה",
+      "setNewBtn": "הגדר סיסמה חדשה"
+    },
+    "mdblist": {
+      "label": "מפתח API של MDBList",
+      "placeholder": "הדבק את מפתח ה-API החינמי שלך מ-MDBList",
+      "hint": "מפעיל את כל הרשימות המובחרות, תרשימי הטרנדים והחדשים ביותר. חינמי, לוקח 30 שניות.",
+      "getKeyLink": "קבל את המפתח החינמי שלך ←",
+      "howToGetKey": "ℹ כיצד אני מקבל מפתח?",
+      "guide": {
+        "title": "כיצד לקבל את מפתח ה-API החינמי שלך מ-MDBList",
+        "step1Html": "שלב 1 — עבור אל <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> וצור חשבון חינמי.",
+        "step2": "שלב 2 — בדוק את האימייל שלך ואשר את חשבונך.",
+        "step3Html": "שלב 3 — עבור אל <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> והעתק את המפתח שלך.",
+        "step4": "שלב 4 — הדבק אותו למעלה. סיימת!",
+        "freeTier": "מסלול חינמי: 1,000 בקשות ביום — יותר ממספיק."
+      }
+    },
+    "optional": {
+      "toggle": "שיפורים אופציונליים",
+      "sub": "פוסטרים, מסנן שפה, שורות אישיות ומסננים.",
+      "aiRows": {
+        "summary": "🤖 שורות מומלצות על ידי בינה מלאכותית",
+        "placeholder": "הדבק את מפתח ה-API שלך מ-Google Gemini",
+        "hint": "מוסיף את השורות סרטים מומלצים על ידי בינה מלאכותית וסדרות מומלצות על ידי בינה מלאכותית.",
+        "enableLabel": "הפעל שורות מומלצות על ידי בינה מלאכותית"
+      },
+      "language": {
+        "summary": "🌐 שפת מטא-נתונים",
+        "hint": "כותרות ותיאורים יופיעו בשפה שבחרת."
+      },
+      "posterKeys": {
+        "summary": "🖼️ מפתחות ספקי פוסטרים"
+      },
+      "rpdb": {
+        "label": "מפתח API של RPDB",
+        "placeholder": "מפתח ה-API שלך מ-RPDB לפוסטרים מדורגים",
+        "link": "קבל את מפתח ה-RPDB שלך ←"
+      },
+      "topPosters": {
+        "label": "מפתח API של TOP Posters",
+        "placeholder": "מפתח ה-API שלך מ-TOP Posters",
+        "link": "קבל את מפתח ה-TOP Posters שלך ←"
+      },
+      "fanart": {
+        "label": "מפתח API של Fanart.tv",
+        "placeholder": "מפתח API מ-Fanart.tv לפוסטרים באיכות גבוהה",
+        "link": "קבל את מפתח ה-Fanart.tv שלך ←"
+      },
+      "omdb": {
+        "label": "מפתח API של OMDb",
+        "placeholder": "מפתח API של OMDb",
+        "link": "קבל את מפתח ה-OMDb שלך ←"
+      },
+      "betterPosters": {
+        "summary": "פוסטרים טובים יותר ואינטגרציות",
+        "label": "פוסטרים טובים יותר",
+        "descHtml": "הוסף שכבות חכמות לכל פוסטר — דירוגים, ז'אנר, תגי טרנד, תגי איכות ועוד. מופעל על ידי <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Nuvio בלבד</span>",
+        "enableTitle": "הפעל את BetterPosters",
+        "enableSub": "החלף את פוסטרי ברירת המחדל של TMDB",
+        "ratingSourceLabel": "⭐ מקור הדירוג",
+        "noRating": "ללא דירוג",
+        "overlaysLabel": "🏷️ שכבות",
+        "trendTagsTitle": "תגי טרנד",
+        "trendTagsSub": "טרנדי, חדש, #3",
+        "qualityTagsTitle": "תגי איכות",
+        "qualityTagsSub": "4K, DV, Atmos",
+        "genreTitle": "ז'אנר",
+        "genreSub": "תווית בתחתית",
+        "ageRatingTitle": "דירוג גיל",
+        "ageRatingSub": "PG-13, TV-MA, R",
+        "urlPatternLabel": "תבנית כתובת URL של הפוסטר שנוצרה:",
+        "testUrlBtn": "🧪 בדוק כתובת URL",
+        "manualUrlLabelHtml": "🔗 או הדבק את כתובת ה-URL שלך מ-<a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>",
+        "manualUrlHint": "אם כתובת ה-URL שנוצרה אוטומטית אינה עובדת, בקר ב-btttr.cc, הגדר את הסגנון שלך והדבק כאן את תבנית כתובת ה-URL.",
+        "manualUrlFallback": "השאר ריק כדי להשתמש בכתובת ה-URL שנוצרה אוטומטית למעלה.",
+        "disabledPreview": "— מושבת",
+        "testing": "בודק...",
+        "testOk": "✅ זה עובד! הפוסטר נטען בהצלחה.",
+        "testFailed": "❌ הטעינה נכשלה — בדוק את כתובת ה-URL שלך או נסה את btttr.cc באופן ידני."
+      },
+      "languageFilter": {
+        "label": "🌍 מסנן שפה",
+        "desc": "מסתיר תוכן שהשפה המקורית שלו תואמת. שימושי לסינון תוכן בוליווד, דרמות קוריאניות, תוכן תאילנדי וכדומה."
+      },
+      "trakt": {
+        "notConnected": "לא מחובר",
+        "connectBtn": "התחבר עם Trakt",
+        "disconnectBtn": "התנתק",
+        "info": "חבר את חשבון ה-Trakt שלך כדי לגשת למועדפים, רשימת הצפייה, האוסף וההיסטוריה שלך. עובד עם פרופילים פרטיים."
+      },
+      "simkl": {
+        "notConnected": "לא מחובר",
+        "connectBtn": "התחבר עם Simkl",
+        "disconnectBtn": "התנתק",
+        "info": "חבר את חשבון ה-Simkl שלך כדי לגשת לרשימת הצפייה, ההיסטוריה והדירוגים שלך כקטלוגים אישיים."
+      },
+      "contentFilters": {
+        "summary": "🎚️ מסנני תוכן",
+        "hideUnreleasedLabel": "🚫 הסתר כותרים שלא יצאו לאור",
+        "hideUnreleasedInfo": "מסנן סרטים וסדרות שעדיין לא יצאו לאור.",
+        "preserveKitsuLabel": "🌸 שמור על מזהי Kitsu מקוריים לאנימה",
+        "preserveKitsuInfo": "מפרסם את מזהי ה-Kitsu המקוריים עבור קטלוגי אנימה נתמכים כך שתוספי סטרימינג ייעודיים ל-Kitsu יוכלו להגיב. כותרים ללא התאמת Kitsu מהימנה ימשיכו להשתמש במזהי IMDb.",
+        "digitalOnlyLabel": "📀 שחרורים דיגיטליים בלבד",
+        "digitalOnlyInfo": "מציג רק סרטים עם שחרור דיגיטלי מאושר הזמין כיום. סדרות אינן מושפעות.",
+        "hideWatchedLabel": "👁️ הסתר כותרים שנצפו",
+        "hideWatchedInfo": "מסתיר סרטים שצפית בהם וסדרות שסיימת לצפות בהן במלואן, בהתבסס על היסטוריית ה-Trakt/Simkl המחוברת שלך.",
+        "includeAdultLabel": "🔞 כלול תוכן למבוגרים",
+        "includeAdultInfo": "כאשר כבוי, תוכן למבוגרים והנטאי מוסתר מכל הקטלוגים. מומלץ להגדרות משפחתיות.",
+        "maxRatingLabel": "👥 דירוג גיל מקסימלי",
+        "maxRatingInfo": "מסתיר תוכן מעל דירוג זה. משתמש בהסמכות אמריקאיות. חוסם גם תוכן ללא דירוג — מומלץ לסינון אנימה למבוגרים והנטאי מהקטלוגים.",
+        "ratingNone": "ללא הגבלה",
+        "ratingG": "G - קהל כללי",
+        "ratingPG": "PG - מומלץ פיקוח הורים",
+        "ratingPG13": "PG-13 - הורים מוזהרים מאוד",
+        "ratingR": "R - מוגבל",
+        "ratingNC17": "NC-17 - למבוגרים בלבד"
+      },
+      "timezone": {
+        "label": "🕰️ אזור זמן",
+        "hint": "מזוהה אוטומטית מהמכשיר הזה. משמש למועדי פרסום פרקים, בכורות ואירועים חיים."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ סטרימינג",
+      "sub": "ספקי Debrid וקישורי סטרימינג ידניים.",
+      "debridLabel": "🎯 ספקי Debrid",
+      "addProvider": "הוסף ספק…",
+      "apiKeyPlaceholder": "הדבק כאן את מפתח ה-API שלך",
+      "checkAddBtn": "בדוק והוסף",
+      "optionsLabel": "אפשרויות סטרימינג",
+      "cachedOnlyLabel": "⚡ במטמון בלבד",
+      "cachedOnlySub": "(מהיר יותר, סטרימינג מיידי)",
+      "englishOnlyLabel": "🇬🇧 סטרימינג באנגלית בלבד",
+      "removeTrashLabel": "🗑️ הסר תוצאות גרועות",
+      "maxQualityLabel": "איכות מקסימלית",
+      "maxFileSizeLabel": "גודל קובץ מקסימלי",
+      "noLimit": "ללא הגבלה",
+      "maxSizeHint": "מסתיר סטרימינג שחורג ממגבלה זו, ללא קשר לרזולוציה.",
+      "poweredByHtml": "הסטרימינג מופעל על ידי <strong>Comet</strong> ומועבר ישירות דרך Ultra MAX. אין צורך בכתובות URL של מניפסט.",
+      "manualLinksLabel": "🔗 קישורי סטרימינג ידניים",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "מצבר סטרימינג כל-באחד עם תמיכה ב-Debrid.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "פרוקסי ואחסון Debrid.",
+      "configureLink": "הגדר ←",
+      "pasteOwnUrl": "או הדבק כתובת URL משלך",
+      "wizardUrlPlaceholder": "https://your-addon/.../manifest.json",
+      "checkAddonBtn": "בדוק תוסף",
+      "addedAddonsLabel": "תוספים שנוספו",
+      "noAddonsYet": "עדיין לא נוספו תוספים.",
+      "torboxTitle": "צריך שירות Debrid?",
+      "torboxDescHtml": "‏TorBox הוא הבסיס שעליו נבנה Ultra MAX. השתמש בקישור למטה וקבל <strong>3 חודשים בחינם</strong> בנוסף למנוי שלך.",
+      "torboxBtn": "קבל את TorBox — 3 חודשים בחינם ←",
+      "preserveSourceBrandingLabel": "הצג את מקור הסטרים המקורי",
+      "preserveSourceBrandingInfo": "שמור שמות כמו Comet או ספק התוסף המקורי במקום להחליף אותם במיתוג Ultra MAX."
+    },
+    "nav": {
+      "backHome": "← חזרה לדף הבית",
+      "nextStep2": "המשך לקטלוגים ←"
+    },
+    "step2": {
+      "eyebrow": "שלב 02",
+      "title": "בנה את מסך הבית שלך",
+      "sub": "בחר נקודת התחלה, ולאחר מכן דייק לפי קטגוריה. מסך הבית שלך ב-Nuvio מתעדכן באופן חי.",
+      "startWithPreset": "התחל עם תבנית מוגדרת מראש",
+      "hideAll": {
+        "title": "הסתר הכול ממסך הבית",
+        "sub": "השאר שורות נבחרות אך מוסתרות",
+        "tooltip": "שומר על השורות הנבחרות, אך מסתיר אותן ממסך הבית שלך ב-Nuvio"
+      },
+      "showAll": {
+        "title": "הצג הכול במסך הבית",
+        "sub": "שחזר את כל השורות הנבחרות",
+        "tooltip": "הופך כל שורה נבחרת לגלויה במסך הבית שלך ב-Nuvio"
+      },
+      "clearAll": {
+        "title": "נקה את כל הבחירה",
+        "sub": "הסר כל שורה שנבחרה",
+        "tooltip": "מסיר כל שורה נבחרת"
+      },
+      "loading": "טוען...",
+      "fineTune": "דייק לפי קטגוריה",
+      "searchPlaceholder": "חפש בכל הקטלוגים...",
+      "manageSetup": "נהל את ההגדרה שלך",
+      "showAllRows": {
+        "title": "הצג את כל השורות",
+        "sub": "עיין בכל הקטלוגים הזמינים"
+      },
+      "allRows": "כל השורות",
+      "reorder": {
+        "title": "סדר מחדש שורות",
+        "sub": "שלוט בסדר המוצג ב-Nuvio וב-Stremio",
+        "note": "גרור שורות לסדר המועדף עליך."
+      },
+      "customRows": {
+        "title": "שורות מותאמות אישית",
+        "sub": "צור שורות מ-IMDb, MDBList, Trakt או TMDB",
+        "note": "הוסף סדרות, פרנצ'יזות ורשימות שאינן מכוסות על ידי הקטלוגים המובנים."
+      },
+      "preview": {
+        "mobile": "📱 נייד",
+        "desktop": "🖥️ מחשב שולחני",
+        "deviceGroupLabel": "מכשיר תצוגה מקדימה",
+        "modalLabel": "תצוגה מקדימה של מסך הבית ב-Nuvio",
+        "closeLabel": "סגור תצוגה מקדימה"
+      },
+      "review": {
+        "kicker": "בדיקה סופית",
+        "title": "בדוק את מסך הבית שלך",
+        "sub": "בדוק את השורות הנבחרות שלך או צפה בתצוגה מקדימה של האופן שבו הן ייראו ב-Nuvio."
+      },
+      "stremioWarning": {
+        "prefix": "משתמשי Stremio:",
+        "textHtml": "יותר מ-200 קטלוגים עלולים לחרוג ממגבלת גודל המניפסט של Stremio. ‏Nuvio יכול להתמודד עם ההגדרה הגדולה יותר. שקול להסתיר שורות שאינן בשימוש במקום להסיר אותן."
+      },
+      "summaryBtn": "📋 סיכום",
+      "previewBtn": "📺 תצוגה מקדימה",
+      "back": {
+        "title": "חזרה",
+        "sub": "חזרה להגדרה"
+      },
+      "selection": {
+        "title": "שורות נבחרות",
+        "sub": "מוכנות למסך הבית שלך"
+      },
+      "next": {
+        "title": "אוספים",
+        "sub": "המשך לשלב 03"
+      }
+    },
+    "step3": {
+      "eyebrow": "שלב 03",
+      "title": "אוספים",
+      "sub": "קבץ את שורות מסך הבית שלך לאוספי Nuvio",
+      "quickStart": "⚡ התחלה מהירה — הקש כדי להוסיף אוסף",
+      "tapToExpand": "הקש כדי להרחיב",
+      "quickStartLabel": "התחלה מהירה — הקש כדי להוסיף אוסף",
+      "quickStartDesc": "כל תבנית מוגדרת מראש יוצרת מיד אוסף חדש למטה. הקש על כמה שתרצה — אחד בכל פעם.",
+      "addCollectionBtn": "+ הוסף אוסף",
+      "presets": {
+        "streaming": "סטרימינג",
+        "trending": "טרנדים",
+        "genres": "ז'אנרים",
+        "themed": "לפי נושא",
+        "filmCollections": "אוספי סרטים",
+        "studios": "אולפנים",
+        "directors": "במאים",
+        "actors": "שחקנים",
+        "trakt": "Trakt",
+        "byDecade": "לפי עשור",
+        "kidsFamily": "ילדים ומשפחה",
+        "uk": "בריטניה",
+        "anime": "אנימה",
+        "documentaries": "סרטים תיעודיים",
+        "bollywood": "בוליווד",
+        "sports": "ספורט",
+        "universes": "יקומים"
+      },
+      "displayStyle": "סגנון תצוגה",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "רשת עם לשוניות",
+          "desc": "מומלץ"
+        },
+        "grid": {
+          "name": "רשת",
+          "desc": "פריסה פשוטה"
+        },
+        "rows": {
+          "name": "שורות",
+          "desc": "תצוגת רשימה"
+        }
+      },
+      "yourCollections": "האוספים שלך",
+      "searchPlaceholder": "חפש אוספים ותיקיות…",
+      "importJsonBtn": "📦 ייבוא JSON",
+      "addCollectionMainBtn": "+ הוסף אוסף",
+      "backToCollections": "← חזרה לאוספים",
+      "emptyState": {
+        "textHtml": "עדיין אין אוספים<br>הקש על תבנית מוגדרת מראש למעלה כדי להתחיל באופן מיידי,<br>או לחץ על <strong style=\"color:var(--text);\">+ הוסף אוסף</strong> כדי לבנות אחד מאפס."
+      },
+      "back": "← חזרה",
+      "collectionsLabel": "אוספים",
+      "foldersLabel": "תיקיות",
+      "next": "הבא — סיים ←",
+      "finaliseGenerateBtn": "סיום / יצירה →",
+      "artworkCreditHtml": "תודה מיוחדת ל-<strong style=\"color:var(--text);\">Shadowfrom88</strong> ב-Reddit על גרפיקות האוספים המשמשות ברחבי Ultra MAX."
+    },
+    "step4": {
+      "title": "🚀 סיים",
+      "installInstructions": {
+        "label": "הוראות התקנה חשובות",
+        "html": "<strong style=\"color:#fff;\">ל-Ultra MAX יש שני חלקים נפרדים:</strong><br><br><strong style=\"color:#fff;\">1. כתובת URL של התוסף</strong><br>לאחר לחיצה על <strong>🚀 צור<br>הגדרה סופית</strong>, העתק את כתובת ה-URL הסופית של ההגדרה והשתמש בה כדי להוסיף/להתקין את Ultra MAX ב-Nuvio או ב-Stremio.<br><br><strong style=\"color:#fff;\">2. JSON של אוספי Nuvio</strong><br>לחץ על <strong>📦 ייצא<br>JSON של Nuvio</strong> כדי להוריד את קובץ האוספים שלך. לאחר מכן פתח את Nuvio, עבור לדף האוספים, וייבא שם את קובץ ה-JSON הזה.<br><br><strong style=\"color:#fff;\">כלל פשוט:</strong><br>כתובת URL של תוסף = קטלוגים. ‏JSON של Nuvio = תיקיות ואוספים."
+      },
+      "summary": {
+        "label": "סיכום ההגדרה הסופית",
+        "homeRowsKept": "שורות מסך בית שנשמרו:",
+        "hiddenFromHome": "הוסתרו ממסך הבית:",
+        "collectionsCreated": "אוספים שנוצרו:",
+        "rowsMovedToCollections": "שורות שהועברו לאוספים:",
+        "performance": "ביצועים:",
+        "perf": {
+          "excellent": "מצוין",
+          "good": "טוב",
+          "heavy": "כבד",
+          "veryHeavy": "כבד מאוד"
+        },
+        "hint": {
+          "excellent": "פריסת מסך בית רזה. מצוין לנייד, טלוויזיה וגלישה מהירה.",
+          "good": "הגדרה מאוזנת. אמור לעבוד היטב ברוב המכשירים.",
+          "heavy": "יש לך הרבה שורות במסך הבית. האוספים יעזרו ברגע שיושלם שלב 3.",
+          "veryHeavy": "הגדרה זו עלולה להרגיש עמוסה. כדאי להעביר עוד שורות לאוספים."
+        }
+      },
+      "generateBtn": "🚀 צור הגדרה סופית",
+      "generating": "יוצר את התוסף שלך...",
+      "part1": {
+        "stepLabel": "שלב 1 · התקנה",
+        "title": "📡 כתובת URL של התוסף",
+        "desc": "העתק כתובת URL זו והתקן אותה ב-Nuvio או ב-Stremio. זה נותן לך את כל שורות הקטלוג שלך.",
+        "copyBtn": "📋 העתק כתובת URL",
+        "stremioInstallBtn": "התקנת Stremio",
+        "stremioInstallTitle": "התקן ישירות באפליקציית Stremio"
+      },
+      "part2": {
+        "stepLabel": "שלב 2 · אוספים",
+        "title": "🗂 JSON של Nuvio",
+        "desc": "ייצא קובץ זה וייבא אותו בדף האוספים של Nuvio. זה נותן לך תיקיות ואוספים.",
+        "exportBtn": "📦 ייצא JSON של Nuvio"
+      },
+      "pushCard": {
+        "title": "🚀 שלח ישירות ל-Nuvio",
+        "desc": "דלג על השלבים הידניים — קשר את חשבון ה-Nuvio שלך ואנחנו נוסיף את Ultra MAX ואת האוספים שלך ישירות לפרופיל.",
+        "manageLink": "⚙️ כבר מקושר? נהל את התוספים והאוספים שלך ←",
+        "emailPlaceholder": "אימייל Nuvio",
+        "passwordPlaceholder": "סיסמת Nuvio",
+        "continueBtn": "המשך",
+        "profileStageNote": "פעולה זו תתקין את התוסף ותחליף את האוספים בפרופיל הנבחר.",
+        "catalogsCheckbox": "קטלוגים",
+        "collectionsCheckbox": "אוספים",
+        "cancelBtn": "ביטול",
+        "pushBtn": "שלח ל-Nuvio",
+        "pushBtnMulti": "שלח ל-Nuvio ({n} פרופילים)",
+        "selectAll": "בחר הכול",
+        "selectNone": "אל תבחר כלום"
+      },
+      "qrCard": {
+        "title": "📱 שלח מהטלפון שלך",
+        "desc": "סרוק זאת עם מצלמת הטלפון שלך כדי לשלוח ישירות, ללא צורך בהקלדה.",
+        "showBtn": "הצג קוד QR"
+      },
+      "token": {
+        "saveHint": "הטוקן שלך — שמור אותו!",
+        "copyBtn": "העתק טוקן"
+      },
+      "registerEmail": {
+        "label": "📧 רשום את האימייל שלך",
+        "desc": "כדי שתוכל לשחזר את הטוקן שלך אם תאבד אותו. לעולם לא ישמש לשיווק.",
+        "placeholder": "your@email.com",
+        "registerBtn": "הרשם"
+      },
+      "exports": {
+        "projectFile": "💾 קובץ פרויקט",
+        "catalogCsv": "📊 CSV של הקטלוג"
+      },
+      "back": "← חזרה"
+    },
+    "nuvioPush": {
+      "missingFields": "אנא הזן את האימייל והסיסמה שלך ב-Nuvio.",
+      "generateFirst": "אנא צור תחילה את ההגדרה שלך לפני השליחה ל-Nuvio.",
+      "loggingIn": "מתחבר...",
+      "selectProfiles": "בחר את הפרופיל(ים) לשליחה אליהם.",
+      "loginFailed": "ההתחברות נכשלה.",
+      "selectAtLeastOne": "בחר לפחות קטלוגים או אוספים לשליחה.",
+      "selectAtLeastOneProfile": "בחר לפחות פרופיל אחד.",
+      "somethingWrong": "משהו השתבש. אנא נסה שוב."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "כל שישה משבצות הפרופיל ב-Nuvio כבר בשימוש.",
+      "profileNotVerified": "‏Nuvio אישר את עדכון הפרופיל, אך לא ניתן היה לאמת את פרופיל הילדים.",
+      "notIsolated": "פרופיל הילדים קיים, אך הוא אינו מבודד מהפרופיל הראשי.",
+      "noKidsCollection": "ההגדרה שנוצרה אינה מכילה את אוסף Ultra MAX Kids.",
+      "generateFirst": "צור את הגדרת הילדים לפני שליחתה ל-Nuvio.",
+      "confirmPrompt": "להגדיר פרופיל Nuvio Kids מבודד?\n\n‏Ultra MAX ייצור או יעדכן את פרופיל הילדים, יכבה תוספים ותוספי משנה משותפים, ולאחר מכן יחליף את התוספים והאוספים של אותו פרופיל בהגדרת הילדים המוגבלת.\n\nגיבוי של תוספי ואוספי הילדים הקיימים יישמר תחילה בדפדפן זה.",
+      "cancelled": "הגדרת פרופיל הילדים בוטלה. לא בוצעו שינויים.",
+      "creatingProfile": "יוצר או מאמת את פרופיל הילדים המבודד...",
+      "backingUp": "מגבה את פרופיל הילדים הנוכחי...",
+      "addonNotVerified": "שליחת תוסף הילדים הושלמה, אך האימות לא תאם את המניפסט שנוצר.",
+      "installingAddon": "מתקין את תוסף Ultra MAX Kids המוגבל...",
+      "installingCollection": "מתקין את אוסף Ultra MAX Kids...",
+      "collectionsNotVerified": "אוספי הילדים נשלחו, אך תוצאת האימות לא תאמה.",
+      "verifying": "מאמת את פרופיל הילדים...",
+      "ready": "פרופיל הילדים מוכן. הוא מבודד ומכיל רק את Ultra MAX Kids."
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "UltraPlay+ אומת עבור הגדרת Ultra MAX הזו",
+      "aria": "UltraPlay Plus אומת"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "יותר מ-500 קטלוגים לבניית ההגדרה שלך"
+    }
+  }
+}

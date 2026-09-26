@@ -1,10 +1,9 @@
 const axios = require('axios');
-const fs = require('fs');
-const pathModule = require('path');
+const { applyContentFilters } = require('./content-filter-service');
+const { mutateAccount, MUTATION_REASONS = { OAUTH_INTEGRATION: "oauth-integration" } } = require('../utils/config-store');
 
 const SIMKL_CLIENT_ID = process.env.SIMKL_CLIENT_ID;
 const SIMKL_BASE = 'https://api.simkl.com';
-const CONFIGS_PATH = pathModule.join(process.env.DATA_DIR || pathModule.join(__dirname, ".."), "configs.json");
 
 async function fetchSimkl(path, accessToken, userToken = null) {
   try {
@@ -19,21 +18,17 @@ async function fetchSimkl(path, accessToken, userToken = null) {
   } catch(e) {
     if(e.response && e.response.status === 401 && userToken) {
       // Token invalid — clear it so user knows to reconnect
-      console.log('[Simkl] Token invalid for:', userToken.slice(0,8), '— clearing');
-      try {
-        const configs = JSON.parse(fs.readFileSync(CONFIGS_PATH, 'utf8'));
-        if(configs[userToken]) {
-          delete configs[userToken].simklAccessToken;
-          delete configs[userToken].simklUser;
-          fs.writeFileSync(CONFIGS_PATH, JSON.stringify(configs, null, 2));
-        }
-      } catch(err) {}
+      console.log('[Simkl] Invalid token cleared');
+      await mutateAccount(userToken, config => {
+        delete config.simklAccessToken;
+        delete config.simklUser;
+      }, { reason: MUTATION_REASONS.OAUTH_INTEGRATION });
     }
     throw e;
   }
 }
 
-async function simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, deps) {
+async function simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, deps, filterConfig = null) {
   const { resultsToMetas, fetchCached, TMDB_KEY } = deps;
   if(!items || !items.length) return [];
 
@@ -52,6 +47,8 @@ async function simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, fana
       const id = tmdbId || imdb;
       const data = await fetchCached(`https://api.themoviedb.org/3/${tmdbType}/${id}?api_key=${TMDB_KEY}`);
       if(!data || !data.id) continue;
+
+      if (filterConfig && applyContentFilters([data], filterConfig).length === 0) continue;
 
       const posterPath = data.poster_path;
       if(!posterPath) continue;
@@ -72,7 +69,7 @@ async function simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, fana
   return metas;
 }
 
-async function handleSimklCatalog(handler, type, simklAccessToken, rpdbKey, tpKey, excludeUnreleased, deps, userToken = null) {
+async function handleSimklCatalog(handler, type, simklAccessToken, rpdbKey, tpKey, excludeUnreleased, deps, userToken = null, filterConfig = null) {
   if(!simklAccessToken) return { metas: [] };
 
   const key = type === 'series' ? 'shows' : 'movies';
@@ -83,32 +80,33 @@ async function handleSimklCatalog(handler, type, simklAccessToken, rpdbKey, tpKe
       case 'simkl_watchlist': {
         const data = await fetchSimkl(`/sync/all-items/${key}?extended=full`, simklAccessToken, userToken);
         const items = (data[key] || []).filter(i => i.status === 'plantowatch');
-        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps) };
+        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps, filterConfig) };
       }
       case 'simkl_watching': {
         const data = await fetchSimkl(`/sync/all-items/${key}?extended=full`, simklAccessToken, userToken);
         const items = (data[key] || []).filter(i => i.status === 'watching');
-        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps) };
+        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps, filterConfig) };
       }
       case 'simkl_completed': {
         const data = await fetchSimkl(`/sync/all-items/${key}?extended=full`, simklAccessToken, userToken);
         const items = (data[key] || [])
           .filter(i => i.status === 'completed')
           .sort((a,b) => (b.last_watched_at||'').localeCompare(a.last_watched_at||''));
-        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps) };
+        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps, filterConfig) };
       }
       case 'simkl_rated': {
         const data = await fetchSimkl(`/sync/all-items/${key}?extended=full`, simklAccessToken, userToken);
         const items = (data[key] || [])
           .filter(i => i.user_rating)
           .sort((a,b) => (b.user_rating||0) - (a.user_rating||0));
-        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps) };
+        return { metas: await simklToMetas(items, type, rpdbKey, tpKey, excludeUnreleased, null, null, deps, filterConfig) };
       }
       default:
         return { metas: [] };
     }
   } catch(e) {
-    console.error('[Simkl]', handler, e.message);
+    if (e && e.code === "PROFILE_STORE_MIRROR_FAILED") throw e;
+    console.error('[Simkl]', handler, 'request failed');
     return { metas: [] };
   }
 }

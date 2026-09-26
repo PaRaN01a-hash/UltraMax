@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- ULTRAMAX STICKY NATIVE MODE START -->
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var queryNative = params.get('native') === '1';
+  var storedNative = false;
+
+  try {
+    storedNative =
+      sessionStorage.getItem('ultramax_native_app') === '1';
+  } catch (error) {}
+
+  if (queryNative) {
+    try {
+      sessionStorage.setItem('ultramax_native_app', '1');
+    } catch (error) {}
+  }
+
+  var isNative = queryNative || storedNative;
+
+  if (!isNative) return;
+
+  document.documentElement.classList.add('native-app');
+
+  if (!queryNative) {
+    try {
+      var currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('native', '1');
+
+      history.replaceState(
+        history.state,
+        document.title,
+        currentUrl.pathname +
+          currentUrl.search +
+          currentUrl.hash
+      );
+    } catch (error) {}
+  }
+
+  function preserveNativeMode() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var rawHref = link.getAttribute('href');
+
+      if (
+        link.hasAttribute('data-native-external') ||
+        !rawHref ||
+        rawHref === '#' ||
+        rawHref.startsWith('javascript:') ||
+        rawHref.startsWith('mailto:') ||
+        rawHref.startsWith('tel:')
+      ) {
+        return;
+      }
+
+      try {
+        var url = new URL(rawHref, location.origin);
+
+        if (url.origin !== location.origin) return;
+
+        url.searchParams.set('native', '1');
+
+        link.setAttribute(
+          'href',
+          url.pathname + url.search + url.hash
+        );
+      } catch (error) {}
+    });
+
+    document.querySelectorAll('form').forEach(function (form) {
+      var method =
+        (form.getAttribute('method') || 'get').toLowerCase();
+
+      if (method !== 'get') return;
+
+      if (!form.querySelector('input[name="native"]')) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'native';
+        input.value = '1';
+        form.appendChild(input);
+      }
+    });
+  }
+
+  function openNativeExternalLink(link) {
+    var href = link && link.href;
+
+    if (!href) return false;
+
+    try {
+      var Browser =
+        window.Capacitor &&
+        window.Capacitor.Plugins &&
+        window.Capacitor.Plugins.Browser;
+
+      if (Browser && typeof Browser.open === 'function') {
+        Browser.open({ url: href });
+        return true;
+      }
+    } catch (error) {
+      console.warn('Ultra MAX: external browser open failed', error);
+    }
+
+    return false;
+  }
+
+  function bindNativeExternalLinks() {
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      var link =
+        target && typeof target.closest === 'function'
+          ? target.closest('a[data-native-external]')
+          : null;
+
+      if (!link) return;
+
+      if (openNativeExternalLink(link)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      preserveNativeMode
+    );
+  } else {
+    preserveNativeMode();
+  }
+
+  bindNativeExternalLinks();
+
+  var observer = new MutationObserver(function () {
+    preserveNativeMode();
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+})();
+</script>
+<!-- ULTRAMAX STICKY NATIVE MODE END -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Ultra MAX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/pwa-manifest.json">
+  <link rel="stylesheet" href="/nav.css?v=20260922-nav3">
+  <link rel="stylesheet" href="/supporter-experience.css?v=20260920-home1">
+  <link rel="stylesheet" href="/home-clean.css?v=20260920-home5">
+  <meta name="theme-color" content="#090514">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080810; --border: #1e1e36; --border2: #2a2a45;
+      --violet: #7B2FFF; --violet2: #9B5FFF; --coral: #FF3D5A;
+      --text: #e8e8f0; --muted: #8888aa; --ok: #34d399;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; overflow-x: hidden; touch-action: pan-y; }
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+    #particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+    .particle{position:absolute;border-radius:50%;animation:floatUp linear infinite;}
+    @keyframes floatUp{0%{transform:translateY(0) translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:.6;}100%{transform:translateY(-100vh) translateX(var(--dx));opacity:0;}}
+    #cursorGlow{position:fixed;pointer-events:none;z-index:1;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,255,0.08) 0%,transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen;}
+    .hero-orb { position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:750px;height:550px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,255,0.32) 0%,transparent 70%);filter:blur(80px);pointer-events:none;z-index:0;animation:orbPulse 7s ease-in-out infinite; }
+    .hero-orb-2 { position:fixed;bottom:-180px;left:-150px;width:550px;height:550px;border-radius:50%;background:radial-gradient(circle,rgba(255,61,90,0.28) 0%,transparent 70%);filter:blur(80px);pointer-events:none;z-index:0;animation:orbPulse 9s ease-in-out infinite 1s; }
+    .hero-orb-3 { position:fixed;bottom:-150px;right:-180px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,0.26) 0%,transparent 70%);filter:blur(80px);pointer-events:none;z-index:0;animation:orbPulse 8s ease-in-out infinite 2s; }
+    @keyframes orbPulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+
+    .wrap { max-width: 640px; margin: 0 auto; padding: 40px 20px 0; position: relative; z-index: 2; }
+
+    .header { text-align: center; margin-bottom: 32px; }
+    .app-icon { width: 96px; height: 96px; border-radius: 26px; margin: 0 auto 18px;
+      box-shadow: 0 12px 40px rgba(123,47,255,.45), 0 0 0 1px rgba(255,255,255,.06); display: block; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: .06em; margin-bottom: 5px; }
+    .logo span { background: linear-gradient(135deg, var(--violet), var(--coral));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .tagline { color: var(--muted); font-size: 15px; }
+
+    .continue-card {
+      background: linear-gradient(135deg, rgba(52,211,153,.14), rgba(52,211,153,.05));
+      border: 1px solid rgba(52,211,153,.35); border-radius: 22px; padding: 22px 24px;
+      margin-bottom: 22px; text-decoration: none; display: none; align-items: center; gap: 16px;
+    }
+    .continue-icon { width: 50px; height: 50px; border-radius: 14px; background: var(--ok); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; }
+    .continue-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--ok); margin-bottom: 4px; }
+    .continue-title { font-size: 18px; font-weight: 700; color: #fff; }
+
+    .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .tile {
+      background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid var(--border); border-radius: 28px; padding: 30px 22px;
+      text-decoration: none; color: var(--text); display: flex; flex-direction: column;
+      justify-content: space-between; align-items: center; text-align: center; gap: 24px;
+      position: relative; overflow: hidden; min-height: 240px;
+    }
+    .tile-pulse { position: absolute; inset: -1px; border-radius: 28px; border: 1px solid var(--tile-clr, var(--violet)); opacity: 0; }
+    .tile:active .tile-pulse { animation: pulseBorder .6s ease-out; }
+    .tile:active { background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); }
+    @keyframes pulseBorder { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.04); } }
+
+    .tile-badge {
+      width: 80px; height: 80px; border-radius: 22px; display: flex; align-items: center; justify-content: center;
+      background: var(--tile-clr);
+      background: linear-gradient(140deg, var(--tile-clr), color-mix(in srgb, var(--tile-clr) 60%, black));
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--tile-clr) 45%, transparent);
+    }
+    .tile-badge svg { width: 38px; height: 38px; }
+    .tile-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .tile-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+    .tile-wide { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: center; text-align: left; min-height: auto; padding: 22px 26px; gap: 18px; }
+    .tile-wide .tile-badge { width: 58px; height: 58px; flex-shrink: 0; border-radius: 17px; }
+    .tile-wide .tile-badge svg { width: 28px; height: 28px; }
+    .tile-wide .tile-text { flex: 0 1 auto; text-align: left; }
+    .tile-wide .tile-name { margin-bottom: 3px; }
+
+    .footer-links { display: flex; justify-content: center; gap: 22px; margin-top: 24px; position: relative; z-index: 2; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+
+    .playplus-promo {
+      position: relative;
+      overflow: hidden;
+      margin-top: 30px;
+      padding: 30px 24px 26px;
+      border: 1px solid rgba(155,95,255,.42);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 86% 9%, rgba(255,61,113,.24), transparent 31%),
+        radial-gradient(circle at 8% 92%, rgba(64,210,255,.13), transparent 34%),
+        linear-gradient(155deg, rgba(123,47,255,.23), rgba(20,13,40,.96) 48%, rgba(8,7,17,.98));
+      box-shadow: 0 22px 70px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.05);
+      z-index: 2;
+    }
+    .playplus-promo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 15%, rgba(255,255,255,.035) 48%, transparent 72%);
+    }
+    .playplus-top { position: relative; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .playplus-mark {
+      width: 58px; height: 58px; flex: 0 0 58px; border-radius: 18px;
+      display: grid; place-items: center;
+      background: linear-gradient(140deg, #7B2FFF, #FF3D71);
+      box-shadow: 0 10px 32px rgba(123,47,255,.35);
+    }
+    .playplus-mark svg { width: 29px; height: 29px; }
+    .playplus-kicker { font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #c8a9ff; margin-bottom: 3px; }
+    .playplus-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 34px; line-height: .95; letter-spacing: .04em;
+      background: linear-gradient(110deg, #fff 12%, #bf8cff 54%, #ff5e8c 92%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .playplus-headline { position: relative; font-size: 22px; line-height: 1.12; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .playplus-copy { position: relative; font-size: 13px; line-height: 1.65; color: #aaa9bc; margin-bottom: 20px; }
+    .playplus-features { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 22px; }
+    .playplus-feature {
+      display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 10px 11px;
+      border: 1px solid rgba(255,255,255,.075); border-radius: 13px;
+      background: rgba(255,255,255,.035); color: #e8e5f3; font-size: 11px; font-weight: 700;
+    }
+    .playplus-feature::before { content: '✓'; color: #c58cff; font-size: 12px; font-weight: 900; }
+    .playplus-pricing { position: relative; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
+    .playplus-price-card { text-align: center; padding: 11px 5px 10px; border-radius: 13px; border: 1px solid rgba(155,95,255,.18); background: rgba(9,7,18,.46); }
+    .playplus-price-main { color: #fff; font-family: 'Bebas Neue',sans-serif; font-size: 24px; line-height: 1; }
+    .playplus-price-label { margin-top: 4px; color: #88869a; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .playplus-cta {
+      position: relative; display: flex; align-items: center; justify-content: center; gap: 9px;
+      width: 100%; min-height: 52px; padding: 14px 18px; border-radius: 16px;
+      background: linear-gradient(110deg,#7B2FFF,#b72fff 48%,#FF3D71); color: #fff;
+      text-decoration: none; font-size: 14px; font-weight: 800; box-shadow: 0 12px 30px rgba(123,47,255,.25);
+    }
+    .playplus-cta:active { transform: scale(.985); }
+    .playplus-footnote { position: relative; margin-top: 13px; text-align: center; color: #777589; font-size: 10px; line-height: 1.45; }
+
+  
+/* ULTRAMAX FIRST RUN START */
+.um-onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overscroll-behavior: contain;
+  padding:
+    calc(24px + env(safe-area-inset-top))
+    22px
+    calc(24px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgba(123,47,255,.34),
+      transparent 42%
+    ),
+    rgba(4,3,10,.96);
+  backdrop-filter: blur(18px);
+}
+
+.um-onboarding.open {
+  display: flex;
+}
+
+.um-onboarding-card {
+  width: min(100%, 430px);
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 30px 24px 24px;
+  border: 1px solid rgba(155,95,255,.34);
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      160deg,
+      rgba(28,20,52,.98),
+      rgba(10,8,20,.98)
+    );
+  box-shadow:
+    0 32px 100px rgba(0,0,0,.65),
+    0 0 70px rgba(123,47,255,.12);
+}
+
+.um-onboarding-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #7b2fff, #ff3d5a);
+  box-shadow: 0 14px 36px rgba(123,47,255,.28);
+  font-size: 30px;
+}
+
+.um-onboarding-kicker {
+  margin-bottom: 8px;
+  color: #a98aff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.um-onboarding h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 29px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.um-onboarding-copy {
+  margin: 12px auto 24px;
+  max-width: 340px;
+  color: #aaa6c2;
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.um-onboarding-actions {
+  display: grid;
+  gap: 11px;
+}
+
+.um-onboarding-btn {
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  background: rgba(255,255,255,.055);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.um-onboarding-btn.primary {
+  border: 0;
+  background: linear-gradient(135deg, #7b2fff, #ff3d5a);
+  box-shadow: 0 12px 28px rgba(123,47,255,.2);
+}
+
+.um-onboarding-btn.continue {
+  display: none;
+  border-color: rgba(52,211,153,.36);
+  background: rgba(52,211,153,.09);
+  color: #b7f7d8;
+}
+
+.um-onboarding-btn span:last-child {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255,255,255,.62);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.um-restore-box {
+  display: none;
+  margin-top: 11px;
+  padding: 14px;
+  border: 1px solid rgba(155,95,255,.22);
+  border-radius: 16px;
+  background: rgba(0,0,0,.2);
+}
+
+.um-restore-box.open {
+  display: block;
+}
+
+.um-restore-row {
+  display: flex;
+  gap: 8px;
+}
+
+.um-restore-input {
+  min-width: 0;
+  flex: 1;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #3a3551;
+  border-radius: 13px;
+  outline: none;
+  background: #0b0915;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.um-restore-input:focus {
+  border-color: #8f61ff;
+}
+
+.um-restore-go {
+  min-width: 84px;
+  border: 0;
+  border-radius: 13px;
+  background: #fff;
+  color: #090711;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.um-restore-error {
+  min-height: 17px;
+  margin-top: 8px;
+  color: #ff7c8f;
+  font-size: 11px;
+}
+
+.um-onboarding-skip {
+  width: 100%;
+  margin-top: 17px;
+  border: 0;
+  background: transparent;
+  color: #77728f;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+/* ULTRAMAX FIRST RUN END */
+
+</style>
+
+<!-- ULTRAMAX APP BUILD BRIDGE START -->
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var queryBuild = params.get('appbuild');
+
+  if (queryBuild) {
+    try {
+      sessionStorage.setItem(
+        'ultramax_installed_build',
+        queryBuild
+      );
+    } catch (error) {}
+  }
+
+  var storedBuild = queryBuild;
+
+  if (!storedBuild) {
+    try {
+      storedBuild = sessionStorage.getItem(
+        'ultramax_installed_build'
+      );
+    } catch (error) {}
+  }
+
+  window.ultraMaxInstalledBuild =
+    parseInt(storedBuild, 10) || 0;
+
+  var queryVersion =
+    params.get('appversion') || '';
+
+  if (queryVersion) {
+    try {
+      sessionStorage.setItem(
+        'ultramax_installed_version',
+        queryVersion
+      );
+    } catch (error) {}
+  }
+
+  var storedVersion = queryVersion;
+
+  if (!storedVersion) {
+    try {
+      storedVersion =
+        sessionStorage.getItem(
+          'ultramax_installed_version'
+        ) || '';
+    } catch (error) {}
+  }
+
+  window.ultraMaxInstalledVersion =
+    storedVersion || '';
+
+  function propagateBuild() {
+    if (!window.ultraMaxInstalledBuild) return;
+
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var rawHref = link.getAttribute('href');
+
+      if (link.hasAttribute('data-native-external') || !rawHref || rawHref.startsWith('#')) return;
+
+      try {
+        var url = new URL(rawHref, location.origin);
+
+        if (url.origin !== location.origin) return;
+
+        url.searchParams.set(
+          'appbuild',
+          String(window.ultraMaxInstalledBuild)
+        );
+
+        if (window.ultraMaxInstalledVersion) {
+          url.searchParams.set(
+            'appversion',
+            window.ultraMaxInstalledVersion
+          );
+        }
+
+        link.setAttribute(
+          'href',
+          url.pathname + url.search + url.hash
+        );
+      } catch (error) {}
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      propagateBuild
+    );
+  } else {
+    propagateBuild();
+  }
+
+  new MutationObserver(propagateBuild).observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+})();
+</script>
+<!-- ULTRAMAX APP BUILD BRIDGE END -->
+
+<script>
+(function () {
+  // Only show the D-pad focus ring on devices with no touchscreen (TV
+  // boxes / remotes). Phones and tablets always report touch support even
+  // when idle, so this stays accurate regardless of current input method.
+  var isTouchCapable =
+    ('ontouchstart' in window) ||
+    (navigator.maxTouchPoints > 0) ||
+    (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+
+  if (!isTouchCapable) {
+    document.documentElement.classList.add('um-tv-input');
+  }
+})();
+</script>
+
+<style id="UM_DPAD_FOCUS_LAYER">
+/*
+ * D-pad / remote keyboard focus layer (Android TV / Firestick).
+ * Keeps focused controls visible and unmistakable. Gated to html.um-tv-input
+ * so the highlight only appears on TV, not on phones/tablets.
+ */
+html.um-tv-input :where(
+  button,
+  input,
+  select,
+  textarea,
+  a[href],
+  [tabindex]:not([tabindex="-1"]),
+  [role="button"]
+):focus-visible {
+  outline: 4px solid #ffffff !important;
+  outline-offset: 4px !important;
+  box-shadow:
+    0 0 0 7px rgba(123, 47, 255, 0.92),
+    0 0 30px rgba(123, 47, 255, 0.78) !important;
+  position: relative;
+  z-index: 30;
+}
+
+html.um-tv-input .tile:focus-visible {
+  transform: scale(1.025);
+}
+</style>
+
+<link rel="stylesheet" href="/cosmic-theme.css?v=20260922-cosmic3">
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+<link rel="stylesheet" href="/app-v2-home.css?v=20260926-brandpolish1">
+</head>
+<body>
+<div id="particles"></div>
+<div id="cursorGlow"></div>
+<div class="hero-orb"></div>
+<div class="hero-orb-2"></div>
+<div class="hero-orb-3"></div>
+<div class="wrap">
+
+<!-- ULTRAMAX FIRST RUN START -->
+<div
+  class="um-onboarding"
+  id="umOnboarding"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="umOnboardingTitle"
+>
+  <div class="um-onboarding-card">
+    <div class="um-onboarding-icon">✦</div>
+
+    <div class="um-onboarding-kicker" data-i18n="home.onboarding.kicker">
+      Welcome to Ultra MAX
+    </div>
+
+    <h2 id="umOnboardingTitle" data-i18n="home.onboarding.title">
+      Let’s build your setup
+    </h2>
+
+    <p class="um-onboarding-copy" data-i18n="home.onboarding.copy">
+      Create something new, restore an existing setup,
+      or take a look around before touching any switches.
+    </p>
+
+    <div class="um-onboarding-actions">
+      <button
+        type="button"
+        class="um-onboarding-btn continue"
+        id="umContinueSetup"
+      >
+        <span data-i18n="home.onboarding.continueBtn">Continue remembered setup</span>
+        <span data-i18n="home.onboarding.continueSub">Pick up exactly where you left off</span>
+      </button>
+
+      <button
+        type="button"
+        class="um-onboarding-btn primary"
+        id="umCreateSetup"
+      >
+        <span data-i18n="home.onboarding.createBtn">Create a new setup</span>
+        <span data-i18n="home.onboarding.createSub">Choose catalogs, services and preferences</span>
+      </button>
+
+      <button
+        type="button"
+        class="um-onboarding-btn"
+        id="umRestoreToggle"
+      >
+        <span data-i18n="home.onboarding.restoreBtn">Restore with a token</span>
+        <span data-i18n="home.onboarding.restoreSub">Open a setup you created previously</span>
+      </button>
+    </div>
+
+    <div class="um-restore-box" id="umRestoreBox">
+      <div class="um-restore-row">
+        <input
+          type="text"
+          class="um-restore-input"
+          id="umRestoreToken"
+          data-i18n-placeholder="home.onboarding.tokenPlaceholder"
+          placeholder="Setup token"
+          maxlength="32"
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <button
+          type="button"
+          class="um-restore-go"
+          id="umRestoreGo"
+          data-i18n="home.onboarding.openBtn"
+        >
+          Open
+        </button>
+      </div>
+
+      <div
+        class="um-restore-error"
+        id="umRestoreError"
+      ></div>
+    </div>
+
+    <button
+      type="button"
+      class="um-onboarding-skip"
+      id="umExploreFirst"
+      data-i18n="home.onboarding.exploreBtn"
+    >
+      Explore the app first
+    </button>
+  </div>
+</div>
+<!-- ULTRAMAX FIRST RUN END -->
+
+
+  <div class="header">
+    <img src="/icons/icon-192.png" alt="Ultra MAX" class="app-icon">
+
+    <div class="logo">ULTRA <span>MAX</span></div>
+    <div class="tagline" data-i18n="home.tagline">Your catalog, collection &amp; discovery hub</div>
+  </div>
+
+  <a href="#" id="continueCard" class="continue-card home-setup-card" hidden aria-label="Open your Ultra MAX setup">
+    <div class="continue-icon">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#08150f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+    </div>
+    <div class="continue-copy">
+      <div class="continue-eyebrow" id="continueEyebrow">Setup found</div>
+      <div class="continue-title" id="continueTitle">Open Your Ultra MAX Setup</div>
+      <div class="continue-subtitle" id="continueSubtitle">Found automatically in Nuvio</div>
+    </div>
+    <div class="continue-action" id="continueAction">Continue →</div>
+  </a>
+
+  <div class="tiles">
+    <a href="/setup.html?shortcut=new-setup" id="homeNewSetupTile" class="tile home-primary-tile" style="--tile-clr:#7B2FFF;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2" fill="#fff"/>
+          <line x1="4" y1="12" x2="20" y2="12"/><circle cx="16" cy="12" r="2" fill="#fff"/>
+          <line x1="4" y1="18" x2="20" y2="18"/><circle cx="12" cy="18" r="2" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tile-name" data-i18n="home.tiles.build.name">New Setup</div>
+        <div class="tile-desc" data-i18n="home.tiles.build.desc">Create a new Ultra MAX setup from scratch</div>
+      </div>
+    </a>
+
+    <a href="#" id="homeNuvioTile" class="tile home-primary-tile" style="--tile-clr:#34d399;" aria-label="Connect Nuvio">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <img class="um-home-brand-logo" src="/logos/nuvio-icon.png" alt="">
+      </div>
+      <div>
+        <div class="tile-name" id="homeNuvioName">Connect Nuvio</div>
+        <div class="tile-desc" id="homeNuvioDesc">Find your existing Ultra MAX setup automatically</div>
+        <div class="home-nuvio-chip" id="homeNuvioChip" hidden>CONNECTED</div>
+      </div>
+    </a>
+
+  </div>
+
+  <details id="homeMoreTools" class="home-more-tools">
+    <summary>
+      <span class="home-more-icon" aria-hidden="true">＋</span>
+      <span class="home-more-copy">
+        <strong>More tools</strong>
+        <small>Avatars, badges, gallery, updates, settings and help</small>
+      </span>
+      <span class="home-more-chev" aria-hidden="true">⌄</span>
+    </summary>
+    <div class="home-more-grid">
+    <a href="/avatars.html" class="tile" style="--tile-clr:#a78bfa;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tile-name" data-i18n="home.tiles.avatars.name">Avatar Vault</div>
+        <div class="tile-desc" data-i18n="home.tiles.avatars.desc">226 character profile pics</div>
+      </div>
+    </a>
+
+    <a href="/badges.html" class="tile" style="--tile-clr:#FF7043;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2H5a1 1 0 00-1 1v7l9 9 9-9-9-9z"/><circle cx="8" cy="8" r="1.2" fill="#fff" stroke="none"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tile-name" data-i18n="home.tiles.badges.name">Stream Badges</div>
+        <div class="tile-desc" data-i18n="home.tiles.badges.desc">Quality tag overlay packs</div>
+      </div>
+    </a>
+
+
+    <a href="/gallery" class="tile tile-wide" style="--tile-clr:#9B5FFF;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 15l6-6"/><path d="M8.5 11.5L7 13a3.5 3.5 0 105 5l1.5-1.5"/><path d="M15.5 12.5L17 11a3.5 3.5 0 10-5-5l-1.5 1.5"/>
+        </svg>
+      </div>
+      <div class="tile-text">
+        <div class="tile-name" data-i18n="home.tiles.gallery.name">Community Gallery</div>
+        <div class="tile-desc" data-i18n="home.tiles.gallery.desc">Share &amp; import setups from other users</div>
+      </div>
+    </a>
+
+    <a href="https://discord.gg/dbaXb6wpk" target="_blank" rel="noopener noreferrer" data-native-external="1" class="tile tile-wide" style="--tile-clr:#5865F2;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 9h8a4 4 0 014 4v5l-3-2H8a4 4 0 01-4-4v-3a4 4 0 014-4h8"/>
+          <circle cx="9" cy="11" r="1" fill="#fff" stroke="none"/><circle cx="15" cy="11" r="1" fill="#fff" stroke="none"/>
+        </svg>
+      </div>
+      <div class="tile-text">
+        <div class="tile-name">Discord Community</div>
+        <div class="tile-desc">Guides, support, releases, beta testing and community</div>
+      </div>
+    </a>
+
+    <a href="/changelog.html" class="tile tile-wide" style="--tile-clr:#FF3D5A;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/>
+        </svg>
+      </div>
+      <div class="tile-text">
+        <div class="tile-name" data-i18n="home.tiles.whatsNew.name">What's New</div>
+        <div class="tile-desc" data-i18n="home.tiles.whatsNew.desc">Latest updates and features</div>
+      </div>
+    </a>
+
+    <!-- ULTRAMAX SETTINGS TILE START -->
+    <a
+      href="/settings.html"
+      class="tile tile-wide"
+      style="--tile-clr:#38BDF8;"
+    >
+      <div class="tile-pulse"></div>
+
+      <div class="tile-badge">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6v.2h-4V21a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 00.3-1.9A1.7 1.7 0 003 14H2.8v-4H3a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 001.9.3A1.7 1.7 0 0010 3v-.2h4V3a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 00-.3 1.9A1.7 1.7 0 0021 10h.2v4H21a1.7 1.7 0 00-1.6 1z"/>
+        </svg>
+      </div>
+
+      <div class="tile-text">
+        <div class="tile-name" data-i18n="home.tiles.settings.name">Settings &amp; About</div>
+        <div class="tile-desc" data-i18n="home.tiles.settings.desc">
+          App version, updates and useful links
+        </div>
+      </div>
+    </a>
+    <!-- ULTRAMAX SETTINGS TILE END -->
+
+    <a href="/help.html" class="tile tile-wide" style="--tile-clr:#22C55E;">
+      <div class="tile-pulse"></div>
+      <div class="tile-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M9.7 9a2.5 2.5 0 014.8 1c0 1.8-2.5 2.1-2.5 4"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="tile-text">
+        <div class="tile-name" data-i18n="home.tiles.help.name">Help &amp; Recovery</div>
+        <div class="tile-desc" data-i18n="home.tiles.help.desc">Guide, token recovery, diagnostics and support</div>
+      </div>
+    </a>
+    </div>
+  </details>
+
+  <section class="playplus-promo" aria-labelledby="playplusPromoTitle">
+    <div class="playplus-top">
+      <div class="playplus-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 5v14l11-7z"/><path d="M4 8v8"/>
+        </svg>
+      </div>
+      <div>
+        <div class="playplus-kicker" data-i18n="home.playPlusPromo.kicker">Optional companion</div>
+        <div class="playplus-name">ULTRAPLAY+</div>
+      </div>
+    </div>
+
+    <div class="playplus-headline" id="playplusPromoTitle" data-i18n="home.playPlusPromo.headline">Ultra MAX stays free. UltraPlay+ helps keep it that way.</div>
+    <div class="playplus-copy" data-i18n="home.playPlusPromo.copy">Get more from Ultra MAX while helping cover the servers, APIs and running costs behind the project.</div>
+
+    <div class="playplus-features" aria-label="UltraPlay Plus features" data-i18n-aria-label="home.playPlusPromo.featuresAria">
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.finder">Finder</div>
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.nuvioManager">Nuvio Manager</div>
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.maxPicks">Max Picks</div>
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.watchHub">Watch Hub</div>
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.arcade">Full Arcade</div>
+      <div class="playplus-feature" data-i18n="home.playPlusPromo.instantAccess">Instant access</div>
+    </div>
+
+    <div class="playplus-pricing" aria-label="UltraPlay Plus pricing" data-i18n-aria-label="home.playPlusPromo.pricingAria">
+      <div class="playplus-price-card"><div class="playplus-price-main">£1</div><div class="playplus-price-label" data-i18n="home.playPlusPromo.monthly">Monthly</div></div>
+      <div class="playplus-price-card"><div class="playplus-price-main">£12</div><div class="playplus-price-label" data-i18n="home.playPlusPromo.yearly">Yearly</div></div>
+      <div class="playplus-price-card"><div class="playplus-price-main">£25</div><div class="playplus-price-label" data-i18n="home.playPlusPromo.lifetime">Lifetime</div></div>
+    </div>
+
+    <a class="playplus-cta" href="https://play.ultramax.vip/" target="_blank" rel="noopener noreferrer">
+      <span data-i18n="home.playPlusPromo.cta">Explore UltraPlay+</span><span aria-hidden="true">↗</span>
+    </a>
+    <div class="playplus-footnote" data-i18n="home.playPlusPromo.footnote">UltraPlay+ enhances Ultra MAX. Ultra MAX itself remains free.</div>
+  </section>
+
+  <div class="footer-links">
+    <a href="https://ultramax.vip/" target="_blank" rel="noopener noreferrer" data-native-external="1" data-i18n="home.footer.website">Website</a>
+    <a href="https://ko-fi.com/ultramaxaddon" target="_blank" rel="noopener" data-i18n="home.footer.support">Support</a>
+    <a href="https://discord.gg/dbaXb6wpk" target="_blank" rel="noopener noreferrer" data-native-external="1">Discord</a>
+    <a href="https://reddit.com/r/Ultra_Max" target="_blank" rel="noopener">r/Ultra_Max</a>
+  </div>
+</div>
+
+<script src="/um-session.js"></script>
+<script>
+(function(){
+  const c = document.getElementById('particles');
+  if (!c) return;
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    const r = Math.random();
+    const clr = r < 0.2 ? 'rgba(123,47,255,0.7)' : r < 0.3 ? 'rgba(255,61,90,0.5)' : 'rgba(255,255,255,0.4)';
+    p.style.cssText = `width:${Math.random()*2+.5}px;height:${Math.random()*2+.5}px;left:${Math.random()*100}%;bottom:-10px;background:${clr};--dx:${(Math.random()-.5)*60}px;animation-duration:${Math.random()*20+15}s;animation-delay:-${Math.random()*20}s;`;
+    c.appendChild(p);
+  }
+})();
+
+const _glow = document.getElementById('cursorGlow');
+if (_glow) document.addEventListener('mousemove', e => { _glow.style.left = e.clientX + 'px'; _glow.style.top = e.clientY + 'px'; });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(function(reg){
+    console.log('SW registered:', reg.scope);
+  }).catch(function(e){
+    console.log('SW failed:', e);
+  });
+}
+
+/* Ultra MAX update checker moved to native modal below. */
+</script>
+
+<!-- ULTRAMAX NATIVE POLISH START -->
+<style>
+
+/* ULTRAMAX NATIVE APP CSS */
+
+html.native-app .wrap {
+  padding-top: calc(28px + env(safe-area-inset-top));
+}
+
+html.native-app body {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+/* Mouse glow is unnecessary inside Android */
+html.native-app #cursorGlow {
+  display: none;
+}
+
+/* Reduce WebView animation workload */
+html.native-app .particle:nth-child(n+21) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle,
+  .hero-orb,
+  .hero-orb-2,
+  .hero-orb-3,
+  .poster-strip {
+    animation: none !important;
+  }
+}
+
+</style>
+
+
+<div id="umNavMount"></div>
+<script src="/nav.js?v=20260923-nav6"></script>
+<script src="/i18n.js"></script>
+
+<!-- ULTRAMAX NATIVE POLISH END -->
+
+
+<!-- ULTRAMAX ANDROID BACK START -->
+
+<style>
+#umBackToast {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 100050;
+  transform: translateX(-50%) translateY(12px);
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 11px 18px;
+  border: 1px solid rgba(155,95,255,.32);
+  border-radius: 999px;
+  background: rgba(14,12,28,.96);
+  color: #fff;
+  box-shadow: 0 14px 40px rgba(0,0,0,.45);
+  font-family: Inter, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html.native-app #umBackToast.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+
+<div id="umBackToast" role="status" aria-live="polite">
+  <span data-i18n="back.exitToast">Press back again to exit</span>
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+
+  if (params.get('native') !== '1') return;
+
+  var lastBackPress = 0;
+  var toastTimer = null;
+
+  function currentPage() {
+    var page = window.location.pathname.split('/').pop();
+    return page || 'app.html';
+  }
+
+  function isHomePage() {
+    return currentPage() === 'app.html';
+  }
+
+  function showExitToast() {
+    var toast = document.getElementById('umBackToast');
+    if (!toast) return;
+
+    toast.classList.add('show');
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function () {
+      toast.classList.remove('show');
+    }, 1900);
+  }
+
+  function goHome() {
+    window.location.href =
+      '/app.html?native=1&fromBack=1';
+  }
+
+  function closeOpenOverlay() {
+    /*
+      Handles common visible dialogs, menus and overlays before navigating.
+      It safely does nothing when none are open.
+    */
+    var selectors = [
+      '[role="dialog"].open',
+      '[role="dialog"].show',
+      '.modal.open',
+      '.modal.show',
+      '.modal.active',
+      '.overlay.open',
+      '.overlay.show',
+      '.drawer.open',
+      '.drawer.show',
+      '.menu.open',
+      '[class*="-overlay"].open',
+      '[class*="-modal"].open'
+    ];
+
+    var openElement = document.querySelector(selectors.join(','));
+
+    if (!openElement) return false;
+
+    var closeButton = openElement.querySelector(
+      '[data-close], .close, .modal-close, .close-button, button[aria-label="Close"]'
+    );
+
+    if (closeButton) {
+      closeButton.click();
+    } else {
+      openElement.classList.remove('open', 'show', 'active');
+    }
+
+    return true;
+  }
+
+  function installBackHandler() {
+    var AppPlugin =
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.App;
+
+    if (!AppPlugin || typeof AppPlugin.addListener !== 'function') {
+      console.warn('Ultra MAX: Capacitor App plugin unavailable');
+      return;
+    }
+
+    AppPlugin.addListener('backButton', function (event) {
+      if (closeOpenOverlay()) return;
+
+      if (!isHomePage()) {
+        var sameOriginReferrer = false;
+
+        try {
+          sameOriginReferrer =
+            !!document.referrer &&
+            new URL(document.referrer).origin === window.location.origin;
+        } catch (error) {}
+
+        if (event.canGoBack && sameOriginReferrer) {
+          window.history.back();
+        } else {
+          goHome();
+        }
+
+        return;
+      }
+
+      var now = Date.now();
+
+      if (now - lastBackPress < 2000) {
+        AppPlugin.exitApp();
+        return;
+      }
+
+      lastBackPress = now;
+      showExitToast();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installBackHandler);
+  } else {
+    installBackHandler();
+  }
+})();
+</script>
+
+<!-- ULTRAMAX ANDROID BACK END -->
+
+
+<!-- ULTRAMAX UPDATE MODAL START -->
+
+<style>
+.um-update-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  align-items: flex-end;
+  justify-content: center;
+  overscroll-behavior: contain;
+  padding:
+    18px
+    14px
+    calc(18px + env(safe-area-inset-bottom));
+  background: rgba(2,2,8,.76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.um-update-overlay.open {
+  display: flex;
+  animation: umUpdateFade .2s ease-out;
+}
+
+.um-update-dialog {
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  border: 1px solid rgba(155,95,255,.34);
+  border-radius: 25px;
+  background:
+    linear-gradient(
+      155deg,
+      rgba(35,26,65,.99),
+      rgba(12,11,25,.99)
+    );
+  box-shadow:
+    0 28px 90px rgba(0,0,0,.68),
+    0 0 45px rgba(123,47,255,.16);
+  animation: umUpdateRise .28s ease-out;
+}
+
+.um-update-top {
+  padding: 22px 20px 16px;
+  text-align: center;
+}
+
+.um-update-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 19px;
+  background:
+    linear-gradient(135deg, #7b2fff, #ff3d5a);
+  box-shadow: 0 14px 34px rgba(123,47,255,.32);
+}
+
+.um-update-icon svg {
+  width: 29px;
+  height: 29px;
+}
+
+.um-update-kicker {
+  color: #a878ff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.um-update-title {
+  margin-top: 6px;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.um-update-version {
+  margin-top: 5px;
+  color: #9b9bb5;
+  font-size: 13px;
+}
+
+.um-update-notes {
+  margin: 0 18px;
+  padding: 14px 15px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+  color: #b2b2c8;
+  font-size: 12px;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.um-update-actions {
+  display: grid;
+  gap: 9px;
+  padding: 18px;
+}
+
+.um-update-actions button,
+.um-update-actions a {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.1);
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.um-update-primary {
+  border: 0 !important;
+  background:
+    linear-gradient(135deg, #7b2fff, #ff3d5a);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(123,47,255,.25);
+}
+
+.um-update-secondary {
+  background: rgba(255,255,255,.045);
+  color: #fff;
+}
+
+.um-update-later {
+  background: transparent;
+  color: #8d8da8;
+}
+
+@keyframes umUpdateFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes umUpdateRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+</style>
+
+<div
+  class="um-update-overlay"
+  id="umUpdateOverlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="umUpdateTitle"
+>
+  <div class="um-update-dialog">
+    <div class="um-update-top">
+      <div class="um-update-icon">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 3v12"/>
+          <path d="M7 10l5 5 5-5"/>
+          <path d="M5 21h14"/>
+        </svg>
+      </div>
+
+      <div class="um-update-kicker" data-i18n="update.kicker">Update available</div>
+
+      <div class="um-update-title" id="umUpdateTitle" data-i18n="update.title">
+        A new Ultra MAX is ready
+      </div>
+
+      <div class="um-update-version" id="umUpdateVersion">
+        Version available
+      </div>
+    </div>
+
+    <div class="um-update-notes" id="umUpdateNotes">
+      Bug fixes and improvements.
+    </div>
+
+    <div class="um-update-actions">
+      <button
+        type="button"
+        class="um-update-primary"
+        id="umUpdateNow"
+        data-i18n="update.now"
+      >
+        Update now
+      </button>
+
+      <a
+        href="/settings.html?native=1"
+        class="um-update-secondary"
+        data-i18n="update.viewSettings"
+      >
+        View app settings
+      </a>
+
+      <button
+        type="button"
+        class="um-update-later close-button"
+        id="umUpdateLater"
+        aria-label="Close"
+        data-i18n="update.later"
+      >
+        Not now
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(async function checkForAppUpdateModal() {
+  try {
+    var params = new URLSearchParams(location.search);
+
+    var isNative =
+      params.get('native') === '1' ||
+      (
+        window.Capacitor &&
+        typeof window.Capacitor.isNativePlatform === 'function' &&
+        window.Capacitor.isNativePlatform()
+      );
+
+    if (!isNative) return;
+
+    var AppPlugin =
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.App;
+
+    var currentBuild = 0;
+
+    if (AppPlugin) {
+      var info = await AppPlugin.getInfo();
+
+      currentBuild =
+        parseInt(info.build, 10) || 0;
+    }
+
+    if (!currentBuild) {
+      currentBuild =
+        parseInt(window.ultraMaxInstalledBuild, 10) || 0;
+    }
+
+    if (!currentBuild) {
+      var paramsBuild =
+        new URLSearchParams(location.search)
+          .get('appbuild');
+
+      currentBuild =
+        parseInt(paramsBuild, 10) || 0;
+    }
+
+    if (!currentBuild) {
+      try {
+        currentBuild =
+          parseInt(
+            sessionStorage.getItem(
+              'ultramax_installed_build'
+            ),
+            10
+          ) || 0;
+      } catch (error) {}
+    }
+
+    if (!currentBuild) return;
+
+    var response = await fetch(
+      '/app-version.json?fresh=' + Date.now(),
+      { cache: 'no-store' }
+    );
+
+    if (!response.ok) return;
+
+    var data = await response.json();
+
+    var latestBuild =
+      parseInt(data.latestVersionCode, 10) || 0;
+
+    if (!latestBuild || latestBuild <= currentBuild) return;
+
+    var dismissedBuild = null;
+
+    try {
+      dismissedBuild =
+        sessionStorage.getItem(
+          'ultramax_update_dismissed_build'
+        );
+    } catch (error) {}
+
+    if (String(latestBuild) === dismissedBuild) return;
+
+    var overlay =
+      document.getElementById('umUpdateOverlay');
+
+    var version =
+      document.getElementById('umUpdateVersion');
+
+    var notes =
+      document.getElementById('umUpdateNotes');
+
+    var updateButton =
+      document.getElementById('umUpdateNow');
+
+    var laterButton =
+      document.getElementById('umUpdateLater');
+
+    if (!overlay) return;
+
+    version.textContent =
+      'Version ' +
+      (data.latestVersionName || latestBuild) +
+      ' · Build ' +
+      latestBuild;
+
+    notes.textContent =
+      data.notes ||
+      (window.umT ? window.umT('update.defaultNotes', 'A newer version of Ultra MAX is available.') : 'A newer version of Ultra MAX is available.');
+
+    function closeModal() {
+      overlay.classList.remove('open');
+
+      try {
+        sessionStorage.setItem(
+          'ultramax_update_dismissed_build',
+          String(latestBuild)
+        );
+      } catch (error) {}
+
+      if (window.__umFocusFirstTile) window.__umFocusFirstTile();
+    }
+
+    laterButton.addEventListener(
+      'click',
+      closeModal
+    );
+
+    overlay.addEventListener(
+      'click',
+      function (event) {
+        if (event.target === overlay) {
+          closeModal();
+        }
+      }
+    );
+
+    updateButton.addEventListener(
+      'click',
+      function () {
+        if (!data.downloadUrl) return;
+
+        window.location.href = data.downloadUrl;
+      }
+    );
+
+    requestAnimationFrame(function () {
+      overlay.classList.add('open');
+      updateButton.focus();
+      if (window.umTrapFocus) window.umTrapFocus(overlay);
+    });
+  } catch (error) {
+    console.warn(
+      'Ultra MAX update check failed:',
+      error
+    );
+  }
+})();
+</script>
+
+<!-- ULTRAMAX UPDATE MODAL END -->
+
+
+<script>
+(function () {
+  async function updateDevBuildBadge() {
+    var versionElement =
+      document.getElementById('devBadgeVersion');
+
+    var buildElement =
+      document.getElementById('devBadgeBuild');
+
+    if (!versionElement || !buildElement) return;
+
+    var versionName = '';
+    var buildCode = 0;
+
+    try {
+      var AppPlugin =
+        window.Capacitor &&
+        window.Capacitor.Plugins &&
+        window.Capacitor.Plugins.App;
+
+      if (AppPlugin) {
+        var info = await AppPlugin.getInfo();
+
+        versionName = info.version || '';
+        buildCode = parseInt(info.build, 10) || 0;
+      }
+    } catch (error) {
+      console.warn(
+        'Could not read native Dev version:',
+        error
+      );
+    }
+
+    if (!buildCode) {
+      buildCode =
+        parseInt(window.ultraMaxInstalledBuild, 10) || 0;
+    }
+
+    if (!buildCode) {
+      buildCode =
+        parseInt(
+          new URLSearchParams(location.search)
+            .get('appbuild'),
+          10
+        ) || 0;
+    }
+
+    if (!versionName) {
+      versionName =
+        new URLSearchParams(location.search)
+          .get('appversion') || '';
+    }
+
+    versionElement.textContent =
+      versionName || 'Dev';
+
+    buildElement.textContent =
+      buildCode || '?';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      updateDevBuildBadge
+    );
+  } else {
+    updateDevBuildBadge();
+  }
+})();
+</script>
+
+<script id="UM_MODAL_FOCUS_TRAP">
+(function () {
+  'use strict';
+
+  // D-pad focus trapping shared by every full-screen modal on this page:
+  // Tab/Shift+Tab and Up/Down arrows cycle through the modal's focusable
+  // elements instead of letting focus (and the underlying UM_DPAD_NAV tile
+  // grid) escape onto the page behind it.
+  function focusableIn(container) {
+    return Array.prototype.filter.call(
+      container.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ),
+      function (el) { return el.offsetParent !== null; }
+    );
+  }
+
+  window.umTrapFocus = function (container) {
+    container.addEventListener('keydown', function (event) {
+      var isCycleKey =
+        event.key === 'Tab' || event.key === 'ArrowDown' || event.key === 'ArrowUp';
+      if (!isCycleKey) return;
+
+      var items = focusableIn(container);
+      if (!items.length) return;
+
+      var backward = event.key === 'ArrowUp' || (event.key === 'Tab' && event.shiftKey);
+      var idx = items.indexOf(document.activeElement);
+
+      event.preventDefault();
+
+      var next;
+      if (backward) {
+        next = items[idx <= 0 ? items.length - 1 : idx - 1];
+      } else {
+        next = items[idx === -1 || idx === items.length - 1 ? 0 : idx + 1];
+      }
+      if (next) next.focus();
+    });
+  };
+})();
+</script>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'um_dev_onboarding_seen_v2';
+
+  function getRememberedToken() {
+    var remembered = null;
+    var token = '';
+
+    try {
+      if (typeof umGetSession === 'function') {
+        remembered = umGetSession();
+      }
+    } catch (error) {}
+
+    if (remembered && remembered.token) {
+      token = remembered.token;
+    }
+
+    if (!token) {
+      try {
+        token =
+          sessionStorage.getItem('um_setup_token') || '';
+      } catch (error) {}
+    }
+
+    return String(token || '').trim();
+  }
+
+  function normaliseToken(value) {
+    return String(value || '')
+      .trim()
+      .replace(/[^a-zA-Z0-9_-]/g, '')
+      .toUpperCase();
+  }
+
+  function setupUrl(token) {
+    var url = new URL('/setup.html', location.origin);
+
+    url.searchParams.set('native', '1');
+
+    if (token) {
+      url.searchParams.set('token', token);
+    }
+
+    if (window.ultraMaxInstalledBuild) {
+      url.searchParams.set(
+        'appbuild',
+        String(window.ultraMaxInstalledBuild)
+      );
+    }
+
+    if (window.ultraMaxInstalledVersion) {
+      url.searchParams.set(
+        'appversion',
+        window.ultraMaxInstalledVersion
+      );
+    }
+
+    return url.pathname + url.search;
+  }
+
+  function closeOnboarding(markSeen) {
+    var overlay =
+      document.getElementById('umOnboarding');
+
+    if (overlay) {
+      overlay.classList.remove('open');
+    }
+
+    if (markSeen) {
+      try {
+        localStorage.setItem(STORAGE_KEY, '1');
+      } catch (error) {}
+    }
+
+    if (window.__umFocusFirstTile) window.__umFocusFirstTile();
+  }
+
+  function initialiseOnboarding() {
+    var overlay =
+      document.getElementById('umOnboarding');
+
+    if (!overlay) return;
+
+    // Native Android builds should land directly on the finished Home screen.
+    // Browser users can still receive the first-run onboarding overlay.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('native') === '1') return;
+
+    var hasSeen = false;
+
+    try {
+      hasSeen =
+        localStorage.getItem(STORAGE_KEY) === '1';
+    } catch (error) {}
+
+    if (hasSeen) return;
+
+    var rememberedToken = getRememberedToken();
+
+    var continueButton =
+      document.getElementById('umContinueSetup');
+
+    var createButton =
+      document.getElementById('umCreateSetup');
+
+    var restoreToggle =
+      document.getElementById('umRestoreToggle');
+
+    var restoreBox =
+      document.getElementById('umRestoreBox');
+
+    var restoreInput =
+      document.getElementById('umRestoreToken');
+
+    var restoreGo =
+      document.getElementById('umRestoreGo');
+
+    var restoreError =
+      document.getElementById('umRestoreError');
+
+    var exploreButton =
+      document.getElementById('umExploreFirst');
+
+    if (rememberedToken) {
+      continueButton.style.display = 'block';
+
+      continueButton.addEventListener(
+        'click',
+        function () {
+          closeOnboarding(true);
+          location.href = setupUrl(rememberedToken);
+        }
+      );
+    }
+
+    createButton.addEventListener(
+      'click',
+      function () {
+        closeOnboarding(true);
+        location.href = setupUrl('');
+      }
+    );
+
+    restoreToggle.addEventListener(
+      'click',
+      function () {
+        restoreBox.classList.toggle('open');
+
+        if (restoreBox.classList.contains('open')) {
+          setTimeout(function () {
+            restoreInput.focus();
+          }, 80);
+        }
+      }
+    );
+
+    function restoreSetup() {
+      var token =
+        normaliseToken(restoreInput.value);
+
+      restoreInput.value = token;
+
+      if (token.length < 4) {
+        restoreError.textContent = window.umT
+          ? window.umT('home.onboarding.tokenError', 'Enter a valid setup token.')
+          : 'Enter a valid setup token.';
+        return;
+      }
+
+      restoreError.textContent = '';
+
+      try {
+        sessionStorage.setItem(
+          'um_setup_token',
+          token
+        );
+      } catch (error) {}
+
+      closeOnboarding(true);
+      location.href = setupUrl(token);
+    }
+
+    restoreGo.addEventListener(
+      'click',
+      restoreSetup
+    );
+
+    restoreInput.addEventListener(
+      'keydown',
+      function (event) {
+        if (event.key === 'Enter') {
+          restoreSetup();
+        }
+      }
+    );
+
+    exploreButton.addEventListener(
+      'click',
+      function () {
+        closeOnboarding(true);
+      }
+    );
+
+    requestAnimationFrame(function () {
+      overlay.classList.add('open');
+
+      var firstVisibleBtn =
+        overlay.querySelector(
+          '.um-onboarding-btn[style*="display: block"], .um-onboarding-btn.primary'
+        );
+
+      if (firstVisibleBtn) firstVisibleBtn.focus();
+      if (window.umTrapFocus) window.umTrapFocus(overlay);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      initialiseOnboarding
+    );
+  } else {
+    initialiseOnboarding();
+  }
+})();
+</script>
+
+<script id="UM_DPAD_NAV">
+(function () {
+  'use strict';
+
+  // Keep the focused control on-screen (helps when the tile grid scrolls).
+  // Fixed-position controls (the bottom dock, modal buttons) are always
+  // within the viewport, so scrolling them "into view" is unnecessary —
+  // worse, doing it on a `position: fixed` element makes some Android
+  // WebViews briefly re-composite it mid-scroll, which reads as the dock
+  // flickering/re-appearing after a tile is focused/selected.
+  document.addEventListener('focusin', function (event) {
+    var target = event.target;
+    if (!target || target.offsetParent === null) return;
+    if (target.closest('#umSidebarNav, .app-bottom-nav')) return;
+    if (window.getComputedStyle(target).position === 'fixed') return;
+    window.requestAnimationFrame(function () {
+      try {
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      } catch (error) {
+        target.scrollIntoView(false);
+      }
+    });
+  });
+
+  // ArrowUp/Down/Left/Right spatial navigation inside the .tiles grid.
+  // The grid mixes 2-column tiles with full-width (.tile-wide) rows, so
+  // column count isn't fixed — tiles are grouped into visual rows by their
+  // actual rendered position instead, and Up/Down jumps to the item in the
+  // neighbouring row whose horizontal center is closest to the current one.
+  var ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+
+  function isVisible(el) {
+    return !!(el && el.offsetParent !== null);
+  }
+
+  function getRows(items) {
+    var rows = [];
+    items.forEach(function (item) {
+      var top = item.offsetTop;
+      var row = rows.find(function (r) { return Math.abs(r.top - top) < 4; });
+      if (!row) {
+        row = { top: top, items: [] };
+        rows.push(row);
+      }
+      row.items.push(item);
+    });
+    rows.sort(function (a, b) { return a.top - b.top; });
+    rows.forEach(function (row) {
+      row.items.sort(function (a, b) { return a.offsetLeft - b.offsetLeft; });
+    });
+    return rows;
+  }
+
+  document.addEventListener('keydown', function (event) {
+    if (ARROWS.indexOf(event.key) === -1) return;
+
+    var target = event.target;
+    if (!target || !target.matches || !target.matches('.tile')) return;
+
+    var grid = target.closest('.tiles');
+    if (!grid) return;
+
+    var items = Array.prototype.filter.call(grid.querySelectorAll('.tile'), isVisible);
+    var rows = getRows(items);
+
+    var rowIdx = -1, colIdx = -1;
+    for (var r = 0; r < rows.length; r++) {
+      var c = rows[r].items.indexOf(target);
+      if (c !== -1) { rowIdx = r; colIdx = c; break; }
+    }
+    if (rowIdx === -1) return;
+
+    var nextEl = null;
+
+    if (event.key === 'ArrowLeft') {
+      nextEl = rows[rowIdx].items[colIdx - 1] || null;
+    } else if (event.key === 'ArrowRight') {
+      nextEl = rows[rowIdx].items[colIdx + 1] || null;
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      var nextRowIdx = event.key === 'ArrowUp' ? rowIdx - 1 : rowIdx + 1;
+      var nextRow = rows[nextRowIdx];
+      if (nextRow) {
+        var targetCenter = target.offsetLeft + target.offsetWidth / 2;
+        var best = null, bestDist = Infinity;
+        nextRow.items.forEach(function (candidate) {
+          var center = candidate.offsetLeft + candidate.offsetWidth / 2;
+          var dist = Math.abs(center - targetCenter);
+          if (dist < bestDist) { bestDist = dist; best = candidate; }
+        });
+        nextEl = best;
+      }
+    }
+
+    if (nextEl) {
+      event.preventDefault();
+      nextEl.focus();
+    }
+  });
+
+  // Nothing is focused when the page first loads, so an Android TV
+  // remote's Up/Down/Left/Right has no starting point to move from and
+  // appears completely dead. Seed focus onto the first tile once the
+  // page settles — but not if an overlay (onboarding / update prompt)
+  // is covering the screen, since that overlay manages its own focus.
+  function focusFirstTile() {
+    var active = document.activeElement;
+    if (active && active !== document.body && active !== document.documentElement) return;
+
+    var tile = document.querySelector('.tiles .tile');
+    if (tile) tile.focus();
+  }
+  window.__umFocusFirstTile = focusFirstTile;
+
+  function maybeFocusHome() {
+    var onboarding = document.getElementById('umOnboarding');
+    if (onboarding && onboarding.classList.contains('open')) return;
+
+    var updateOverlay = document.getElementById('umUpdateOverlay');
+    if (updateOverlay && updateOverlay.classList.contains('open')) return;
+
+    focusFirstTile();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      requestAnimationFrame(maybeFocusHome);
+    });
+  } else {
+    requestAnimationFrame(maybeFocusHome);
+  }
+})();
+</script>
+
+<script id="UM_NATIVE_KEYBOARD">
+(function () {
+  'use strict';
+
+  // Android TV / Fire TV WebViews decide whether to summon the on-screen
+  // keyboard using touch-interaction heuristics, and a text field focused
+  // via D-pad "Select" (not a tap) frequently doesn't trigger it. On TV,
+  // D-pad users move focus between inputs constantly just to navigate the
+  // page, so opening the keyboard on every focus is disruptive — instead,
+  // only summon it on an explicit Enter/Select press while an editable
+  // field is focused. No-op outside the native app shell (regular browsers
+  // ignore this file's Capacitor check and never reach the plugin call).
+  var isNativeApp =
+    window.Capacitor &&
+    typeof window.Capacitor.isNativePlatform === 'function' &&
+    window.Capacitor.isNativePlatform();
+
+  if (!isNativeApp) return;
+
+  function isEditable(el) {
+    if (!el) return false;
+    if (el.tagName === 'TEXTAREA') return true;
+    if (el.tagName !== 'INPUT') return false;
+    var type = (el.getAttribute('type') || 'text').toLowerCase();
+    var nonTextTypes = ['checkbox', 'radio', 'button', 'submit', 'reset', 'file', 'range', 'color', 'hidden'];
+    return nonTextTypes.indexOf(type) === -1 && !el.disabled && !el.readOnly;
+  }
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Enter') return;
+    if (!isEditable(event.target)) return;
+    try {
+      var Keyboard = window.Capacitor.Plugins && window.Capacitor.Plugins.Keyboard;
+      if (!Keyboard || !Keyboard.show) return;
+      // Consume this Enter press ourselves so it opens the keyboard instead
+      // of submitting a surrounding form — typing/submission happens via
+      // the on-screen keyboard afterwards.
+      event.preventDefault();
+      Keyboard.show();
+    } catch (error) {
+      // Plugin not available on this build — safe to ignore.
+    }
+  });
+})();
+</script>
+
+<script id="UM_SCROBBLE_TRIGGER">
+(function () {
+  'use strict';
+
+  // Fires POST /c/:token/scrobble whenever something on the page announces
+  // a stream click via data attributes — see registerScrobbleRoute in
+  // services/scrobble-service.js for what happens server-side (Trakt/Simkl/
+  // MAL/AniList, whichever the user has connected).
+  //
+  // Ultra MAX's web pages (this app, setup.html, etc.) are a catalog/addon
+  // configurator — actual playback happens inside Stremio/Nuvio, not here,
+  // so nothing on the current pages emits stream clicks yet. This listener
+  // is wired generically via event delegation so any future stream-link
+  // element just needs to carry these attributes to start scrobbling
+  // automatically, without further JS changes:
+  //   data-scrobble-imdb="tt1234567"   (required)
+  //   data-scrobble-type="movie|series"
+  //   data-scrobble-season="1"
+  //   data-scrobble-episode="1"
+  //   data-scrobble-progress="0-100"   (omit for a fresh "start" event)
+
+  function getSetupToken() {
+    try {
+      if (typeof umGetSession === 'function') {
+        var remembered = umGetSession();
+        if (remembered && remembered.token) return remembered.token;
+      }
+    } catch (error) {}
+
+    try {
+      return sessionStorage.getItem('um_setup_token') || '';
+    } catch (error) {
+      return '';
+    }
+  }
+
+  window.umScrobble = function (payload) {
+    var token = getSetupToken();
+    if (!token || !payload || !payload.imdbId) return Promise.resolve(null);
+
+    return fetch('/c/' + token + '/scrobble', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json(); })
+      .catch(function () { return null; });
+  };
+
+  document.addEventListener('click', function (event) {
+    var el = event.target.closest('[data-scrobble-imdb]');
+    if (!el) return;
+
+    window.umScrobble({
+      type: el.getAttribute('data-scrobble-type') === 'movie' ? 'movie' : 'series',
+      imdbId: el.getAttribute('data-scrobble-imdb'),
+      season: el.getAttribute('data-scrobble-season') || undefined,
+      episode: el.getAttribute('data-scrobble-episode') || undefined,
+      progress: el.getAttribute('data-scrobble-progress') || undefined
+    });
+  });
+})();
+</script>
+
+<script src="/nuvio-push.js?v=20260923-remember4"></script>
+<script src="/home-nuvio-controller.js?v=20260923-passwordlabels1"></script>
+<script src="/home-start-controller.js?v=20260923-continue8"></script>
+<script src="/supporter-experience.js?v=20260920-home1"></script>
+</body>
+</html>

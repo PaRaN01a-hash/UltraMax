@@ -1,0 +1,996 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "build": "إنشاء",
+    "nuvio": "Nuvio",
+    "updates": "التحديثات"
+  },
+  "home": {
+    "tagline": "مركزك للكتالوجات والمجموعات والاكتشاف",
+    "sectionNewTrending": "جديد ورائج",
+    "continue": {
+      "eyebrow": "متابعة",
+      "title": "استئناف الإعداد"
+    },
+    "tiles": {
+      "build": {
+        "name": "إعداد جديد",
+        "desc": "أنشئ إعداد Ultra MAX جديدًا من البداية"
+      },
+      "nuvio": {
+        "name": "حساب Nuvio",
+        "desc": "أرسل الإضافات وأدرها مباشرة"
+      },
+      "avatars": {
+        "name": "خزانة الصور الرمزية",
+        "desc": "226 صورة ملف شخصي لشخصيات"
+      },
+      "badges": {
+        "name": "شارات البث",
+        "desc": "حزم تراكب الجودة"
+      },
+      "gallery": {
+        "name": "معرض المجتمع",
+        "desc": "شارك واستورد إعدادات من مستخدمين آخرين"
+      },
+      "whatsNew": {
+        "name": "الجديد",
+        "desc": "أحدث التحديثات والميزات"
+      },
+      "settings": {
+        "name": "الإعدادات وحول",
+        "desc": "إصدار التطبيق والتحديثات والروابط المفيدة"
+      },
+      "help": {
+        "name": "المساعدة والاسترداد",
+        "desc": "الدليل واسترداد الرمز والتشخيص والدعم"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "رفيق اختياري",
+      "headline": "يبقى Ultra MAX مجانيًا. ويساعد UltraPlay+ في إبقائه كذلك.",
+      "copy": "احصل على المزيد من Ultra MAX وساهم في تغطية تكاليف الخوادم وواجهات API وتشغيل المشروع.",
+      "featuresAria": "ميزات UltraPlay Plus",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Arcade الكامل",
+      "instantAccess": "وصول فوري",
+      "pricingAria": "أسعار UltraPlay Plus",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "lifetime": "مدى الحياة",
+      "cta": "استكشف UltraPlay+",
+      "footnote": "يعزز UltraPlay+ تجربة Ultra MAX. ويبقى Ultra MAX مجانيًا."
+    },
+    "stats": {
+      "catalogs": "الكتالوجات",
+      "activeUsers": "المستخدمون النشطون",
+      "selfHosted": "استضافة ذاتية"
+    },
+    "footer": {
+      "website": "الموقع الإلكتروني",
+      "support": "الدعم"
+    },
+    "onboarding": {
+      "kicker": "مرحبًا بك في Ultra MAX",
+      "title": "لنقم بإعداد تهيئتك",
+      "copy": "أنشئ شيئًا جديدًا، أو استعد إعدادًا موجودًا، أو ألقِ نظرة أولًا قبل تغيير أي شيء.",
+      "continueBtn": "متابعة الإعداد المحفوظ",
+      "continueSub": "استأنف من حيث توقفت بالضبط",
+      "createBtn": "إنشاء إعداد جديد",
+      "createSub": "اختر الكتالوجات والخدمات والتفضيلات",
+      "restoreBtn": "استعادة باستخدام رمز",
+      "restoreSub": "افتح إعدادًا أنشأته سابقًا",
+      "tokenPlaceholder": "رمز الإعداد",
+      "tokenError": "أدخل رمز إعداد صالحًا.",
+      "openBtn": "فتح",
+      "exploreBtn": "استكشف التطبيق أولًا"
+    }
+  },
+  "update": {
+    "kicker": "يتوفر تحديث",
+    "title": "إصدار جديد من Ultra MAX جاهز",
+    "defaultNotes": "يتوفر إصدار أحدث من Ultra MAX.",
+    "now": "التحديث الآن",
+    "viewSettings": "عرض إعدادات التطبيق",
+    "later": "ليس الآن"
+  },
+  "back": {
+    "exitToast": "اضغط على زر الرجوع مرة أخرى للخروج"
+  },
+  "account": {
+    "subtitle": "مدير حساب Nuvio",
+    "backLink": "← العودة إلى Ultra MAX",
+    "header": {
+      "title": "حساب Nuvio",
+      "backAriaLabel": "العودة إلى Ultra MAX"
+    },
+    "login": {
+      "emailPlaceholder": "البريد الإلكتروني لـ Nuvio",
+      "passwordPlaceholder": "كلمة مرور Nuvio",
+      "remember": "تذكرني على هذا الجهاز",
+      "continueBtn": "متابعة",
+      "missingFields": "الرجاء إدخال بريدك الإلكتروني وكلمة مرورك في Nuvio.",
+      "loggingIn": "جارٍ تسجيل الدخول...",
+      "failed": "فشل تسجيل الدخول."
+    },
+    "profilePicker": {
+      "title": "اختر ملفًا شخصيًا"
+    },
+    "status": {
+      "loading": "جارٍ التحميل...",
+      "loadFailed": "تعذّر تحميل بيانات الملف الشخصي."
+    },
+    "manager": {
+      "switchBtn": "تبديل",
+      "addonsTitle": "الإضافات",
+      "addonsInstalled": "تم تثبيت {n}",
+      "noAddons": "لا توجد إضافات مثبّتة على هذا الملف الشخصي.",
+      "addonUrlPlaceholder": "الصق رابط بيان الإضافة...",
+      "addBtn": "إضافة",
+      "addonUrlRequired": "الرجاء لصق رابط بيان.",
+      "addonDuplicate": "هذه الإضافة موجودة بالفعل في القائمة.",
+      "checkingAddon": "جارٍ التحقق من الإضافة...",
+      "addonAdded": "تمت إضافة \"{name}\" — انقر على حفظ أدناه لإرسالها إلى Nuvio.",
+      "collectionsTitle": "المجموعات",
+      "collectionsCount": "{n} مجموعة",
+      "noCollections": "لا توجد مجموعات على هذا الملف الشخصي.",
+      "folderSingular": "مجلد",
+      "folderPlural": "مجلدات",
+      "saveBtn": "حفظ التغييرات",
+      "savingAddons": "جارٍ حفظ الإضافات...",
+      "savingCollections": "جارٍ حفظ المجموعات...",
+      "saved": "تم الحفظ ✓",
+      "saveFailed": "تعذّر حفظ التغييرات.",
+      "unnamedAddon": "إضافة بدون اسم",
+      "untitledCollection": "مجموعة بدون عنوان"
+    }
+  },
+  "settings": {
+    "headerTitle": "الإعدادات وحول",
+    "backAriaLabel": "العودة إلى Ultra MAX",
+    "subtitle": "معلومات التطبيق والتحديثات والروابط المفيدة",
+    "sections": {
+      "appInfo": "معلومات التطبيق",
+      "language": "اللغة",
+      "updates": "التحديثات",
+      "links": "الروابط"
+    },
+    "language": {
+      "title": "لغة التطبيق",
+      "sub": "يغيّر النص في التطبيق بأكمله"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "الإصدار المثبّت",
+        "detecting": "جارٍ اكتشاف إصدار التطبيق…",
+        "detectingValue": "جارٍ الاكتشاف…"
+      },
+      "latestVersion": {
+        "title": "أحدث إصدار منشور",
+        "checking": "جارٍ التحقق من معلومات الإصدار…"
+      }
+    },
+    "updates": {
+      "checkBtn": "التحقق من وجود تحديثات",
+      "downloadBtn": "تنزيل أحدث ملف APK",
+      "statusDefault": "يقارن Ultra MAX الإصدار المنشور بالتطبيق المثبّت."
+    },
+    "links": {
+      "website": {
+        "title": "موقع Ultra MAX الإلكتروني",
+        "sub": "فتح ultramax.vip"
+      },
+      "support": {
+        "title": "دعم Ultra MAX",
+        "sub": "قدّم لكريس قهوة على Ko-fi"
+      },
+      "community": {
+        "title": "مجتمع Ultra MAX",
+        "sub": "زر r/Ultra_Max"
+      }
+    },
+    "legal": "Ultra MAX هو مشروع مجتمعي مستقل. تظل Nuvio والخدمات الأخرى المذكورة ملكًا لأصحابها المعنيين.",
+    "showWelcomeAgain": {
+      "title": "إظهار شاشة الترحيب مرة أخرى",
+      "sub": "يعيد فتح خيارات الإعداد الأولي على الشاشة الرئيسية"
+    },
+    "buildPrefix": "الإصدار {n}",
+    "installedBuildUnavailable": "الإصدار المثبّت غير متوفر",
+    "couldNotReadBuild": "تعذّرت قراءة الإصدار المثبّت",
+    "checkingForUpdates": "جارٍ التحقق من وجود تحديثات…",
+    "unknownVersion": "غير معروف",
+    "updateAvailable": "يتوفر إصدار أحدث: {name}.",
+    "upToDate": "Ultra MAX محدّث.",
+    "latestLoadedNoBuild": "تم تحميل أحدث إصدار. تعذّر اكتشاف الإصدار المثبّت.",
+    "latestLoaded": "تم تحميل معلومات أحدث إصدار.",
+    "unavailable": "غير متوفر",
+    "couldNotReachUpdateService": "تعذّر الوصول إلى خدمة التحديث",
+    "updateCheckFailed": "فشل التحقق من التحديث. الرجاء المحاولة مرة أخرى."
+  },
+  "changelog": {
+    "backToHome": "← العودة إلى الرئيسية",
+    "heroBadge": "📋 سجل التغييرات",
+    "heroTitleLine1": "ما هو",
+    "heroTitleLine2": "الجديد",
+    "heroSub": "كل تحديث وتحسين وميزة جديدة — موثّقة منذ البداية.",
+    "tabs": {
+      "app": "تطبيق أندرويد"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "مجهول"
+    },
+    "header": {
+      "home": "← الرئيسية",
+      "submit": "+ إرسال"
+    },
+    "hero": {
+      "eyebrow": "معرض المجتمع",
+      "titlePrefix": "شارك",
+      "titleHighlight": "مجموعاتك",
+      "sub": "نزّل حزم مجموعات Nuvio التي أنشأها المجتمع. استورد ملف JSON مباشرة في Nuvio ← المجموعات ← استيراد.",
+      "submitBtn": "+ أرسل مجموعتك"
+    },
+    "stats": {
+      "collections": "المجموعات",
+      "downloads": "التنزيلات",
+      "likes": "الإعجابات"
+    },
+    "search": {
+      "placeholder": "ابحث عن مجموعات أو وسوم أو مؤلفين…"
+    },
+    "sort": {
+      "recent": "الأحدث",
+      "popular": "الأكثر تنزيلًا",
+      "liked": "الأكثر إعجابًا"
+    },
+    "tabs": {
+      "all": "الكل",
+      "ready": "✅ بلا إضافات",
+      "needs": "⚠️ يتطلب إضافة"
+    },
+    "feed": {
+      "loading": "جارٍ تحميل مجموعات المجتمع…",
+      "failedTitle": "فشل التحميل",
+      "failedSub": "الرجاء تحديث الصفحة",
+      "emptyTitle": "لم يتم العثور على مجموعات",
+      "emptySub": "كن أول من يرسل واحدة!"
+    },
+    "card": {
+      "noAddons": "✓ بلا إضافات",
+      "addonsNeeded": "⚠ مطلوب {n} {addonWord}",
+      "byAuthor": "بواسطة {author}",
+      "folders": "{n} مجلد"
+    },
+    "addon": {
+      "singular": "إضافة",
+      "plural": "إضافات"
+    },
+    "time": {
+      "justNow": "الآن",
+      "minutesAgo": "منذ {n} دقيقة",
+      "hoursAgo": "منذ {n} ساعة",
+      "daysAgo": "منذ {n} يوم",
+      "weeksAgo": "منذ {n} أسبوع"
+    },
+    "detail": {
+      "about": "حول",
+      "tags": "الوسوم",
+      "requiredAddons": "الإضافات المطلوبة",
+      "addonsHint": "ثبّت هذه الإضافات قبل استيراد هذه المجموعة.",
+      "extraFiles": "ملفات إضافية",
+      "extraFilesHint": "ملفات تكوين إضافية مضمّنة مع هذه المجموعة.",
+      "howToImport": "كيفية الاستيراد",
+      "step1": "1. نزّل ملف JSON أدناه",
+      "step2": "2. افتح Nuvio ← المجموعات ← استيراد",
+      "step3": "3. اختر الملف الذي تم تنزيله",
+      "downloadBtn": "⬇️ تنزيل JSON",
+      "closeBtn": "إغلاق",
+      "noAddonsNeeded": "✓ لا تتطلب إضافات",
+      "addonsRequired": "⚠ مطلوب {n} {addonWord}",
+      "statFolders": "مجلدات",
+      "statDownloads": "تنزيلات",
+      "statLikes": "إعجابات",
+      "installLink": "تثبيت ←",
+      "downloadFileBtn": "تنزيل"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ تحتوي هذه المجموعة على رمز ثابت ({token}).\n\nإذا استوردتها كما هي، فستستخدم إعداد كتالوج شخص آخر.\n\nأدخل رمز Ultra MAX الخاص بك لتصحيحه تلقائيًا، أو ألغِ لتنزيلها كما هي:",
+      "tokenReplaced": "✅ تم استبدال الرمز بـ {token} — جارٍ تنزيل الملف المصحح",
+      "originalToken": "⚠️ جارٍ التنزيل بالرمز الأصلي — قد لا تعمل المجلدات لديك",
+      "downloaded": "تم التنزيل! استورد في Nuvio ← المجموعات ← استيراد",
+      "downloadedFile": "تم تنزيل {filename}",
+      "failed": "فشل التنزيل"
+    },
+    "like": {
+      "already": "أُعجب به بالفعل!",
+      "liked": "أُعجب به! ♥",
+      "failed": "فشل الإعجاب"
+    },
+    "submit": {
+      "title": "شارك مجموعتك",
+      "sub": "ارفع ملف JSON لمجموعات Nuvio. يمكن للآخرين تنزيله واستيراده مباشرة في Nuvio.",
+      "nameLabel": "اسم المجموعة *",
+      "namePlaceholder": "مثال: مجموعات رعب جديدة",
+      "authorLabel": "اسمك",
+      "authorPlaceholder": "مجهول",
+      "descLabel": "الوصف",
+      "descPlaceholder": "ماذا تحتوي هذه المجموعة؟ لمن هي موجّهة؟",
+      "tagsLabel": "الوسوم",
+      "tagsHint": "(اضغط Enter أو الفاصلة للإضافة)",
+      "tagsPlaceholder": "رعب، أفلام، مسلسلات…",
+      "addonsLabel": "الإضافات المطلوبة",
+      "addonsHint": "(اتركه فارغًا إذا لم يكن مطلوبًا)",
+      "addAddonBtn": "+ إضافة إضافة مطلوبة",
+      "addonNamePlaceholder": "اسم الإضافة (مثال: ScaryOnly)",
+      "addonUrlPlaceholder": "رابط البيان (اختياري)",
+      "jsonLabel": "ملف JSON لمجموعات Nuvio *",
+      "uploadHint": "📂 انقر للرفع أو اسحب وأفلت",
+      "exportHint": "صدّر من Nuvio ← المجموعات ← تصدير JSON",
+      "extraFilesLabel": "ملفات إضافية",
+      "extraFilesHint": "(اختياري — مثال: ملف JSON لكتالوج AIOMetadata)",
+      "extraFileNamePlaceholder": "اسم الملف (مثال: aiometadata-catalogs.json)",
+      "uploadLabel": "رفع",
+      "loadedLabel": "✓ تم التحميل",
+      "addExtraFileBtn": "+ إضافة ملف إضافي",
+      "cancelBtn": "إلغاء",
+      "submitBtn": "🚀 إرسال إلى المعرض",
+      "submitting": "جارٍ الإرسال…",
+      "successBtn": "✅ تم الإرسال!",
+      "success": "✅ تم الإرسال! مجموعتك مرئية الآن في المعرض.",
+      "failed": "فشل الإرسال.",
+      "networkError": "خطأ في الشبكة — الرجاء المحاولة مرة أخرى.",
+      "invalidJsonFile": "ملف JSON غير صالح — الرجاء التحقق من الملف والمحاولة مرة أخرى.",
+      "invalidJsonFileNamed": "ملف JSON غير صالح: {filename}",
+      "errors": {
+        "nameRequired": "الرجاء إدخال اسم للمجموعة.",
+        "fileRequired": "الرجاء رفع ملف JSON لمجموعات Nuvio.",
+        "invalidFormat": "يجب أن يكون JSON عبارة عن مصفوفة مجموعات Nuvio (يجب أن يبدأ الملف بـ [)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← العودة إلى الرئيسية"
+    },
+    "hero": {
+      "eyebrow": "شارات Nuvio",
+      "titleLine1": "شارات",
+      "titleLine2": "البث",
+      "sub": "اختر مجموعة شارات والصق الرابط في Nuvio. ادمج حتى 3 مجموعات في وقت واحد للحصول على أفضل تغطية.",
+      "howToLabel": "كيفية الإضافة:",
+      "howToSteps": "Nuvio ← الإعدادات ← البث ← رابط شارات Fusion ← لصق ← استيراد"
+    },
+    "sections": {
+      "signature": "الحزم المميزة",
+      "community": "حزم المجتمع",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visual"
+    },
+    "preview": {
+      "loading": "جارٍ التحميل…",
+      "textOnly": "نص فقط",
+      "unavailable": "المعاينة غير متوفرة"
+    },
+    "copyBtn": "نسخ الرابط",
+    "copiedBtn": "تم النسخ ✓",
+    "toastCopied": "تم النسخ ✓",
+    "install": {
+      "title": "كيفية إضافة الشارات في Nuvio",
+      "stepsHtml": "1. اضغط على <strong>نسخ الرابط</strong> على أي مجموعة أعلاه<br>2. افتح <strong>Nuvio</strong> ← <strong>الإعدادات</strong> ← <strong>البث</strong><br>3. مرّر إلى <strong>رابط شارات Fusion</strong><br>4. اضغط على حقل الرابط، والصق، ثم اضغط على <strong>استيراد</strong><br>5. سترى <strong>\"تم استيراد 1/3 روابط\"</strong> — لقد نجح الأمر!<br>💡 يدعم Nuvio حتى <strong>3 مجموعات شارات في وقت واحد</strong> — ادمج المجموعات للحصول على أفضل تغطية"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← العودة إلى الرئيسية"
+    },
+    "hero": {
+      "eyebrow": "ملفات Nuvio الشخصية",
+      "titleLine1": "خزانة",
+      "titleLine2": "الصور الرمزية",
+      "sub": "226 صورة رمزية لشخصيات لملفك الشخصي في Nuvio. اضغط على أي صورة رمزية لنسخ رابطها، ثم الصقه في Nuvio ← الملف الشخصي ← الصورة الرمزية."
+    },
+    "banner": {
+      "linkTitle": "🔗 اربط حساب Nuvio الخاص بك",
+      "linkSub": "اربط حسابك لتعيين الصور الرمزية مباشرة — فقط اضغط على أي صورة رمزية أدناه بدلًا من نسخ الروابط يدويًا.",
+      "manageLink": "⚙️ مرتبط بالفعل؟ أدر إضافاتك ومجموعاتك ←",
+      "emailPlaceholder": "البريد الإلكتروني لـ Nuvio",
+      "passwordPlaceholder": "كلمة مرور Nuvio",
+      "continueBtn": "متابعة",
+      "selectProfile": "اختر ملفًا شخصيًا لتعيين الصور الرمزية له",
+      "logoutBtn": "تسجيل الخروج",
+      "tapToSet": "اضغط على صورة رمزية أدناه لتعيينها لـ",
+      "changeBtn": "تغيير",
+      "checkingSession": "جارٍ البحث عن جلسة Nuvio محفوظة...",
+      "missingFields": "الرجاء إدخال بريدك الإلكتروني وكلمة مرورك في Nuvio.",
+      "loggingIn": "جارٍ تسجيل الدخول...",
+      "loginFailed": "فشل تسجيل الدخول."
+    },
+    "search": {
+      "placeholder": "ابحث عن صور رمزية…"
+    },
+    "tabs": {
+      "all": "الكل ✦",
+      "other": "🎭 أخرى"
+    },
+    "count": "{n} صورة رمزية",
+    "copiedBadge": "تم النسخ ✓",
+    "push": {
+      "settingAvatar": "جارٍ تعيين الصورة الرمزية...",
+      "avatarSet": "تم تعيين الصورة الرمزية ✓",
+      "setFailed": "تعذّر تعيين الصورة الرمزية."
+    },
+    "uploader": {
+      "kicker": "صورة رمزية مخصصة",
+      "title": "أنشئ صورتك الخاصة",
+      "sub": "اختر صورة، اسحبها لتحديد موضعها، ثم أرسلها مباشرة إلى ملف Nuvio الشخصي المحدد.",
+      "choosePhotoBtn": "اختر صورة",
+      "zoomLabel": "التكبير",
+      "privacyNote": "يتم تخزين الصور الرمزية المرفوعة على رابط عام يتم إنشاؤه عشوائيًا. تتم إعادة تحجيم الصورة وترميزها قبل الرفع، مما يزيل اسم الملف الأصلي والبيانات الوصفية المضمّنة.",
+      "saveBtn": "رفع وتعيين الصورة الرمزية",
+      "cancelBtn": "إلغاء",
+      "uploadYourOwnBtn": "ارفع صورتك الخاصة",
+      "selectProfileFirst": "اختر ملف Nuvio شخصيًا أولًا.",
+      "invalidFileType": "اختر صورة بصيغة JPG أو PNG أو WebP.",
+      "fileTooLarge": "اختر صورة أصغر من 12 ميجابايت.",
+      "imageOpenFailed": "تعذّر فتح هذه الصورة.",
+      "imageReadFailed": "تعذّرت قراءة الصورة المحددة.",
+      "dragToPosition": "اسحب الصورة لتحديد موضعها.",
+      "preparing": "جارٍ تجهيز الصورة الرمزية…",
+      "uploading": "جارٍ رفع الصورة الرمزية…",
+      "uploadFailed": "فشل رفع الصورة الرمزية.",
+      "updatingProfile": "جارٍ تحديث ملف Nuvio الشخصي…",
+      "uploadedSet": "تم رفع الصورة الرمزية وتعيينها ✓",
+      "customAvatarSetToast": "تم تعيين الصورة الرمزية المخصصة ✓",
+      "setFailed": "تعذّر تعيين الصورة الرمزية."
+    },
+    "recent": {
+      "title": "التحميلات الأخيرة",
+      "subtitle": "اضغط على واحدة لاستخدامها مرة أخرى",
+      "clearBtn": "مسح الكل",
+      "useAriaLabel": "استخدم هذه الصورة الرمزية الأخيرة",
+      "altText": "صورة رمزية مخصصة حديثة",
+      "removeAriaLabel": "إزالة من الصور الرمزية الأخيرة"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "موفرو الاكتشاف",
+      "atLeastOne": "TMDB أو MDBList مطلوب · TVDB وOMDb اختياريان",
+      "oneRequired": "مطلوب مزود أساسي",
+      "atLeastOneShort": "واحد على الأقل",
+      "tmdbLabel": "مفتاح TMDB API v3",
+      "tmdbPlaceholder": "ألصق مفتاح TMDB API v3",
+      "tmdbHelp": "يدعم مفتاح TMDB API v3 الاكتشاف المعتمد على TMDB، لكنه لا يفتح كتالوجات أو أدوات MDBList الخاصة.",
+      "mdblistHelp": "يتيح MDBList الكتالوجات الخاصة به والبحث في القوائم وأدوات الاستيراد.",
+      "bothHelp": "أضف الموفرين معًا للحصول على تجربة Ultra MAX الأكثر اكتمالًا.",
+      "getTmdbKey": "احصل على مفتاح TMDB v3 ←",
+      "tmdbAttribution": "يستخدم هذا المنتج واجهة TMDB API ولكنه غير معتمد أو مصدّق من TMDB.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ TMDB فقط",
+      "statusMdblist": "✓ MDBList فقط",
+      "statusRequired": "TMDB أو MDBList مطلوب",
+      "validation": "أضف مفتاح TMDB API v3 أو مفتاح MDBList API في الخطوة 1.",
+      "savedKey": "مفتاح محفوظ",
+      "mdblistPresetUnavailable": "يتطلب مفتاح MDBList API.",
+      "unsupportedManualImdb": "معرّفات IMDb (غير مدعومة في هذا المنشئ)",
+      "unsupportedManualMdblist": "رابط / معرّف MDBList (استخدم البحث/الاستيراد)",
+      "statusConnectedCount": "متصل: {count}",
+      "statusSupplementalOnly": "متصل: {count} · أضف TMDB أو MDBList"
+    },
+    "collectionSync": {
+      "backToStep1": "↤ العودة إلى الخطوة 1"
+    },
+    "badge": {
+      "required": "مطلوب",
+      "optional": "اختياري"
+    },
+    "verifyBtn": "تحقق",
+    "step1": {
+      "eyebrow": "الخطوة 01 من 04",
+      "title": "إعداد Ultra MAX",
+      "sub": "أكمل الأساسيات ثم خصص ما تريد."
+    },
+    "modeChooser": {
+      "kicker": "اختر مسارك",
+      "title": "كيف تريد أن تبدأ؟",
+      "copy": "اختر المسار السريع، أو خصّص كل شيء بنفسك، أو أعد فتح إعداد موجود باستخدام رمزه.",
+      "quick": {
+        "name": "إعداد سريع",
+        "desc": "اختر نمطًا ودع Ultra MAX يختار مجموعة صفوف نظيفة ومتوازنة."
+      },
+      "custom": {
+        "name": "إعداد مخصص",
+        "desc": "اختر بنفسك المفاتيح والكتالوجات والمجموعات والبث وجميع الخيارات المتقدمة."
+      },
+      "kids": {
+        "name": "إعداد الأطفال",
+        "desc": "أنشئ ملفًا شخصيًا مقيدًا للأطفال بحدود عمرية وكتالوجات آمنة وإضافات Nuvio معزولة."
+      },
+      "restore": {
+        "name": "استعادة إعداد موجود",
+        "desc": "أدخل رمز إعداد وتابع تعديل تكوين Ultra MAX الموجود."
+      },
+      "changeRoute": "← اختر مسار إعداد مختلف"
+    },
+    "toolbar": {
+      "newSetup": "🚀 إعداد جديد",
+      "loadToken": "🔑 تحميل رمز",
+      "save": "💾 حفظ",
+      "draftSaved": "تم حفظ المسودة.",
+      "more": "••• المزيد",
+      "import": "📦 استيراد",
+      "recoverToken": "📧 استعادة الرمز",
+      "restore": "↩ استعادة",
+      "help": "❓ مساعدة",
+      "assets": "🖼 الأصول",
+      "clear": "🗑 مسح"
+    },
+    "returning": {
+      "title": "تحميل إعداد موجود",
+      "placeholder": "الصق رمزك هنا",
+      "loadBtn": "تحميل ←"
+    },
+    "quick": {
+      "label": "إعداد سريع",
+      "title": "أنشئ إعدادًا نظيفًا في ثوانٍ",
+      "sub": "اختر نمطًا — يختار Ultra MAX الصفوف. أو انتقل مباشرة إلى المُنشئ المتقدم أدناه.",
+      "balanced": {
+        "name": "متوازن",
+        "desc": "أفضل اختيار افتراضي. صفوف سريعة ومرتبة ومفيدة."
+      },
+      "movies": {
+        "name": "عاشق الأفلام",
+        "desc": "الأفلام أولًا. الرائج والشائع ومقدمو الخدمة والمجموعات."
+      },
+      "series": {
+        "name": "مشاهد المسلسلات",
+        "desc": "التركيز على المسلسلات. رائع للمسلسلات الجارية والمجموعات الكاملة."
+      },
+      "quality": {
+        "name": "إعداد الجودة",
+        "desc": "صفوف أنظف وذات طابع مميز مع فوضى أقل."
+      },
+      "summaryDefault": "اختر نمطًا أعلاه لمعاينة الصفوف التي سيختارها Ultra MAX.",
+      "generateBtn": "🚀 إنشاء الإعداد السريع",
+      "advancedBtn": "🔧 المُنشئ المتقدم",
+      "backBtn": "← العودة إلى الإعداد السريع"
+    },
+    "requiredMarker": "● مطلوب",
+    "tiles": {
+      "requiredStatus": "مطلوب",
+      "password": {
+        "name": "كلمة المرور"
+      },
+      "mdblist": {
+        "name": "مفتاح MDBList"
+      },
+      "optional": {
+        "name": "تحسينات اختيارية",
+        "desc": "الملصقات، اللغة، الفلاتر"
+      },
+      "streams": {
+        "name": "البث",
+        "desc": "مزوّدو Debrid والروابط اليدوية"
+      },
+      "backToOverview": "← العودة إلى النظرة العامة"
+    },
+    "password": {
+      "label": "🔐 كلمة المرور",
+      "placeholder": "أنشئ كلمة مرور",
+      "confirmPlaceholder": "أكّد كلمة المرور",
+      "mismatchError": "كلمتا المرور غير متطابقتين",
+      "hint": "احفظ هذا — ستحتاجه لتعديل إعدادك لاحقًا.",
+      "rememberMe": "تذكرني على هذا الجهاز",
+      "forgotQuestion": "نسيت كلمة المرور؟",
+      "resetBtn": "🔑 إعادة تعيين كلمة المرور",
+      "newPlaceholder": "كلمة مرور جديدة",
+      "confirmNewPlaceholder": "أكّد كلمة المرور الجديدة",
+      "setNewBtn": "تعيين كلمة مرور جديدة"
+    },
+    "mdblist": {
+      "label": "مفتاح API لـ MDBList",
+      "placeholder": "الصق مفتاح API المجاني الخاص بك من MDBList",
+      "hint": "يشغّل جميع القوائم المنسّقة ومخططات الاتجاهات والإصدارات الجديدة. مجاني، ويستغرق 30 ثانية.",
+      "getKeyLink": "احصل على مفتاحك المجاني ←",
+      "howToGetKey": "ℹ كيف أحصل على مفتاح؟",
+      "guide": {
+        "title": "كيفية الحصول على مفتاح API المجاني من MDBList",
+        "step1Html": "الخطوة 1 — انتقل إلى <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> وأنشئ حسابًا مجانيًا.",
+        "step2": "الخطوة 2 — تحقق من بريدك الإلكتروني وأكّد حسابك.",
+        "step3Html": "الخطوة 3 — انتقل إلى <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> وانسخ مفتاحك.",
+        "step4": "الخطوة 4 — الصقه أعلاه. تم!",
+        "freeTier": "الفئة المجانية: 1000 طلب/يوم — أكثر من كافٍ."
+      }
+    },
+    "optional": {
+      "toggle": "تحسينات اختيارية",
+      "sub": "الملصقات، فلتر اللغة، الصفوف الشخصية والفلاتر.",
+      "aiRows": {
+        "summary": "🤖 صفوف موصى بها بالذكاء الاصطناعي",
+        "placeholder": "الصق مفتاح API الخاص بك من Google Gemini",
+        "hint": "يضيف صفوف الأفلام الموصى بها بالذكاء الاصطناعي والمسلسلات الموصى بها بالذكاء الاصطناعي.",
+        "enableLabel": "تفعيل الصفوف الموصى بها بالذكاء الاصطناعي"
+      },
+      "language": {
+        "summary": "🌐 لغة البيانات الوصفية",
+        "hint": "ستظهر العناوين والأوصاف باللغة التي اخترتها."
+      },
+      "posterKeys": {
+        "summary": "🖼️ مفاتيح مزوّدي الملصقات"
+      },
+      "rpdb": {
+        "label": "مفتاح API لـ RPDB",
+        "placeholder": "مفتاح API الخاص بك من RPDB للملصقات المصنّفة",
+        "link": "احصل على مفتاح RPDB الخاص بك ←"
+      },
+      "topPosters": {
+        "label": "مفتاح API لـ TOP Posters",
+        "placeholder": "مفتاح API الخاص بك من TOP Posters",
+        "link": "احصل على مفتاح TOP Posters الخاص بك ←"
+      },
+      "fanart": {
+        "label": "مفتاح API لـ Fanart.tv",
+        "placeholder": "مفتاح API من Fanart.tv لملصقات عالية الجودة",
+        "link": "احصل على مفتاح Fanart.tv الخاص بك ←"
+      },
+      "omdb": {
+        "label": "مفتاح API لـ OMDb",
+        "placeholder": "مفتاح API لـ OMDb",
+        "link": "احصل على مفتاح OMDb الخاص بك ←"
+      },
+      "betterPosters": {
+        "summary": "ملصقات أفضل وتكاملات",
+        "label": "ملصقات أفضل",
+        "descHtml": "أضف تراكبات ذكية إلى كل ملصق — التقييمات، النوع، وسوم الاتجاه، شارات الجودة والمزيد. مدعوم من <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Nuvio فقط</span>",
+        "enableTitle": "تفعيل BetterPosters",
+        "enableSub": "استبدال ملصقات TMDB الافتراضية",
+        "ratingSourceLabel": "⭐ مصدر التقييم",
+        "noRating": "بلا تقييم",
+        "overlaysLabel": "🏷️ التراكبات",
+        "trendTagsTitle": "وسوم الاتجاه",
+        "trendTagsSub": "رائج، جديد، #3",
+        "qualityTagsTitle": "وسوم الجودة",
+        "qualityTagsSub": "4K، DV، Atmos",
+        "genreTitle": "النوع",
+        "genreSub": "تسمية في الأسفل",
+        "ageRatingTitle": "تصنيف عمري",
+        "ageRatingSub": "PG-13، TV-MA، R",
+        "urlPatternLabel": "نمط رابط الملصق المُنشأ:",
+        "testUrlBtn": "🧪 اختبار الرابط",
+        "manualUrlLabelHtml": "🔗 أو الصق رابطك الخاص من <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>",
+        "manualUrlHint": "إذا لم يعمل الرابط المُنشأ تلقائيًا، فقم بزيارة btttr.cc، وكوّن نمطك، والصق نمط الرابط هنا.",
+        "manualUrlFallback": "اترك فارغًا لاستخدام الرابط المُنشأ تلقائيًا أعلاه.",
+        "disabledPreview": "— معطّل",
+        "testing": "جارٍ الاختبار...",
+        "testOk": "✅ يعمل! تم تحميل الملصق بنجاح.",
+        "testFailed": "❌ فشل التحميل — تحقق من رابطك أو جرّب btttr.cc يدويًا."
+      },
+      "languageFilter": {
+        "label": "🌍 فلتر اللغة",
+        "desc": "يخفي المحتوى الذي تتطابق لغته الأصلية. مفيد لتصفية أفلام بوليوود والدراما الكورية والمحتوى التايلندي وغير ذلك."
+      },
+      "trakt": {
+        "notConnected": "غير متصل",
+        "connectBtn": "الاتصال بـ Trakt",
+        "disconnectBtn": "قطع الاتصال",
+        "info": "اربط حساب Trakt الخاص بك للوصول إلى مفضلاتك وقائمة المشاهدة ومجموعتك وسجلّك. يعمل مع الملفات الشخصية الخاصة."
+      },
+      "simkl": {
+        "notConnected": "غير متصل",
+        "connectBtn": "الاتصال بـ Simkl",
+        "disconnectBtn": "قطع الاتصال",
+        "info": "اربط حساب Simkl الخاص بك للوصول إلى قائمة المشاهدة والسجل والتقييمات كقوائم شخصية."
+      },
+      "contentFilters": {
+        "summary": "🎚️ فلاتر المحتوى",
+        "hideUnreleasedLabel": "🚫 إخفاء العناوين غير الصادرة",
+        "hideUnreleasedInfo": "يصفّي الأفلام والمسلسلات التي لم تصدر بعد.",
+        "preserveKitsuLabel": "🌸 الحفاظ على معرّفات Kitsu الأصلية للأنمي",
+        "preserveKitsuInfo": "ينشر معرّفات Kitsu الأصلية لكتالوجات الأنمي المدعومة حتى تتمكن إضافات البث الخاصة بـ Kitsu فقط من الاستجابة. تستمر العناوين التي لا تملك تطابقًا موثوقًا مع Kitsu في استخدام معرّفات IMDb.",
+        "digitalOnlyLabel": "📀 الإصدارات الرقمية فقط",
+        "digitalOnlyInfo": "يعرض فقط الأفلام التي لديها إصدار رقمي مؤكد ومتاح اليوم. لا تتأثر المسلسلات.",
+        "hideWatchedLabel": "👁️ إخفاء العناوين المشاهدة",
+        "hideWatchedInfo": "يخفي الأفلام التي شاهدتها والمسلسلات التي أكملتها بالكامل، بناءً على سجل Trakt/Simkl المتصل لديك.",
+        "includeAdultLabel": "🔞 تضمين محتوى للبالغين",
+        "includeAdultInfo": "عند إيقاف التشغيل، يتم إخفاء محتوى البالغين والهنتاي من جميع الكتالوجات. موصى به للإعدادات العائلية.",
+        "maxRatingLabel": "👥 الحد الأقصى للتصنيف العمري",
+        "maxRatingInfo": "يخفي المحتوى الأعلى من هذا التصنيف. يستخدم الشهادات الأمريكية. كما يحظر المحتوى غير المصنّف — موصى به لتصفية أنمي البالغين والهنتاي من الكتالوجات.",
+        "ratingNone": "بلا قيود",
+        "ratingG": "G - لجميع الأعمار",
+        "ratingPG": "PG - يُنصح بإشراف الوالدين",
+        "ratingPG13": "PG-13 - تحذير شديد للوالدين",
+        "ratingR": "R - مقيّد",
+        "ratingNC17": "NC-17 - للبالغين فقط"
+      },
+      "timezone": {
+        "label": "🕰️ المنطقة الزمنية",
+        "hint": "يتم اكتشافها تلقائيًا من هذا الجهاز. تُستخدم لمواعيد إصدار الحلقات والعروض الأولى والأحداث المباشرة."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ البث",
+      "sub": "مزوّدو Debrid وروابط البث اليدوية.",
+      "debridLabel": "🎯 مزوّدو Debrid",
+      "addProvider": "إضافة مزوّد…",
+      "apiKeyPlaceholder": "الصق مفتاح API الخاص بك هنا",
+      "checkAddBtn": "تحقق وأضف",
+      "optionsLabel": "خيارات البث",
+      "cachedOnlyLabel": "⚡ المخزَّن مؤقتًا فقط",
+      "cachedOnlySub": "(أسرع، بث فوري)",
+      "englishOnlyLabel": "🇬🇧 البث الإنجليزي فقط",
+      "removeTrashLabel": "🗑️ إزالة النتائج الرديئة",
+      "maxQualityLabel": "أقصى جودة",
+      "maxFileSizeLabel": "أقصى حجم للملف",
+      "noLimit": "بلا حد",
+      "maxSizeHint": "يخفي البث الذي يتجاوز هذا الحد، بغض النظر عن الدقة.",
+      "poweredByHtml": "يتم تشغيل البث بواسطة <strong>Comet</strong> ويتم تقديمه مباشرة عبر Ultra MAX. لا حاجة إلى روابط بيان.",
+      "manualLinksLabel": "🔗 روابط البث اليدوية",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "مجمّع بث شامل مع دعم Debrid.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "وكيل وتخزين Debrid.",
+      "configureLink": "تكوين ←",
+      "pasteOwnUrl": "أو الصق رابطك الخاص",
+      "wizardUrlPlaceholder": "https://إضافتك/.../manifest.json",
+      "checkAddonBtn": "تحقق من الإضافة",
+      "addedAddonsLabel": "الإضافات المضافة",
+      "noAddonsYet": "لم تتم إضافة أي إضافات بعد.",
+      "torboxTitle": "هل تحتاج إلى خدمة Debrid؟",
+      "torboxDescHtml": "TorBox هو ما بُني حوله Ultra MAX. استخدم الرابط أدناه واحصل على <strong>3 أشهر مجانية</strong> بالإضافة إلى اشتراكك.",
+      "torboxBtn": "احصل على TorBox — 3 أشهر مجانية ←",
+      "preserveSourceBrandingLabel": "إظهار مصدر البث الأصلي",
+      "preserveSourceBrandingInfo": "احتفظ بأسماء مثل Comet أو مزود الإضافة الأصلي بدلًا من استبدالها بعلامة Ultra MAX."
+    },
+    "nav": {
+      "backHome": "← العودة إلى الرئيسية",
+      "nextStep2": "المتابعة إلى الكتالوجات ←"
+    },
+    "step2": {
+      "eyebrow": "الخطوة 02",
+      "title": "أنشئ شاشتك الرئيسية",
+      "sub": "اختر نقطة بداية، ثم اضبط بدقة حسب الفئة. يتم تحديث الشاشة الرئيسية لـ Nuvio مباشرة.",
+      "startWithPreset": "ابدأ بإعداد مسبق",
+      "hideAll": {
+        "title": "إخفاء الكل من الشاشة الرئيسية",
+        "sub": "إبقاء الصفوف محددة ولكن مخفية",
+        "tooltip": "يحتفظ بالصفوف المحددة، لكن يخفيها من شاشتك الرئيسية في Nuvio"
+      },
+      "showAll": {
+        "title": "إظهار الكل في الشاشة الرئيسية",
+        "sub": "استعادة جميع الصفوف المحددة",
+        "tooltip": "يجعل كل صف محدد مرئيًا على شاشتك الرئيسية في Nuvio"
+      },
+      "clearAll": {
+        "title": "مسح كل التحديد",
+        "sub": "إزالة كل صف تم اختياره",
+        "tooltip": "يزيل كل صف محدد"
+      },
+      "loading": "جارٍ التحميل...",
+      "fineTune": "اضبط بدقة حسب الفئة",
+      "searchPlaceholder": "ابحث في جميع الكتالوجات...",
+      "manageSetup": "إدارة إعدادك",
+      "showAllRows": {
+        "title": "إظهار جميع الصفوف",
+        "sub": "تصفّح جميع الكتالوجات المتاحة"
+      },
+      "allRows": "جميع الصفوف",
+      "reorder": {
+        "title": "إعادة ترتيب الصفوف",
+        "sub": "تحكّم في الترتيب المعروض في Nuvio و Stremio",
+        "note": "اسحب الصفوف إلى الترتيب المفضل لديك."
+      },
+      "customRows": {
+        "title": "صفوف مخصصة",
+        "sub": "أنشئ صفوفًا من IMDb أو MDBList أو Trakt أو TMDB",
+        "note": "أضف مسلسلات وامتيازات وقوائم غير مشمولة بالكتالوجات المدمجة."
+      },
+      "preview": {
+        "mobile": "📱 الجوال",
+        "desktop": "🖥️ سطح المكتب",
+        "deviceGroupLabel": "جهاز المعاينة",
+        "modalLabel": "معاينة الشاشة الرئيسية لـ Nuvio",
+        "closeLabel": "إغلاق المعاينة"
+      },
+      "review": {
+        "kicker": "الفحص النهائي",
+        "title": "راجع شاشتك الرئيسية",
+        "sub": "تحقق من صفوفك المحددة أو عاين كيف ستظهر في Nuvio."
+      },
+      "stremioWarning": {
+        "prefix": "مستخدمو Stremio:",
+        "textHtml": "قد يؤدي وجود أكثر من 200 كتالوج إلى تجاوز حد حجم البيان في Stremio. يمكن لـ Nuvio التعامل مع الإعداد الأكبر. فكّر في إخفاء الصفوف غير المستخدمة بدلًا من إزالتها."
+      },
+      "summaryBtn": "📋 ملخص",
+      "previewBtn": "📺 معاينة",
+      "back": {
+        "title": "رجوع",
+        "sub": "العودة إلى الإعداد"
+      },
+      "selection": {
+        "title": "الصفوف المحددة",
+        "sub": "جاهزة لشاشتك الرئيسية"
+      },
+      "next": {
+        "title": "المجموعات",
+        "sub": "تابع إلى الخطوة 03"
+      }
+    },
+    "step3": {
+      "eyebrow": "الخطوة 03",
+      "title": "المجموعات",
+      "sub": "جمّع صفوف شاشتك الرئيسية في مجموعات Nuvio",
+      "quickStart": "⚡ بداية سريعة — اضغط لإضافة مجموعة",
+      "tapToExpand": "اضغط للتوسيع",
+      "quickStartLabel": "بداية سريعة — اضغط لإضافة مجموعة",
+      "quickStartDesc": "ينشئ كل إعداد مسبق مجموعة جديدة فورًا أدناه. اضغط على أي عدد تريده — واحدة تلو الأخرى.",
+      "addCollectionBtn": "+ إضافة مجموعة",
+      "presets": {
+        "streaming": "البث",
+        "trending": "الرائج",
+        "genres": "الأنواع",
+        "themed": "حسب الموضوع",
+        "filmCollections": "مجموعات الأفلام",
+        "studios": "الاستوديوهات",
+        "directors": "المخرجون",
+        "actors": "الممثلون",
+        "trakt": "Trakt",
+        "byDecade": "حسب العقد",
+        "kidsFamily": "الأطفال والعائلة",
+        "uk": "المملكة المتحدة",
+        "anime": "الأنمي",
+        "documentaries": "الوثائقيات",
+        "bollywood": "بوليوود",
+        "sports": "الرياضة",
+        "universes": "العوالم"
+      },
+      "displayStyle": "نمط العرض",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "شبكة بعلامات تبويب",
+          "desc": "موصى به"
+        },
+        "grid": {
+          "name": "شبكة",
+          "desc": "تخطيط بسيط"
+        },
+        "rows": {
+          "name": "صفوف",
+          "desc": "عرض القائمة"
+        }
+      },
+      "yourCollections": "مجموعاتك",
+      "searchPlaceholder": "ابحث عن مجموعات ومجلدات…",
+      "importJsonBtn": "📦 استيراد JSON",
+      "addCollectionMainBtn": "+ إضافة مجموعة",
+      "backToCollections": "← العودة إلى المجموعات",
+      "emptyState": {
+        "textHtml": "لا توجد مجموعات بعد<br>اضغط على إعداد مسبق أعلاه للبدء فورًا،<br>أو انقر على <strong style=\"color:var(--text);\">+ إضافة مجموعة</strong> لإنشاء واحدة من الصفر."
+      },
+      "back": "← رجوع",
+      "collectionsLabel": "مجموعات",
+      "foldersLabel": "مجلدات",
+      "next": "التالي — إنهاء ←",
+      "finaliseGenerateBtn": "إنهاء / إنشاء →",
+      "artworkCreditHtml": "شكر خاص لـ <strong style=\"color:var(--text);\">Shadowfrom88</strong> على Reddit على رسومات المجموعات المستخدمة في Ultra MAX."
+    },
+    "step4": {
+      "title": "🚀 إنهاء",
+      "installInstructions": {
+        "label": "تعليمات تثبيت مهمة",
+        "html": "<strong style=\"color:#fff;\">يتكون Ultra MAX من جزأين منفصلين:</strong><br><br><strong style=\"color:#fff;\">1. رابط الإضافة</strong><br>بعد النقر على <strong>🚀 إنشاء<br>الإعداد النهائي</strong>، انسخ رابط الإعداد النهائي واستخدمه لإضافة/تثبيت Ultra MAX في Nuvio أو Stremio.<br><br><strong style=\"color:#fff;\">2. ملف JSON لمجموعات Nuvio</strong><br>انقر على <strong>📦 تصدير<br>JSON لـ Nuvio</strong> لتنزيل ملف مجموعاتك. ثم افتح Nuvio، وانتقل إلى صفحة المجموعات، واستورد ملف JSON هذا هناك.<br><br><strong style=\"color:#fff;\">قاعدة بسيطة:</strong><br>رابط الإضافة = الكتالوجات. JSON لـ Nuvio = المجلدات والمجموعات."
+      },
+      "summary": {
+        "label": "ملخص الإعداد النهائي",
+        "homeRowsKept": "صفوف الشاشة الرئيسية المحتفظ بها:",
+        "hiddenFromHome": "المخفية من الشاشة الرئيسية:",
+        "collectionsCreated": "المجموعات المُنشأة:",
+        "rowsMovedToCollections": "الصفوف المنقولة إلى المجموعات:",
+        "performance": "الأداء:",
+        "perf": {
+          "excellent": "ممتاز",
+          "good": "جيد",
+          "heavy": "ثقيل",
+          "veryHeavy": "ثقيل جدًا"
+        },
+        "hint": {
+          "excellent": "تخطيط شاشة رئيسية رشيق. رائع للجوال والتلفزيون والتصفح السريع.",
+          "good": "إعداد متوازن. من المفترض أن يعمل جيدًا على معظم الأجهزة.",
+          "heavy": "لديك الكثير من صفوف الشاشة الرئيسية. ستساعد المجموعات بمجرد إنشاء الخطوة 3.",
+          "veryHeavy": "قد يبدو هذا الإعداد مزدحمًا. قد ترغب في نقل المزيد من الصفوف إلى المجموعات."
+        }
+      },
+      "generateBtn": "🚀 إنشاء الإعداد النهائي",
+      "generating": "جارٍ إنشاء إضافتك...",
+      "part1": {
+        "stepLabel": "الخطوة 1 · التثبيت",
+        "title": "📡 رابط الإضافة",
+        "desc": "انسخ هذا الرابط وثبّته في Nuvio أو Stremio. سيمنحك هذا جميع صفوف الكتالوج الخاصة بك.",
+        "copyBtn": "📋 نسخ الرابط",
+        "stremioInstallBtn": "تثبيت في Stremio",
+        "stremioInstallTitle": "ثبّت مباشرة في تطبيق Stremio"
+      },
+      "part2": {
+        "stepLabel": "الخطوة 2 · المجموعات",
+        "title": "🗂 JSON لـ Nuvio",
+        "desc": "صدّر هذا الملف واستورده في صفحة المجموعات في Nuvio. سيمنحك هذا مجلدات ومجموعات.",
+        "exportBtn": "📦 تصدير JSON لـ Nuvio"
+      },
+      "pushCard": {
+        "title": "🚀 إرسال مباشرة إلى Nuvio",
+        "desc": "تخطَّ الخطوات اليدوية — اربط حساب Nuvio الخاص بك وسنضيف Ultra MAX ومجموعاتك مباشرة إلى ملف شخصي.",
+        "manageLink": "⚙️ مرتبط بالفعل؟ أدر إضافاتك ومجموعاتك ←",
+        "emailPlaceholder": "البريد الإلكتروني لـ Nuvio",
+        "passwordPlaceholder": "كلمة مرور Nuvio",
+        "continueBtn": "متابعة",
+        "profileStageNote": "سيؤدي هذا إلى تثبيت الإضافة واستبدال المجموعات في الملف الشخصي المحدد.",
+        "catalogsCheckbox": "الكتالوجات",
+        "collectionsCheckbox": "المجموعات",
+        "cancelBtn": "إلغاء",
+        "pushBtn": "إرسال إلى Nuvio",
+        "pushBtnMulti": "إرسال إلى Nuvio ({n} ملفات شخصية)",
+        "selectAll": "تحديد الكل",
+        "selectNone": "عدم تحديد أي شيء"
+      },
+      "qrCard": {
+        "title": "📱 إرسال من هاتفك",
+        "desc": "امسح هذا بكاميرا هاتفك للإرسال مباشرة، دون الحاجة للكتابة.",
+        "showBtn": "إظهار رمز QR"
+      },
+      "token": {
+        "saveHint": "رمزك — احفظ هذا!",
+        "copyBtn": "نسخ الرمز"
+      },
+      "registerEmail": {
+        "label": "📧 سجّل بريدك الإلكتروني",
+        "desc": "حتى تتمكن من استعادة رمزك في حال فقدانه. لا يُستخدم أبدًا للتسويق.",
+        "placeholder": "بريدك@الإلكتروني.com",
+        "registerBtn": "تسجيل"
+      },
+      "exports": {
+        "projectFile": "💾 ملف المشروع",
+        "catalogCsv": "📊 CSV للكتالوج"
+      },
+      "back": "← رجوع"
+    },
+    "nuvioPush": {
+      "missingFields": "الرجاء إدخال بريدك الإلكتروني وكلمة مرورك في Nuvio.",
+      "generateFirst": "الرجاء إنشاء إعدادك أولًا قبل الإرسال إلى Nuvio.",
+      "loggingIn": "جارٍ تسجيل الدخول...",
+      "selectProfiles": "اختر الملف (الملفات) الشخصية للإرسال إليها.",
+      "loginFailed": "فشل تسجيل الدخول.",
+      "selectAtLeastOne": "اختر على الأقل الكتالوجات أو المجموعات للإرسال.",
+      "selectAtLeastOneProfile": "اختر ملفًا شخصيًا واحدًا على الأقل.",
+      "somethingWrong": "حدث خطأ ما. الرجاء المحاولة مرة أخرى."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "جميع فتحات الملفات الشخصية الست في Nuvio قيد الاستخدام بالفعل.",
+      "profileNotVerified": "قبل Nuvio تحديث الملف الشخصي، لكن تعذّر التحقق من ملف الأطفال الشخصي.",
+      "notIsolated": "ملف الأطفال الشخصي موجود، لكنه غير معزول عن الملف الشخصي الرئيسي.",
+      "noKidsCollection": "لا يحتوي الإعداد الذي تم إنشاؤه على مجموعة Ultra MAX للأطفال.",
+      "generateFirst": "أنشئ إعداد الأطفال قبل إرساله إلى Nuvio.",
+      "confirmPrompt": "هل تريد إعداد ملف Nuvio شخصي معزول للأطفال؟\n\nسيقوم Ultra MAX بإنشاء أو تحديث ملف الأطفال الشخصي، وإيقاف الإضافات والمكوّنات الإضافية المشتركة، ثم استبدال إضافات ومجموعات ذلك الملف الشخصي بإعداد الأطفال المقيّد.\n\nسيتم حفظ نسخة احتياطية من إضافات ومجموعات الأطفال الحالية أولًا في هذا المتصفح.",
+      "cancelled": "تم إلغاء إعداد ملف الأطفال الشخصي. لم يتم إجراء أي تغييرات.",
+      "creatingProfile": "جارٍ إنشاء أو التحقق من ملف الأطفال الشخصي المعزول...",
+      "backingUp": "جارٍ نسخ ملف الأطفال الشخصي الحالي احتياطيًا...",
+      "addonNotVerified": "اكتمل إرسال إضافة الأطفال، لكن التحقق لم يتطابق مع البيان الذي تم إنشاؤه.",
+      "installingAddon": "جارٍ تثبيت إضافة Ultra MAX للأطفال المقيّدة...",
+      "installingCollection": "جارٍ تثبيت مجموعة Ultra MAX للأطفال...",
+      "collectionsNotVerified": "تم إرسال مجموعات الأطفال، لكن نتيجة التحقق لم تتطابق.",
+      "verifying": "جارٍ التحقق من ملف الأطفال الشخصي...",
+      "ready": "ملف الأطفال الشخصي جاهز. إنه معزول ولا يحتوي إلا على Ultra MAX للأطفال."
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "تم التحقق من UltraPlay+ لإعداد Ultra MAX هذا",
+      "aria": "تم التحقق من UltraPlay Plus"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "أكثر من 500 كتالوج لبناء إعدادك"
+    }
+  }
+}

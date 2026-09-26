@@ -1,3 +1,11 @@
+const { resolveConfigForProfile } = require("../utils/profiles");
+const {
+  getProviderCapabilities,
+  createEffectiveDiscoveryConfig
+} = require("./provider-capability-service");
+const { createMetadataService } = require("./metadata-service");
+const { resolveRuntimeTmdbKey } = require("./tmdb-key-health-service");
+
 function normaliseTitle(meta) {
   return String(
     meta?.name ||
@@ -139,7 +147,8 @@ function registerCatalogInspectorRoutes(app, deps) {
     handleCatalogService,
     catalogDeps,
     loadConfigs,
-    MDBLIST_KEY,
+    readConfig = async token => loadConfigs()[token],
+    CATALOG_DEFS,
     FILTER_ENABLED
   } = deps;
 
@@ -177,15 +186,39 @@ function registerCatalogInspectorRoutes(app, deps) {
         catalogId = "search_movies";
       }
 
-      const configs = loadConfigs();
-      const config = configs[token];
+      const baseConfig = await readConfig(token, req.query.profile);
 
-      if (!config) {
+      if (!baseConfig) {
         return res.status(404).json({
           ok: false,
           error: "token not found"
         });
       }
+
+      const resolvedConfig = resolveConfigForProfile(baseConfig, req.query.profile);
+      const capabilities = getProviderCapabilities(resolvedConfig, {
+        serverTmdbKey: catalogDeps.TMDB_KEY
+      });
+      const runtimeTmdb = await resolveRuntimeTmdbKey(capabilities, {
+        serverTmdbKey: catalogDeps.TMDB_KEY
+      });
+      if (!capabilities.hasAnyDiscoveryProvider || !runtimeTmdb.tmdbKey) {
+        return res.status(400).json({
+          ok: false,
+          error: "discovery provider unavailable",
+          hasTmdb: capabilities.hasTmdb,
+          hasMdblist: capabilities.hasMdblist
+        });
+      }
+      const config = createEffectiveDiscoveryConfig(resolvedConfig, {
+        catalogDefs: CATALOG_DEFS,
+        capabilities
+      });
+      const requestCatalogDeps = {
+        ...catalogDeps,
+        TMDB_KEY: runtimeTmdb.tmdbKey,
+        ...createMetadataService({ tmdbKey: runtimeTmdb.tmdbKey })
+      };
 
       const extra = {};
 
@@ -221,7 +254,7 @@ function registerCatalogInspectorRoutes(app, deps) {
           catalogId,
           type,
           extra,
-          config.mdblistKey || MDBLIST_KEY,
+          capabilities.effectiveMdbKey,
           hasAnime ? false : FILTER_ENABLED,
           config.language || "en-US",
           config.rpdbKey || null,
@@ -234,7 +267,7 @@ function registerCatalogInspectorRoutes(app, deps) {
           config.googleAiKey || null,
           config.fanartKey || null,
           config.omdbKey || null,
-          catalogDeps,
+          requestCatalogDeps,
           config.excludeLanguages || [],
           config.betterPostersStyle || null,
           config.traktAccessToken || null,
@@ -266,7 +299,9 @@ function registerCatalogInspectorRoutes(app, deps) {
             filterEnabled: hasAnime ? false : FILTER_ENABLED,
             excludeUnreleased: config.excludeUnreleased || false,
             maxRating: config.maxRating || null,
-            excludeLanguages: config.excludeLanguages || []
+            excludeLanguages: config.excludeLanguages || [],
+            tmdbKeySource: runtimeTmdb.source,
+            tmdbFallbackUsed: runtimeTmdb.fellBack
           },
           performance: {
             durationMs: Date.now() - started

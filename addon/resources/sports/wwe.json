@@ -1,0 +1,437 @@
+{
+  "wwe_wrestlemania": [
+    {
+      "id": "tt0248614",
+      "name": "WrestleMania 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0306215",
+      "name": "WrestleMania X8",
+      "year": 2002
+    },
+    {
+      "id": "tt0353015",
+      "name": "WrestleMania XIX",
+      "year": 2003
+    },
+    {
+      "id": "tt0403687",
+      "name": "WrestleMania XX",
+      "year": 2004
+    },
+    {
+      "id": "tt0439335",
+      "name": "WrestleMania 21",
+      "year": 2005
+    },
+    {
+      "id": "tt0910978",
+      "name": "WrestleMania 23",
+      "year": 2007
+    },
+    {
+      "id": "tt0988810",
+      "name": "WrestleMania XXIV",
+      "year": 2008
+    },
+    {
+      "id": "tt1831830",
+      "name": "WrestleMania XXVII",
+      "year": 2011
+    },
+    {
+      "id": "tt2187205",
+      "name": "WrestleMania XXVIII",
+      "year": 2012
+    },
+    {
+      "id": "tt3058844",
+      "name": "WrestleMania XXX",
+      "year": 2014
+    },
+    {
+      "id": "tt8671116",
+      "name": "WrestleMania 35",
+      "year": 2019
+    },
+    {
+      "id": "tt21386522",
+      "name": "WrestleMania XL",
+      "year": 2024
+    }
+  ],
+  "wwe_royal_rumble": [
+    {
+      "id": "tt0350067",
+      "name": "Royal Rumble 2003",
+      "year": 2003
+    },
+    {
+      "id": "tt0403465",
+      "name": "Royal Rumble 2004",
+      "year": 2004
+    },
+    {
+      "id": "tt0442709",
+      "name": "WWE Royal Rumble 2005",
+      "year": 2005
+    },
+    {
+      "id": "tt1178664",
+      "name": "WWE Royal Rumble 2008",
+      "year": 2008
+    }
+  ],
+  "wwe_summerslam": [
+    {
+      "id": "tt0276539",
+      "name": "SummerSlam 1988",
+      "year": 1988
+    },
+    {
+      "id": "tt0276540",
+      "name": "SummerSlam 1989",
+      "year": 1989
+    },
+    {
+      "id": "tt0330944",
+      "name": "SummerSlam 2002",
+      "year": 2002
+    },
+    {
+      "id": "tt0417176",
+      "name": "SummerSlam 2004",
+      "year": 2004
+    },
+    {
+      "id": "tt0457150",
+      "name": "SummerSlam 2005",
+      "year": 2005
+    },
+    {
+      "id": "tt2846412",
+      "name": "SummerSlam 2013",
+      "year": 2013
+    }
+  ],
+  "wwe_survivor_series": [
+    {
+      "id": "tt0274118",
+      "name": "Survivor Series 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0457151",
+      "name": "WWE Survivor Series 2005",
+      "year": 2005
+    },
+    {
+      "id": "tt0791343",
+      "name": "Survivor Series 2006",
+      "year": 2006
+    },
+    {
+      "id": "tt1130761",
+      "name": "Survivor Series 2007",
+      "year": 2007
+    },
+    {
+      "id": "tt1315059",
+      "name": "Survivor Series 2008",
+      "year": 2008
+    }
+  ],
+  "wwf_classics": [
+    {
+      "id": "tt0276539",
+      "name": "SummerSlam 1988",
+      "year": 1988
+    },
+    {
+      "id": "tt0276540",
+      "name": "SummerSlam 1989",
+      "year": 1989
+    },
+    {
+      "id": "tt0248614",
+      "name": "WrestleMania 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0274118",
+      "name": "Survivor Series 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0306215",
+      "name": "WrestleMania X8",
+      "year": 2002
+    },
+    {
+      "id": "tt0330944",
+      "name": "SummerSlam 2002",
+      "year": 2002
+    }
+  ],
+  "wwe_money_in_the_bank": [
+    {
+      "id": "tt1683518",
+      "name": "WWE Money in the Bank",
+      "year": 2010
+    },
+    {
+      "id": "tt2846410",
+      "name": "Money in the Bank",
+      "year": 2013
+    },
+    {
+      "id": "tt3808076",
+      "name": "WWE Money in the Bank",
+      "year": 2014
+    },
+    {
+      "id": "tt5746242",
+      "name": "Money in the Bank",
+      "year": 2016
+    },
+    {
+      "id": "tt8386682",
+      "name": "WWE Money in the Bank",
+      "year": 2018
+    },
+    {
+      "id": "tt10229430",
+      "name": "WWE Money in the Bank",
+      "year": 2019
+    },
+    {
+      "id": "tt14425566",
+      "name": "WWE Money in the Bank",
+      "year": 2021
+    },
+    {
+      "id": "tt15766816",
+      "name": "WWE Money in the Bank",
+      "year": 2022
+    },
+    {
+      "id": "tt25784918",
+      "name": "WWE Money in the Bank",
+      "year": 2023
+    },
+    {
+      "id": "tt30791310",
+      "name": "WWE Money in the Bank",
+      "year": 2024
+    }
+  ],
+  "wwe_elimination_chamber": [
+    {
+      "id": "tt1611215",
+      "name": "WWE Elimination Chamber",
+      "year": 2010
+    },
+    {
+      "id": "tt1797379",
+      "name": "WWE Elimination Chamber",
+      "year": 2011
+    },
+    {
+      "id": "tt2201043",
+      "name": "Elimination Chamber",
+      "year": 2012
+    },
+    {
+      "id": "tt2613402",
+      "name": "Elimination Chamber",
+      "year": 2013
+    },
+    {
+      "id": "tt3508724",
+      "name": "WWE Elimination Chamber",
+      "year": 2014
+    },
+    {
+      "id": "tt4700456",
+      "name": "WWE Elimination Chamber",
+      "year": 2015
+    },
+    {
+      "id": "tt6487752",
+      "name": "WWE Elimination Chamber",
+      "year": 2017
+    },
+    {
+      "id": "tt7948266",
+      "name": "WWE Elimination Chamber",
+      "year": 2018
+    },
+    {
+      "id": "tt9685264",
+      "name": "WWE Elimination Chamber",
+      "year": 2019
+    },
+    {
+      "id": "tt11747672",
+      "name": "WWE Elimination Chamber",
+      "year": 2020
+    },
+    {
+      "id": "tt13865074",
+      "name": "WWE Elimination Chamber",
+      "year": 2021
+    },
+    {
+      "id": "tt17073198",
+      "name": "WWE Elimination Chamber",
+      "year": 2022
+    },
+    {
+      "id": "tt29256275",
+      "name": "WWE Elimination Chamber: Perth",
+      "year": 2024
+    }
+  ],
+  "wwe_backlash": [
+    {
+      "id": "tt0362296",
+      "name": "WWE Backlash",
+      "year": 2003
+    },
+    {
+      "id": "tt0407301",
+      "name": "WWE Backlash",
+      "year": 2004
+    },
+    {
+      "id": "tt0444704",
+      "name": "WWE Backlash",
+      "year": 2005
+    },
+    {
+      "id": "tt0462190",
+      "name": "Backlash",
+      "year": 2006
+    },
+    {
+      "id": "tt0974665",
+      "name": "WWE Backlash",
+      "year": 2007
+    },
+    {
+      "id": "tt1227568",
+      "name": "WWE Backlash",
+      "year": 2008
+    },
+    {
+      "id": "tt1412366",
+      "name": "WWE Backlash",
+      "year": 2009
+    },
+    {
+      "id": "tt8289596",
+      "name": "WWE Backlash",
+      "year": 2018
+    },
+    {
+      "id": "tt12392552",
+      "name": "WWE Backlash",
+      "year": 2020
+    },
+    {
+      "id": "tt14425568",
+      "name": "WWE WrestleMania Backlash",
+      "year": 2021
+    },
+    {
+      "id": "tt18226738",
+      "name": "WWE WrestleMania Backlash",
+      "year": 2022
+    },
+    {
+      "id": "tt27054682",
+      "name": "WWE Backlash",
+      "year": 2023
+    },
+    {
+      "id": "tt30016229",
+      "name": "WWE Backlash: France",
+      "year": 2024
+    }
+  ],
+  "wwf_wwe_king_of_the_ring": [
+    {
+      "id": "tt0314866",
+      "name": "King of the Ring",
+      "year": 1995
+    },
+    {
+      "id": "tt0290228",
+      "name": "King of the Ring",
+      "year": 1996
+    },
+    {
+      "id": "tt0311996",
+      "name": "King of the Ring",
+      "year": 1998
+    },
+    {
+      "id": "tt0311997",
+      "name": "King of the Ring",
+      "year": 1999
+    },
+    {
+      "id": "tt0292731",
+      "name": "King of the Ring",
+      "year": 2001
+    },
+    {
+      "id": "tt0316876",
+      "name": "King of the Ring",
+      "year": 2002
+    }
+  ],
+  "wwf_wwe_no_mercy": [
+    {
+      "id": "tt0262888",
+      "name": "WWF No Mercy",
+      "year": 1999
+    },
+    {
+      "id": "tt0274203",
+      "name": "WWF No Mercy",
+      "year": 2000
+    },
+    {
+      "id": "tt0295013",
+      "name": "WWF No Mercy",
+      "year": 2001
+    },
+    {
+      "id": "tt0406325",
+      "name": "WWE No Mercy",
+      "year": 2003
+    },
+    {
+      "id": "tt0423499",
+      "name": "WWE No Mercy",
+      "year": 2004
+    },
+    {
+      "id": "tt0457196",
+      "name": "WWE No Mercy",
+      "year": 2005
+    },
+    {
+      "id": "tt1213839",
+      "name": "WWE No Mercy",
+      "year": 2007
+    },
+    {
+      "id": "tt1305558",
+      "name": "WWE No Mercy",
+      "year": 2008
+    }
+  ]
+}

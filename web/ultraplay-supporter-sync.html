@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Ultra MAX Supporter Sync</title>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body hidden>
+<script>
+(() => {
+  'use strict';
+  const claim = new URLSearchParams(location.hash.replace(/^#/, '')).get('claim') || '';
+  if (!/^[A-Za-z0-9_-]{20,1200}\.[A-Za-z0-9_-]{43,100}$/.test(claim)) return;
+  try {
+    const raw = claim.split('.')[0].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = raw + '='.repeat((4 - raw.length % 4) % 4);
+    const payload = JSON.parse(atob(padded));
+    const now = Date.now();
+    if (payload?.v !== 1 || payload?.tier !== 'plus') return;
+    if (!/^[A-Za-z0-9_-]{43}$/.test(String(payload.setup || ''))) return;
+    if (!Number.isFinite(Number(payload.exp)) || Number(payload.exp) <= now) return;
+    localStorage.setItem('um_playplus_badge_v1:' + payload.setup, claim);
+  } catch {}
+})();
+</script>
+</body>
+</html>

@@ -1,8 +1,14 @@
 const axios = require("axios");
+const crypto = require("crypto");
 const { fetchCached } = require("./api-helpers");
 const {
   resolveTmdbAnimeToKitsuId
 } = require("./kitsu-id-service");
+const {
+  applyContentFilters,
+  normalizeContentExclusions,
+  matchesContentExclusion
+} = require("./content-filter-service");
 const TMDB_KEY = process.env.TMDB_KEY;
 const imdbCache = new Map();
 const certCache = new Map();
@@ -13,7 +19,23 @@ const digitalReleaseCache = new Map();
 const DIGITAL_RELEASE_TTL = 7 * 24 * 60 * 60 * 1000;
 const imdbTmdbCache = new Map();
 const FILTER_ENABLED = process.env.FILTER_MODE !== "off";
-const MDBLIST_KEYS = ( process.env.MDBLIST_KEYS || process.env.MDBLIST_KEY || "" ).split(",").map(k => k.trim()).filter(Boolean);
+const PICTORIUM_RENDER_VERSION = process.env.PICTORIUM_RENDER_VERSION || "67dc78827a";
+const MDBLIST_KEYS = (process.env.MDBLIST_KEYS || process.env.MDBLIST_KEY || "")
+  .split(",")
+  .map(key => key.trim())
+  .filter(Boolean);
+
+function credentialScope(value) {
+  return crypto.createHash("sha256").update(String(value || "none")).digest("hex").slice(0, 24);
+}
+
+function credentialScopedCacheKey(tmdbKey, ...parts) {
+  return `${credentialScope(tmdbKey)}:${parts.map(part => String(part)).join(":")}`;
+}
+
+function publicTmdbMappingKey(...parts) {
+  return `public:${parts.map(part => String(part)).join(":")}`;
+}
 
 // Map language codes to btttr.cc lang params
 function getBpLang(language) {
@@ -36,9 +58,60 @@ function getBpLang(language) {
   return map[language] || map[language.split('-')[0]] || '';
 }
 
-function applyBpStyle(bpStyle, imdbId, language) {
+function applyBpStyle(bpStyle, imdbId, language, context = {}) {
   if (!bpStyle) return null;
-  let url = bpStyle.replace('{imdb_id}', imdbId);
+
+  const mediaType = context.type === "series" ? "series" : "movie";
+  let url = String(bpStyle)
+    .split('{imdb_id}').join(String(imdbId || ''))
+    .split('{media_type}').join(mediaType)
+    .split('{type}').join(mediaType)
+    .split('{tmdb_id}').join(String(context.tmdbId || imdbId || ''));
+
+  if (url.includes('/api/poster/')) {
+    try {
+      const parsed = new URL(url);
+      const title = String(context.title || '').trim();
+      const releaseDate = String(context.releaseDate || '').trim();
+      const lang = String(language || 'en').split('-')[0].toLowerCase();
+
+      const isHostedPictorium =
+        (parsed.origin === 'https://ultramax.vip' || parsed.origin === 'https://ultramax.vip') &&
+        parsed.pathname.includes('/pictorium/api/poster/');
+
+      // Ultra MAX already knows the TMDB id for normal catalog/meta results.
+      // Prefer it on our hosted Pictorium instance so Pictorium can skip its
+      // IMDb -> TMDB resolver on a cold render. Legacy saved templates that
+      // still use {imdb_id} are upgraded transparently at request time.
+      if (isHostedPictorium && context.tmdbId) {
+        const parts = parsed.pathname.split('/');
+        const last = parts[parts.length - 1] || '';
+        if (/^tt\d+$/i.test(last)) {
+          parts[parts.length - 1] = String(context.tmdbId);
+          parsed.pathname = parts.join('/');
+        }
+      }
+
+      if (isHostedPictorium && !parsed.searchParams.has('rv')) {
+        parsed.searchParams.set('rv', PICTORIUM_RENDER_VERSION);
+      }
+      if (isHostedPictorium && !parsed.searchParams.has('fmt')) {
+        parsed.searchParams.set('fmt', 'webp');
+      }
+      if (title && !parsed.searchParams.has('title')) parsed.searchParams.set('title', title);
+      if (imdbId && !parsed.searchParams.has('imdbId')) parsed.searchParams.set('imdbId', imdbId);
+      if (lang && !parsed.searchParams.has('lang')) parsed.searchParams.set('lang', lang);
+      if (releaseDate) {
+        const dateParam = mediaType === 'series' ? 'fad' : 'rd';
+        if (!parsed.searchParams.has(dateParam)) parsed.searchParams.set(dateParam, releaseDate);
+      }
+
+      return parsed.toString();
+    } catch (_) {
+      return url;
+    }
+  }
+
   if (url.includes('btttr.cc')) {
     const lang = getBpLang(language);
     if (lang) url += (url.includes('?') ? '&' : '?') + 'lang=' + lang;
@@ -46,12 +119,12 @@ function applyBpStyle(bpStyle, imdbId, language) {
   return url;
 }
 
-async function getImdbId(tmdbId, type) {
-  const key = `${type}-${tmdbId}`;
+async function getImdbId(tmdbId, type, tmdbKey = TMDB_KEY) {
+  const key = publicTmdbMappingKey(type, tmdbId);
   if (imdbCache.has(key)) return imdbCache.get(key);
   try {
     const t = type === "series" ? "tv" : "movie";
-    const data = await fetchCached(`https://api.themoviedb.org/3/${t}/${tmdbId}/external_ids?api_key=${TMDB_KEY}`);
+    const data = await fetchCached(`https://api.themoviedb.org/3/${t}/${tmdbId}/external_ids?api_key=${tmdbKey}`);
     const imdbId = data.imdb_id || null;
     if (imdbId) imdbCache.set(key, imdbId);
     return imdbId;
@@ -140,14 +213,18 @@ function ratingAllowed(cert, maxRating, type = "movie") {
   return certRank <= maxRank;
 }
 
-function certificationCacheKey(tmdbId, type) {
-  return `${type === "series" ? "series" : "movie"}:${tmdbId}`;
+function certificationCacheKey(tmdbId, type, tmdbKey) {
+  return credentialScopedCacheKey(
+    tmdbKey,
+    type === "series" ? "series" : "movie",
+    tmdbId
+  );
 }
 
-async function getMovieCertification(tmdbId) {
+async function getMovieCertification(tmdbId, tmdbKey = TMDB_KEY) {
   if (!tmdbId) return null;
 
-  const cacheKey = certificationCacheKey(tmdbId, "movie");
+  const cacheKey = certificationCacheKey(tmdbId, "movie", tmdbKey);
   const cached = certCache.get(cacheKey);
 
   if (cached && Date.now() - cached.time < CERT_TTL) {
@@ -156,7 +233,7 @@ async function getMovieCertification(tmdbId) {
 
   try {
     const data = await fetchCached(
-      `https://api.themoviedb.org/3/movie/${tmdbId}/release_dates?api_key=${TMDB_KEY}`
+      `https://api.themoviedb.org/3/movie/${tmdbId}/release_dates?api_key=${tmdbKey}`
     );
 
     const regions = data.results || [];
@@ -183,10 +260,10 @@ async function getMovieCertification(tmdbId) {
   }
 }
 
-async function getSeriesCertification(tmdbId) {
+async function getSeriesCertification(tmdbId, tmdbKey = TMDB_KEY) {
   if (!tmdbId) return null;
 
-  const cacheKey = certificationCacheKey(tmdbId, "series");
+  const cacheKey = certificationCacheKey(tmdbId, "series", tmdbKey);
   const cached = certCache.get(cacheKey);
 
   if (cached && Date.now() - cached.time < CERT_TTL) {
@@ -195,7 +272,7 @@ async function getSeriesCertification(tmdbId) {
 
   try {
     const data = await fetchCached(
-      `https://api.themoviedb.org/3/tv/${tmdbId}/content_ratings?api_key=${TMDB_KEY}`
+      `https://api.themoviedb.org/3/tv/${tmdbId}/content_ratings?api_key=${tmdbKey}`
     );
 
     const ratings = data.results || [];
@@ -221,20 +298,20 @@ async function getSeriesCertification(tmdbId) {
   }
 }
 
-async function getCertification(tmdbId, type = "movie") {
+async function getCertification(tmdbId, type = "movie", tmdbKey = TMDB_KEY) {
   return type === "series"
-    ? getSeriesCertification(tmdbId)
-    : getMovieCertification(tmdbId);
+    ? getSeriesCertification(tmdbId, tmdbKey)
+    : getMovieCertification(tmdbId, tmdbKey);
 }
 
-async function filterByMaxRating(results, maxRating, type = "movie") {
+async function filterByMaxRating(results, maxRating, type = "movie", tmdbKey = TMDB_KEY) {
   if (!maxRating || !Array.isArray(results)) return results;
 
   const limited = results.slice(0, 40);
 
   const checked = await Promise.all(
     limited.map(async item => {
-      const cert = await getCertification(item.id, type);
+      const cert = await getCertification(item.id, type, tmdbKey);
       return ratingAllowed(cert, maxRating, type) ? item : null;
     })
   );
@@ -242,17 +319,18 @@ async function filterByMaxRating(results, maxRating, type = "movie") {
   return checked.filter(Boolean);
 }
 
-async function hasDigitalRelease(tmdbId) {
+async function hasDigitalRelease(tmdbId, tmdbKey = TMDB_KEY) {
   if (!tmdbId) return false;
 
-  const cached = digitalReleaseCache.get(tmdbId);
+  const cacheKey = credentialScopedCacheKey(tmdbKey, "digital-release", tmdbId);
+  const cached = digitalReleaseCache.get(cacheKey);
   if (cached && Date.now() - cached.time < DIGITAL_RELEASE_TTL) {
     return cached.available;
   }
 
   try {
     const data = await fetchCached(
-      `https://api.themoviedb.org/3/movie/${tmdbId}/release_dates?api_key=${TMDB_KEY}`
+      `https://api.themoviedb.org/3/movie/${tmdbId}/release_dates?api_key=${tmdbKey}`
     );
 
     const today = new Date().toISOString().slice(0, 10);
@@ -267,7 +345,7 @@ async function hasDigitalRelease(tmdbId) {
       })
     );
 
-    digitalReleaseCache.set(tmdbId, {
+    digitalReleaseCache.set(cacheKey, {
       available,
       time: Date.now()
     });
@@ -285,14 +363,14 @@ async function hasDigitalRelease(tmdbId) {
   }
 }
 
-async function filterByDigitalRelease(results) {
+async function filterByDigitalRelease(results, tmdbKey = TMDB_KEY) {
   if (!Array.isArray(results)) return [];
 
   const candidates = results.slice(0, 40);
 
   const checked = await Promise.all(
     candidates.map(async item => {
-      const available = await hasDigitalRelease(item.id);
+      const available = await hasDigitalRelease(item.id, tmdbKey);
 
       // null means the lookup failed, so preserve the item for stability.
       return available === false ? null : item;
@@ -302,31 +380,32 @@ async function filterByDigitalRelease(results) {
   return checked.filter(Boolean);
 }
 
-async function imdbToTmdbMovieId(imdbId) {
+async function imdbToTmdbMovieId(imdbId, tmdbKey = TMDB_KEY) {
   if (!imdbId) return null;
-  if (imdbTmdbCache.has(imdbId)) return imdbTmdbCache.get(imdbId);
+  const cacheKey = publicTmdbMappingKey("movie", imdbId);
+  if (imdbTmdbCache.has(cacheKey)) return imdbTmdbCache.get(cacheKey);
 
   try {
-    const data = await fetchCached(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${TMDB_KEY}&external_source=imdb_id`);
+    const data = await fetchCached(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
     const id = data.movie_results && data.movie_results[0] ? data.movie_results[0].id : null;
-    imdbTmdbCache.set(imdbId, id);
+    imdbTmdbCache.set(cacheKey, id);
     return id;
   } catch (e) {
     return null;
   }
 }
 
-async function imdbToTmdbSeriesId(imdbId) {
+async function imdbToTmdbSeriesId(imdbId, tmdbKey = TMDB_KEY) {
   if (!imdbId) return null;
 
-  const cacheKey = `series:${imdbId}`;
+  const cacheKey = publicTmdbMappingKey("series", imdbId);
   if (imdbTmdbCache.has(cacheKey)) {
     return imdbTmdbCache.get(cacheKey);
   }
 
   try {
     const data = await fetchCached(
-      `https://api.themoviedb.org/3/find/${imdbId}?api_key=${TMDB_KEY}&external_source=imdb_id`
+      `https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`
     );
 
     const id =
@@ -345,7 +424,8 @@ async function imdbToTmdbSeriesId(imdbId) {
 async function filterMetasByMaxRating(
   metas,
   maxRating,
-  type = "movie"
+  type = "movie",
+  tmdbKey = TMDB_KEY
 ) {
   if (!maxRating || !Array.isArray(metas)) return metas;
 
@@ -357,12 +437,12 @@ async function filterMetasByMaxRating(
 
       const tmdbId =
         type === "series"
-          ? await imdbToTmdbSeriesId(imdbId)
-          : await imdbToTmdbMovieId(imdbId);
+          ? await imdbToTmdbSeriesId(imdbId, tmdbKey)
+          : await imdbToTmdbMovieId(imdbId, tmdbKey);
 
       if (!tmdbId) return null;
 
-      const cert = await getCertification(tmdbId, type);
+      const cert = await getCertification(tmdbId, type, tmdbKey);
 
       return ratingAllowed(cert, maxRating, type)
         ? meta
@@ -403,7 +483,7 @@ async function getBestPoster({ type, tmdbId, imdbId, tmdbPosterPath, fanartKey =
   return tmdbPoster;
 }
 
-async function traktToMetas(arr, type, language, rpdbKey, tpKey, excludeUnreleased = false, bpStyle = null) {
+async function traktToMetas(arr, type, language, rpdbKey, tpKey, excludeUnreleased = false, bpStyle = null, filterConfig = null, tmdbKey = TMDB_KEY, resultsMapper = resultsToMetas) {
   const tmdbType = type === "series" ? "tv" : "movie";
   const tmdbResults = (await Promise.all(
     (arr || []).map(async item => {
@@ -411,11 +491,11 @@ async function traktToMetas(arr, type, language, rpdbKey, tpKey, excludeUnreleas
       const tmdbId = entity?.ids?.tmdb;
       if (!tmdbId) return null;
       try {
-        return await fetchCached(`https://api.themoviedb.org/3/${tmdbType}/${tmdbId}?api_key=${TMDB_KEY}&language=${language}`);
+        return await fetchCached(`https://api.themoviedb.org/3/${tmdbType}/${tmdbId}?api_key=${tmdbKey}&language=${language}`);
       } catch(e) { return null; }
     })
   )).filter(Boolean);
-  return await resultsToMetas(tmdbResults, type, FILTER_ENABLED, language, rpdbKey, tpKey, excludeUnreleased, null, null, bpStyle);
+  return await resultsMapper(tmdbResults, type, FILTER_ENABLED, language, rpdbKey, tpKey, excludeUnreleased, null, null, bpStyle, false, false, filterConfig);
 }
 
 
@@ -441,9 +521,16 @@ function normBpStyle(s) {
   return map[s.toLowerCase()] || null;
 }
 
-async function resultsToMetas(arr, type, filterLang = FILTER_ENABLED, language = "en-US", rpdbKey = null, tpKey = null, excludeUnreleased = false, fanartKey = null, omdbKey = null, bpStyle = null, digitalReleaseOnly = false, preserveKitsuIds = false) {
+async function resultsToMetas(arr, type, filterLang = FILTER_ENABLED, language = "en-US", rpdbKey = null, tpKey = null, excludeUnreleased = false, fanartKey = null, omdbKey = null, bpStyle = null, digitalReleaseOnly = false, preserveKitsuIds = false, filterConfig = null, filterOpts = {}, tmdbKey = TMDB_KEY) {
   const today = new Date().toISOString().slice(0,10);
-  let candidates = arr.filter(i => {
+  const effectiveFilterOpts = {
+    ...filterOpts,
+    mediaType: filterOpts.mediaType || type
+  };
+  const sourceArr = filterConfig
+    ? applyContentFilters(arr, filterConfig, effectiveFilterOpts)
+    : arr;
+  let candidates = sourceArr.filter(i => {
       if (!i.poster_path) return false;
 
       const title = i.title || i.name || i.original_title || i.original_name || "";
@@ -488,34 +575,82 @@ async function resultsToMetas(arr, type, filterLang = FILTER_ENABLED, language =
     });
 
   if (digitalReleaseOnly && type === "movie") {
-    candidates = await filterByDigitalRelease(candidates);
+    candidates = await filterByDigitalRelease(candidates, tmdbKey);
   }
 
   return (await Promise.all(
     candidates.map(async i => {
-      const imdb = await getImdbId(i.id, type);
-      if (!imdb) return null;
+      try {
+        const imdb = i.imdb_id || i.external_ids?.imdb_id || await getImdbId(i.id, type, tmdbKey);
+        const tmdbPublishedId = i.id ? `tmdb:${i.id}` : null;
+        if (!imdb && !tmdbPublishedId) return null;
 
-      let publishedId = imdb;
+        let publishedId = imdb || tmdbPublishedId;
 
-      if (preserveKitsuIds) {
-        const kitsuId = await resolveTmdbAnimeToKitsuId(i, type);
+        if (preserveKitsuIds) {
+          const kitsuId = await resolveTmdbAnimeToKitsuId(i, type);
 
-        if (kitsuId) {
-          publishedId = kitsuId;
+          if (kitsuId) {
+            publishedId = kitsuId;
+          }
         }
-      }
 
-      const meta = {
-        id: publishedId, type,
-        name: i.title || i.name || i.original_title,
-        poster: bpStyle ? applyBpStyle(bpStyle, imdb, language) : tpKey ? `https://api.top-streaming.stream/${tpKey}/imdb/poster-default/${imdb}.jpg` : rpdbKey ? `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${imdb}.jpg` : await getBestPoster({ type, tmdbId: i.id, imdbId: imdb, tmdbPosterPath: i.poster_path, fanartKey, omdbKey }),
-        background: i.backdrop_path ? `https://image.tmdb.org/t/p/original${i.backdrop_path}` : null
-      };
-      if (language && language !== "en-US" && i.overview) meta.description = i.overview;
-      return meta;
+        const title = i.title || i.name || i.original_title || i.original_name;
+        const releaseDate = i.release_date || i.first_air_date || null;
+        const poster = imdb && bpStyle
+          ? applyBpStyle(bpStyle, imdb, language, { type, tmdbId: i.id, title, releaseDate })
+          : imdb && tpKey
+            ? `https://api.top-streaming.stream/${tpKey}/imdb/poster-default/${imdb}.jpg`
+            : imdb && rpdbKey
+              ? `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${imdb}.jpg`
+              : await getBestPoster({
+                  type,
+                  tmdbId: i.id,
+                  imdbId: imdb,
+                  tmdbPosterPath: i.poster_path,
+                  fanartKey,
+                  omdbKey
+                });
+
+        const meta = {
+          id: publishedId,
+          type,
+          name: title,
+          poster,
+          background: i.backdrop_path ? `https://image.tmdb.org/t/p/original${i.backdrop_path}` : null
+        };
+        if (language && language !== "en-US" && i.overview) meta.description = i.overview;
+        return meta;
+      } catch (error) {
+        console.warn(
+          `[Metadata] Skipped one ${type} mapping: tmdb=${i?.id || "unknown"}, error=${error.message}`
+        );
+        return null;
+      }
     })
   )).filter(Boolean);
+}
+
+function normalizeMdblistListRef(value) {
+  if (Number.isSafeInteger(Number(value)) && String(value).trim() && /^\d+$/.test(String(value).trim())) {
+    return { kind: "id", value: String(Number(value)) };
+  }
+  const text = String(value || "").trim();
+  const match = text.match(/^([A-Za-z0-9._-]{1,80})\/([A-Za-z0-9._-]{1,160})$/);
+  if (!match) return null;
+  return { kind: "path", author: match[1], slug: match[2], value: `${match[1]}/${match[2]}` };
+}
+
+function buildMdblistItemsUrl(listRef, type, key) {
+  const ref = normalizeMdblistListRef(listRef);
+  if (!ref) return null;
+  const media = type === "series" ? "show" : "movie";
+  if (ref.kind === "id") {
+    return `https://api.mdblist.com/lists/${ref.value}/items?apikey=${encodeURIComponent(key)}&limit=100&type=${media}`;
+  }
+  const author = encodeURIComponent(ref.author);
+  const slug = encodeURIComponent(ref.slug);
+  return `https://api.mdblist.com/lists/${author}/${slug}/items/${media}?apikey=${encodeURIComponent(key)}&limit=100`;
 }
 
 async function mdblistToMetas(
@@ -529,12 +664,16 @@ async function mdblistToMetas(
   omdbKey = null,
   bpStyle = null,
   language = "en-US",
-  digitalReleaseOnly = false
+  digitalReleaseOnly = false,
+  filterConfig = null,
+  tmdbKey = TMDB_KEY,
+  serverMdbListKeys = MDBLIST_KEYS
 ) {
-  const tryKeys = mdbKey ? [mdbKey] : MDBLIST_KEYS;
+  const tryKeys = mdbKey ? [mdbKey] : serverMdbListKeys;
   let data = null;
   for (const key of tryKeys) {
-    const url = `https://mdblist.com/api/lists/${listId}/items/?apikey=${key}&limit=100&type=${type ==="series" ?"show" :"movie"}`;
+    const url = buildMdblistItemsUrl(listId, type, key);
+    if (!url) return [];
     try {
       const resp = await fetchCached(url);
       if (resp && !resp.error) { data = resp; break; }
@@ -542,9 +681,14 @@ async function mdblistToMetas(
   }
   if (!data) return [];
   try {
-    const items = Array.isArray(data)
+    const rawItems = Array.isArray(data)
       ? data
-      : (data.movies || data.shows || data.items || []);
+      : type === "series"
+        ? (Array.isArray(data.shows) ? data.shows : data.items || [])
+        : (Array.isArray(data.movies) ? data.movies : data.items || []);
+    const items = filterConfig
+      ? applyContentFilters(rawItems, filterConfig, { mediaType: type })
+      : rawItems;
 
     // Digital checks require one TMDB release-date lookup per candidate.
     // Keep the candidate pool bounded while still allowing rejected films
@@ -560,7 +704,7 @@ async function mdblistToMetas(
         if (!imdbId) return null;
         const tmdbType = type ==="series" ?"tv" :"movie";
         try {
-          const find = await fetchCached(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${TMDB_KEY}&external_source=imdb_id`);
+          const find = await fetchCached(`https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&external_source=imdb_id`);
           const result = find[`${tmdbType}_results`]?.[0];
 
           if (!result) {
@@ -569,8 +713,19 @@ async function mdblistToMetas(
               : { id: imdbId, type, name: item.title };
           }
 
+          const contentExclusions = normalizeContentExclusions(
+            filterConfig?.contentExclusions
+          );
+          if (
+            contentExclusions.some(key =>
+              matchesContentExclusion(result, key, { mediaType: type })
+            )
+          ) {
+            return null;
+          }
+
           if (digitalReleaseOnly && type === "movie") {
-            const available = await hasDigitalRelease(result.id);
+            const available = await hasDigitalRelease(result.id, tmdbKey);
 
             // false is a confirmed non-digital result.
             // null means the lookup failed, so preserve it for stability.
@@ -580,7 +735,7 @@ async function mdblistToMetas(
           return {
             id: imdbId, type,
             name: item.title || result.title || result.name,
-            poster: bpStyle ? applyBpStyle(bpStyle, imdbId, language) : tpKey ? `https://api.top-streaming.stream/${tpKey}/imdb/poster-default/${imdbId}.jpg` : rpdbKey ? `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${imdbId}.jpg` : await getBestPoster({ type, tmdbId: result.id, imdbId: imdbId, tmdbPosterPath: result.poster_path, fanartKey, omdbKey }),
+            poster: bpStyle ? applyBpStyle(bpStyle, imdbId, language, { type, tmdbId: result.id, title: item.title || result.title || result.name, releaseDate: result.release_date || result.first_air_date || null }) : tpKey ? `https://api.top-streaming.stream/${tpKey}/imdb/poster-default/${imdbId}.jpg` : rpdbKey ? `https://api.ratingposterdb.com/${rpdbKey}/imdb/poster-default/${imdbId}.jpg` : await getBestPoster({ type, tmdbId: result.id, imdbId: imdbId, tmdbPosterPath: result.poster_path, fanartKey, omdbKey }),
             background: result.backdrop_path ? `https://image.tmdb.org/t/p/original${result.backdrop_path}` : null
           };
         } catch {
@@ -594,12 +749,119 @@ async function mdblistToMetas(
       metas = await filterMetasByMaxRating(
         metas,
         maxRating,
-        type
+        type,
+        tmdbKey
       );
     }
 
       return metas;
   } catch (e) { console.log("mdblist error", listId, e.message); return []; }
+}
+
+function createMetadataService(options = {}) {
+  const tmdbKey = String(options.tmdbKey || "").trim() || TMDB_KEY;
+  const serverMdbListKeys = options.allowServerMdbListFallback === true
+    ? MDBLIST_KEYS
+    : [];
+
+  const service = {
+    getImdbId: (tmdbId, type) => getImdbId(tmdbId, type, tmdbKey),
+    getMovieCertification: tmdbId => getMovieCertification(tmdbId, tmdbKey),
+    getSeriesCertification: tmdbId => getSeriesCertification(tmdbId, tmdbKey),
+    getCertification: (tmdbId, type = "movie") => getCertification(tmdbId, type, tmdbKey),
+    filterByMaxRating: (results, maxRating, type = "movie") => filterByMaxRating(results, maxRating, type, tmdbKey),
+    hasDigitalRelease: tmdbId => hasDigitalRelease(tmdbId, tmdbKey),
+    filterByDigitalRelease: results => filterByDigitalRelease(results, tmdbKey),
+    imdbToTmdbMovieId: imdbId => imdbToTmdbMovieId(imdbId, tmdbKey),
+    imdbToTmdbSeriesId: imdbId => imdbToTmdbSeriesId(imdbId, tmdbKey),
+    filterMetasByMaxRating: (metas, maxRating, type = "movie") => filterMetasByMaxRating(metas, maxRating, type, tmdbKey),
+    getBestPoster,
+    resultsToMetas: (
+      arr,
+      type,
+      filterLang = FILTER_ENABLED,
+      language = "en-US",
+      rpdbKey = null,
+      tpKey = null,
+      excludeUnreleased = false,
+      fanartKey = null,
+      omdbKey = null,
+      bpStyle = null,
+      digitalReleaseOnly = false,
+      preserveKitsuIds = false,
+      filterConfig = null,
+      filterOpts = {}
+    ) => resultsToMetas(
+      arr,
+      type,
+      filterLang,
+      language,
+      rpdbKey,
+      tpKey,
+      excludeUnreleased,
+      fanartKey,
+      omdbKey,
+      bpStyle,
+      digitalReleaseOnly,
+      preserveKitsuIds,
+      filterConfig,
+      filterOpts,
+      tmdbKey
+    ),
+    mdblistToMetas: (
+      listId,
+      type,
+      mdbKey,
+      rpdbKey = null,
+      tpKey = null,
+      maxRating = null,
+      fanartKey = null,
+      omdbKey = null,
+      bpStyle = null,
+      language = "en-US",
+      digitalReleaseOnly = false,
+      filterConfig = null
+    ) => mdblistToMetas(
+      listId,
+      type,
+      mdbKey,
+      rpdbKey,
+      tpKey,
+      maxRating,
+      fanartKey,
+      omdbKey,
+      bpStyle,
+      language,
+      digitalReleaseOnly,
+      filterConfig,
+      tmdbKey,
+      serverMdbListKeys
+    )
+  };
+
+  service.traktToMetas = (
+    arr,
+    type,
+    language,
+    rpdbKey,
+    tpKey,
+    excludeUnreleased = false,
+    bpStyle = null,
+    filterConfig = null
+  ) => traktToMetas(
+    arr,
+    type,
+    language,
+    rpdbKey,
+    tpKey,
+    excludeUnreleased,
+    bpStyle,
+    filterConfig,
+    tmdbKey,
+    service.resultsToMetas
+  );
+
+  return service;
 }
 
 module.exports = {
@@ -615,5 +877,10 @@ module.exports = {
   getBestPoster,
   traktToMetas,
   resultsToMetas,
-  mdblistToMetas
+  mdblistToMetas,
+  createMetadataService,
+  credentialScopedCacheKey,
+  normalizeMdblistListRef,
+  buildMdblistItemsUrl,
+  applyBpStyle
 };

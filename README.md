@@ -1,68 +1,151 @@
-# Ultra MAX — Self-Host
+# Ultra MAX — Self-Host 8.1.4
 
-Ultra MAX is a highly customisable catalog addon for Stremio and Nuvio —
-trending titles, streaming-service rows, genres, curated collections,
-studios, decades, Trakt/Simkl/MAL/AniList integrations, and a builder UI
-for choosing exactly what shows up on your home screen and in what order.
+**Ultra MAX is a free, customisable discovery, catalog and metadata addon for Nuvio and Stremio.** This repository is the self-hostable edition of the project.
 
-This repo is the self-hostable version. If you'd rather not run your own
-instance, the maintained hosted version is at **https://ultramax.vip**.
+If you do not want to run your own instance, the maintained hosted service is at **https://ultramax.vip**. Current official project information lives at **https://ultramax.vip/about.html**.
 
-## Licence
+## Current self-host release
 
-Ultra MAX is licensed under **AGPL v3**. The short version: you're free to
-run, modify and self-host this code. But if you run a **modified version
-of it as a public-facing service** — anyone other than you can reach it
-over a network — you're required to make your modified source available
-to those users. See [LICENSE](LICENSE) for the full text. This applies
-whether you're running it for a Discord server, a friend group, or the
-general public.
+- Version: **8.1.4**
+- Updated: **26 September 2026**
+- Runtime: Node 20 + Docker
+- Persistence: local `/data` volume by default
+- Clients: Nuvio and Stremio
 
-## Prerequisites
+This release brings the self-host edition back in line with the current Ultra MAX addon core while keeping production-only infrastructure disabled by default.
 
-- **Docker** and **Docker Compose**
-- A **domain name** pointed at your server, with **SSL** (a reverse proxy
-  like nginx + Let's Encrypt, or Caddy, or Cloudflare Tunnel — Stremio and
-  Nuvio both require HTTPS for addon installs)
-- A **TMDB API key** (required — the addon won't start without one)
-- Optional but recommended: an **MDBList API key**, and OAuth app
-  credentials for whichever of Trakt / Simkl / MyAnimeList / AniList you
-  want to support — see below for each
+## Included
+
+- personalised movie and TV catalog layouts
+- profiles and saved setups
+- curated catalogs, custom rows and collections
+- search and recommendation tools
+- language, region and content controls
+- TMDB and MDBList discovery providers
+- optional TVDB and OMDb metadata providers
+- Trakt, Simkl, MyAnimeList and AniList integrations
+- artwork/provider support used by the current builder
+- optional stream/debrid integrations
+- Premiumize Cloud Library
+- TorBox Cloud Library
+- current Ultra MAX setup UI and provider branding
+
+Large poster/badge artwork is loaded from the public Ultra MAX asset host rather than bundled into every clone. Provider logos, UI code, translations and core interface assets remain local.
+
+## Requirements
+
+- Docker and Docker Compose
+- a domain name with HTTPS for remote Nuvio/Stremio installs
+- a TMDB API key
+- optional credentials for whichever integrations you enable
 
 ## Quick start
 
 ```bash
-git clone https://github.com/PaRaN01a-hash/Ultramax.git
-cd Ultramax
+git clone https://github.com/PaRaN01a-hash/UltraMax.git
+cd UltraMax
 cp .env.example .env
-# edit .env — fill in BASE_URL, TMDB_KEY at minimum
-docker compose up -d
 ```
 
-The addon will be listening on the port you set in `.env` (`7000` by
-default). Once your reverse proxy is in front of it, your setup page is at
-`https://your-domain.com/setup.html`.
+Edit `.env` and set at least:
 
-Check logs with `docker compose logs -f`, and confirm it's healthy with
-`curl https://your-domain.com/health`.
+```env
+BASE_URL=https://your-domain.example
+TMDB_KEY=your_tmdb_api_key
+```
 
-## Reverse proxy (nginx example)
+Start Ultra MAX:
 
-Ultra MAX needs to be reachable over HTTPS at the exact `BASE_URL` you put
-in `.env` — OAuth providers will reject redirect URIs that don't match
-what's registered, and Stremio/Nuvio won't install an addon served over
-plain HTTP. A minimal nginx site config, assuming Certbot has already
-issued a certificate for your domain:
+```bash
+docker compose up -d --build
+```
+
+Open:
+
+```text
+https://your-domain.example/setup.html
+```
+
+Health check:
+
+```bash
+curl https://your-domain.example/health
+```
+
+Logs:
+
+```bash
+docker compose logs -f ultramax
+```
+
+## Discovery providers
+
+At least one **core discovery provider** is required for each user setup:
+
+- TMDB
+- MDBList
+
+The self-host server still needs its own `TMDB_KEY` for metadata resolution and fallback operations.
+
+Optional user metadata providers:
+
+- TVDB
+- OMDb
+
+TVDB and OMDb supplement metadata but do not replace TMDB/MDBList core discovery.
+
+## Cloud Library
+
+Ultra MAX can scan supported files already stored in a user's cloud account and expose matched movie and series rows with Ultra MAX metadata.
+
+Supported providers:
+
+- Premiumize
+- TorBox
+
+TorBox Cloud Library can reuse a TorBox credential already configured under Streams or accept a dedicated TorBox API key.
+
+## OAuth integrations
+
+Optional OAuth integrations include Trakt, Simkl, MyAnimeList and AniList. Create your own developer application for each service you enable and use callbacks on your own `BASE_URL`, for example:
+
+```text
+https://your-domain.example/auth/trakt/callback
+https://your-domain.example/auth/simkl/callback
+https://your-domain.example/auth/mal/callback
+https://your-domain.example/auth/anilist/callback
+```
+
+## Nuvio collection sync
+
+Nuvio collection-write features require your own Nuvio application credentials where supported. Hosted Ultra MAX credentials are not distributed with the self-host edition. Leaving those credentials blank does not affect normal catalog/addon use.
+
+## Persistence and backups
+
+The supplied Compose file stores state in the `ultramax_data` named volume mounted at `/data`.
+
+Example backup:
+
+```bash
+docker run --rm \
+  -v ultramax_data:/data \
+  -v "$PWD":/backup \
+  alpine \
+  tar czf /backup/ultramax-data-backup.tar.gz -C /data .
+```
+
+Never commit your live `.env` or `/data` contents.
+
+## Reverse proxy
+
+Expose the container through HTTPS using nginx, Caddy, Nginx Proxy Manager, Cloudflare Tunnel or another reverse proxy. The container listens on port `7000` internally.
+
+Minimal nginx example:
 
 ```nginx
 server {
-    listen 443 ssl http2;
-    server_name your-domain.com;
-
-    ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
-
-    client_max_body_size 10m;
+    listen 443 ssl;
+    server_name your-domain.example;
 
     location / {
         proxy_pass http://127.0.0.1:7000;
@@ -72,69 +155,32 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
-
-server {
-    listen 80;
-    server_name your-domain.com;
-    return 301 https://$host$request_uri;
-}
 ```
 
-## Trakt OAuth setup
+## Hosted-only infrastructure
 
-1. Go to https://trakt.tv/oauth/applications and create a new application.
-2. Set **Redirect URI** to `BASE_URL/auth/trakt/callback` — e.g.
-   `https://your-domain.com/auth/trakt/callback`.
-3. Copy the generated **Client ID** and **Client Secret** into
-   `TRAKT_CLIENT_ID` / `TRAKT_CLIENT_SECRET` in `.env`.
-4. Restart the container (`docker compose up -d`) to pick up the change.
+The public self-host edition does not require Ultra MAX production infrastructure. These remain disabled by default unless a self-hoster deliberately supplies their own supporting services and configuration:
 
-## Simkl OAuth setup
+- production PostgreSQL profile-store ownership
+- hosted UltraPlay bridge credentials
+- hosted sports/transcoder infrastructure
+- production Resend inbound forwarding
+- internal monitoring/control services
 
-1. Go to https://simkl.com/settings/developer and create a new app.
-2. Set **Redirect URI** to `BASE_URL/auth/simkl/callback`.
-3. Copy the **Client ID** and **Client Secret** into `SIMKL_CLIENT_ID` /
-   `SIMKL_CLIENT_SECRET` in `.env`.
-4. Restart the container.
+The default self-host deployment uses the local `/data` JSON configuration store and survives container restarts without PostgreSQL.
 
-MyAnimeList and AniList follow the same pattern (`/auth/mal/callback` and
-`/auth/anilist/callback` respectively) — see the comments in
-`.env.example` for their developer-portal links. Both are fully optional:
-leaving their credentials blank just disables that one integration with a
-clear message, nothing else breaks.
+## Licence
 
-## Data persistence
+Ultra MAX is licensed under **AGPL v3**. You may run, modify and self-host it. If you expose a modified version over a network, AGPL obligations may require you to make the modified source available to users. See [LICENSE](LICENSE).
 
-All per-user state — setup tokens, saved catalog configs, connected
-OAuth accounts, community share links — lives under the `ultramax_data`
-Docker volume (mounted at `/data` in the container, controlled by
-`DATA_DIR`). This is the only thing you need to back up:
+## Official links
 
-```bash
-docker run --rm -v ultramax_data:/data -v "$PWD":/backup alpine \
-  tar czf /backup/ultramax-data-backup.tar.gz -C /data .
-```
-
-Restore by extracting that tarball back into the volume the same way, in
-reverse.
-
-## What's in this repo vs. what isn't
-
-- `addon/` — the backend (catalogs, meta, streams, auth, config storage).
-- `web/` — the frontend pages (setup, guide, badges, gallery, changelog).
-- Removed before publishing: real user data (`configs.json`,
-  `shares.json`, registered emails, recovery rate-limit state), the
-  production `.env`, and various internal backup/dev-only files that
-  aren't relevant to a fresh self-host.
-- `web/*.html` still contain a number of hardcoded links back to
-  `ultramax.vip` (the community gallery, badge downloads, changelog, etc.)
-  that weren't in scope for this pass — some flows there will point at
-  the hosted site rather than your own instance until that's cleaned up.
-- A handful of preset collection cover images/GIFs in
-  `addon/ultramax-collections.json` are hotlinked from `ultramax.vip`'s
-  CDN, since those specific styled assets aren't bundled in this repo.
-
-## Community
-
+- Website: https://ultramax.vip/
+- Current project information: https://ultramax.vip/about.html
+- Hosted project source/history: https://github.com/PaRaN01a-hash/ultra-max-addon
+- Self-host edition: https://github.com/PaRaN01a-hash/UltraMax
+- Discord: https://discord.gg/dbaXb6wpk
 - Reddit: https://reddit.com/r/Ultra_Max
-- Support the original project: https://ko-fi.com/ultramaxaddon
+- Ko-fi: https://ko-fi.com/ultramaxaddon
+
+Older search results may mention v5, v6, v7 or early v8 releases. Those are historical. Use **https://ultramax.vip/about.html** for the current hosted product description.

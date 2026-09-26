@@ -111,7 +111,7 @@
 <title>Changelog — Ultra MAX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/nav.css">
+<link rel="stylesheet" href="/nav.css?v=20260922-nav3">
 <style>
   :root {
     --bg:#080810; --bg2:#0f0f1e; --card:#12121f; --border:#1e1e36; --border2:#2a2a45;
@@ -127,7 +127,7 @@
   @keyframes floatUp{0%{transform:translateY(0) translateX(0);opacity:0;}10%{opacity:1;}90%{opacity:.6;}100%{transform:translateY(-100vh) translateX(var(--dx));opacity:0;}}
   #cursorGlow{position:fixed;pointer-events:none;z-index:1;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,255,0.08) 0%,transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen;}
 
-  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 32px;border-bottom:1px solid var(--border);background:rgba(8,8,16,0.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;}
+  .changelog-page-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 32px;border-bottom:1px solid var(--border);background:rgba(8,8,16,0.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;}
   .logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.08em;color:#fff;text-decoration:none;}
   .logo span{background:linear-gradient(135deg,var(--violet),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
   .nav-back{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
@@ -178,7 +178,7 @@
   .section-divider{height:1px;background:var(--border);margin:8px 0 16px;}
 
   @media(max-width:600px){
-    nav{padding:14px 16px;}
+    .changelog-page-nav{padding:14px 16px;}
     .hero{padding:36px 16px 24px;}
     .main{padding:24px 14px 60px;}
     .version-left{width:80px;}
@@ -187,12 +187,13 @@
   }
 </style>
 <script defer src="https://umami-maxbase.duckdns.org/script.js" data-website-id="57e5e9f9-98bb-46cb-bd46-9b2a299e1af3"></script>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
 </head>
 <body>
 <div id="particles"></div>
 <div id="cursorGlow"></div>
 
-<nav>
+<nav class="changelog-page-nav">
   <a href="/" id="changelogLogoLink" class="logo">ULTRA <span>MAX</span></a>
   <a href="/" id="changelogBackLink" class="nav-back" data-i18n="changelog.backToHome">← Back to home</a>
 </nav>
@@ -212,6 +213,112 @@
 
   <div id="ultramaxTab">
   <div class="timeline">
+
+
+    <!-- v8.1.4 -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v8.1.4</div>
+        <div class="version-date">Sep 2026</div>
+        <div class="version-dot dot-latest"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Ultra MAX v8.1.4</span>
+          <span class="badge badge-latest">LATEST</span>
+        </div>
+        <div class="version-sub">Smarter catalogue filtering, better control over newly aired episodes, and a faster route into the parts of Ultra MAX you use most.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">🔎</span><span><strong>Stream Availability Filter (Beta)</strong> — optionally hide movies only after every configured stream source has successfully answered with no playable result. Unknown titles stay visible while the cache warms, and partial source failures fail open instead of hiding content.</span></div>
+          <div class="change"><span class="change-icon">⏱️</span><span><strong>Episode Release Delay</strong> — add an optional post-air safety buffer so newly aired episodes can stay hidden for a configurable number of hours before Nuvio treats them as released.</span></div>
+          <div class="change"><span class="change-icon">👁️</span><span><strong>Per-profile watched filtering</strong> — Hide Watched continues to use connected Trakt/Simkl history and respects profile-specific tracker connections, while shared settings can still be pushed across profiles.</span></div>
+          <div class="change"><span class="change-icon">🛡️</span><span><strong>Conservative stream checks</strong> — support/config links no longer count as playable streams, negative checks are cached briefly, positive checks longer, and catalogue requests remain bounded to avoid hammering stream providers.</span></div>
+          <div class="change"><span class="change-icon">📱</span><span><strong>Android app shortcuts</strong> — long-press the Ultra MAX app icon for quick access to New setup, Load token, Nuvio account, Avatars and Ultra Play.</span></div>
+          <div class="change"><span class="change-icon">🗃️</span><span><strong>Optional TVDB provider</strong> — TVDB can now be added alongside TMDB and MDBList during setup when a user has their own TVDB credentials. It remains completely optional.</span></div>
+          <div class="change"><span class="change-icon">🎞️</span><span><strong>Pictorium poster integration</strong> — optional Pictorium support adds enhanced poster artwork with configurable badges, rankings, ratings, quality and network overlays, private-instance support, live previews and fine-grained sizing/position controls.</span></div>
+          <div class="change"><span class="change-icon">✏️</span><span><strong>Custom search names</strong> — search and discovery rows can use clearer custom display names instead of forcing the provider's original title everywhere.</span></div>
+          <div class="change"><span class="change-icon">🎯</span><span><strong>Exact-title search fallback</strong> — title matching has been hardened so shows with reused names, including Big Brother, can resolve the intended series more reliably.</span></div>
+          <div class="change"><span class="change-icon">💾</span><span><strong>Setup resume reliability</strong> — Continue Setup now restores more of the saved setup state, including remembered provider details and connection choices, instead of quietly forgetting half the form like a particularly unhelpful goldfish.</span></div>
+          <div class="change"><span class="change-icon">💬</span><span><strong>Official Discord community</strong> — Discord is now linked directly from Ultra MAX for guides, support, releases, beta testing and community discussion. Reddit remains available too.</span></div>
+          <div class="change"><span class="change-icon">🌐</span><span><strong>Stream language controls</strong> — replace the old English-only switch with ordered language preferences, Prefer / Only-selected modes, conservative manual-addon language detection, and language fields for custom stream formatting.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v8.1.3 -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v8.1.3</div>
+        <div class="version-date">Sep 2026</div>
+        <div class="version-dot"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Ultra MAX v8.1.3</span>
+        </div>
+        <div class="version-sub">More ways to discover something worth watching, safer setup tools, stronger Nuvio integration and a cleaner mobile experience.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">🧭</span><span><strong>Discovery expanded</strong> — new and improved Anime, Documentaries, Bollywood and Kids &amp; Family collection presets add more focused ways to browse without flooding your Home screen.</span></div>
+          <div class="change"><span class="change-icon">🔎</span><span><strong>More dynamic discovery rows</strong> — new TMDB-powered discovery catalogs cover fresh releases, themes, studios and targeted categories that continue to update instead of relying only on static lists.</span></div>
+          <div class="change"><span class="change-icon">🎞️</span><span><strong>IMAX Movies</strong> — a new Cinema Experiences catalog brings together more than 1,000 verified films released in IMAX, with fast local TMDB-ID paging instead of a fragile live keyword search.</span></div>
+          <div class="change"><span class="change-icon">🔑</span><span><strong>TMDB or MDBList setup</strong> — Ultra MAX now accepts either provider during setup. Use TMDB, MDBList or both; MDBList-only tools simply stay out of the way when no MDBList key is configured.</span></div>
+          <div class="change"><span class="change-icon">🎨</span><span><strong>Collection artwork refresh</strong> — Bollywood, Documentary and Kids &amp; Family groups now use new matching landscape artwork across cover, focus and hero views.</span></div>
+          <div class="change"><span class="change-icon">⚙️</span><span><strong>Row Settings repaired</strong> — per-row sorting, rating, vote, year and content controls now open reliably on mobile and the Android app, with safer handling of partial UI state.</span></div>
+          <div class="change"><span class="change-icon">📲</span><span><strong>Clearer install and support flow</strong> — Finalise now shows whether this is a first install, an update or already current, while Help includes an in-page support form and corrected Collections navigation.</span></div>
+          <div class="change"><span class="change-icon">✨</span><span><strong>UltraPlay+ companion integration</strong> — Plus can securely work with supported Ultra MAX settings, collections and AIOmetadata imports without handing setup passwords to UltraPlay. Ultra MAX itself remains free.</span></div>
+          <div class="change"><span class="change-icon">🛡️</span><span><strong>Accuracy, safety and reliability</strong> — incorrect franchise collection mappings were corrected, collection rollback controls were cleaned up, development files are no longer exposed by the web server, and the full release test baseline has been repaired.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v8.1.0 -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v8.1.0</div>
+        <div class="version-date">Aug 2026</div>
+        <div class="version-dot"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Ultra MAX v8.1.0</span>
+        </div>
+        <div class="version-sub">Sports, expanded cinematic universes, a cleaner catalog builder and completely refreshed collection artwork.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">🏟️</span><span><strong>Sports arrive in Ultra MAX</strong> — new sports catalogs and supporting sports infrastructure expand the Ultra MAX sports experience.</span></div>
+          <div class="change"><span class="change-icon">🌌</span><span><strong>Expanded Universes</strong> — major connected franchises now group films and series together more completely, including Marvel, Star Wars, Star Trek, Alien / Predator, Yellowstone, The Walking Dead, Game of Thrones and more.</span></div>
+          <div class="change"><span class="change-icon">🗂️</span><span><strong>Catalog page tidy-up</strong> — collection and universe browsing has been reorganised for a cleaner setup experience with clearer grouping and less clutter.</span></div>
+          <div class="change"><span class="change-icon">🎨</span><span><strong>New collection artwork</strong> — the collection library has received a major visual refresh with new custom artwork across the catalog experience.</span></div>
+          <div class="change"><span class="change-icon">🔑</span><span><strong>Key validation restored</strong> — Step 1 API-key checks now correctly reach the Ultra MAX verification service from the setup site.</span></div>
+          <div class="change"><span class="change-icon">🛠️</span><span><strong>Stability and cleanup</strong> — continued backend refactoring, catalog-handler separation and release preparation improve maintainability without changing existing user setups.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- v8.0.0 -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v8.0.0</div>
+        <div class="version-date">Jul 2026</div>
+        <div class="version-dot dot-major"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Ultra MAX v8.0.0</span>
+          <span class="badge badge-major">MAJOR</span>
+        </div>
+        <div class="version-sub">A major update to setup, catalog discovery, Fusion and Nuvio integration.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">🔗</span><span><strong>Single Nuvio connection</strong> — connect once and use the same Nuvio profile throughout setup, manifest installation and collections.</span></div>
+          <div class="change"><span class="change-icon">🧬</span><span><strong>Full Fusion support</strong> — combine setups, preview results, create share links and export Fusion configurations.</span></div>
+          <div class="change"><span class="change-icon">🎛️</span><span><strong>Improved filtering</strong> — stronger controls for language, region, release status, adult content, ratings and catalog results.</span></div>
+          <div class="change"><span class="change-icon">🌸</span><span><strong>Better anime support</strong> — improved Kitsu ID handling, anime metadata matching and compatibility with anime stream sources.</span></div>
+          <div class="change"><span class="change-icon">🗂️</span><span><strong>Safer collection syncing</strong> — compare collections, add only what is new, review changes and undo supported updates.</span></div>
+          <div class="change"><span class="change-icon">📺</span><span><strong>Cleaner stream results</strong> — improved formatting, provider information, quality details and result consistency.</span></div>
+          <div class="change"><span class="change-icon">👤</span><span><strong>Improved setup profiles</strong> — manage multiple configurations under one setup and switch between them more reliably.</span></div>
+          <div class="change"><span class="change-icon">✨</span><span><strong>Visual and stability improvements</strong> — cleaner layouts, reduced clutter, improved mobile usability, stronger security and numerous fixes.</span></div>
+        </div>
+      </div>
+    </div>
 
     <!-- v7.7.0 -->
     <div class="version-block">
@@ -250,7 +357,7 @@
         <div class="version-num">v7.7.0</div>
         <div class="version-date">Jul 2026</div>
       </div>
-      <div class="version-dot dot-latest"></div>
+      <div class="version-dot"></div>
       <div class="version-content">
         <div class="version-title">
           Setup Profiles &amp; Cleaner Stream Results
@@ -653,6 +760,52 @@
   <div id="appTab" style="display:none;">
   <div class="timeline">
 
+    <!-- ULTRAMAX ANDROID V1.6.0 START -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v1.6.0</div>
+        <div class="version-date">Sep 2026</div>
+        <div class="version-dot dot-latest"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Android App v1.6.0</span>
+          <span class="badge badge-latest">Latest</span>
+        </div>
+        <div class="version-sub">Faster access to common Ultra MAX actions directly from the Android launcher.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">⚡</span><span><strong>Launcher shortcuts</strong> — long-press the Ultra MAX app icon to jump straight to New setup, Load token, Nuvio account, Avatars or Ultra Play.</span></div>
+          <div class="change"><span class="change-icon">🔑</span><span><strong>Load token shortcut fixed</strong> — the shortcut now opens the returning-user token flow and token loading works correctly from that route.</span></div>
+          <div class="change"><span class="change-icon">🧭</span><span><strong>Shortcut routing hardened</strong> — native shortcut intents now route reliably whether the app is cold-started or already open.</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- ULTRAMAX ANDROID V1.6.0 END -->
+
+    <!-- ULTRAMAX ANDROID V1.5.0 START -->
+    <div class="version-block">
+      <div class="version-left">
+        <div class="version-num">v1.5.0</div>
+        <div class="version-date">Jul 2026</div>
+        <div class="version-dot"></div>
+      </div>
+      <div class="version-content">
+        <div class="version-title">
+          <span>Android App v1.5.0</span>
+        </div>
+        <div class="version-sub">Updated for the new Ultra MAX experience with better downloads, navigation and reliability.</div>
+        <div class="changes">
+          <div class="change"><span class="change-icon">📥</span><span><strong>Improved file downloads</strong> — collection exports, backups, reports and JSON files now download correctly inside the app.</span></div>
+          <div class="change"><span class="change-icon">🧬</span><span><strong>Fusion support</strong> — improved navigation and downloads across Fusion previews, exports and shared setups.</span></div>
+          <div class="change"><span class="change-icon">🧭</span><span><strong>Better navigation</strong> — smoother movement through setup steps, dialogs and account screens.</span></div>
+          <div class="change"><span class="change-icon">🎮</span><span><strong>Improved remote support</strong> — more reliable D-pad, keyboard and focus navigation.</span></div>
+          <div class="change"><span class="change-icon">📱</span><span><strong>Refined mobile layout</strong> — better spacing, scrolling and interaction on smaller screens.</span></div>
+          <div class="change"><span class="change-icon">🔐</span><span><strong>Security and stability improvements</strong> — safer file handling, stronger WebView behaviour and various bug fixes.</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- ULTRAMAX ANDROID V1.5.0 END -->
+
     <!-- ULTRAMAX ANDROID V1.4 START -->
         <div class="version-block">
       <div class="version-left">
@@ -663,7 +816,6 @@
       <div class="version-content">
         <div class="version-title">
           <span>Android App v1.4.1</span>
-          <span class="badge badge-latest">Latest</span>
         </div>
         <div class="version-sub">UI improvements across the setup wizard and app.</div>
         <div class="changes">
@@ -684,12 +836,11 @@
         <div class="version-date">Jul 2026</div>
       </div>
 
-      <div class="version-dot dot-latest"></div>
+      <div class="version-dot"></div>
 
       <div class="version-content">
         <div class="version-title">
           Remote Control Support &amp; Language Selection
-          <span class="badge badge-latest">Latest</span>
         </div>
 
         <div class="version-sub">
@@ -1022,7 +1173,7 @@ html.native-app body {
 </style>
 
 <div id="umNavMount"></div>
-<script src="/nav.js"></script>
+<script src="/nav.js?v=20260923-nav6"></script>
 <script src="/i18n.js"></script>
 <!-- ULTRAMAX SHARED NATIVE NAV END -->
 
@@ -1207,7 +1358,7 @@ html.native-app body {
     calc(96px + env(safe-area-inset-bottom));
 }
 
-html.native-app body > nav {
+html.native-app .changelog-page-nav {
   display: none !important;
 }
 
@@ -1254,6 +1405,10 @@ html.native-app .um-changelog-app-header {
   color: #fff;
   text-decoration: none;
   font-size: 22px;
+}
+
+html.native-app .um-changelog-back {
+  display: none !important;
 }
 
 .um-changelog-heading {

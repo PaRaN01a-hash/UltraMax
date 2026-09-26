@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07110d">
+
+  <title>Ultra MAX 8.0.0 Preview</title>
+
+  <meta
+    name="description"
+    content="Explore everything already built into the Ultra MAX development system since Web 7.8.0 and Android App 1.4.0."
+  >
+
+  <style>
+    :root {
+      --bg: #050907;
+      --panel: #0a110e;
+      --panel-soft: #0d1712;
+      --line: rgba(155, 95, 255, .18);
+      --line-strong: rgba(155, 95, 255, .38);
+      --text: #e8e8f0;
+      --muted: #8888aa;
+      --green: #7B2FFF;
+      --green-soft: rgba(123, 47, 255, .14);
+      --blue: #9B5FFF;
+      --amber: #FFB800;
+      --red: #FF3D5A;
+      --purple: #9B5FFF;
+      --radius: 22px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 4%, rgba(123, 47, 255, .16), transparent 30rem),
+        radial-gradient(circle at 90% 15%, rgba(255, 61, 90, .10), transparent 32rem),
+        var(--bg);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 88px 0 56px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        #7B2FFF,
+        #FF3D5A,
+        transparent
+      );
+      opacity: .55;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(123, 47, 255, .10);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+
+    h1 {
+      max-width: 880px;
+      margin: 24px 0 18px;
+      font-size: clamp(42px, 8vw, 86px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .glow {
+      color: #ffffff;
+      background: linear-gradient(135deg, #9B5FFF 0%, #FF3D5A 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 34px rgba(123, 47, 255, .22);
+    }
+
+    .intro {
+      max-width: 820px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2.3vw, 21px);
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .status {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .025);
+      color: #e8e8f0;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .status strong {
+      color: var(--green);
+    }
+
+    .release-note {
+      margin: 24px 0 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--green);
+      border-radius: 0 14px 14px 0;
+      background: var(--green-soft);
+      color: #d8d8e8;
+      max-width: 900px;
+    }
+
+    .tabs-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      padding: 14px 0;
+      background: rgba(5, 9, 7, .84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tab {
+      flex: 1;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px 16px;
+      color: var(--muted);
+      background: rgba(255,255,255,.025);
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .tab:hover,
+    .tab.active {
+      color: #ffffff;
+      border-color: var(--green);
+      background: linear-gradient(135deg, #7B2FFF, #FF3D5A);
+      box-shadow:
+        0 0 28px rgba(123, 47, 255, .24),
+        0 0 34px rgba(255, 61, 90, .10);
+    }
+
+    main {
+      padding: 48px 0 76px;
+    }
+
+    .release-panel {
+      display: none;
+    }
+
+    .release-panel.active {
+      display: block;
+      animation: fade .2s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: .4; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-head {
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 8px;
+      font-size: clamp(30px, 4vw, 48px);
+      letter-spacing: -.035em;
+    }
+
+    .section-head p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.035), transparent 42%),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent, var(--green));
+      opacity: .9;
+    }
+
+    .card.featured {
+      grid-column: 1 / -1;
+      background:
+        radial-gradient(circle at 100% 0, rgba(255,61,90,.10), transparent 28rem),
+        var(--panel);
+    }
+
+    .card h3 {
+      margin: 12px 0 9px;
+      font-size: 21px;
+      letter-spacing: -.018em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      color: var(--accent, var(--green));
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      opacity: .92;
+    }
+
+    .details {
+      margin: 17px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .details li {
+      position: relative;
+      margin-top: 9px;
+      padding-left: 20px;
+      color: #c9c9dc;
+      font-size: 14px;
+    }
+
+    .details li::before {
+      content: "›";
+      position: absolute;
+      left: 2px;
+      color: var(--accent, var(--green));
+      font-weight: 950;
+    }
+
+    details.tech {
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+
+    details.tech summary {
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    details.tech p {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .architecture {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 16px;
+      background: rgba(123,47,255,.07);
+    }
+
+    .architecture code {
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .footer-note {
+      margin-top: 32px;
+      padding: 24px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--green-soft);
+    }
+
+    .footer-note h3 {
+      margin: 0 0 6px;
+    }
+
+    .footer-note p {
+      margin: 0;
+      color: #d8d8e8;
+    }
+
+    footer {
+      padding: 28px 0 44px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100% - 22px, 1180px);
+      }
+
+      .hero {
+        padding: 60px 0 42px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card.featured {
+        grid-column: auto;
+      }
+
+      .tabs {
+        gap: 7px;
+      }
+
+      .tab {
+        padding: 12px 9px;
+        font-size: 14px;
+      }
+
+      .card {
+        padding: 21px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="eyebrow">Built in Dev · Testing Now</div>
+
+      <h1>
+        Ultra MAX 8.0.0
+        <span class="glow">Ultra MAX</span>
+      </h1>
+
+      <p class="intro">
+        Since Ultra MAX 7.8.0 and Android App 1.4.0, a huge amount has
+        changed across setup, Nuvio collections, Fusion, catalogues,
+        metadata, Android navigation, security and the underlying platform.
+      </p>
+
+      <div class="status-row">
+        <div class="status"><strong>Web:</strong> 8.0.0</div>
+        <div class="status"><strong>Android:</strong> 1.5.0</div>
+        <div class="status"><strong>Status:</strong> Feature complete in Dev</div>
+      </div>
+
+      <p class="release-note">
+        Everything listed here is already implemented in the Ultra MAX
+        development system. This is not a wishlist or future roadmap.
+        Final testing and polish are still taking place before release.
+      </p>
+    </div>
+  </header>
+
+  <div class="tabs-wrap">
+    <div class="shell tabs">
+      <button class="tab active" data-target="web">Ultra MAX Web</button>
+      <button class="tab" data-target="app">Android App 1.5.0</button>
+    </div>
+  </div>
+
+  <main class="shell">
+    <section id="web" class="release-panel active">
+      <div class="section-head">
+        <h2>Ultra MAX 8.0.0</h2>
+        <p>
+          Everything already added to the development system for Ultra MAX 8.0.0, covering major workflow, reliability, visual and architectural improvements.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card featured" style="--accent:var(--green)">
+          <span class="badge">Major improvement</span>
+          <h3>One Nuvio connection across the whole setup</h3>
+          <p>
+            Nuvio account state is now shared across the setup experience.
+            Users connect once, select the correct profile and continue without
+            repeatedly signing in or wondering which account is active.
+          </p>
+          <ul class="details">
+            <li>Explicit Change Account control</li>
+            <li>Correct handling of public and numeric Nuvio profile identities</li>
+            <li>Cleaner connection and profile status</li>
+            <li>Collection pushing removed from Finalise and Generate</li>
+            <li>Reduced duplicate controls across setup steps</li>
+          </ul>
+        </article>
+
+        <article class="card featured" style="--accent:var(--blue)">
+          <span class="badge">Safety</span>
+          <h3>Safer Nuvio collection syncing</h3>
+          <p>
+            Ultra MAX now compares the live Nuvio collection state with the
+            setup being prepared before anything is written. The process is
+            built to protect existing collections and prevent stale changes.
+          </p>
+          <ul class="details">
+            <li>Read-only comparison before writes</li>
+            <li>Add Only mode</li>
+            <li>Three-way Safe Merge</li>
+            <li>Stale-plan detection</li>
+            <li>Guarded whole-array writes</li>
+            <li>Canary validation and exact rollback testing</li>
+            <li>Clear added, skipped and protected counts</li>
+            <li>Cancelled preset selection no longer commits changes</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--purple)">
+          <span class="badge">Improved</span>
+          <h3>Fusion is cleaner and more dependable</h3>
+          <p>
+            Fusion creation, previewing and sharing now sit inside a clearer
+            workflow with stable collection identities and safer source
+            handling.
+          </p>
+          <ul class="details">
+            <li>Improved Fusion preview and sharing</li>
+            <li>Stable folder and collection identities</li>
+            <li>Cleaner source selection</li>
+            <li>Better separation from standard collection syncing</li>
+            <li>Improved Android navigation through Fusion screens</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--green)">
+          <span class="badge">New</span>
+          <h3>Multiple setup profiles under one token</h3>
+          <p>
+            A single Ultra MAX token can now hold several independent setup
+            profiles, making it easier to maintain different configurations
+            for devices, users or viewing styles.
+          </p>
+          <ul class="details">
+            <li>Fast profile switching</li>
+            <li>Profile-specific catalogue choices and preferences</li>
+            <li>Reduced state leaking between profiles</li>
+            <li>Cleaner loading and editing behaviour</li>
+          </ul>
+        </article>
+
+        <article class="card featured" style="--accent:var(--amber)">
+          <span class="badge">Catalogue system</span>
+          <h3>More reliable catalogues and stronger compatibility</h3>
+          <p>
+            The catalogue layer has received extensive work across MDBList,
+            custom sources, legacy IDs, ordering, filtering and metadata
+            conversion.
+          </p>
+          <ul class="details">
+            <li>Built-in MDBList rows moved to the current MDBList API</li>
+            <li>Fixed lists that appeared empty despite containing hundreds of titles</li>
+            <li>Readable catalogue IDs with legacy compatibility</li>
+            <li>Public MDBList search and custom MDBList rows</li>
+            <li>Custom genre, provider, decade, actor, director and keyword sources</li>
+            <li>Improved duplicate handling and catalogue ordering</li>
+            <li>Better digital-release filtering</li>
+            <li>Improved filtering consistency across multiple catalogue sources</li>
+          </ul>
+
+          <details class="tech">
+            <summary>Technical example</summary>
+            <p>
+              The “Must-See Mindfuck” row previously returned no content
+              because an older MDBList endpoint returned an empty response for
+              that specific list. The updated endpoint returns the full source
+              data and now produces a populated Ultra MAX catalogue.
+            </p>
+          </details>
+        </article>
+
+        <article class="card" style="--accent:var(--purple)">
+          <span class="badge">Metadata</span>
+          <h3>Improved anime and identity handling</h3>
+          <p>
+            Anime catalogues now have more deliberate metadata and ID handling,
+            with improved support for services that depend on original Kitsu
+            identities.
+          </p>
+          <ul class="details">
+            <li>Kitsu ID preservation support</li>
+            <li>Unified and AniSync presentation modes</li>
+            <li>Improved AniList and MyAnimeList integration paths</li>
+            <li>Better anime row filtering behaviour</li>
+            <li>Stronger TMDB, IMDb and Kitsu mapping safeguards</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--blue)">
+          <span class="badge">Improved</span>
+          <h3>Cleaner stream results</h3>
+          <p>
+            Stream results are easier to scan and compare, with more consistent
+            formatting for quality, file information and debrid results.
+          </p>
+          <ul class="details">
+            <li>Consistent result titles and video information</li>
+            <li>Clearer quality and file-size presentation</li>
+            <li>Improved provider compatibility</li>
+            <li>Stream resources hidden when no stream provider is configured</li>
+            <li>Reduced unnecessary provider and API errors</li>
+          </ul>
+        </article>
+
+        <article class="card featured" style="--accent:var(--green)">
+          <span class="badge">Visual overhaul</span>
+          <h3>A denser, calmer setup experience</h3>
+          <p>
+            Large cards, deep empty spaces and repeated inner boxes have been
+            reduced. The setup now makes better use of the screen while keeping
+            advanced controls available when needed.
+          </p>
+          <ul class="details">
+            <li>More compact cards and collapsed sections</li>
+            <li>Reduced visual clutter and unused space</li>
+            <li>Clearer hierarchy between important and advanced controls</li>
+            <li>Improved confirmation overlays</li>
+            <li>Better mobile and narrow-screen behaviour</li>
+            <li>Cleaner account, profile and collection status areas</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--red)">
+          <span class="badge">Security</span>
+          <h3>Security and failure handling improvements</h3>
+          <p>
+            The platform has been hardened across authentication, configuration
+            handling, browser rendering and external API failures.
+          </p>
+          <ul class="details">
+            <li>Safer handling of sensitive values</li>
+            <li>Improved input and configuration validation</li>
+            <li>Reduced accidental state leakage</li>
+            <li>Safer browser rendering and WebView behaviour</li>
+            <li>Improved timeout, rate-limit and API failure handling</li>
+            <li>Additional protection around collection writes</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--green)">
+          <span class="badge">Technical</span>
+          <h3>A more maintainable backend</h3>
+          <p>
+            Major backend responsibilities have been split into dedicated
+            services, reducing the size and risk of the central application
+            file.
+          </p>
+
+          <div class="architecture">
+            <code>
+              Manifest service<br>
+              Manifest route service<br>
+              Config route service<br>
+              TMDB preview service<br>
+              Catalogue handler service<br>
+              Shared Nuvio setup context
+            </code>
+          </div>
+
+          <ul class="details">
+            <li>Critical JavaScript files syntax-tested independently</li>
+            <li>Manifest and catalogue routes tested after each extraction</li>
+            <li>Incremental refactoring with backups and compatibility preserved</li>
+            <li>Reduced reliance on one oversized backend file</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="app" class="release-panel">
+      <div class="section-head">
+        <h2>Android App 1.5.0</h2>
+        <p>
+          Everything already added to the Android development app since
+          version 1.4.0.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card featured" style="--accent:var(--green)">
+          <span class="badge">Downloads</span>
+          <h3>More reliable file and collection downloads</h3>
+          <p>
+            The Android download bridge has been improved so files created
+            inside the Ultra MAX interface can be saved correctly through the
+            native Android download system.
+          </p>
+          <ul class="details">
+            <li>Blob download support</li>
+            <li>Improved collection file downloads</li>
+            <li>Better file naming and saving</li>
+            <li>Native Android Download Manager integration</li>
+            <li>Improved handling of authenticated downloads</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--blue)">
+          <span class="badge">Navigation</span>
+          <h3>Better D-pad, remote and TV control</h3>
+          <p>
+            Focus handling and navigation have been improved across setup
+            screens for Android TV devices and physical remotes.
+          </p>
+          <ul class="details">
+            <li>More consistent D-pad movement</li>
+            <li>Improved focus states</li>
+            <li>Better remote-control navigation</li>
+            <li>Cleaner movement between setup sections</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--purple)">
+          <span class="badge">Fusion</span>
+          <h3>Improved Fusion navigation</h3>
+          <p>
+            Fusion screens are easier to use inside the app, with improved
+            transitions, back behaviour and movement between preview and setup.
+          </p>
+          <ul class="details">
+            <li>Cleaner Fusion screen flow</li>
+            <li>Better back-button behaviour</li>
+            <li>Improved preview and sharing navigation</li>
+            <li>Better handling on smaller displays</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--amber)">
+          <span class="badge">Setup</span>
+          <h3>Safer collection preset selection</h3>
+          <p>
+            Opening a collection preset now behaves as a true preview. Pressing
+            Cancel no longer leaves selected folders committed behind the
+            scenes.
+          </p>
+          <ul class="details">
+            <li>Non-mutating preset preview</li>
+            <li>Cancel safely discards temporary selections</li>
+            <li>Only confirmed folders are added</li>
+            <li>Improved picker button behaviour</li>
+          </ul>
+        </article>
+
+        <article class="card featured" style="--accent:var(--green)">
+          <span class="badge">Visual improvement</span>
+          <h3>A more compact mobile experience</h3>
+          <p>
+            The setup interface has been made less crowded inside the app,
+            particularly when many catalogue, collection or account cards are
+            visible.
+          </p>
+          <ul class="details">
+            <li>Smaller cards and reduced empty space</li>
+            <li>Cleaner collapsed sections</li>
+            <li>Improved confirmation overlays</li>
+            <li>Better touch targets</li>
+            <li>Improved layouts across phone and TV displays</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--blue)">
+          <span class="badge">Language</span>
+          <h3>Interface language selection</h3>
+          <p>
+            Users can select their preferred interface language directly in
+            the app, with improved language handling across the setup screens.
+          </p>
+        </article>
+
+        <article class="card" style="--accent:var(--red)">
+          <span class="badge">Security</span>
+          <h3>Safer WebView behaviour</h3>
+          <p>
+            External links, downloads and embedded web content now pass through
+            tighter handling inside the Android application.
+          </p>
+          <ul class="details">
+            <li>Safer external-link handling</li>
+            <li>Improved download permissions and routing</li>
+            <li>Better recovery after failed page loads</li>
+            <li>General WebView security and stability improvements</li>
+          </ul>
+        </article>
+
+        <article class="card" style="--accent:var(--green)">
+          <span class="badge">Testing</span>
+          <h3>Fresh development builds</h3>
+          <p>
+            Development APKs are now rebuilt from the latest app source and
+            verified against the public download using matching SHA-256 hashes,
+            ensuring testers receive the intended build.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <h3>Already built. Currently being tested.</h3>
+      <p>
+        Everything on this page is present in the Ultra MAX development
+        system. Individual features may receive final polish before launch,
+        but this page does not include planned or speculative work.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="shell">
+      Ultra MAX 8.0.0 · Development release preview
+    </div>
+  </footer>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const panels = document.querySelectorAll(".release-panel");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.target;
+
+        tabs.forEach(item => item.classList.remove("active"));
+        panels.forEach(panel => panel.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.getElementById(target).classList.add("active");
+
+        history.replaceState(null, "", "#" + target);
+      });
+    });
+
+    const hash = location.hash.replace("#", "");
+
+    if (hash === "app" || hash === "web") {
+      document.querySelector(`[data-target="${hash}"]`)?.click();
+    }
+  </script>
+</body>
+</html>

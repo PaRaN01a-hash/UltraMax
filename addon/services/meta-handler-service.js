@@ -3,6 +3,19 @@ const {
   buildKitsuMeta
 } = require("./kitsu-id-service");
 
+const {
+  getSportsFixtureMeta,
+  isSportsFixtureId
+} = require("./sports-fixture-catalog-service");
+const {
+  getNuvioSportsMeta,
+  isNuvioSportsId
+} = require("./nuvio-live-sports-service");
+const {
+  getF1HistoryMeta,
+  isF1HistoryId
+} = require("./f1-history-service");
+
 async function handleMetaRequest({ type, id }, deps) {
   const {
     TMDB_KEY,
@@ -10,23 +23,71 @@ async function handleMetaRequest({ type, id }, deps) {
   } = deps;
 
   try {
+    if (isNuvioSportsId(id)) {
+      const meta =
+        await getNuvioSportsMeta(
+          id,
+          type || "tv"
+        );
+
+      if (meta) {
+        return { meta };
+      }
+
+      return { meta: null };
+    }
+
+    if (isSportsFixtureId(id)) {
+      const meta =
+        await getSportsFixtureMeta(
+          id,
+          type
+        );
+
+      return {
+        meta: meta || {
+          id,
+          type
+        }
+      };
+    }
+
+    if (isF1HistoryId(id)) {
+      const meta =
+        await getF1HistoryMeta(
+          id,
+          type
+        );
+
+      return {
+        meta: meta || {
+          id,
+          type
+        }
+      };
+    }
+
     if (isKitsuId(id)) {
       return await buildKitsuMeta({ type, id });
     }
 
     const tmdbType = type === "series" ? "tv" : "movie";
+    const directTmdbMatch = String(id || "").match(/^tmdb:(\d+)$/i);
+    let tmdbId = directTmdbMatch ? Number(directTmdbMatch[1]) : null;
 
-    const findRes = await fetchCached(
-      `https://api.themoviedb.org/3/find/${id}?api_key=${TMDB_KEY}&external_source=imdb_id`
-    );
+    if (!tmdbId) {
+      const findRes = await fetchCached(
+        `https://api.themoviedb.org/3/find/${id}?api_key=${TMDB_KEY}&external_source=imdb_id`
+      );
 
-    const result = findRes[`${tmdbType}_results`]?.[0];
+      const result = findRes[`${tmdbType}_results`]?.[0];
 
-    if (!result) {
-      return { meta: { id, type } };
+      if (!result) {
+        return { meta: { id, type } };
+      }
+
+      tmdbId = result.id;
     }
-
-    const tmdbId = result.id;
 
     const d = await fetchCached(
       `https://api.themoviedb.org/3/${tmdbType}/${tmdbId}?api_key=${TMDB_KEY}&append_to_response=credits`

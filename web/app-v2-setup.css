@@ -1,0 +1,516 @@
+/* ============================================================
+   ULTRA MAX V2 — SETUP / BUILDER VISUAL LAYER
+   Loaded after setup.css + cosmic-theme.css.
+   ============================================================ */
+
+html.um-app-mode {
+  --um2-card:rgba(17,10,44,.88);
+  --um2-card2:rgba(10,9,30,.91);
+  --um2-purple:#9838ff;
+  --um2-pink:#ff2ba8;
+  --um2-cyan:#27dfff;
+  --um2-green:#27e8b4;
+  --um2-line:rgba(183,62,255,.62);
+}
+
+html.um-app-mode,
+html.um-app-mode body {
+  background-color:#05020f !important;
+}
+
+html.um-app-mode body {
+  padding-bottom:calc(108px + env(safe-area-inset-bottom)) !important;
+  background:
+    radial-gradient(ellipse 80% 28% at 5% 10%,rgba(126,36,255,.28),transparent 72%),
+    radial-gradient(ellipse 76% 27% at 98% 18%,rgba(232,41,255,.20),transparent 72%),
+    radial-gradient(ellipse 70% 25% at 50% 98%,rgba(51,168,225,.09),transparent 72%),
+    linear-gradient(180deg,#080218,#05020f 48%,#05020f) !important;
+  background-attachment:fixed !important;
+}
+
+/* star field */
+html.um-app-mode body::before {
+  opacity:.82 !important;
+  background-image:
+    radial-gradient(circle at 8% 8%,rgba(255,255,255,.88) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 20% 31%,rgba(200,155,255,.70) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 37% 11%,rgba(255,255,255,.72) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 56% 42%,rgba(180,135,255,.63) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 74% 8%,rgba(255,255,255,.72) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 91% 28%,rgba(242,169,255,.70) 0 1px,transparent 1.7px) !important;
+  background-size:157px 157px,221px 221px,189px 189px,257px 257px,283px 283px,331px 331px !important;
+}
+
+/* planetary / neon horizon shapes */
+html.um-app-mode body::after {
+  opacity:1 !important;
+  background:
+    radial-gradient(circle at -7% 19%,
+      transparent 0 20.5%,
+      rgba(90,31,192,.43) 20.9%,
+      rgba(204,51,255,.84) 21.35%,
+      rgba(118,57,255,.28) 21.8%,
+      transparent 23%),
+    radial-gradient(circle at 105% 30%,
+      transparent 0 20.5%,
+      rgba(99,31,195,.40) 20.9%,
+      rgba(228,49,255,.82) 21.35%,
+      rgba(116,57,255,.27) 21.8%,
+      transparent 23%),
+    radial-gradient(ellipse 62% 18% at 47% 95%,
+      transparent 0 68%,
+      rgba(227,45,255,.48) 69%,
+      transparent 72%) !important;
+  filter:drop-shadow(0 0 18px rgba(165,45,255,.22));
+}
+
+/* Main shell */
+html.um-app-mode .um-app,
+html.um-app-mode .um-main,
+html.um-app-mode .wizard-step {
+  position:relative;
+  z-index:1;
+  background:transparent !important;
+}
+
+html.um-app-mode .um-main {
+  padding-bottom:calc(106px + env(safe-area-inset-bottom)) !important;
+}
+
+/* Header: strong typography, less giant empty chrome */
+html.um-app-mode .um-step-header {
+  margin:8px 10px 14px !important;
+  padding:20px 18px 17px !important;
+  border:1px solid rgba(182,72,255,.42) !important;
+  border-radius:21px !important;
+  background:
+    radial-gradient(circle at 88% -5%,rgba(237,47,255,.14),transparent 36%),
+    linear-gradient(145deg,rgba(25,14,57,.86),rgba(8,9,27,.82)) !important;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.33),
+    0 0 26px rgba(137,43,255,.10),
+    inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+html.um-app-mode .um-step-eyebrow,
+html.um-app-mode .um-section-label,
+html.um-app-mode .step-label {
+  color:#bd6cff !important;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+html.um-app-mode .um-step-header h1 {
+  margin-top:4px !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  font-size:clamp(26px,7vw,38px) !important;
+  line-height:1.03 !important;
+  letter-spacing:-.035em !important;
+}
+
+html.um-app-mode .um-step-header p,
+html.um-app-mode .um-step-subtitle {
+  color:#aaa3c2 !important;
+  line-height:1.48;
+}
+
+/* Core setup cards */
+html.um-app-mode .um-card,
+html.um-app-mode .um-mode-card,
+html.um-app-mode .mobile-setup-card,
+html.um-app-mode .step1-option-group,
+html.um-app-mode .category,
+html.um-app-mode .guided-card,
+html.um-app-mode .guided-page-card,
+html.um-app-mode .s2-preset,
+html.um-app-mode .s2-family-card,
+html.um-app-mode .s2-selection-card,
+html.um-app-mode .collection-card,
+html.um-app-mode .s3-preset-card,
+html.um-app-mode .final-summary-card,
+html.um-app-mode .result-section,
+html.um-app-mode .info-box {
+  border:1px solid rgba(181,65,255,.50) !important;
+  border-radius:19px !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.026),transparent 31%),
+    radial-gradient(circle at 0% 0%,rgba(125,45,255,.10),transparent 35%),
+    radial-gradient(circle at 100% 100%,rgba(30,212,224,.045),transparent 34%),
+    linear-gradient(145deg,rgba(19,11,47,.91),rgba(8,9,28,.89)) !important;
+  box-shadow:
+    0 16px 42px rgba(0,0,0,.31),
+    0 0 22px rgba(129,43,255,.08),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+  backdrop-filter:blur(15px) saturate(118%);
+  -webkit-backdrop-filter:blur(15px) saturate(118%);
+}
+
+html.um-app-mode .mobile-setup-card,
+html.um-app-mode .step1-option-group {
+  margin-bottom:12px !important;
+}
+
+html.um-app-mode .mobile-setup-card.is-open,
+html.um-app-mode .step1-option-group[open],
+html.um-app-mode .category[open] {
+  border-color:rgba(218,80,255,.76) !important;
+  box-shadow:
+    0 18px 48px rgba(0,0,0,.34),
+    0 0 30px rgba(153,47,255,.15),
+    inset 3px 0 0 rgba(46,213,255,.64),
+    inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+/* Keep summaries compact and app-like */
+html.um-app-mode details > summary,
+html.um-app-mode .mobile-setup-summary,
+html.um-app-mode .step1-option-summary,
+html.um-app-mode .category-summary {
+  min-height:72px !important;
+  padding:14px 15px !important;
+}
+
+html.um-app-mode details > summary strong,
+html.um-app-mode .mobile-setup-title,
+html.um-app-mode .step1-option-title {
+  color:#fff !important;
+  font-size:16px !important;
+  line-height:1.15 !important;
+}
+
+html.um-app-mode details > summary small,
+html.um-app-mode .mobile-setup-subtitle,
+html.um-app-mode .step1-option-subtitle {
+  color:#aaa3c2 !important;
+  font-size:11.5px !important;
+  line-height:1.38 !important;
+}
+
+/* Step 2 presets / families */
+html.um-app-mode .s2-preset,
+html.um-app-mode .s2-family-card,
+html.um-app-mode .s2-selection-card {
+  padding:15px !important;
+}
+
+html.um-app-mode .s2-preset.is-selected,
+html.um-app-mode .s2-family-card.is-selected,
+html.um-app-mode .s2-selection-card.is-selected {
+  border-color:rgba(223,86,255,.74) !important;
+  background:
+    radial-gradient(circle at 0 0,rgba(145,54,255,.20),transparent 42%),
+    linear-gradient(145deg,rgba(35,16,71,.94),rgba(10,10,32,.91)) !important;
+}
+
+/* Collection cards: closer to actual app rows */
+html.um-app-mode .collection-card {
+  overflow:hidden;
+  min-height:92px;
+  padding:13px !important;
+}
+
+html.um-app-mode .collection-card img {
+  border-radius:13px !important;
+  box-shadow:0 10px 25px rgba(0,0,0,.32);
+}
+
+html.um-app-mode .collection-card h3,
+html.um-app-mode .collection-card .title {
+  color:#fff !important;
+}
+
+/* pills / chips */
+html.um-app-mode .pill {
+  min-height:36px;
+  padding:8px 12px !important;
+  border:1px solid rgba(160,99,235,.28) !important;
+  border-radius:999px !important;
+  background:rgba(12,10,32,.77) !important;
+  color:#bcb5d6 !important;
+}
+
+html.um-app-mode .pill.selected {
+  color:#fff !important;
+  border-color:rgba(220,125,255,.68) !important;
+  background:linear-gradient(118deg,#6758e9,#aa42df 58%,#db459f) !important;
+  box-shadow:0 7px 18px rgba(107,50,205,.22) !important;
+}
+
+/* forms */
+html.um-app-mode input[type="text"],
+html.um-app-mode input[type="password"],
+html.um-app-mode input[type="email"],
+html.um-app-mode input[type="number"],
+html.um-app-mode select,
+html.um-app-mode textarea,
+html.um-app-mode .search-box {
+  min-height:44px;
+  color:#fbf7ff !important;
+  border:1px solid rgba(171,99,247,.34) !important;
+  border-radius:12px !important;
+  background:linear-gradient(180deg,rgba(6,7,23,.91),rgba(14,9,35,.83)) !important;
+}
+
+html.um-app-mode input:focus,
+html.um-app-mode select:focus,
+html.um-app-mode textarea:focus,
+html.um-app-mode .search-box:focus {
+  border-color:rgba(218,108,255,.74) !important;
+  box-shadow:0 0 0 3px rgba(149,58,255,.12),0 0 22px rgba(145,42,255,.08) !important;
+}
+
+/* buttons */
+html.um-app-mode .nav-btn,
+html.um-app-mode .next-btn,
+html.um-app-mode .global-btn,
+html.um-app-mode .verify-btn,
+html.um-app-mode .rbtn,
+html.um-app-mode #genBtn,
+html.um-app-mode .guided-next,
+html.um-app-mode button {
+  border-radius:12px !important;
+}
+
+html.um-app-mode .nav-btn.primary,
+html.um-app-mode .next-btn,
+html.um-app-mode #genBtn,
+html.um-app-mode .guided-next {
+  color:#fff !important;
+  border:1px solid rgba(232,135,255,.50) !important;
+  background:linear-gradient(112deg,#6b57ed 0%,#a43fed 47%,#f42f9d 100%) !important;
+  box-shadow:
+    0 11px 30px rgba(99,46,212,.30),
+    0 0 22px rgba(240,48,191,.09),
+    inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+
+/* Finalise screen */
+html.um-app-mode .final-summary-card {
+  padding:17px !important;
+}
+
+html.um-app-mode .final-summary-card .summary-stat,
+html.um-app-mode .final-summary-card .stat,
+html.um-app-mode .summary-stat {
+  border:1px solid rgba(133,95,225,.42) !important;
+  border-radius:13px !important;
+  background:rgba(20,18,54,.58) !important;
+}
+
+html.um-app-mode #genBtn {
+  min-height:62px !important;
+  font-size:17px !important;
+  letter-spacing:.02em;
+  box-shadow:
+    0 13px 34px rgba(69,181,255,.21),
+    0 0 27px rgba(237,51,255,.20),
+    inset 0 1px 0 rgba(255,255,255,.23) !important;
+}
+
+/* Success/info callouts */
+html.um-app-mode .success,
+html.um-app-mode .success-box,
+html.um-app-mode .no-reinstall-card {
+  border-color:rgba(45,232,179,.50) !important;
+  background:
+    radial-gradient(circle at 0% 50%,rgba(39,232,180,.12),transparent 35%),
+    linear-gradient(145deg,rgba(10,42,43,.72),rgba(10,14,37,.89)) !important;
+}
+
+/* Bottom navigation */
+html.um-app-mode .um-build-bottom-nav {
+  left:14px !important;
+  right:14px !important;
+  bottom:calc(9px + env(safe-area-inset-bottom)) !important;
+  width:auto !important;
+  max-width:620px !important;
+  min-height:82px !important;
+  margin:0 auto !important;
+  padding:7px !important;
+  border:1px solid rgba(181,68,255,.62) !important;
+  border-radius:25px !important;
+  background:
+    radial-gradient(circle at 50% 110%,rgba(139,41,255,.16),transparent 45%),
+    linear-gradient(180deg,rgba(21,12,52,.96),rgba(7,8,27,.97)) !important;
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.52),
+    0 0 27px rgba(139,45,255,.20),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+  backdrop-filter:blur(20px) saturate(125%) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(125%) !important;
+}
+
+html.um-app-mode .um-build-bottom-nav a {
+  min-height:64px !important;
+  border-radius:18px !important;
+  color:#aaa4cb !important;
+}
+
+html.um-app-mode .um-build-bottom-nav a.active {
+  color:#dd8aff !important;
+  border-color:rgba(174,80,255,.18) !important;
+  background:
+    radial-gradient(circle at 50% 15%,rgba(198,70,255,.22),transparent 52%),
+    linear-gradient(180deg,rgba(113,31,215,.36),rgba(68,25,140,.30)) !important;
+  box-shadow:0 0 24px rgba(154,45,255,.20),inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+html.um-app-mode .counter-bar {
+  bottom:calc(101px + env(safe-area-inset-bottom)) !important;
+  border-top:1px solid rgba(165,92,245,.22) !important;
+  background:rgba(8,7,24,.92) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+}
+
+/* Native app uses the active Build tab as the top/bottom jump control.
+   Keep the legacy floating arrows available only on the regular web builder. */
+html.um-app-mode #umBackToTop,
+html.um-app-mode #umGoToBottom,
+html.um-app-mode #umScrollHelper {
+  display:none !important;
+}
+
+/* Mobile density */
+@media (max-width:720px) {
+  html.um-app-mode .um-step-header {
+    margin:7px 8px 12px !important;
+    padding:18px 15px 15px !important;
+  }
+
+  html.um-app-mode .um-card,
+  html.um-app-mode .mobile-setup-card,
+  html.um-app-mode .step1-option-group,
+  html.um-app-mode .category,
+  html.um-app-mode .collection-card,
+  html.um-app-mode .result-section {
+    border-radius:17px !important;
+  }
+
+  html.um-app-mode .mobile-setup-card,
+  html.um-app-mode .step1-option-group,
+  html.um-app-mode .category {
+    margin-left:7px !important;
+    margin-right:7px !important;
+  }
+}
+
+/* Steps 1-3 each have their own final CTA above the fixed app nav.
+   Older layout layers reserved bottom clearance at body + main + step level,
+   stacking into a large scrollable empty area. Keep one clearance zone only. */
+@media (max-width:899px) {
+  html.um-app-mode body:has(#step-1.active),
+  html.um-app-mode body:has(#step-2.active),
+  html.um-app-mode body:has(#step-3.active) {
+    padding-bottom:0 !important;
+  }
+
+  html.um-app-mode .um-main:has(#step-1.active),
+  html.um-app-mode .um-main:has(#step-2.active),
+  html.um-app-mode .um-main:has(#step-3.active) {
+    padding-bottom:0 !important;
+  }
+
+  html.um-app-mode #step-1.active,
+  html.um-app-mode #step-2.active,
+  html.um-app-mode #step-3.active {
+    min-height:0 !important;
+    padding-bottom:calc(96px + env(safe-area-inset-bottom)) !important;
+  }
+
+  html.um-app-mode #step-1.active #advancedBuilderContainer {
+    padding-bottom:0 !important;
+  }
+}
+
+@media (max-width:390px) {
+  html.um-app-mode .um-build-bottom-nav {
+    left:8px !important;
+    right:8px !important;
+    bottom:calc(6px + env(safe-area-inset-bottom)) !important;
+    min-height:78px !important;
+    border-radius:22px !important;
+  }
+
+  html.um-app-mode .um-build-bottom-nav a {
+    min-height:59px !important;
+    font-size:10px !important;
+  }
+}
+
+/* Mobile density pass — keep expanded builder sections useful instead of
+   nesting padding inside padding until the content resembles a postage stamp. */
+@media (max-width:720px) {
+  html.um-app-mode .wizard-step {
+    padding-left:6px !important;
+    padding-right:6px !important;
+  }
+
+  html.um-app-mode .mobile-setup-card,
+  html.um-app-mode .step1-option-group,
+  html.um-app-mode .category {
+    margin-left:2px !important;
+    margin-right:2px !important;
+  }
+
+  html.um-app-mode .step1-option-group-body {
+    padding:10px 7px 12px !important;
+  }
+
+  html.um-app-mode .step1-rule-section-body {
+    padding:9px 7px 10px !important;
+  }
+
+  html.um-app-mode #step-1 .opt-subsection {
+    margin-left:2px !important;
+    margin-right:2px !important;
+  }
+
+  html.um-app-mode #step-1 .opt-subsection > *:not(summary) {
+    padding-left:9px !important;
+    padding-right:9px !important;
+  }
+
+  html.um-app-mode #step-1 #streamsSectionBody {
+    padding-left:4px !important;
+    padding-right:4px !important;
+  }
+
+  html.um-app-mode .step1-option-group > summary,
+  html.um-app-mode .mobile-setup-card > summary,
+  html.um-app-mode .category > summary {
+    min-height:62px !important;
+    padding-top:11px !important;
+    padding-bottom:11px !important;
+  }
+
+  html.um-app-mode .pretty-stream-card {
+    margin:8px 0 !important;
+    padding:10px !important;
+  }
+
+  html.um-app-mode .pretty-stream-actions {
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:6px !important;
+    margin-top:8px !important;
+  }
+
+  html.um-app-mode .pretty-stream-btn {
+    width:100% !important;
+    min-height:34px !important;
+    padding:6px 8px !important;
+    font-size:11px !important;
+    line-height:1.2 !important;
+  }
+
+  html.um-app-mode .pretty-stream-rename {
+    margin-top:8px !important;
+  }
+
+  html.um-app-mode .pretty-stream-url {
+    margin-top:5px !important;
+  }
+}

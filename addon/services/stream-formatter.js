@@ -14,25 +14,39 @@
 // parsing, no eval/Function/vm. It cannot do anything its author didn't
 // explicitly implement.
 
+const {
+  detectStreamLanguages,
+  describeStreamLanguages
+} = require("./stream-language-service");
+
 const PRESETS = {
   minimal: ["resolution"],
   compact: ["resolution", "size", "source"],
-  detailed: ["title", "resolution", "source", "codec", "audio", "size", "seeders"]
+  detailed: ["title", "resolution", "source", "codec", "languages", "audio", "size", "seeders"]
 };
 
-const FIELD_KEYS = ["title", "resolution", "size", "source", "codec", "audio", "seeders", "provider"];
+const FIELD_KEYS = ["title", "resolution", "size", "bitrate", "source", "codec", "languages", "audio", "seeders", "provider"];
 
 // Fields available to the custom field-list AND the template engine.
-// sizeBytes/seedersNum are numeric variants for template comparators
-// (e.g. {sizeBytes::>5000000000[...]}) and aren't shown in the field-list UI.
-const TEMPLATE_FIELD_KEYS = FIELD_KEYS.concat(["sizeBytes", "seedersNum"]);
+// sizeBytes/bitrateMbps/seedersNum are numeric variants for template comparators
+// (e.g. {bitrateMbps::>20[...]}) and aren't shown in the field-list UI.
+// language/languageEmoji expose the primary detected label and flag to code templates.
+const TEMPLATE_FIELD_KEYS = FIELD_KEYS.concat([
+  "language",
+  "languageEmoji",
+  "sizeBytes",
+  "bitrateMbps",
+  "seedersNum"
+]);
 
 const FIELD_ICONS = {
   title: "📄",
   resolution: "📺",
   size: "💾",
+  bitrate: "📶",
   source: "🎞️",
   codec: "🎛️",
+  languages: "🌐",
   audio: "🔊",
   seeders: "👤",
   provider: "⚙️"
@@ -46,6 +60,42 @@ function formatBytes(bytes) {
   if (gb >= 1) return `${gb.toFixed(gb >= 10 ? 0 : 1)} GB`;
   const mb = bytes / (1024 * 1024);
   return `${Math.round(mb)} MB`;
+}
+
+function formatBitrateMbps(mbps) {
+  if (!mbps || !Number.isFinite(mbps) || mbps <= 0) return null;
+  if (mbps >= 100) return `${Math.round(mbps)} Mbps`;
+  if (mbps >= 10) return `${mbps.toFixed(1).replace(/\.0$/, "")} Mbps`;
+  return `${mbps.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")} Mbps`;
+}
+
+function normaliseBitrateMbps(value) {
+  if (value === null || value === undefined || value === "") return 0;
+
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    if (value >= 100000) return value / 1000000; // bits/sec
+    if (value >= 1000) return value / 1000;      // kilobits/sec
+    return value;                                // already Mbps
+  }
+
+  const text = String(value).trim();
+  if (!text) return 0;
+
+  let m = text.match(/([\d.]+)\s*(?:Mbit\/s|Mbits\/s|Mbps|Mb\/s)\b/i);
+  if (m) return Number(m[1]) || 0;
+
+  m = text.match(/([\d.]+)\s*(?:Kbit\/s|Kbits\/s|Kbps|Kb\/s)\b/i);
+  if (m) return (Number(m[1]) || 0) / 1000;
+
+  const numeric = Number(text);
+  return Number.isFinite(numeric) ? normaliseBitrateMbps(numeric) : 0;
+}
+
+function normaliseDurationSeconds(value) {
+  const numeric = Number(value || 0);
+  if (!Number.isFinite(numeric) || numeric <= 0) return 0;
+  const seconds = numeric > 86400 ? numeric / 1000 : numeric;
+  return seconds >= 60 && seconds <= 43200 ? seconds : 0;
 }
 
 function firstMatch(text, patterns) {
@@ -68,9 +118,23 @@ function extractStreamFields(stream, addonName) {
     [/480p/i, "480p"]
   ]);
 
-  const sizeBytes = Number((stream.behaviorHints && stream.behaviorHints.videoSize) || 0);
+  const behaviorHints = stream.behaviorHints || {};
+  const sizeBytes = Number(behaviorHints.videoSize || 0);
   const sizeMatch = text.match(/([\d.]+\s?(?:GB|MB))/i);
   const size = formatBytes(sizeBytes) || (sizeMatch ? sizeMatch[1] : null);
+
+  const directBitrateMbps = normaliseBitrateMbps(
+    stream.bitrate || behaviorHints.bitrate || behaviorHints.videoBitrate
+  );
+  const textBitrateMbps = normaliseBitrateMbps(text);
+  const durationSeconds = normaliseDurationSeconds(
+    stream.duration || behaviorHints.duration || behaviorHints.videoDuration
+  );
+  const derivedBitrateMbps = sizeBytes && durationSeconds
+    ? (sizeBytes * 8) / durationSeconds / 1000000
+    : 0;
+  const bitrateMbps = directBitrateMbps || textBitrateMbps || derivedBitrateMbps;
+  const bitrate = formatBitrateMbps(bitrateMbps);
 
   const codec = firstMatch(text, [
     [/hevc|x265|h\.?265/i, "HEVC"],
@@ -98,16 +162,25 @@ function extractStreamFields(stream, addonName) {
   const seedersMatch = text.match(/👤\s?(\d+)/) || text.match(/(\d+)\s?seeds?\b/i);
   const seeders = seedersMatch ? seedersMatch[1] : null;
 
+  const detectedLanguages = detectStreamLanguages(stream);
+  const languageFields = describeStreamLanguages(detectedLanguages);
+  const languages = languageFields.languages;
+
   return {
     title: filename || rawTitle || rawName || null,
     resolution,
     size,
+    bitrate,
     codec,
+    languages,
+    language: languageFields.language,
+    languageEmoji: languageFields.languageEmoji,
     audio,
     source,
     seeders,
     provider: addonName || null,
     sizeBytes: sizeBytes || 0,
+    bitrateMbps: bitrateMbps || 0,
     seedersNum: seeders ? Number(seeders) || 0 : 0
   };
 }
@@ -236,7 +309,12 @@ function sanitizeStreamFormat(sf) {
   return { mode: "preset", preset };
 }
 
-function applyStreamFormat(stream, formatConfig, addonName) {
+function applyStreamFormat(
+  stream,
+  formatConfig,
+  addonName,
+  preserveStreamSourceBranding = false
+) {
   const clean = sanitizeStreamFormat(formatConfig);
   if (!clean) return stream;
 
@@ -266,7 +344,11 @@ function applyStreamFormat(stream, formatConfig, addonName) {
 
   if (!parts.length) return stream;
 
-  const nameBadge = ["⚡ Ultra MAX", extracted.resolution].filter(Boolean).join(" ");
+  const nameBadge = preserveStreamSourceBranding
+    ? String(stream.name || addonName || "External").trim()
+    : ["⚡ Ultra MAX", extracted.resolution]
+        .filter(Boolean)
+        .join(" ");
 
   return {
     ...stream,

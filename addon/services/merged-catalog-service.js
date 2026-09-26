@@ -19,7 +19,8 @@ function customSourceDefinitions(config) {
   const definitions = new Map();
   const candidates = [
     ...(Array.isArray(config?.customCatalogs) ? config.customCatalogs : []),
-    ...(Array.isArray(config?.customMdbLists) ? config.customMdbLists : [])
+    ...(Array.isArray(config?.customMdbLists) ? config.customMdbLists : []),
+    ...(Array.isArray(config?.customTraktLists) ? config.customTraktLists : [])
   ];
 
   for (const item of candidates) {

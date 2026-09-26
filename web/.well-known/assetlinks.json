@@ -1,0 +1,17 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "vip.ultramax.app",
+      "sha256_cert_fingerprints": [
+        "64:4C:25:3D:E8:18:CE:4B:7D:1D:F1:B8:11:B0:8A:FE:2C:DB:ED:39:F7:62:67:67:D0:A3:98:59:5D:CA:43:97",
+        "F1:C5:1D:54:CF:E9:BD:BB:8A:AF:C6:F7:51:74:03:DE:BA:E5:77:A8:EC:82:38:E6:21:F0:EA:2C:03:DB:64:4C",
+        "F1:7B:36:E1:2D:C6:81:3F:29:50:5C:F4:E3:5B:6E:A4:C5:35:F9:A1:C6:6D:D7:8D:55:0C:F3:14:8F:AD:D5:62",
+        "73:F7:B4:12:90:9C:E0:A9:D4:2A:67:12:ED:7D:78:62:6A:22:C9:78:B6:7A:DB:8C:FB:72:F2:87:0E:8D:02:8C"
+      ]
+    }
+  }
+]

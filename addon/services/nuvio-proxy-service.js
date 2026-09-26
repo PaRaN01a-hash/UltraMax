@@ -60,11 +60,11 @@ function registerNuvioProxyRoutes(app) {
   app.post("/api/nuvio/rpc/sync_push_addons", (req, res) =>
     forward(req, res, "POST", "/rest/v1/rpc/sync_push_addons"));
 
-  app.post("/api/nuvio/rpc/sync_push_collections", (req, res) =>
-    forward(req, res, "POST", "/rest/v1/rpc/sync_push_collections"));
-
   app.post("/api/nuvio/rpc/sync_push_profiles", (req, res) =>
     forward(req, res, "POST", "/rest/v1/rpc/sync_push_profiles"));
+
+  app.post("/api/nuvio/rpc/sync_delete_profile_data", (req, res) =>
+    forward(req, res, "POST", "/rest/v1/rpc/sync_delete_profile_data"));
 }
 
 module.exports = { registerNuvioProxyRoutes };

@@ -1,0 +1,338 @@
+{
+  "sports_wrestling_events": [
+    {
+      "id": "tt0248614",
+      "name": "WrestleMania 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0350067",
+      "name": "Royal Rumble 2003",
+      "year": 2003
+    },
+    {
+      "id": "tt0276539",
+      "name": "SummerSlam 1988",
+      "year": 1988
+    },
+    {
+      "id": "tt21210816",
+      "name": "AEW All Out",
+      "year": 2022
+    },
+    {
+      "id": "tt14761008",
+      "name": "AEW All Out 2021",
+      "year": 2021
+    },
+    {
+      "id": "tt11465732",
+      "name": "NJPW Wrestle Kingdom 14",
+      "year": 2020
+    },
+    {
+      "id": "tt4328056",
+      "name": "NJPW Wrestle Kingdom 9",
+      "year": 2015
+    }
+  ],
+
+  "sports_wrestling_shows": [
+    {
+      "id": "tt0185103",
+      "name": "WWE Monday Night RAW",
+      "year": 1993
+    },
+    {
+      "id": "tt0227972",
+      "name": "WWE SmackDown",
+      "year": 1999
+    },
+    {
+      "id": "tt1601141",
+      "name": "WWE NXT",
+      "year": 2010
+    },
+    {
+      "id": "tt10691888",
+      "name": "AEW Dynamite",
+      "year": 2019
+    },
+    {
+      "id": "tt27776045",
+      "name": "AEW Collision",
+      "year": 2023
+    },
+    {
+      "id": "tt0421463",
+      "name": "TNA iMPACT! Wrestling",
+      "year": 2004
+    },
+    {
+      "id": "tt1747437",
+      "name": "Ring of Honor Wrestling",
+      "year": 2009
+    }
+  ],
+
+  "sports_wwe_events": [
+    {
+      "id": "tt0248614",
+      "name": "WrestleMania 2000",
+      "year": 2000
+    },
+    {
+      "id": "tt0350067",
+      "name": "Royal Rumble 2003",
+      "year": 2003
+    },
+    {
+      "id": "tt0276539",
+      "name": "SummerSlam 1988",
+      "year": 1988
+    },
+    {
+      "id": "tt1683518",
+      "name": "WWE Money in the Bank",
+      "year": 2010
+    },
+    {
+      "id": "tt1611215",
+      "name": "WWE Elimination Chamber",
+      "year": 2010
+    },
+    {
+      "id": "tt0362296",
+      "name": "WWE Backlash",
+      "year": 2003
+    }
+  ],
+
+  "sports_wwe_shows": [
+    {
+      "id": "tt0185103",
+      "name": "WWE Monday Night RAW",
+      "year": 1993
+    },
+    {
+      "id": "tt0227972",
+      "name": "WWE SmackDown",
+      "year": 1999
+    },
+    {
+      "id": "tt1601141",
+      "name": "WWE NXT",
+      "year": 2010
+    },
+    {
+      "id": "tt9425798",
+      "name": "WWE NXT UK",
+      "year": 2018
+    }
+  ],
+
+  "sports_aew_events": [
+    {
+      "id": "tt21210816",
+      "name": "AEW All Out",
+      "year": 2022
+    },
+    {
+      "id": "tt14761008",
+      "name": "AEW All Out 2021",
+      "year": 2021
+    },
+    {
+      "id": "tt10609998",
+      "name": "All Elite Wrestling: All Out",
+      "year": 2019
+    },
+    {
+      "id": "tt11738802",
+      "name": "All Elite Wrestling: Double or Nothing",
+      "year": 2020
+    },
+    {
+      "id": "tt18341158",
+      "name": "All Elite Wrestling: Double or Nothing",
+      "year": 2022
+    },
+    {
+      "id": "tt27042806",
+      "name": "All Elite Wrestling: Double or Nothing",
+      "year": 2023
+    },
+    {
+      "id": "tt32095634",
+      "name": "All Elite Wrestling: Double or Nothing",
+      "year": 2024
+    },
+    {
+      "id": "tt40062572",
+      "name": "AEW Double or Nothing",
+      "year": 2026
+    }
+  ],
+
+  "sports_aew_shows": [
+    {
+      "id": "tt10691888",
+      "name": "AEW Dynamite",
+      "year": 2019
+    },
+    {
+      "id": "tt27776045",
+      "name": "AEW Collision",
+      "year": 2023
+    },
+    {
+      "id": "tt14130026",
+      "name": "AEW Dark: Elevation",
+      "year": 2021
+    }
+  ],
+
+  "sports_njpw_events": [
+    {
+      "id": "tt11465732",
+      "name": "NJPW Wrestle Kingdom 14",
+      "year": 2020
+    },
+    {
+      "id": "tt4328056",
+      "name": "NJPW Wrestle Kingdom 9",
+      "year": 2015
+    }
+  ],
+
+  "sports_tna_shows": [
+    {
+      "id": "tt0421463",
+      "name": "TNA iMPACT! Wrestling",
+      "year": 2004
+    },
+    {
+      "id": "tt10701822",
+      "name": "IMPACT Xplosion",
+      "year": 2017
+    },
+    {
+      "id": "tt8323604",
+      "name": "Impact Wrestling PPV Events",
+      "year": 2004
+    }
+  ],
+
+  "sports_roh_shows": [
+    {
+      "id": "tt1747437",
+      "name": "Ring of Honor Wrestling",
+      "year": 2009
+    }
+  ],
+
+  "sports_ufc_events": [
+    {
+      "id": "tt32109552",
+      "name": "UFC 300: Pereira vs Hill",
+      "year": 2024
+    },
+    {
+      "id": "tt32222551",
+      "name": "UFC 303: Pereira vs. Prochazka 2",
+      "year": 2024
+    },
+    {
+      "id": "tt33042639",
+      "name": "UFC 304: Edwards vs. Muhammad 2",
+      "year": 2024
+    }
+  ],
+
+  "sports_ufc_shows": [
+    {
+      "id": "tt0445912",
+      "name": "The Ultimate Fighter",
+      "year": 2005
+    },
+    {
+      "id": "tt4007152",
+      "name": "The Ultimate Fighter: Latin America",
+      "year": 2014
+    },
+    {
+      "id": "tt3494638",
+      "name": "The Ultimate Fighter: Nations",
+      "year": 2014
+    },
+    {
+      "id": "tt4635670",
+      "name": "The Ultimate Fighter: Brazil",
+      "year": 2012
+    }
+  ],
+
+  "sports_motorsport": [
+    {
+      "id": "tt1424432",
+      "name": "Senna",
+      "year": 2010
+    },
+    {
+      "id": "tt2518788",
+      "name": "1",
+      "year": 2013
+    },
+    {
+      "id": "tt6981046",
+      "name": "Williams",
+      "year": 2017
+    },
+    {
+      "id": "tt0368721",
+      "name": "Faster",
+      "year": 2003
+    },
+    {
+      "id": "tt1320302",
+      "name": "Truth in 24",
+      "year": 2008
+    },
+    {
+      "id": "tt0815140",
+      "name": "Dale",
+      "year": 2007
+    }
+  ],
+
+  "sports_motorsport_shows": [
+    {
+      "id": "tt8289930",
+      "name": "Formula 1: Drive to Survive",
+      "year": 2019
+    },
+    {
+      "id": "tt6758316",
+      "name": "Formula 1",
+      "year": 1950
+    },
+    {
+      "id": "tt18396468",
+      "name": "MotoGP Unlimited",
+      "year": 2022
+    }
+  ],
+
+  "sports_formula1_shows": [
+    {
+      "id": "tt8289930",
+      "name": "Formula 1: Drive to Survive",
+      "year": 2019
+    },
+    {
+      "id": "tt6758316",
+      "name": "Formula 1",
+      "year": 1950
+    }
+  ]
+}

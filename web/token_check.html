@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Token Inspector v2 — Ultra MAX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070d;--panel:#11111c;--panel2:#171725;--line:#29293c;--text:#f1f1f7;--muted:#9292aa;--violet:#7b2fff;--coral:#ff3d5a;--green:#00d2a0;--amber:#ffb800;--blue:#60a5fa}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,rgba(123,47,255,.13),transparent 30%),var(--bg);color:var(--text);font-family:Inter,sans-serif;min-height:100vh}
+nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(7,7,13,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-family:"Bebas Neue";font-size:26px;letter-spacing:.08em;color:white;text-decoration:none}.logo span{background:linear-gradient(135deg,var(--violet),var(--coral));-webkit-background-clip:text;color:transparent}.back{color:var(--muted);text-decoration:none;font-size:13px}
+.wrap{max-width:1180px;margin:auto;padding:34px 18px 80px}.hero{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;margin-bottom:22px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#b995ff}.hero h1{font-family:"Bebas Neue";font-size:clamp(44px,8vw,76px);line-height:.9;margin:7px 0 10px;letter-spacing:.03em}.hero p{margin:0;color:var(--muted);max-width:760px;line-height:1.55}
+.version{font:600 12px "JetBrains Mono";color:var(--green);border:1px solid rgba(0,210,160,.3);background:rgba(0,210,160,.08);padding:8px 11px;border-radius:999px}
+.search{display:flex;gap:10px;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-bottom:20px}.search input{flex:1;min-width:0;border:1px solid var(--line);background:#090910;color:white;border-radius:11px;padding:14px;font:600 15px "JetBrains Mono";text-transform:uppercase;letter-spacing:.09em;outline:none}.search input:focus{border-color:var(--violet)}button{border:0;border-radius:11px;padding:0 20px;background:linear-gradient(135deg,var(--violet),var(--coral));color:white;font-weight:700;cursor:pointer}
+#result.hidden{display:none}.loading,.error{padding:26px;border:1px solid var(--line);background:var(--panel);border-radius:16px;text-align:center;color:var(--muted)}.error{color:#ff8092;border-color:rgba(255,61,90,.3)}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px}.stat b{display:block;font-size:26px;margin-top:5px}.stat span{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--muted)}
+.health{display:flex;gap:12px;align-items:center;padding:15px 17px;border-radius:15px;margin-bottom:14px;border:1px solid rgba(0,210,160,.3);background:rgba(0,210,160,.07)}.health.warn{border-color:rgba(255,184,0,.35);background:rgba(255,184,0,.07)}.dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}.warn .dot{background:var(--amber);box-shadow:0 0 18px var(--amber)}.health strong{display:block}.health small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:linear-gradient(145deg,rgba(255,255,255,.015),transparent),var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;overflow:hidden}.card.wide{grid-column:1/-1}.card h2{font-size:12px;margin:0 0 13px;text-transform:uppercase;letter-spacing:.12em;color:#bdbdd0}.rows{display:grid;gap:0}.row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid #20202d}.row:last-child{border-bottom:0}.label{color:var(--muted);font-size:13px}.value{font-size:13px;font-weight:600;text-align:right;word-break:break-word}.mono{font-family:"JetBrains Mono";font-size:12px}.badge{display:inline-flex;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;border:1px solid var(--line)}.good{color:var(--green);border-color:rgba(0,210,160,.28);background:rgba(0,210,160,.08)}.off{color:var(--muted)}.warnb{color:var(--amber);border-color:rgba(255,184,0,.25);background:rgba(255,184,0,.08)}
+.pills{display:flex;flex-wrap:wrap;gap:7px}.pill{font:500 11px "JetBrains Mono";padding:6px 8px;border-radius:8px;background:#0a0a12;border:1px solid var(--line);color:#c8c8d8}.catalog-tools{display:flex;gap:8px;margin-bottom:10px}.catalog-tools input{width:100%;background:#0a0a12;border:1px solid var(--line);border-radius:9px;color:white;padding:10px 12px;outline:none}
+details{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}summary{cursor:pointer;color:#cfcfe0;font-size:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.linkbtn{display:inline-flex;align-items:center;text-decoration:none;color:white;background:var(--panel2);border:1px solid var(--line);padding:10px 13px;border-radius:10px;font-size:12px;font-weight:700}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.version{justify-self:start}.summary{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}.search{flex-direction:column}.search button{padding:13px}.row{align-items:flex-start}.value{max-width:58%}}
+</style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+<nav><a class="logo" href="/">ULTRA <span>MAX</span></a><a class="back" href="/">← Home</a></nav>
+<main class="wrap">
+  <section class="hero">
+    <div><div class="eyebrow">Diagnostics</div><h1>TOKEN INSPECTOR</h1><p>See what Ultra MAX is actually using for a token: selected rows, filters, discovery providers, artwork, accounts and streaming settings.</p></div>
+    <div class="version">INSPECTOR v2</div>
+  </section>
+  <div class="search"><input id="tokenInput" maxlength="8" autocomplete="off" spellcheck="false" placeholder="Enter token e.g. ABC12345"><button id="inspectBtn">Inspect token</button></div>
+  <div id="result" class="hidden"></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const bool=v=>v?'<span class="badge good">ON</span>':'<span class="badge off">OFF</span>';
+const yes=v=>v?'<span class="badge good">✓ Set</span>':'<span class="badge off">Not set</span>';
+const list=v=>Array.isArray(v)&&v.length?v.map(esc).join(', '):'None';
+const val=v=>(v===null||v===undefined||v==='')?'—':esc(v);
+function row(k,v){return '<div class="row"><span class="label">'+esc(k)+'</span><span class="value">'+v+'</span></div>'}
+function card(title,body,wide=false){return '<section class="card'+(wide?' wide':'')+'"><h2>'+esc(title)+'</h2><div class="rows">'+body+'</div></section>'}
+function pills(items,cls='catalog-pill'){if(!items||!items.length)return '<span class="label">None</span>';return '<div class="pills">'+items.map(x=>'<span class="pill '+cls+'" data-text="'+esc(String(x).toLowerCase())+'">'+esc(x)+'</span>').join('')+'</div>'}
+function serviceName(s){return ({torbox:'TorBox',realdebrid:'Real-Debrid',alldebrid:'AllDebrid',premiumize:'Premiumize',offcloud:'Offcloud',debridlink:'Debrid-Link'})[s]||s||'None'}
+async function inspectToken(){
+  const token=$('tokenInput').value.trim().toUpperCase();
+  if(!/^[A-Z0-9]{6,8}$/.test(token)){ $('result').className=''; $('result').innerHTML='<div class="error">Enter a valid Ultra MAX token.</div>'; return; }
+  $('result').className=''; $('result').innerHTML='<div class="loading">Inspecting current configuration…</div>';
+  try{
+    const res=await fetch('/api/token-inspect',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({token})});
+    if(!res.ok){$('result').innerHTML='<div class="error">'+(res.status===404?'Token not found.':res.status===429?'Too many checks. Try again shortly.':'Inspector request failed.')+'</div>';return}
+    const d=await res.json();
+    if(Number(d.schemaVersion||0)<2){$('result').innerHTML='<div class="error">This server is still using the legacy Token Inspector API.</div>';return}
+    const c=d.catalogs||{},f=d.filters||{},a=d.artwork||{},ac=d.accounts||{},s=d.streams||{},di=d.diagnostics||{},dis=d.discovery||{};
+    const healthy=!!di.selectionHealthy;
+    let html='<div class="summary">'+
+      '<div class="stat"><span>Selected rows</span><b>'+esc(c.selectedCount||0)+'</b></div>'+
+      '<div class="stat"><span>Hidden rows</span><b>'+esc(c.hiddenCount||0)+'</b></div>'+
+      '<div class="stat"><span>Profiles</span><b>'+esc((d.profiles||{}).count||0)+'</b></div>'+
+      '<div class="stat"><span>Overrides</span><b>'+esc(c.overrideCount||0)+'</b></div>'+
+    '</div>';
+    html+='<div class="health '+(healthy?'':'warn')+'"><span class="dot"></span><div><strong>'+(healthy?'Selection state looks healthy':'Selection state needs attention')+'</strong><small>'+(healthy?'Selected, hidden and ordered catalog state is internally consistent.':'The inspector found duplicate or orphaned catalog state. See Diagnostics below.')+'</small></div></div>';
+    html+='<div class="grid">';
+    html+=card('Token & setup',
+      row('Token','<span class="mono">'+esc(d.token)+'</span>')+
+      row('Created',val((d.timestamps||{}).createdAt))+
+      row('Last updated',val((d.timestamps||{}).updatedAt))+
+      row('Language',val(f.language))+
+      row('Timezone',val(f.timezone))
+    );
+    html+=card('Discovery',
+      row('TMDB',yes(dis.hasTmdb))+
+      row('MDBList',yes(dis.hasMdblist))+
+      row('Search',bool(dis.searchEnabled))+
+      row('AI Recommended',bool(dis.aiRecommended))+
+      row('Google AI key',yes(dis.hasGoogleAi))+
+      row('Hide unreleased search',bool(dis.hideUnreleasedDigitalSearch))
+    );
+    html+=card('Content filters',
+      row('Minimum rating',val(f.minRating||0))+
+      row('Minimum votes',val(f.minVotes||0))+
+      row('Year range',esc(f.minYear||'Any')+' → '+esc(f.maxYear||'Any'))+
+      row('Certification ceiling',val(f.maxRating))+
+      row('Exclude unreleased',bool(f.excludeUnreleased))+
+      row('Digital releases only',bool(f.digitalReleaseOnly))+
+      row('Hide watched',bool(f.hideWatched))+
+      row('Hide unavailable streams',bool(f.hideUnavailableStreams))+
+      row('Anime filter',val(f.animeFilter))+
+      row('Indian cinema filter',val(f.indianCinemaFilter))+
+      row('Excluded languages',val(list(f.excludeLanguages)))+
+      row('Excluded countries',val(list(f.excludeCountries)))+
+      row('Episode delay',esc(f.episodeReleaseDelayHours||0)+'h')
+    );
+    html+=card('Artwork',
+      row('Active mode','<span class="badge '+(a.pictoriumEnabled?'good':'off')+'">'+esc(a.mode||'Standard')+'</span>')+
+      row('Pictorium',bool(a.pictoriumEnabled))+
+      row('Better Posters/custom',bool(a.betterPostersEnabled))+
+      row('RPDB',yes(a.rpdb))+row('TOP Posters',yes(a.topPosters))+row('Fanart.tv',yes(a.fanart))+row('OMDb',yes(a.omdb))
+    );
+    html+=card('Connected accounts',
+      row('Trakt',ac.trakt&&ac.trakt.connected?'<span class="badge good">✓ Connected</span>'+(ac.trakt.expired?' <span class="badge warnb">Expired</span>':''):'<span class="badge off">Not connected</span>')+
+      row('Simkl',ac.simkl&&ac.simkl.connected?'<span class="badge good">✓ Connected</span>':'<span class="badge off">Not connected</span>')
+    );
+    const qs=s.qualities||{};
+    html+=card('Streams',
+      row('Debrid services',s.debridServices&&s.debridServices.length?s.debridServices.map(serviceName).map(esc).join(', '):'None')+
+      row('Primary debrid',esc(serviceName(s.primaryDebrid)))+
+      row('Cached only',bool(s.cachedOnly))+
+      row('English only',bool(s.englishOnly))+
+      row('Remove trash',bool(s.removeTrash))+
+      row('Max size',s.maxSizeGb?esc(s.maxSizeGb)+' GB':'Unlimited')+
+      row('Quality',Object.keys(qs).filter(k=>qs[k]).map(k=>esc(k.toUpperCase())).join(' · ')||'None')+
+      row('Manual addons',esc(s.manualAddonCount||0))+
+      row('Cloud Library',bool(s.premiumizeLibraryEnabled))
+    );
+    html+=card('Catalog composition',
+      row('Built-in / selected',esc(c.selectedCount||0))+
+      row('Custom catalogs',esc(c.customCount||0))+
+      row('MDBList rows',esc(c.mdbListCount||0))+
+      row('Trakt list rows',esc(c.traktListCount||0))+
+      row('Merged rows',esc(c.mergedCount||0))+
+      row('Per-row overrides',esc(c.overrideCount||0))
+    );
+    html+=card('Selected catalog IDs',
+      '<div class="catalog-tools"><input id="catalogFilter" placeholder="Filter selected rows…"></div>'+
+      pills(c.selected||[])+
+      '<details><summary>Hidden catalog IDs ('+esc(c.hiddenCount||0)+')</summary><div style="margin-top:10px">'+pills(c.hidden||[],'hidden-pill')+'</div></details>'+
+      '<details><summary>Override catalog IDs ('+esc(c.overrideCount||0)+')</summary><div style="margin-top:10px">'+pills(c.overrideIds||[],'override-pill')+'</div></details>',
+      true
+    );
+    const diagBody=row('Duplicate selected IDs',di.duplicateCatalogs&&di.duplicateCatalogs.length?'<span class="badge warnb">'+esc(di.duplicateCatalogs.length)+'</span>':'<span class="badge good">0</span>')+
+      row('Hidden but not selected',di.hiddenNotSelected&&di.hiddenNotSelected.length?'<span class="badge warnb">'+esc(di.hiddenNotSelected.length)+'</span>':'<span class="badge good">0</span>')+
+      row('Ordered but not selected',di.orderNotSelected&&di.orderNotSelected.length?'<span class="badge warnb">'+esc(di.orderNotSelected.length)+'</span>':'<span class="badge good">0</span>')+
+      (di.duplicateCatalogs&&di.duplicateCatalogs.length?'<div style="margin-top:10px">'+pills(di.duplicateCatalogs)+'</div>':'')+
+      (di.hiddenNotSelected&&di.hiddenNotSelected.length?'<div style="margin-top:10px">'+pills(di.hiddenNotSelected)+'</div>':'')+
+      (di.orderNotSelected&&di.orderNotSelected.length?'<div style="margin-top:10px">'+pills(di.orderNotSelected)+'</div>':'');
+    html+=card('Diagnostics',diagBody,true);
+    html+='</div><div class="actions"><a class="linkbtn" href="/setup.html?token='+encodeURIComponent(token)+'">Edit this setup →</a><a class="linkbtn" href="/catalog-inspector.html?token='+encodeURIComponent(token)+'">Open Catalog Inspector →</a></div>';
+    $('result').innerHTML=html;
+    const cf=$('catalogFilter'); if(cf) cf.addEventListener('input',()=>{const q=cf.value.trim().toLowerCase();document.querySelectorAll('.catalog-pill').forEach(el=>el.style.display=!q||el.dataset.text.includes(q)?'inline-flex':'none')});
+  }catch(e){$('result').innerHTML='<div class="error">Could not reach the inspector API.</div>'}
+}
+$('inspectBtn').addEventListener('click',inspectToken);
+$('tokenInput').addEventListener('keydown',e=>{if(e.key==='Enter')inspectToken()});
+// Deliberately do not persist or auto-load tokens from the page URL.
+</script>
+</body>
+</html>

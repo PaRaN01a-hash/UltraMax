@@ -18,7 +18,10 @@ const BLOCKED_OVERRIDE_KEYS = [
   "createdAt",
   "updatedAt",
   "lastAccessed",
-  "preauth"
+  "preauth",
+  // Premiumize is an account-level cloud connection. Profiles may choose
+  // which Cloud Library rows to show, but never receive a duplicate secret.
+  "premiumizeApiKey"
 ];
 
 // Generous but bounded — profiles duplicate catalogs/collections arrays,
@@ -46,11 +49,20 @@ function sanitiseProfileOverrides(overrides) {
 function resolveConfigForProfile(config, profileId) {
   if (!config || !profileId) return config;
   const profile = config.profiles && config.profiles[profileId];
-  if (!profile) return config;
+  if (!profile) {
+    // A profileId that doesn't resolve (deleted/recreated with a new id,
+    // stale copied URL, typo) falls back to the base config on purpose so
+    // an install never hard-fails — but that fallback is otherwise silent
+    // and indistinguishable from a real profile whose overrides happen to
+    // match the base. Logging makes this diagnosable instead of looking
+    // like unexplained catalog "bleed" between profiles.
+    console.warn(`[profiles] profile "${profileId}" not found — falling back to base config`);
+    return config;
+  }
   const resolved = { ...config, ...(profile.overrides || {}) };
 
-  // A profile can connect its own OAuth accounts (see the
-  // ?profile=<id> handling on the auth connect routes in
+  // A profile can connect its own Trakt/Simkl account (see the
+  // ?profile=<id> handling on /auth/trakt|simkl/connect/:token in
   // auth-service.js), stored under these profile* keys so it never
   // collides with the base config's own connection. When the profile
   // hasn't connected its own account, these are unset and
@@ -65,17 +77,6 @@ function resolveConfigForProfile(config, profileId) {
   if (resolved.profileSimklToken) {
     resolved.simklAccessToken = resolved.profileSimklToken;
     resolved.simklUser = resolved.profileSimklUser || resolved.simklUser;
-  }
-  if (resolved.profileMalToken) {
-    resolved.malAccessToken = resolved.profileMalToken;
-    resolved.malRefreshToken = resolved.profileMalRefreshToken || null;
-    resolved.malTokenExpiry = resolved.profileMalTokenExpiry || null;
-    resolved.malUser = resolved.profileMalUser || resolved.malUser;
-  }
-  if (resolved.profileAnilistToken) {
-    resolved.anilistAccessToken = resolved.profileAnilistToken;
-    resolved.anilistUserId = resolved.profileAnilistUserId || null;
-    resolved.anilistUser = resolved.profileAnilistUser || resolved.anilistUser;
   }
 
   return resolved;

@@ -8,12 +8,39 @@
 // language + imdbrating; etc), so every getter below is deliberately
 // tolerant of several possible field names rather than assuming one shape.
 
-// TMDB genre ids that matter for detection below. Movie and TV share these
-// particular ids (16 = Animation) even though the two full genre lists
-// otherwise diverge slightly.
+// TMDB genre ids that matter for detection below. Movie and TV share some
+// ids, while the 1076x ids are TV-specific categories used by the reusable
+// content-exclusion system.
 const TMDB_GENRE_ID_NAMES = {
   16: "animation",
-  99: "documentary"
+  99: "documentary",
+  10763: "news",
+  10764: "reality",
+  10766: "soap",
+  10767: "talk"
+};
+
+const CONTENT_EXCLUSION_DEFS = {
+  talk: {
+    mediaType: "series",
+    tmdbGenreId: 10767,
+    genreNames: ["talk"]
+  },
+  reality: {
+    mediaType: "series",
+    tmdbGenreId: 10764,
+    genreNames: ["reality"]
+  },
+  news: {
+    mediaType: "series",
+    tmdbGenreId: 10763,
+    genreNames: ["news"]
+  },
+  soap: {
+    mediaType: "series",
+    tmdbGenreId: 10766,
+    genreNames: ["soap"]
+  }
 };
 
 const INDIAN_LANGUAGE_CODES = new Set([
@@ -29,7 +56,15 @@ const DEDICATED_ANIME_CATALOG_IDS = new Set([
   "hidive_movies", "hidive_series",
   "mal_watching", "mal_plantowatch", "mal_completed",
   "anilist_watching", "anilist_plantowatch", "anilist_trending", "anilist_seasonal",
-  "ai_anime_anilist"
+  "ai_anime_anilist",
+  "demonslayer_coll",
+  "detectiveconan_coll",
+  "dragonball_coll",
+  "evangelion_coll",
+  "myheroacademia_coll",
+  "naruto_coll",
+  "onepiece_coll",
+  "pokemon_coll"
 ]);
 
 const DEDICATED_ANIME_PREFIXES = ["anilist_", "mal_", "kitsu_", "theme_anime_"];
@@ -40,6 +75,8 @@ const DEDICATED_ANIME_PREFIXES = ["anilist_", "mal_", "kitsu_", "theme_anime_"];
 const DEDICATED_INDIAN_CATALOG_IDS = new Set([
   "bollywood_movies", "bollywood_series"
 ]);
+
+const DEDICATED_INDIAN_PREFIXES = ["theme_bollywood_"];
 
 const CERTIFICATION_ORDER = ["G", "TV-G", "PG", "TV-PG", "PG-13", "TV-14", "R", "TV-MA", "NC-17", "18"];
 
@@ -67,6 +104,41 @@ function getGenreNames(item) {
   });
 
   return names;
+}
+
+function normalizeContentExclusions(value) {
+  const raw = Array.isArray(value) ? value : [];
+  const normalized = raw
+    .map(key => String(key || "").trim().toLowerCase())
+    .filter(key => Object.prototype.hasOwnProperty.call(CONTENT_EXCLUSION_DEFS, key));
+
+  return Array.from(new Set(normalized));
+}
+
+function matchesContentExclusion(item, exclusionKey, opts = {}) {
+  if (!item) return false;
+
+  const def = CONTENT_EXCLUSION_DEFS[exclusionKey];
+  if (!def) return false;
+
+  if (
+    def.mediaType &&
+    opts.mediaType &&
+    String(opts.mediaType) !== def.mediaType
+  ) {
+    return false;
+  }
+
+  const genreIds = new Set(
+    toArray(item.genre_ids)
+      .map(id => Number(id))
+      .filter(Number.isFinite)
+  );
+
+  if (genreIds.has(def.tmdbGenreId)) return true;
+
+  const genres = getGenreNames(item);
+  return def.genreNames.some(name => genres.has(name));
 }
 
 function getKeywords(item) {
@@ -174,7 +246,9 @@ function shouldIncludeAnimeRow(catalogId, config) {
 }
 
 function isIndianCinemaCatalog(catalogId) {
-  return DEDICATED_INDIAN_CATALOG_IDS.has(String(catalogId || ""));
+  const id = String(catalogId || "");
+  if (DEDICATED_INDIAN_CATALOG_IDS.has(id)) return true;
+  return DEDICATED_INDIAN_PREFIXES.some(prefix => id.startsWith(prefix));
 }
 
 /**
@@ -207,8 +281,15 @@ function applyContentFilters(items, config, opts = {}) {
   }
 
   const indianCinemaFilter = cfg.indianCinemaFilter || "allow";
-  if (indianCinemaFilter === "hide") {
+  if (indianCinemaFilter === "hide" && !opts.skipIndianCinemaFilter) {
     out = out.filter(item => !isIndianCinemaItem(item));
+  }
+
+  const contentExclusions = normalizeContentExclusions(cfg.contentExclusions);
+  if (contentExclusions.length && !opts.skipContentExclusions) {
+    out = out.filter(item =>
+      !contentExclusions.some(key => matchesContentExclusion(item, key, opts))
+    );
   }
 
   const minRating = Number(cfg.minRating) || 0;
@@ -266,6 +347,8 @@ function applyContentFilters(items, config, opts = {}) {
 
 module.exports = {
   applyContentFilters,
+  normalizeContentExclusions,
+  matchesContentExclusion,
   shouldIncludeAnimeRow,
   isAnimeCatalog,
   isAnimeItem,

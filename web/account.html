@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- ULTRAMAX STICKY NATIVE MODE START -->
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var queryNative = params.get('native') === '1';
+  var storedNative = false;
+
+  try {
+    storedNative =
+      sessionStorage.getItem('ultramax_native_app') === '1';
+  } catch (error) {}
+
+  if (queryNative) {
+    try {
+      sessionStorage.setItem('ultramax_native_app', '1');
+    } catch (error) {}
+  }
+
+  var isNative = queryNative || storedNative;
+
+  if (!isNative) return;
+
+  document.documentElement.classList.add('native-app');
+
+  if (!queryNative) {
+    try {
+      var currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('native', '1');
+
+      history.replaceState(
+        history.state,
+        document.title,
+        currentUrl.pathname +
+          currentUrl.search +
+          currentUrl.hash
+      );
+    } catch (error) {}
+  }
+
+  function preserveNativeMode() {
+    document.querySelectorAll('a[href]').forEach(function (link) {
+      var rawHref = link.getAttribute('href');
+
+      if (
+        !rawHref ||
+        rawHref === '#' ||
+        rawHref.startsWith('javascript:') ||
+        rawHref.startsWith('mailto:') ||
+        rawHref.startsWith('tel:')
+      ) {
+        return;
+      }
+
+      try {
+        var url = new URL(rawHref, location.origin);
+
+        if (url.origin !== location.origin) return;
+
+        url.searchParams.set('native', '1');
+
+        link.setAttribute(
+          'href',
+          url.pathname + url.search + url.hash
+        );
+      } catch (error) {}
+    });
+
+    document.querySelectorAll('form').forEach(function (form) {
+      var method =
+        (form.getAttribute('method') || 'get').toLowerCase();
+
+      if (method !== 'get') return;
+
+      if (!form.querySelector('input[name="native"]')) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'native';
+        input.value = '1';
+        form.appendChild(input);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      preserveNativeMode
+    );
+  } else {
+    preserveNativeMode();
+  }
+
+  var observer = new MutationObserver(function () {
+    preserveNativeMode();
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+})();
+</script>
+<!-- ULTRAMAX STICKY NATIVE MODE END -->
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Ultra MAX · Nuvio Account Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/nav.css?v=20260922-nav3">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080810; --card: #12121f; --border: #1e1e36; --border2: #2a2a45;
+      --violet: #7B2FFF; --violet2: #9B5FFF; --coral: #FF3D5A;
+      --text: #e8e8f0; --muted: #8888aa; --ok: #34d399; --err: #ff6b6b;
+    }
+    html, body { min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; }
+    .wrap { max-width: 560px; margin: 0 auto; padding: 32px 20px; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .06em;
+      text-align: center; margin-bottom: 6px; }
+    .logo span { background: linear-gradient(135deg, var(--violet), var(--coral));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+    .card { background: linear-gradient(135deg, rgba(123,47,255,.1), rgba(123,47,255,.05));
+      border: 1px solid rgba(123,47,255,.3); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    input[type=email], input[type=password] {
+      width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border2);
+      background: rgba(255,255,255,.03); color: #fff; font-size: 14px; margin-bottom: 10px;
+      font-family: inherit;
+    }
+    label.remember { display: flex; align-items: center; gap: 8px; font-size: 13px;
+      color: var(--muted); margin-bottom: 14px; cursor: pointer; }
+    button {
+      padding: 13px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: inherit; font-weight: 700; font-size: 14px;
+    }
+    .btn-full { width: 100%; }
+    .btn-primary { background: var(--violet); color: #fff; }
+    .btn-primary:disabled { opacity: .5; cursor: default; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
+
+    .btn-danger {
+      background: rgba(255,107,107,.08);
+      border: 1px solid rgba(255,107,107,.32);
+      color: var(--err);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255,107,107,.14);
+      border-color: rgba(255,107,107,.5);
+    }
+
+    .btn-danger:disabled {
+      opacity: .35;
+      cursor: default;
+    }
+    .status { margin-top: 12px; font-size: 13px; text-align: center; min-height: 18px; }
+    #accountBootStage .spinner {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      border: 2px solid rgba(155,95,255,.24);
+      border-top-color: var(--violet2);
+      border-radius: 50%;
+      animation: accountSpin .8s linear infinite;
+    }
+    @keyframes accountSpin { to { transform: rotate(360deg); } }
+    .profile-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--border2);
+      border-radius: 12px; margin-bottom: 10px; cursor: pointer; background: rgba(255,255,255,.02);
+    }
+    .profile-row.selected { border-color: var(--violet); background: rgba(123,47,255,.12); }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name { font-size: 14px; font-weight: 600; }
+
+    .nuvio-store-map {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .nuvio-store-card {
+      padding: 10px 11px;
+      border: 1px solid var(--border2);
+      border-radius: 9px;
+      background: rgba(255,255,255,.02);
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .nuvio-store-card.is-actionable {
+      cursor: pointer;
+    }
+
+    .nuvio-store-card.is-actionable:hover {
+      border-color: rgba(123,47,255,.65);
+      background: rgba(123,47,255,.08);
+      transform: translateY(-1px);
+    }
+
+    .nuvio-store-card.is-actionable:focus-visible {
+      outline: 2px solid var(--violet2);
+      outline-offset: 2px;
+    }
+
+    .nuvio-store-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .nuvio-store-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nuvio-store-badge {
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--violet2);
+    }
+
+    .nuvio-store-users {
+      margin-top: 4px;
+      font-size: 10px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .hidden { display: none; }
+    .top-link { display: block; text-align: center; font-size: 12px; color: var(--muted);
+      text-decoration: none; margin-top: 18px; }
+    .section-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between; }
+    .item-row {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border2);
+      border-radius: 10px; margin-bottom: 8px; background: rgba(255,255,255,.02);
+    }
+    .item-name { flex: 1; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .item-sub { font-size: 11px; color: var(--muted); word-break: break-all; overflow-wrap: break-word; }
+    .remove-btn {
+      background: rgba(255,107,107,.1); border: 1px solid rgba(255,107,107,.3); color: var(--err);
+      width: 28px; height: 28px; border-radius: 8px; font-size: 14px; padding: 0; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; line-height: 1;
+    }
+    .empty-note { font-size: 12px; color: var(--muted); text-align: center; padding: 12px; }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .top-bar .profile-mini { display: flex; align-items: center; gap: 8px; }
+    .top-bar .avatar { width: 28px; height: 28px; font-size: 11px; }
+  </style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">ULTRA <span>MAX</span></div>
+  <div class="sub" data-i18n="account.subtitle">Nuvio Account Manager</div>
+
+  <div id="accountBootStage" class="card">
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;min-height:72px;color:var(--muted);font-size:13px;">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Checking your saved Nuvio session…</span>
+    </div>
+  </div>
+
+  <div id="loginStage" class="card hidden">
+    <input type="email" id="email" data-i18n-placeholder="account.login.emailPlaceholder" placeholder="Nuvio email" autocomplete="username">
+    <input type="password" id="password" data-i18n-placeholder="account.login.passwordPlaceholder" placeholder="Nuvio password" autocomplete="current-password">
+    <label class="remember">
+      <input type="checkbox" id="rememberMe">
+      <span data-i18n="account.login.remember">Remember me on this device</span>
+    </label>
+    <button class="btn-primary btn-full" id="loginBtn" data-i18n="account.login.continueBtn">Continue</button>
+    <div class="status"></div>
+  </div>
+
+  <div id="profilePickStage" class="card hidden">
+    <div style="font-size:14px;font-weight:700;margin-bottom:12px;" data-i18n="account.profilePicker.title">Select a profile</div>
+
+    <div id="nuvioAccountOverview"
+         style="display:none;margin-bottom:14px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.025);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <strong style="font-size:11px;color:var(--text);">Nuvio account</strong>
+        <span id="nuvioOverviewProfileCount"
+              style="font-size:10px;color:var(--muted);"></span>
+      </div>
+
+      <div id="nuvioOverviewSummary"
+           style="font-size:10px;line-height:1.55;color:var(--muted);margin-top:5px;"></div>
+
+      <div id="nuvioAddonStoreMap"
+           class="nuvio-store-map"></div>
+    </div>
+
+    <div id="profileList"></div>
+    <div class="status"></div>
+  </div>
+
+  <div id="managerStage" class="hidden">
+    <div class="card">
+      <div class="top-bar">
+        <div class="profile-mini">
+          <div class="avatar" id="activeAvatar"></div>
+          <strong id="activeName"></strong>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="btn-secondary" id="renameProfileBtn" style="padding:6px 12px;font-size:11px;">Rename</button>
+          <button class="btn-danger" id="deleteProfileBtn" style="padding:6px 12px;font-size:11px;">Delete</button>
+          <button class="btn-secondary" id="switchBtn" style="padding:6px 12px;font-size:11px;" data-i18n="account.manager.switchBtn">Switch</button>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span data-i18n="account.manager.addonsTitle">Addons</span>
+        <span id="addonCount" style="font-weight:400;color:var(--muted);font-size:11px;"></span>
+      </div>
+
+      <div
+        id="addonScopeNotice"
+        style="display:none;margin:0 0 10px;padding:9px 10px;border:1px solid var(--border2);border-radius:8px;background:rgba(123,47,255,.07);font-size:11px;line-height:1.5;color:var(--muted);"
+      ></div>
+
+      <div id="addonList"></div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <input type="text" id="newAddonUrl" data-i18n-placeholder="account.manager.addonUrlPlaceholder" placeholder="Paste addon manifest URL..." style="flex:1;min-width:0;padding:9px 12px;background:var(--bg2,#1a1a2e);color:var(--text);border:1px solid var(--border2);border-radius:8px;font-size:13px;">
+        <button class="btn-secondary" id="addAddonBtn" style="padding:9px 16px;font-size:13px;white-space:nowrap;" data-i18n="account.manager.addBtn">Add</button>
+      </div>
+      <div id="addAddonStatus" style="font-size:11px;margin-top:6px;"></div>
+
+      <div class="section-title" style="margin-top:18px;">
+        <span data-i18n="account.manager.collectionsTitle">Collections</span>
+        <span id="collectionCount" style="font-weight:400;color:var(--muted);font-size:11px;"></span>
+      </div>
+
+      <div
+        id="collectionScopeNotice"
+        style="margin:0 0 10px;font-size:10px;line-height:1.45;color:var(--muted);"
+      ></div>
+
+      <div id="collectionList"></div>
+
+      <button class="btn-primary btn-full" id="saveBtn" style="margin-top:16px;" data-i18n="account.manager.saveBtn">Save Changes</button>
+      <div class="status" id="managerStatus"></div>
+    </div>
+  </div>
+
+  <a href="/" id="backLink" class="top-link" data-i18n="account.backLink">← Back to Ultra MAX</a>
+</div>
+
+<script src="/nuvio-push.js?v=20260919-tvrefresh1"></script>
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const setupToken = params.get('token');
+  if (setupToken) {
+    document.getElementById('backLink').href = '/configure/' + setupToken;
+  }
+
+  const accountBootStage = document.getElementById('accountBootStage');
+  const loginStage = document.getElementById('loginStage');
+  const profilePickStage = document.getElementById('profilePickStage');
+
+  const rememberMeControl = document.getElementById('rememberMe');
+  const nativeRememberPreferenceKey = 'ultramax_nuvio_remember_pref_v1';
+  const nativeAccountSurface =
+    params.get('native') === '1' ||
+    document.documentElement.classList.contains('native-app');
+
+  if (nativeAccountSurface && rememberMeControl) {
+    let rememberPreference = null;
+    try {
+      rememberPreference = localStorage.getItem(nativeRememberPreferenceKey);
+    } catch (_error) {}
+
+    rememberMeControl.checked = rememberPreference !== '0';
+
+    rememberMeControl.addEventListener('change', function(){
+      try {
+        localStorage.setItem(
+          nativeRememberPreferenceKey,
+          rememberMeControl.checked ? '1' : '0'
+        );
+      } catch (_error) {}
+    });
+  }
+  const managerStage = document.getElementById('managerStage');
+  const loginStatus = loginStage.querySelector('.status');
+  const pickStatus = profilePickStage.querySelector('.status');
+  const managerStatus = document.getElementById('managerStatus');
+  const profileList = document.getElementById('profileList');
+  const addonList = document.getElementById('addonList');
+  const collectionList = document.getElementById('collectionList');
+
+  let accessToken = null;
+  let profiles = [];
+  let selectedProfile = null;
+  let effectiveAddonProfile = null;
+  let currentAddons = [];
+  let currentCollections = [];
+  let accountDirty = false;
+
+  function setAccountDirty(dirty){
+    accountDirty = Boolean(dirty);
+
+    const saveBtn = document.getElementById('saveBtn');
+    if (!saveBtn) return;
+
+    saveBtn.textContent = accountDirty
+      ? 'Save Changes •'
+      : umT('account.manager.saveBtn', 'Save Changes');
+  }
+
+  function confirmDiscardAccountChanges(){
+    if (!accountDirty) return true;
+
+    return window.confirm(
+      'You have unsaved Nuvio changes. Discard them?'
+    );
+  }
+
+  window.addEventListener('beforeunload', function(event){
+    if (!accountDirty) return;
+
+    event.preventDefault();
+    event.returnValue = '';
+  });
+
+  (async function init(){
+    const restored = await nuvioTryRestoreSession().catch(() => null);
+
+    if (accountBootStage) accountBootStage.classList.add('hidden');
+
+    if (restored && restored.accessToken && Array.isArray(restored.profiles)) {
+      accessToken = restored.accessToken;
+      profiles = restored.profiles;
+      loginStage.classList.add('hidden');
+      showProfilePicker();
+      return;
+    }
+
+    loginStage.classList.remove('hidden');
+  })();
+
+  function renderProfileList(container, onSelect){
+    container.innerHTML = '';
+    profiles.forEach(function(p){
+      const row = document.createElement('div');
+      row.className = 'profile-row';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      if (p.avatar_url) {
+        const img = document.createElement('img');
+        img.src = p.avatar_url;
+        img.onerror = function(){
+          avatar.textContent = (p.name || '?').charAt(0).toUpperCase();
+          avatar.style.background = p.avatar_color_hex || '#7B2FFF';
+          img.remove();
+        };
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = (p.name || '?').charAt(0).toUpperCase();
+        avatar.style.background = p.avatar_color_hex || '#7B2FFF';
+      }
+
+      const info = document.createElement('div');
+      info.style.cssText =
+        'flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;';
+
+      const name = document.createElement('div');
+      name.className = 'profile-name';
+      name.textContent = p.name;
+
+      const addonScope = document.createElement('div');
+      addonScope.className = 'profile-addon-scope';
+      addonScope.style.cssText =
+        'font-size:10px;line-height:1.3;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+
+      const numericProfileId = Number(p.profile_index);
+
+      if (numericProfileId === 1) {
+        addonScope.textContent = umT(
+          'account.profilePicker.primaryAddonStore',
+          'Primary add-on store'
+        );
+      } else if (p.uses_primary_addons === true) {
+        const primaryProfile = profiles.find(function(candidate){
+          return Number(candidate.profile_index) === 1;
+        });
+
+        addonScope.textContent =
+          primaryProfile && primaryProfile.name
+            ? umT(
+                'account.profilePicker.usesPrimaryAddonsNamed',
+                'Uses {name}\'s add-ons',
+                { name: primaryProfile.name }
+              )
+            : umT(
+                'account.profilePicker.usesPrimaryAddons',
+                'Uses primary profile add-ons'
+              );
+      } else if (p.uses_primary_addons === false) {
+        addonScope.textContent = umT(
+          'account.profilePicker.ownAddonStore',
+          'Own add-on store'
+        );
+      } else {
+        addonScope.textContent = umT(
+          'account.profilePicker.unknownAddonStore',
+          'Add-on store unavailable'
+        );
+      }
+
+      info.appendChild(name);
+      info.appendChild(addonScope);
+
+      row.appendChild(avatar);
+      row.appendChild(info);
+      row.addEventListener('click', function(){ onSelect(p); });
+      container.appendChild(row);
+    });
+  }
+
+  function renderNuvioAccountOverview(){
+    const overview = document.getElementById('nuvioAccountOverview');
+    const count = document.getElementById('nuvioOverviewProfileCount');
+    const summary = document.getElementById('nuvioOverviewSummary');
+    const storeMap = document.getElementById('nuvioAddonStoreMap');
+
+    if (!overview || !count || !summary || !storeMap) return;
+
+    const availableProfiles = Array.isArray(profiles) ? profiles : [];
+
+    if (!availableProfiles.length) {
+      overview.style.display = 'none';
+      count.textContent = '';
+      summary.textContent = '';
+      storeMap.innerHTML = '';
+      return;
+    }
+
+    const primaryProfile = availableProfiles.find(function(profile){
+      return Number(profile.profile_index) === 1;
+    }) || null;
+
+    const inheritedProfiles = availableProfiles.filter(function(profile){
+      return (
+        Number(profile.profile_index) !== 1 &&
+        profile.uses_primary_addons === true
+      );
+    });
+
+    const isolatedProfiles = availableProfiles.filter(function(profile){
+      return (
+        Number(profile.profile_index) !== 1 &&
+        profile.uses_primary_addons === false
+      );
+    });
+
+    overview.style.display = 'block';
+
+    count.textContent =
+      availableProfiles.length === 1
+        ? '1 profile'
+        : availableProfiles.length + ' profiles';
+
+    const parts = [];
+
+    if (primaryProfile) {
+      parts.push(
+        'Primary add-on store: ' +
+        (primaryProfile.name || 'Profile 1')
+      );
+    }
+
+    if (inheritedProfiles.length) {
+      parts.push(
+        inheritedProfiles.length +
+        (
+          inheritedProfiles.length === 1
+            ? ' profile shares the primary add-ons'
+            : ' profiles share the primary add-ons'
+        )
+      );
+    }
+
+    if (isolatedProfiles.length) {
+      parts.push(
+        isolatedProfiles.length +
+        (
+          isolatedProfiles.length === 1
+            ? ' profile has its own add-on store'
+            : ' profiles have their own add-on stores'
+        )
+      );
+    }
+
+    summary.textContent = parts.join(' • ');
+    storeMap.innerHTML = '';
+
+    const physicalStores = new Map();
+
+    availableProfiles.forEach(function(profile){
+      let storeId;
+
+      try {
+        storeId = nuvioEffectiveAddonProfileId(
+          profile.profile_index,
+          availableProfiles
+        );
+      } catch (_error) {
+        return;
+      }
+
+      const numericStoreId = Number(storeId);
+
+      if (!physicalStores.has(numericStoreId)) {
+        physicalStores.set(numericStoreId, []);
+      }
+
+      physicalStores.get(numericStoreId).push(profile);
+    });
+
+    Array.from(physicalStores.entries())
+      .sort(function(a, b){
+        return Number(a[0]) - Number(b[0]);
+      })
+      .forEach(function(entry){
+        const storeId = entry[0];
+        const users = entry[1];
+
+        const owner = availableProfiles.find(function(profile){
+          return Number(profile.profile_index) === Number(storeId);
+        }) || null;
+
+        const card = document.createElement('div');
+        card.className = 'nuvio-store-card';
+
+        if (owner) {
+          card.classList.add('is-actionable');
+          card.tabIndex = 0;
+          card.setAttribute('role', 'button');
+          card.setAttribute(
+            'aria-label',
+            'Manage add-ons stored under ' +
+              (owner.name || ('Profile ' + storeId))
+          );
+
+          const openStoreOwner = function(){
+            selectProfile(owner);
+          };
+
+          card.addEventListener('click', openStoreOwner);
+          card.addEventListener('keydown', function(event){
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openStoreOwner();
+            }
+          });
+        }
+
+        const head = document.createElement('div');
+        head.className = 'nuvio-store-head';
+
+        const name = document.createElement('div');
+        name.className = 'nuvio-store-name';
+        name.textContent =
+          owner && owner.name
+            ? owner.name
+            : 'Profile ' + storeId;
+
+        const badge = document.createElement('div');
+        badge.className = 'nuvio-store-badge';
+        badge.textContent =
+          Number(storeId) === 1
+            ? 'Primary add-on store'
+            : 'Own add-on store';
+
+        const usersEl = document.createElement('div');
+        usersEl.className = 'nuvio-store-users';
+
+        const names = users
+          .map(function(profile){
+            return profile.name || ('Profile ' + profile.profile_index);
+          })
+          .filter(Boolean);
+
+        usersEl.textContent =
+          (
+            names.length === 1
+              ? 'Used by ' + names[0]
+              : 'Used by ' + names.join(', ')
+          ) +
+          (
+            owner
+              ? ' · Click to manage this add-on store'
+              : ''
+          );
+
+        head.appendChild(name);
+        head.appendChild(badge);
+
+        card.appendChild(head);
+        card.appendChild(usersEl);
+
+        storeMap.appendChild(card);
+      });
+  }
+
+  function showProfilePicker(){
+    profilePickStage.classList.remove('hidden');
+    renderNuvioAccountOverview();
+    renderProfileList(profileList, selectProfile);
+  }
+
+  function effectiveAddonProfileId(profile){
+    return nuvioEffectiveAddonProfileId(
+      profile.profile_index,
+      profiles
+    );
+  }
+
+  function resolveEffectiveAddonProfile(profile){
+    const effectiveId = effectiveAddonProfileId(profile);
+    const effectiveProfile = profileByIndex(effectiveId);
+
+    if (!effectiveProfile) {
+      throw new Error('Resolved Nuvio add-on store profile was not found.');
+    }
+
+    return effectiveProfile;
+  }
+
+  function profileByIndex(profileIndex){
+    return profiles.find(function(profile){
+      return Number(profile.profile_index) === Number(profileIndex);
+    }) || null;
+  }
+
+  function profilesUsingAddonStore(storeProfileId){
+    return profiles.filter(function(profile){
+      try {
+        return Number(
+          effectiveAddonProfileId(profile)
+        ) === Number(storeProfileId);
+      } catch (_error) {
+        return false;
+      }
+    });
+  }
+
+  function renderScopeNotices(){
+    if (!selectedProfile) return;
+
+    const addonNotice = document.getElementById('addonScopeNotice');
+    const collectionNotice = document.getElementById('collectionScopeNotice');
+
+    const effectiveId = effectiveAddonProfile
+      ? effectiveAddonProfile.profile_index
+      : effectiveAddonProfileId(selectedProfile);
+    const effectiveProfile = effectiveAddonProfile || profileByIndex(effectiveId);
+    const affectedProfiles = profilesUsingAddonStore(effectiveId);
+
+    if (Number(effectiveId) !== Number(selectedProfile.profile_index)) {
+      const ownerName =
+        effectiveProfile && effectiveProfile.name
+          ? effectiveProfile.name
+          : 'the primary profile';
+
+      const affectedNames = affectedProfiles
+        .map(function(profile){ return profile.name; })
+        .filter(Boolean);
+
+      addonNotice.style.display = 'block';
+      addonNotice.innerHTML =
+        '<strong style="color:var(--text);">Shared add-on store</strong><br>' +
+        escapeHtml(selectedProfile.name) +
+        ' uses ' +
+        escapeHtml(ownerName) +
+        '\'s add-ons.<br>' +
+        'Changes to add-ons will also affect other profiles using the primary add-on store.' +
+        (
+          affectedNames.length > 1
+            ? '<br>Changes here affect: ' +
+              escapeHtml(affectedNames.join(', ')) +
+              '.'
+            : ''
+        );
+    } else {
+      addonNotice.style.display = 'block';
+
+      if (Number(effectiveId) === 1 && affectedProfiles.length > 1) {
+        const affectedNames = affectedProfiles
+          .map(function(profile){ return profile.name; })
+          .filter(Boolean);
+
+        addonNotice.innerHTML =
+          '<strong style="color:var(--text);">Primary add-on store</strong><br>' +
+          'These add-ons are shared with: ' +
+          escapeHtml(affectedNames.join(', ')) +
+          '.';
+      } else {
+        addonNotice.innerHTML =
+          '<strong style="color:var(--text);">Profile add-on store</strong><br>' +
+          'This profile has its own add-ons.';
+      }
+    }
+
+    collectionNotice.textContent =
+      selectedProfile.name +
+      '\'s collections are separate and only affect this profile.';
+  }
+
+  async function selectProfile(p){
+    selectedProfile = p;
+    effectiveAddonProfile = null;
+    profilePickStage.classList.add('hidden');
+    managerStage.classList.remove('hidden');
+
+    const activeAvatar = document.getElementById('activeAvatar');
+    activeAvatar.innerHTML = '';
+    if (p.avatar_url) {
+      const img = document.createElement('img');
+      img.src = p.avatar_url;
+      img.onerror = function(){
+        activeAvatar.textContent = (p.name || '?').charAt(0).toUpperCase();
+        activeAvatar.style.background = p.avatar_color_hex || '#7B2FFF';
+        img.remove();
+      };
+      activeAvatar.appendChild(img);
+    } else {
+      activeAvatar.textContent = (p.name || '?').charAt(0).toUpperCase();
+      activeAvatar.style.background = p.avatar_color_hex || '#7B2FFF';
+    }
+    document.getElementById('activeName').textContent = p.name;
+
+    const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+
+    if (deleteProfileBtn) {
+      const isPrimaryProfile =
+        Number(p.profile_index) === 1;
+
+      deleteProfileBtn.disabled = isPrimaryProfile;
+      deleteProfileBtn.style.display =
+        isPrimaryProfile ? 'none' : '';
+    }
+
+    managerStatus.textContent = umT('account.status.loading', 'Loading...');
+    managerStatus.style.color = 'var(--muted)';
+
+    try {
+      effectiveAddonProfile = resolveEffectiveAddonProfile(p);
+
+      currentAddons = await nuvioGetAddons(
+        accessToken,
+        effectiveAddonProfile.profile_index
+      );
+
+      currentCollections = await nuvioGetCollections(
+        accessToken,
+        p.profile_index
+      );
+
+      window.accountLoadedAddonState =
+        nuvioAddonState(currentAddons);
+
+      renderScopeNotices();
+      renderAddons();
+      renderCollections();
+      setAccountDirty(false);
+      managerStatus.textContent = '';
+    } catch (err) {
+      managerStatus.textContent = err.message || umT('account.status.loadFailed', 'Failed to load profile data.');
+      managerStatus.style.color = 'var(--err)';
+    }
+  }
+  function renderAddons(){
+    document.getElementById('addonCount').textContent = umT('account.manager.addonsInstalled', '{n} installed', { n: currentAddons.length });
+    addonList.innerHTML = '';
+    if (currentAddons.length === 0) {
+      addonList.innerHTML = '<div class="empty-note">' + escapeHtml(umT('account.manager.noAddons', 'No addons installed on this profile.')) + '</div>';
+      return;
+    }
+    currentAddons.forEach(function(addon, idx){
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML =
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="item-name">' + escapeHtml(addon.name || umT('account.manager.unnamedAddon', 'Unnamed addon')) + '</div>' +
+          '<div class="item-sub">' + escapeHtml(addon.url || '') + '</div>' +
+        '</div>';
+      const reorderStyle = 'background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text);border-radius:6px;width:26px;height:26px;flex-shrink:0;cursor:pointer;font-size:12px;';
+      const upBtn = document.createElement('button');
+      upBtn.style.cssText = reorderStyle;
+      upBtn.textContent = '↑';
+      upBtn.disabled = (idx === 0);
+      upBtn.style.opacity = (idx === 0) ? '0.3' : '1';
+      upBtn.addEventListener('click', function(){
+        if (idx === 0) return;
+        const tmp = currentAddons[idx - 1];
+        currentAddons[idx - 1] = currentAddons[idx];
+        currentAddons[idx] = tmp;
+        setAccountDirty(true);
+        renderAddons();
+      });
+      const downBtn = document.createElement('button');
+      downBtn.style.cssText = reorderStyle;
+      downBtn.textContent = '↓';
+      downBtn.disabled = (idx === currentAddons.length - 1);
+      downBtn.style.opacity = (idx === currentAddons.length - 1) ? '0.3' : '1';
+      downBtn.addEventListener('click', function(){
+        if (idx === currentAddons.length - 1) return;
+        const tmp = currentAddons[idx + 1];
+        currentAddons[idx + 1] = currentAddons[idx];
+        currentAddons[idx] = tmp;
+        setAccountDirty(true);
+        renderAddons();
+      });
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', function(){
+        currentAddons.splice(idx, 1);
+        setAccountDirty(true);
+        renderAddons();
+      });
+      row.appendChild(upBtn);
+      row.appendChild(downBtn);
+      row.appendChild(removeBtn);
+      addonList.appendChild(row);
+    });
+  }
+
+
+  function renderCollections(){
+    document.getElementById('collectionCount').textContent = umT('account.manager.collectionsCount', '{n} collections', { n: currentCollections.length });
+    collectionList.innerHTML = '';
+    if (currentCollections.length === 0) {
+      collectionList.innerHTML = '<div class="empty-note">' + escapeHtml(umT('account.manager.noCollections', 'No collections on this profile.')) + '</div>';
+      return;
+    }
+    currentCollections.forEach(function(coll, idx){
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      const folderCount = Array.isArray(coll.folders) ? coll.folders.length : 0;
+      const folderWord = folderCount === 1
+        ? umT('account.manager.folderSingular', 'folder')
+        : umT('account.manager.folderPlural', 'folders');
+      row.innerHTML =
+        '<div style="flex:1;min-width:0;">' +
+          '<div class="item-name">' + escapeHtml(coll.title || umT('account.manager.untitledCollection', 'Untitled collection')) + '</div>' +
+          '<div class="item-sub">' + folderCount + ' ' + escapeHtml(folderWord) + '</div>' +
+        '</div>';
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', function(){
+        currentCollections.splice(idx, 1);
+        setAccountDirty(true);
+        renderCollections();
+      });
+      row.appendChild(removeBtn);
+      collectionList.appendChild(row);
+    });
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('rememberMe').checked;
+    const btn = document.getElementById('loginBtn');
+
+    if (!email || !password) {
+      loginStatus.textContent = umT('account.login.missingFields', 'Please enter your Nuvio email and password.');
+      loginStatus.style.color = 'var(--err)';
+      return;
+    }
+
+    btn.disabled = true;
+    loginStatus.style.color = 'var(--muted)';
+    loginStatus.textContent = umT('account.login.loggingIn', 'Logging in...');
+
+    try {
+      const result = await nuvioLoginAndListProfiles(email, password);
+      accessToken = result.accessToken;
+      profiles = result.profiles;
+      document.getElementById('password').value = '';
+
+      if (remember) {
+        nuvioSaveSession(result.refreshToken);
+      }
+
+      loginStage.classList.add('hidden');
+      showProfilePicker();
+    } catch (err) {
+      loginStatus.textContent = err.message || umT('account.login.failed', 'Login failed.');
+      loginStatus.style.color = 'var(--err)';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('renameProfileBtn').addEventListener('click', async () => {
+    if (!selectedProfile) return;
+
+    if (accountDirty) {
+      managerStatus.textContent =
+        'Save or discard your current changes before renaming this profile.';
+      managerStatus.style.color = 'var(--err)';
+      return;
+    }
+
+    const currentName = String(selectedProfile.name || '').trim();
+
+    const requestedName = window.prompt(
+      'Rename Nuvio profile',
+      currentName
+    );
+
+    if (requestedName === null) return;
+
+    const newName = requestedName.trim();
+
+    if (!newName || newName === currentName) return;
+
+    if (newName.length > 40) {
+      managerStatus.textContent =
+        'Profile names must be 40 characters or fewer.';
+      managerStatus.style.color = 'var(--err)';
+      return;
+    }
+
+    const button = document.getElementById('renameProfileBtn');
+    button.disabled = true;
+
+    managerStatus.textContent = 'Preparing profile rename...';
+    managerStatus.style.color = 'var(--muted)';
+
+    try {
+      const renamedProfileIndex =
+        Number(selectedProfile.profile_index);
+
+      const previousEffectiveAddonProfileId =
+        effectiveAddonProfile
+          ? Number(effectiveAddonProfile.profile_index)
+          : null;
+
+      profiles = await nuvioSafelyRenameProfile(
+        accessToken,
+        profiles,
+        renamedProfileIndex,
+        newName,
+        function(message){
+          managerStatus.textContent = message;
+        }
+      );
+
+      selectedProfile = profiles.find(function(profile){
+        return Number(profile.profile_index) ===
+          renamedProfileIndex;
+      }) || null;
+
+      if (!selectedProfile) {
+        throw new Error(
+          'The renamed Nuvio profile could not be found after verification.'
+        );
+      }
+
+      if (previousEffectiveAddonProfileId !== null) {
+        effectiveAddonProfile = profiles.find(function(profile){
+          return Number(profile.profile_index) ===
+            previousEffectiveAddonProfileId;
+        }) || null;
+      }
+
+      document.getElementById('activeName').textContent =
+        selectedProfile.name;
+
+      renderScopeNotices();
+      renderNuvioAccountOverview();
+
+      managerStatus.textContent =
+        'Profile renamed ✓';
+      managerStatus.style.color = 'var(--ok)';
+    } catch (err) {
+      managerStatus.textContent =
+        err.message || 'Could not rename profile.';
+      managerStatus.style.color = 'var(--err)';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById('deleteProfileBtn').addEventListener('click', async () => {
+    if (!selectedProfile) return;
+
+    const profileIndex =
+      Number(selectedProfile.profile_index);
+
+    if (profileIndex === 1) {
+      managerStatus.textContent =
+        'The primary Nuvio profile cannot be deleted.';
+      managerStatus.style.color = 'var(--err)';
+      return;
+    }
+
+    if (accountDirty) {
+      managerStatus.textContent =
+        'Save or discard your current changes before deleting this profile.';
+      managerStatus.style.color = 'var(--err)';
+      return;
+    }
+
+    const profileName =
+      String(selectedProfile.name || ('Profile ' + profileIndex));
+
+    const confirmed = window.confirm(
+      'Delete Nuvio profile "' + profileName + '"?\n\n' +
+      'This permanently removes this profile and its profile-scoped Nuvio data, including add-ons, collections, watch history/progress, settings, credentials and related profile data.\n\n' +
+      'This cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    const button =
+      document.getElementById('deleteProfileBtn');
+
+    const renameButton =
+      document.getElementById('renameProfileBtn');
+
+    button.disabled = true;
+
+    if (renameButton) {
+      renameButton.disabled = true;
+    }
+
+    managerStatus.textContent =
+      'Preparing profile deletion...';
+
+    managerStatus.style.color =
+      'var(--muted)';
+
+    try {
+      profiles = await nuvioSafelyDeleteProfile(
+        accessToken,
+        profiles,
+        profileIndex,
+        function(message){
+          managerStatus.textContent = message;
+        }
+      );
+
+      selectedProfile = null;
+      effectiveAddonProfile = null;
+      currentAddons = [];
+      currentCollections = [];
+
+      window.accountLoadedAddonState = null;
+
+      setAccountDirty(false);
+
+      managerStage.classList.add('hidden');
+
+      renderNuvioAccountOverview();
+      renderProfileList(
+        profileList,
+        selectProfile
+      );
+
+      profilePickStage.classList.remove('hidden');
+
+      pickStatus.textContent =
+        'Profile "' + profileName + '" deleted ✓';
+
+      pickStatus.style.color =
+        'var(--ok)';
+    } catch (err) {
+      managerStatus.textContent =
+        err.message ||
+        'Could not delete profile.';
+
+      managerStatus.style.color =
+        'var(--err)';
+
+      button.disabled = false;
+
+      if (renameButton) {
+        renameButton.disabled = false;
+      }
+    }
+  });
+
+  document.getElementById('switchBtn').addEventListener('click', () => {
+    if (!confirmDiscardAccountChanges()) return;
+
+    setAccountDirty(false);
+    managerStage.classList.add('hidden');
+    showProfilePicker();
+  });
+
+  document.getElementById('addAddonBtn').addEventListener('click', async () => {
+    const input = document.getElementById('newAddonUrl');
+    const statusEl = document.getElementById('addAddonStatus');
+    const url = input.value.trim();
+    if (!url) { statusEl.textContent = umT('account.manager.addonUrlRequired', 'Please paste a manifest URL.'); statusEl.style.color = 'var(--err)'; return; }
+    if (currentAddons.some(a => a.url === url)) { statusEl.textContent = umT('account.manager.addonDuplicate', 'That addon is already in the list.'); statusEl.style.color = 'var(--err)'; return; }
+    statusEl.textContent = umT('account.manager.checkingAddon', 'Checking addon...');
+    statusEl.style.color = 'var(--muted)';
+    let addonName = url;
+    try {
+      const manifestUrl = url.endsWith('.json') ? url : url.replace(/\/$/, '') + '/manifest.json';
+      const resp = await fetch(manifestUrl);
+      if (resp.ok) {
+        const manifest = await resp.json();
+        if (manifest && manifest.name) addonName = manifest.name;
+      }
+    } catch (e) { /* fall back to using the URL as the name */ }
+    currentAddons.push({ url: url, name: addonName, enabled: true });
+    setAccountDirty(true);
+    renderAddons();
+    input.value = '';
+    statusEl.textContent = umT('account.manager.addonAdded', 'Added "{name}" — click Save below to push it to Nuvio.', { name: addonName });
+    statusEl.style.color = 'var(--ok)';
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    managerStatus.style.color = 'var(--muted)';
+    managerStatus.textContent = umT('account.manager.savingAddons', 'Saving addons...');
+
+    try {
+      effectiveAddonProfile = resolveEffectiveAddonProfile(
+        selectedProfile
+      );
+
+      const verifiedAddons = await nuvioSafelyReplaceAddons(
+        accessToken,
+        effectiveAddonProfile.profile_index,
+        currentAddons,
+        window.accountLoadedAddonState,
+        function(message){
+          managerStatus.textContent = message;
+        }
+      );
+
+      currentAddons = verifiedAddons;
+      window.accountLoadedAddonState =
+        nuvioAddonState(verifiedAddons);
+
+      managerStatus.textContent = umT('account.manager.savingCollections', 'Saving collections...');
+
+      await nuvioPushCollections(
+        accessToken,
+        selectedProfile.profile_index,
+        currentCollections
+      );
+
+      setAccountDirty(false);
+      managerStatus.textContent = umT('account.manager.saved', 'Saved ✓');
+      managerStatus.style.color = 'var(--ok)';
+    } catch (err) {
+      managerStatus.textContent = err.message || umT('account.manager.saveFailed', 'Failed to save changes.');
+      managerStatus.style.color = 'var(--err)';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+
+<!-- ULTRAMAX SHARED NATIVE NAV START -->
+<style>
+html.native-app body {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+</style>
+
+<div id="umNavMount"></div>
+<script src="/nav.js?v=20260923-nav6"></script>
+<script src="/i18n.js"></script>
+<!-- ULTRAMAX SHARED NATIVE NAV END -->
+
+
+<!-- ULTRAMAX ANDROID BACK START -->
+
+<style>
+#umBackToast {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 100050;
+  transform: translateX(-50%) translateY(12px);
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 11px 18px;
+  border: 1px solid rgba(155,95,255,.32);
+  border-radius: 999px;
+  background: rgba(14,12,28,.96);
+  color: #fff;
+  box-shadow: 0 14px 40px rgba(0,0,0,.45);
+  font-family: Inter, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html.native-app #umBackToast.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+
+<div id="umBackToast" role="status" aria-live="polite">
+  Press back again to exit
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+
+  if (params.get('native') !== '1') return;
+
+  var lastBackPress = 0;
+  var toastTimer = null;
+
+  function currentPage() {
+    var page = window.location.pathname.split('/').pop();
+    return page || 'app.html';
+  }
+
+  function isHomePage() {
+    return currentPage() === 'app.html';
+  }
+
+  function showExitToast() {
+    var toast = document.getElementById('umBackToast');
+    if (!toast) return;
+
+    toast.classList.add('show');
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function () {
+      toast.classList.remove('show');
+    }, 1900);
+  }
+
+  function goHome() {
+    window.location.href =
+      '/app.html?native=1&fromBack=1';
+  }
+
+  function closeOpenOverlay() {
+    /*
+      Handles common visible dialogs, menus and overlays before navigating.
+      It safely does nothing when none are open.
+    */
+    var selectors = [
+      '[role="dialog"].open',
+      '[role="dialog"].show',
+      '.modal.open',
+      '.modal.show',
+      '.modal.active',
+      '.overlay.open',
+      '.overlay.show',
+      '.drawer.open',
+      '.drawer.show',
+      '.menu.open'
+    ];
+
+    var openElement = document.querySelector(selectors.join(','));
+
+    if (!openElement) return false;
+
+    var closeButton = openElement.querySelector(
+      '[data-close], .close, .modal-close, .close-button, button[aria-label="Close"]'
+    );
+
+    if (closeButton) {
+      closeButton.click();
+    } else {
+      openElement.classList.remove('open', 'show', 'active');
+    }
+
+    return true;
+  }
+
+  function installBackHandler() {
+    var AppPlugin =
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.App;
+
+    if (!AppPlugin || typeof AppPlugin.addListener !== 'function') {
+      console.warn('Ultra MAX: Capacitor App plugin unavailable');
+      return;
+    }
+
+    AppPlugin.addListener('backButton', function (event) {
+      if (closeOpenOverlay()) return;
+
+      if (!isHomePage()) {
+        var sameOriginReferrer = false;
+
+        try {
+          sameOriginReferrer =
+            !!document.referrer &&
+            new URL(document.referrer).origin === window.location.origin;
+        } catch (error) {}
+
+        if (event.canGoBack && sameOriginReferrer) {
+          window.history.back();
+        } else {
+          goHome();
+        }
+
+        return;
+      }
+
+      var now = Date.now();
+
+      if (now - lastBackPress < 2000) {
+        AppPlugin.exitApp();
+        return;
+      }
+
+      lastBackPress = now;
+      showExitToast();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installBackHandler);
+  } else {
+    installBackHandler();
+  }
+})();
+</script>
+
+<!-- ULTRAMAX ANDROID BACK END -->
+
+
+<!-- ULTRAMAX ACCOUNT APP VIEW START -->
+
+<style>
+.um-account-app-header {
+  display: none;
+}
+
+html.native-app body {
+  min-height: 100vh;
+  padding-bottom:
+    calc(98px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(123,47,255,.28),
+      transparent 38%
+    ),
+    var(--bg);
+}
+
+html.native-app .um-account-app-header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 5000;
+  min-height: calc(62px + env(safe-area-inset-top));
+  padding:
+    calc(8px + env(safe-area-inset-top))
+    14px
+    8px;
+  align-items: center;
+  gap: 12px;
+  background: rgba(8,8,16,.96);
+  border-bottom: 1px solid rgba(155,95,255,.18);
+  box-shadow: 0 12px 34px rgba(0,0,0,.34);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.um-account-back {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(155,95,255,.28);
+  border-radius: 14px;
+  background: rgba(255,255,255,.045);
+  color: #fff;
+  text-decoration: none;
+  font-size: 22px;
+  line-height: 1;
+}
+
+html.native-app .um-account-back {
+  display: none !important;
+}
+
+.um-account-heading {
+  min-width: 0;
+  flex: 1;
+}
+
+.um-account-eyebrow {
+  color: var(--violet2);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.um-account-title {
+  margin-top: 2px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.um-account-status-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: 0 0 0 5px rgba(136,136,170,.08);
+}
+
+html.native-app .wrap {
+  width: 100%;
+  max-width: 560px;
+  padding:
+    22px 16px
+    calc(20px + env(safe-area-inset-bottom));
+}
+
+html.native-app .logo {
+  font-size: 36px;
+  margin-bottom: 4px;
+}
+
+html.native-app .sub {
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+html.native-app .card {
+  padding: 20px;
+  border-radius: 22px;
+  margin-bottom: 18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(123,47,255,.13),
+      rgba(255,255,255,.025)
+    );
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+html.native-app input[type=email],
+html.native-app input[type=password],
+html.native-app #newAddonUrl {
+  min-height: 50px;
+  padding: 13px 14px !important;
+  border-radius: 14px !important;
+  font-size: 16px !important;
+}
+
+html.native-app button {
+  min-height: 48px;
+  border-radius: 14px;
+}
+
+html.native-app .btn-primary {
+  background:
+    linear-gradient(
+      135deg,
+      var(--violet),
+      var(--coral)
+    );
+  box-shadow: 0 10px 28px rgba(123,47,255,.24);
+}
+
+html.native-app .remember {
+  min-height: 40px;
+  margin-bottom: 12px;
+}
+
+html.native-app .remember input {
+  width: 18px;
+  height: 18px;
+}
+
+html.native-app .profile-row {
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+}
+
+html.native-app .profile-row:active {
+  transform: scale(.985);
+}
+
+html.native-app .avatar {
+  width: 46px;
+  height: 46px;
+}
+
+html.native-app .profile-name {
+  font-size: 15px;
+}
+
+html.native-app .top-bar {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+html.native-app .top-bar .avatar {
+  width: 36px;
+  height: 36px;
+}
+
+html.native-app .section-title {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+html.native-app .item-row {
+  min-height: 58px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.028);
+}
+
+html.native-app .item-name {
+  font-size: 14px;
+}
+
+html.native-app .item-sub {
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
+html.native-app .remove-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+
+html.native-app #managerStage .card {
+  padding-bottom: 22px;
+}
+
+html.native-app #newAddonUrl {
+  margin-bottom: 0;
+}
+
+html.native-app #addAddonBtn {
+  min-width: 72px;
+}
+
+html.native-app #saveBtn {
+  position: sticky;
+  bottom:
+    calc(82px + env(safe-area-inset-bottom));
+  z-index: 20;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.38),
+    0 10px 28px rgba(123,47,255,.24);
+}
+
+html.native-app #backLink {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  html.native-app .wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  html.native-app .card {
+    padding: 18px;
+  }
+
+  html.native-app #managerStage .card > div[style*="display:flex"] {
+    gap: 7px !important;
+  }
+}
+</style>
+
+<header class="um-account-app-header">
+  <a
+    href="/app.html?native=1"
+    class="um-account-back"
+    aria-label="Back to Ultra MAX"
+    data-i18n-aria-label="account.header.backAriaLabel"
+  >‹</a>
+
+  <img class="um-account-brand-logo" src="/logos/nuvio-icon.png" alt="" aria-hidden="true">
+  <div class="um-account-heading">
+    <div class="um-account-eyebrow">Ultra MAX</div>
+    <div class="um-account-title" data-i18n="account.header.title">Nuvio Account</div>
+  </div>
+
+  <div
+    class="um-account-status-dot"
+    id="umAccountStatusDot"
+    aria-hidden="true"
+  ></div>
+</header>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+
+  if (params.get('native') !== '1') return;
+
+  document.documentElement.classList.add('native-app');
+
+  function updateAccountIndicator() {
+    var dot = document.getElementById('umAccountStatusDot');
+    if (!dot) return;
+
+    var manager =
+      document.getElementById('managerStage');
+
+    var profilePicker =
+      document.getElementById('profilePickStage');
+
+    var connected =
+      manager &&
+      !manager.classList.contains('hidden');
+
+    var choosingProfile =
+      profilePicker &&
+      !profilePicker.classList.contains('hidden');
+
+    if (connected) {
+      dot.style.background = 'var(--ok)';
+      dot.style.boxShadow =
+        '0 0 0 5px rgba(52,211,153,.11), ' +
+        '0 0 18px rgba(52,211,153,.45)';
+    } else if (choosingProfile) {
+      dot.style.background = 'var(--violet2)';
+      dot.style.boxShadow =
+        '0 0 0 5px rgba(155,95,255,.11), ' +
+        '0 0 18px rgba(155,95,255,.42)';
+    } else {
+      dot.style.background = 'var(--muted)';
+      dot.style.boxShadow =
+        '0 0 0 5px rgba(136,136,170,.08)';
+    }
+  }
+
+  updateAccountIndicator();
+
+  var observer = new MutationObserver(
+    updateAccountIndicator
+  );
+
+  [
+    document.getElementById('loginStage'),
+    document.getElementById('profilePickStage'),
+    document.getElementById('managerStage')
+  ].forEach(function (element) {
+    if (!element) return;
+
+    observer.observe(element, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  });
+})();
+</script>
+
+<!-- ULTRAMAX ACCOUNT APP VIEW END -->
+
+
+<!-- ULTRAMAX ACCOUNT HEADER FIX START -->
+<style>
+/*
+  The header is injected near the end of the HTML, so it must be fixed
+  rather than sticky. Fixed positioning removes it from document flow.
+*/
+html.native-app .um-account-app-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* Make room for the fixed header at the top */
+html.native-app .wrap {
+  padding-top:
+    calc(84px + env(safe-area-inset-top)) !important;
+}
+
+/* The connection/profile dot is unnecessary */
+html.native-app .um-account-status-dot {
+  display: none !important;
+}
+
+/* Keep the title area aligned after removing the dot */
+html.native-app .um-account-heading {
+  padding-right: 42px;
+}
+
+/* Ultra MAX brand polish: Nuvio account mark */
+.um-account-brand-logo {
+  display:none;
+}
+html.native-app .um-account-brand-logo {
+  display:block;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:11px;
+  object-fit:cover;
+  box-shadow:0 8px 24px rgba(123,47,255,.22);
+}
+</style>
+<!-- ULTRAMAX ACCOUNT HEADER FIX END -->
+
+</body>
+</html>

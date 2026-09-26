@@ -1,7 +1,26 @@
 const { getWatchedIds, filterWatched } = require("./watched-filter");
 const { resolveConfigForProfile } = require("../utils/profiles");
+const {
+  getProviderCapabilities,
+  createEffectiveDiscoveryConfig
+} = require("./provider-capability-service");
+const { createMetadataService } = require("./metadata-service");
+const { resolveRuntimeTmdbKey } = require("./tmdb-key-health-service");
+const { buildEffectiveStreamAddons } = require("./stream-source-config-service");
+const { probeStreamBridgeAvailability } = require("./stream-bridge");
+const {
+  createStreamAvailabilityScope,
+  filterCatalogByStreamAvailability,
+  scheduleStreamAvailabilityChecks
+} = require("./stream-availability-service");
 
-const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 7000}`;
+function buildRequestCatalogDeps(catalogDeps, tmdbKey) {
+  return {
+    ...catalogDeps,
+    TMDB_KEY: tmdbKey,
+    ...createMetadataService({ tmdbKey })
+  };
+}
 
 function registerCatalogRoutes(app, deps) {
 console.log("CATALOG ROUTE SERVICE ACTIVE");
@@ -15,19 +34,20 @@ console.log("CATALOG ROUTE SERVICE ACTIVE");
     handleCatalogService,
     catalogDeps,
     loadConfigs,
+    readConfig = async (token) => loadConfigs()[token],
     MDBLIST_KEY
   } = deps;
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const url = req.url;
   if (url.includes("/manifest.json") && !url.startsWith("/c/") && !url.startsWith("/n/") && !url.startsWith("/collections/") && !url.startsWith("/auth/")) {
     const fullManifest = {
-      id: FILTER_ENABLED ?"com.ultramax" :"com.ultramax",
+      id: FILTER_ENABLED ?"com.ultramax" :"com.ultramax.all.dev",
       version: require("../package.json").version,
-  logo: `${BASE_URL}/logo.svg`,
+  logo: "https://ultramax.vip/logo.png",
       name: FILTER_ENABLED ?"Ultra MAX" :"Ultra MAX All Dev",
       description: FILTER_ENABLED ?"Curated discovery with filtered rows and cleaner collections." :"Full Ultra MAX discovery with all available rows.",
-      types: ["movie","series"],
+      types: ["movie","series","tv"],
       resources: ["catalog","meta","stream"],
       catalogs: [
         ...QUICK_PICK_CATALOGS,
@@ -49,7 +69,7 @@ app.use((req, res, next) => {
 
     return res.json(fullManifest);
   }
-  if (url.match(/\/catalog\//) && !url.startsWith("/c/") && !url.startsWith("/collections/")) {
+  if (url.match(/\/catalog\//) && !url.startsWith("/c/") && !url.startsWith("/n/") && !url.startsWith("/collections/")) {
     const match = url.match(/\/catalog\/([^/]+)\/([^/]+)(?:\/(.+))?\.json/);
     if (match) {
       const [, type, id, extraStr] = match;
@@ -59,7 +79,7 @@ app.use((req, res, next) => {
   id,
   type,
   extra,
-  null,           // mdbKey
+  MDBLIST_KEY,    // server-owned public MDBList key
   FILTER_ENABLED, // filterLang
   "en-US",        // language
   null,           // rpdbKey
@@ -79,24 +99,31 @@ app.use((req, res, next) => {
       return;
     }
   }
-if (url.includes("/catalog/") && url.includes("/c/")) {
-    const match = url.match(/\/c\/([^/]+)\/catalog\/([^/]+)\/([^/]+)(?:\/(.+))?\.json/);
+if (url.includes("/catalog/") && (url.includes("/c/") || url.includes("/n/"))) {
+    const match = url.match(/\/(?:c|n)\/([^/]+)\/catalog\/([^/]+)\/([^/]+)(?:\/(.+))?\.json/);
     if (match) {
       let [, token, type, id, extraStr] = match;
-console.log(
-  "CUSTOM CATALOG:",
-  token,
-  id,
-  "extraStr:",
-  extraStr,
-  "query:",
-  req.query
-);
-
       if (id === "search_movie") id = "search_movies";
-      const configs = loadConfigs();
-      if (!configs[token]) return res.json({ metas: [] });
-      const config = resolveConfigForProfile(configs[token], req.query.profile);
+      const baseConfig = await readConfig(token, req.query.profile);
+      if (!baseConfig) return res.json({ metas: [] });
+      const resolvedConfig = resolveConfigForProfile(baseConfig, req.query.profile);
+      const capabilities = getProviderCapabilities(resolvedConfig, {
+        serverTmdbKey: catalogDeps.TMDB_KEY
+      });
+      const runtimeTmdb = await resolveRuntimeTmdbKey(capabilities, {
+        serverTmdbKey: catalogDeps.TMDB_KEY
+      });
+      if (!capabilities.hasAnyDiscoveryProvider || !runtimeTmdb.tmdbKey) {
+        return res.json({ metas: [] });
+      }
+      const config = createEffectiveDiscoveryConfig(resolvedConfig, {
+        catalogDefs: CATALOG_DEFS,
+        capabilities
+      });
+      const requestCatalogDeps = buildRequestCatalogDeps(
+        catalogDeps,
+        runtimeTmdb.tmdbKey
+      );
       let extra = {};
       if (extraStr) { try { extra = JSON.parse(decodeURIComponent(extraStr)); } catch { decodeURIComponent(extraStr).split('&').forEach(p => { const [k,v] = p.split('='); if(k && v) extra[k]=decodeURIComponent(v); }); } }
       if (req.query.skip) extra.skip = parseInt(req.query.skip);
@@ -106,7 +133,7 @@ console.log(
         id,
         type,
         extra,
-        config.mdblistKey || MDBLIST_KEY,
+        capabilities.effectiveMdbKey,
         hasAnime ? false : FILTER_ENABLED,
         config.language || "en-US",
         config.rpdbKey || null,
@@ -119,7 +146,7 @@ console.log(
         config.googleAiKey || null,
         config.fanartKey || null,
         config.omdbKey || null,
-        catalogDeps,
+        requestCatalogDeps,
         config.excludeLanguages || [],
         config.betterPostersStyle || null,
         config.traktAccessToken || null,
@@ -136,7 +163,8 @@ console.log(
         .then(async result => {
             const isAiCatalog =
               id === "ai_recommended_movies" ||
-              id === "ai_recommended_series";
+              id === "ai_recommended_series" ||
+              id === "ai_anime_anilist";
 
             /*
              * AI recommendations automatically avoid watched titles when
@@ -148,15 +176,74 @@ console.log(
               (config.traktAccessToken || config.simklAccessToken);
 
             if (shouldFilterWatched) {
-              const watchedIds = await getWatchedIds(
-                token,
-                config.traktAccessToken || null,
-                config.simklAccessToken || null,
-                process.env.TRAKT_CLIENT_ID,
-                process.env.SIMKL_CLIENT_ID
-              );
+              try {
+                const watchedIds = await getWatchedIds(
+                  token,
+                  config.traktAccessToken || null,
+                  config.simklAccessToken || null,
+                  process.env.TRAKT_CLIENT_ID,
+                  process.env.SIMKL_CLIENT_ID
+                );
 
-              result = filterWatched(result, watchedIds);
+                result = filterWatched(result, watchedIds);
+              } catch (error) {
+                console.warn(
+                  "[watched-filter] post-processing failed open:",
+                  error.message
+                );
+              }
+            }
+
+            if (config.hideUnavailableStreams && type === "movie") {
+              try {
+                const availabilityAddons = buildEffectiveStreamAddons(config);
+                const availabilityScope =
+                  createStreamAvailabilityScope(availabilityAddons);
+
+                if (availabilityScope) {
+                  const filtered = filterCatalogByStreamAvailability(
+                    result,
+                    {
+                      scope: availabilityScope,
+                      type
+                    }
+                  );
+
+                  result = filtered.result;
+
+                  const scheduled = scheduleStreamAvailabilityChecks({
+                    scope: availabilityScope,
+                    type,
+                    metas: result.metas,
+                    probe: (probeType, probeId) =>
+                      probeStreamBridgeAvailability(
+                        availabilityAddons,
+                        probeType,
+                        probeId
+                      )
+                  });
+
+                  if (filtered.excludedUnavailable || scheduled) {
+                    console.log(
+                      "[stream-availability] catalog " +
+                      JSON.stringify({
+                        id,
+                        type,
+                        excludedUnavailable:
+                          filtered.excludedUnavailable,
+                        known: filtered.known,
+                        unknown: filtered.unknown,
+                        scheduled
+                      })
+                    );
+                  }
+                }
+              } catch (error) {
+                console.warn(
+                  "[stream-availability] catalog filter failed open:",
+                  error?.message || error
+                );
+              }
             }
 
             /*
@@ -167,7 +254,19 @@ console.log(
               result.metas = result.metas.slice(0, 24);
             }
 
-            res.setHeader("Cache-Control","public, max-age=300");
+            const hasImmediateCatalogFilters = Boolean(
+              (Array.isArray(config.contentExclusions) && config.contentExclusions.length) ||
+              (config.catalogOverrides && config.catalogOverrides[id])
+            );
+
+            res.setHeader(
+              "Cache-Control",
+              hasImmediateCatalogFilters
+                ? "private, no-store, max-age=0"
+                : (config.hideUnavailableStreams
+                    ? "public, max-age=60"
+                    : "public, max-age=300")
+            );
             res.json(result);
           })
         .catch(() => res.json({ metas: [] }));
@@ -180,5 +279,6 @@ console.log(
 }
 
 module.exports = {
-  registerCatalogRoutes
+  registerCatalogRoutes,
+  buildRequestCatalogDeps
 };

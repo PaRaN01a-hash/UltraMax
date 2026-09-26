@@ -1,0 +1,641 @@
+/* Ultra MAX Native Home V2
+ * DEV-first mobile visual rebuild based on the approved Play Store concept.
+ * Presentation only: existing ids, hrefs, supporter/session logic remain intact.
+ */
+
+html.native-app {
+  --umv2-bg:#05020f;
+  --umv2-panel:rgba(15,10,38,.78);
+  --umv2-panel-strong:rgba(18,11,45,.91);
+  --umv2-border:rgba(180,69,255,.68);
+  --umv2-border-soft:rgba(164,85,255,.34);
+  --umv2-purple:#8d35ff;
+  --umv2-pink:#ff2ca8;
+  --umv2-cyan:#2de1ff;
+  --umv2-green:#18e6aa;
+  --umv2-text:#f7f2ff;
+  --umv2-muted:#aaa4ca;
+}
+
+@media (max-width: 820px) {
+  html.native-app,
+  html.native-app body {
+    min-height:100%;
+    background:#05020f !important;
+  }
+
+  html.native-app body {
+    padding-bottom:calc(108px + env(safe-area-inset-bottom)) !important;
+    color:var(--umv2-text);
+    background:
+      radial-gradient(ellipse 80% 34% at 9% 9%, rgba(125,35,255,.30), transparent 70%),
+      radial-gradient(ellipse 84% 32% at 94% 18%, rgba(230,40,255,.22), transparent 72%),
+      radial-gradient(ellipse 75% 30% at 50% 78%, rgba(90,25,220,.18), transparent 75%),
+      linear-gradient(180deg,#070216 0%,#05010f 42%,#05020f 100%) !important;
+    background-attachment:fixed !important;
+  }
+
+  /* star field */
+  html.native-app body::before {
+    content:"" !important;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    opacity:.92 !important;
+    background-image:
+      radial-gradient(circle at 7% 8%,rgba(255,255,255,.95) 0 1px,transparent 1.7px),
+      radial-gradient(circle at 19% 31%,rgba(204,169,255,.88) 0 1.2px,transparent 1.8px),
+      radial-gradient(circle at 34% 14%,rgba(255,255,255,.82) 0 1px,transparent 1.6px),
+      radial-gradient(circle at 51% 42%,rgba(182,135,255,.70) 0 1px,transparent 1.7px),
+      radial-gradient(circle at 68% 7%,rgba(255,255,255,.88) 0 1px,transparent 1.6px),
+      radial-gradient(circle at 81% 29%,rgba(244,173,255,.82) 0 1.2px,transparent 1.8px),
+      radial-gradient(circle at 94% 11%,rgba(255,255,255,.90) 0 1px,transparent 1.6px),
+      radial-gradient(circle at 12% 71%,rgba(161,207,255,.64) 0 1px,transparent 1.7px),
+      radial-gradient(circle at 72% 76%,rgba(255,255,255,.68) 0 1px,transparent 1.6px);
+    background-size:
+      146px 146px,211px 211px,173px 173px,237px 237px,193px 193px,
+      269px 269px,317px 317px,229px 229px,283px 283px !important;
+  }
+
+  /* glowing planetary arcs */
+  html.native-app body::after {
+    content:"" !important;
+    position:fixed !important;
+    inset:-3% -18% !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+    opacity:1 !important;
+    background:
+      radial-gradient(circle at -4% 20%,
+        transparent 0 22.2%,
+        rgba(91,30,198,.52) 22.45%,
+        rgba(197,56,255,.95) 22.9%,
+        rgba(112,54,255,.36) 23.3%,
+        transparent 24.6%),
+      radial-gradient(circle at 103% 27%,
+        transparent 0 21.7%,
+        rgba(89,25,186,.50) 22%,
+        rgba(224,49,255,.92) 22.45%,
+        rgba(123,57,255,.34) 22.9%,
+        transparent 24.2%),
+      radial-gradient(ellipse 56% 18% at 40% 91%,
+        transparent 0 68%,
+        rgba(110,42,230,.28) 69%,
+        rgba(234,49,255,.72) 70%,
+        transparent 73%),
+      radial-gradient(ellipse at 52% 8%,rgba(124,48,255,.20),transparent 40%) !important;
+    filter:drop-shadow(0 0 18px rgba(165,47,255,.26));
+  }
+
+  html.native-app #particles {
+    opacity:.62 !important;
+  }
+
+  html.native-app .wrap {
+    width:100% !important;
+    max-width:560px !important;
+    padding:
+      calc(24px + env(safe-area-inset-top))
+      18px
+      28px !important;
+    position:relative;
+    z-index:2;
+  }
+
+  /* ----- Hero ----- */
+  html.native-app .header {
+    margin:0 0 22px !important;
+    padding:6px 8px 0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    overflow:visible !important;
+    text-align:center;
+  }
+
+  html.native-app .header::before,
+  html.native-app .header::after {
+    display:none !important;
+  }
+
+  html.native-app .app-icon {
+    width:112px !important;
+    height:112px !important;
+    margin:0 auto 18px !important;
+    border-radius:29px !important;
+    border:1px solid rgba(255,255,255,.13) !important;
+    box-shadow:
+      0 0 0 3px rgba(138,44,255,.15),
+      0 0 30px rgba(135,45,255,.72),
+      0 0 66px rgba(230,47,255,.32),
+      0 18px 48px rgba(0,0,0,.48) !important;
+  }
+
+  html.native-app .dev-build-badge {
+    position:absolute;
+    top:calc(6px + env(safe-area-inset-top));
+    right:18px;
+    margin:0 !important;
+    padding:5px 8px !important;
+    border-color:rgba(190,113,255,.26) !important;
+    background:rgba(9,5,24,.66) !important;
+    color:#bda4e9 !important;
+    font-size:7px !important;
+    letter-spacing:.10em !important;
+    box-shadow:none !important;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    opacity:.82;
+  }
+
+  html.native-app .logo {
+    margin:0 0 6px !important;
+    color:#fff !important;
+    font-size:46px !important;
+    line-height:.95 !important;
+    letter-spacing:.045em !important;
+    text-shadow:0 3px 24px rgba(0,0,0,.55);
+  }
+
+  html.native-app .logo span {
+    background:linear-gradient(115deg,#a884ff 0%,#bf42ff 42%,#ff2ba9 100%) !important;
+    -webkit-background-clip:text !important;
+    background-clip:text !important;
+  }
+
+  html.native-app .tagline {
+    margin:10px auto 0 !important;
+    max-width:430px;
+    color:#c1bbd6 !important;
+    font-size:15px !important;
+    line-height:1.45 !important;
+  }
+
+  /* ----- Supporter identity pill below logo ----- */
+  html.native-app .um-supporter-identity {
+    margin:13px auto 4px !important;
+    padding:8px 15px 8px 9px !important;
+    border:1px solid rgba(247,215,122,.65) !important;
+    background:
+      radial-gradient(circle at 14% 50%,rgba(247,215,122,.13),transparent 25%),
+      linear-gradient(100deg,rgba(91,48,177,.54),rgba(9,11,29,.93) 58%,rgba(21,45,66,.78)) !important;
+    box-shadow:
+      0 0 26px rgba(167,139,250,.23),
+      inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+
+  html.native-app .um-supporter-identity-mark {
+    width:31px !important;
+    height:31px !important;
+    box-shadow:0 0 20px rgba(247,215,122,.40) !important;
+  }
+
+  html.native-app .um-supporter-identity strong {
+    font-size:10px !important;
+  }
+
+  html.native-app .um-supporter-identity small {
+    font-size:8px !important;
+  }
+
+  /* ----- Shared premium card ----- */
+  html.native-app .um-supporter-home-card,
+  html.native-app .continue-card,
+  html.native-app .tile,
+  html.native-app .home-more-tools > summary,
+  html.native-app .playplus-promo {
+    border:1px solid rgba(173,67,255,.60) !important;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.025),transparent 27%),
+      radial-gradient(circle at 0% 18%,rgba(129,47,255,.13),transparent 31%),
+      linear-gradient(145deg,rgba(22,13,53,.91),rgba(8,9,28,.87) 62%,rgba(13,15,42,.90)) !important;
+    box-shadow:
+      0 18px 45px rgba(0,0,0,.38),
+      0 0 24px rgba(121,42,255,.11),
+      inset 0 1px 0 rgba(255,255,255,.06) !important;
+    backdrop-filter:blur(16px) saturate(122%) !important;
+    -webkit-backdrop-filter:blur(16px) saturate(122%) !important;
+  }
+
+  /* ----- Supporter card ----- */
+  html.native-app .um-supporter-home-card {
+    grid-template-columns:58px 1fr !important;
+    gap:15px !important;
+    margin:0 0 20px !important;
+    padding:20px !important;
+    border-color:rgba(247,215,122,.55) !important;
+    border-radius:25px !important;
+    background:
+      radial-gradient(circle at 4% 8%,rgba(247,215,122,.12),transparent 28%),
+      radial-gradient(circle at 95% 80%,rgba(34,214,255,.10),transparent 30%),
+      linear-gradient(145deg,rgba(31,17,54,.95),rgba(8,11,31,.93) 55%,rgba(10,31,47,.91)) !important;
+  }
+
+  html.native-app .um-supporter-home-mark {
+    width:58px !important;
+    height:58px !important;
+    border-radius:18px !important;
+  }
+
+  html.native-app .um-supporter-home-kicker {
+    font-size:9px !important;
+    letter-spacing:.16em !important;
+  }
+
+  html.native-app .um-supporter-home-card h2 {
+    font-size:21px !important;
+  }
+
+  html.native-app .um-supporter-home-card p {
+    margin-top:7px !important;
+    font-size:12px !important;
+    line-height:1.48 !important;
+  }
+
+  html.native-app .um-supporter-home-verified {
+    grid-column:2 !important;
+    width:max-content !important;
+    margin:1px 0 0 !important;
+    padding:8px 12px !important;
+    border-color:rgba(38,228,255,.38) !important;
+    color:#e3fbff !important;
+    font-size:8px !important;
+  }
+
+  /* ----- Resume draft ----- */
+  html.native-app .continue-card {
+    position:relative;
+    min-height:100px;
+    margin:0 0 18px !important;
+    padding:18px 58px 18px 18px !important;
+    border-radius:24px !important;
+    gap:16px !important;
+    align-items:center !important;
+  }
+
+  html.native-app .continue-card::after {
+    content:"›";
+    position:absolute;
+    right:22px;
+    top:50%;
+    transform:translateY(-52%);
+    color:#bbaaff;
+    font-size:42px;
+    font-weight:200;
+    line-height:1;
+  }
+
+  html.native-app .continue-icon {
+    width:58px !important;
+    height:58px !important;
+    border:1px solid rgba(191,91,255,.52) !important;
+    border-radius:18px !important;
+    background:linear-gradient(145deg,#6522c8,#8d26ff) !important;
+    box-shadow:0 0 28px rgba(133,42,255,.39) !important;
+  }
+
+  html.native-app .continue-icon svg {
+    width:27px !important;
+    height:27px !important;
+    stroke:#fff !important;
+  }
+
+  html.native-app .continue-eyebrow {
+    color:#c26bff !important;
+    font-size:10px !important;
+    letter-spacing:.15em !important;
+  }
+
+  html.native-app .continue-title {
+    margin-top:3px;
+    font-size:20px !important;
+    line-height:1.15;
+  }
+
+  /* LIVE uses a separate draft card while DEV historically reused continueCard. */
+  html.native-app .home-draft-card {
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    min-height:92px;
+    margin:0 0 18px !important;
+    padding:16px 52px 16px 16px !important;
+    border:1px solid rgba(181,67,255,.60) !important;
+    border-radius:23px !important;
+    color:#fff !important;
+    text-decoration:none !important;
+    background:
+      radial-gradient(circle at 0% 20%,rgba(133,47,255,.15),transparent 35%),
+      linear-gradient(145deg,rgba(22,13,53,.91),rgba(8,9,28,.88)) !important;
+    box-shadow:
+      0 17px 42px rgba(0,0,0,.34),
+      0 0 23px rgba(128,43,255,.10),
+      inset 0 1px 0 rgba(255,255,255,.055) !important;
+  }
+
+  html.native-app .home-draft-card::after {
+    content:"›";
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-53%);
+    color:#bbaaff;
+    font-size:35px;
+    font-weight:200;
+    line-height:1;
+  }
+
+  html.native-app .home-draft-icon {
+    width:54px !important;
+    height:54px !important;
+    flex:0 0 54px !important;
+    border:1px solid rgba(191,91,255,.52) !important;
+    border-radius:17px !important;
+    background:linear-gradient(145deg,#6522c8,#8d26ff) !important;
+    color:#fff !important;
+    font-size:24px !important;
+    box-shadow:0 0 25px rgba(133,42,255,.34) !important;
+  }
+
+  html.native-app .home-draft-eyebrow {
+    margin-bottom:3px !important;
+    color:#c26bff !important;
+    font-size:9px !important;
+    letter-spacing:.15em !important;
+  }
+
+  html.native-app .home-draft-title {
+    color:#fff !important;
+    font-size:18px !important;
+    line-height:1.1 !important;
+  }
+
+  html.native-app .home-draft-subtitle {
+    margin-top:4px !important;
+    color:#aaa3c2 !important;
+    font-size:10.5px !important;
+  }
+
+  html.native-app .home-draft-action {
+    display:none !important;
+  }
+
+  html.native-app .home-setup-card:not([hidden]) {
+    border-color:rgba(46,224,180,.48) !important;
+    background:
+      radial-gradient(circle at 0% 20%,rgba(39,232,180,.12),transparent 34%),
+      linear-gradient(145deg,rgba(10,43,43,.73),rgba(9,11,31,.91)) !important;
+  }
+
+  /* ----- Primary home actions ----- */
+  html.native-app .tiles {
+    gap:14px !important;
+  }
+
+  html.native-app .home-primary-tile {
+    min-height:170px !important;
+    padding:18px 14px 17px !important;
+    border-radius:23px !important;
+    justify-content:center !important;
+    gap:13px !important;
+  }
+
+  html.native-app .home-primary-tile .tile-badge {
+    width:70px !important;
+    height:70px !important;
+    border-radius:21px !important;
+  }
+
+  html.native-app .home-primary-tile .tile-badge svg {
+    width:34px !important;
+    height:34px !important;
+  }
+
+  html.native-app .home-primary-new .tile-badge {
+    background:linear-gradient(145deg,#5e29ff,#9c20ff) !important;
+    box-shadow:0 0 34px rgba(125,39,255,.55) !important;
+  }
+
+  html.native-app .home-primary-nuvio {
+    border-color:rgba(89,224,225,.47) !important;
+  }
+
+  html.native-app .home-primary-nuvio .tile-badge {
+    background:linear-gradient(145deg,#23ddb3,#04ae83) !important;
+    box-shadow:0 0 36px rgba(18,226,174,.42) !important;
+  }
+
+  html.native-app .home-primary-tile .tile-name {
+    margin-bottom:5px !important;
+    color:#fff !important;
+    font-size:18px !important;
+    line-height:1.08 !important;
+  }
+
+  html.native-app .home-primary-tile .tile-desc {
+    max-width:160px !important;
+    margin:0 auto;
+    color:#b5aecb !important;
+    font-size:11.5px !important;
+    line-height:1.4 !important;
+  }
+
+  /* ----- More tools keeps every old feature reachable ----- */
+  html.native-app .home-more-tools {
+    margin:18px 0 0;
+  }
+
+  html.native-app .home-more-tools > summary {
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    min-height:74px;
+    padding:16px 54px 16px 18px;
+    border-radius:20px !important;
+    cursor:pointer;
+    list-style:none;
+    color:#fff;
+  }
+
+  html.native-app .home-more-tools > summary::-webkit-details-marker {
+    display:none;
+  }
+
+  html.native-app .home-more-tools > summary::after {
+    content:"⌄";
+    position:absolute;
+    right:21px;
+    top:50%;
+    transform:translateY(-54%);
+    color:#bdadf1;
+    font-size:24px;
+    transition:transform .18s ease;
+  }
+
+  html.native-app .home-more-tools[open] > summary::after {
+    transform:translateY(-44%) rotate(180deg);
+  }
+
+  html.native-app .home-more-title {
+    display:block;
+    font-size:16px;
+    font-weight:800;
+  }
+
+  html.native-app .home-more-sub {
+    display:block;
+    margin-top:3px;
+    color:#9d96b7;
+    font-size:11px;
+    line-height:1.35;
+  }
+
+  html.native-app .home-more-grid {
+    margin-top:12px;
+  }
+
+  html.native-app .home-secondary-tile,
+  html.native-app .home-more-grid .tile {
+    min-height:102px !important;
+    padding:12px !important;
+    border-radius:19px !important;
+    flex-direction:row !important;
+    justify-content:flex-start !important;
+    text-align:left !important;
+    gap:10px !important;
+  }
+
+  html.native-app .home-secondary-tile .tile-badge,
+  html.native-app .home-more-grid .tile .tile-badge {
+    width:46px !important;
+    height:46px !important;
+    min-width:46px !important;
+    flex:0 0 46px !important;
+    border-radius:14px !important;
+  }
+
+  html.native-app .home-secondary-tile .tile-badge svg,
+  html.native-app .home-more-grid .tile .tile-badge svg {
+    width:23px !important;
+    height:23px !important;
+  }
+
+  html.native-app .home-more-grid .tile > div:not(.tile-pulse):not(.tile-badge) {
+    min-width:0 !important;
+    max-width:100% !important;
+    flex:1 1 0 !important;
+  }
+
+  html.native-app .home-secondary-tile .tile-name,
+  html.native-app .home-more-grid .tile .tile-name {
+    max-width:100% !important;
+    margin-bottom:3px !important;
+    font-size:13px !important;
+    line-height:1.18 !important;
+    white-space:normal !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+    word-break:normal !important;
+    overflow-wrap:normal !important;
+  }
+
+  html.native-app .home-secondary-tile .tile-desc,
+  html.native-app .home-more-grid .tile .tile-desc {
+    font-size:10px !important;
+    line-height:1.35 !important;
+  }
+
+  html.native-app .home-more-grid .tile .tile-text {
+    min-width:0 !important;
+    text-align:left !important;
+  }
+
+  html.native-app .playplus-promo {
+    margin:12px 0 0 !important;
+    border-radius:22px !important;
+  }
+
+  html.native-app.um-supporter-active .playplus-promo {
+    display:none !important;
+  }
+
+  html.native-app .footer-links {
+    margin:22px 0 0 !important;
+    padding-bottom:4px;
+    gap:18px !important;
+  }
+
+  html.native-app .footer-links a {
+    color:#8f88aa !important;
+    font-size:11px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  html.native-app .wrap {
+    padding-left:13px !important;
+    padding-right:13px !important;
+  }
+
+  html.native-app .logo {
+    font-size:41px !important;
+  }
+
+  html.native-app .app-icon {
+    width:101px !important;
+    height:101px !important;
+  }
+
+  html.native-app .home-primary-tile {
+    min-height:158px !important;
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  html.native-app .home-primary-tile .tile-badge {
+    width:64px !important;
+    height:64px !important;
+  }
+
+  html.native-app .home-primary-tile .tile-name {
+    font-size:17px !important;
+  }
+
+  html.native-app .um-supporter-home-card {
+    padding:17px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.native-app .home-more-tools > summary::after,
+  html.native-app .tile {
+    transition:none !important;
+  }
+}
+
+/* Ultra MAX brand polish · Nuvio home tile */
+.um-home-brand-logo {
+  display:block;
+  width:32px;
+  height:32px;
+  object-fit:cover;
+  border-radius:9px;
+}
+html.native-app .home-primary-tile .tile-badge .um-home-brand-logo {
+  width:40px !important;
+  height:40px !important;
+  border-radius:12px;
+}
+@media (max-width: 420px) {
+  html.native-app .home-primary-tile .tile-badge .um-home-brand-logo {
+    width:36px !important;
+    height:36px !important;
+  }
+}

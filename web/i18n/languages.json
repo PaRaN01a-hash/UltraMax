@@ -1,0 +1,17 @@
+{
+  "default": "en",
+  "supported": [
+    { "code": "en", "label": "English", "flag": "🇬🇧" },
+    { "code": "es", "label": "Español", "flag": "🇪🇸" },
+    { "code": "fr", "label": "Français", "flag": "🇫🇷" },
+    { "code": "de", "label": "Deutsch", "flag": "🇩🇪" },
+    { "code": "it", "label": "Italiano", "flag": "🇮🇹" },
+    { "code": "pt", "label": "Português", "flag": "🇧🇷" },
+    { "code": "nl", "label": "Nederlands", "flag": "🇳🇱" },
+    { "code": "pl", "label": "Polski", "flag": "🇵🇱" },
+    { "code": "tr", "label": "Türkçe", "flag": "🇹🇷" },
+    { "code": "ar", "label": "العربية", "flag": "🇸🇦" },
+    { "code": "he", "label": "עברית", "flag": "🇮🇱" },
+    { "code": "sv", "label": "Svenska", "flag": "🇸🇪" }
+  ]
+}

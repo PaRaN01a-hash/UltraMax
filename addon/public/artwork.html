@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0c10" />
+<title>Ultra MAX Artwork Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --base:#0a0c10; --surface:#12151c; --surface-2:#171b24; --raised:#1b2029;
+  --border:#1f2530; --border-bright:#2a3340;
+  --text:#e8edf4; --text-dim:#8a94a6; --text-faint:#5a6373;
+  --amber:#ffb627; --amber-dim:#7a5818;
+  --cyan:#3dd9d6; --cyan-dim:#1d5e5d;
+  --red:#ff5a5f; --green:#4ade80;
+  --grad:linear-gradient(90deg,#ffb627,#3dd9d6);
+  --r:16px; --r-sm:11px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--base);color:var(--text);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+button,input{font:inherit}
+.mono{font-family:'JetBrains Mono',monospace}
+.gate{position:fixed;inset:0;background:var(--base);display:grid;place-items:center;z-index:20;padding:18px}
+.gate.hidden{display:none}
+.gate .box{width:min(380px,100%);background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:30px;text-align:center}
+.logo{width:48px;height:48px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:#0a0c10;font-size:22px}
+.gate .logo{margin:0 auto 18px}
+.gate h1{font-family:'Space Grotesk';font-size:23px;line-height:1.1;margin-bottom:7px}
+.gate p{color:var(--text-dim);font-size:13px;margin-bottom:20px}
+.gate input{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:13px 15px;color:var(--text);font-size:14px;margin-bottom:12px;font-family:'JetBrains Mono'}
+.gate input:focus{outline:none;border-color:var(--cyan-dim)}
+.primary{background:var(--grad);color:#0a0c10;border:none;border-radius:10px;padding:12px 15px;font-weight:700;font-size:14px;cursor:pointer;font-family:'Space Grotesk'}
+.secondary{background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:600;cursor:pointer}
+.secondary:hover{border-color:var(--border-bright);color:var(--text)}
+.danger{color:#ffd0d1;border-color:rgba(255,90,95,.45)}
+.danger:hover{border-color:var(--red);background:rgba(255,90,95,.08)}
+.gate .primary{width:100%}
+.err{color:var(--red);font-size:12px;min-height:16px;margin-top:10px}
+.app{min-height:100vh;display:none}
+.app.ready{display:block}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(10,12,16,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:14px}
+.brand-copy{min-width:0}
+.brand-copy .name{font-family:'Space Grotesk';font-weight:700;font-size:16px;letter-spacing:.04em}
+.brand-copy .sub{font-family:'JetBrains Mono';font-size:10px;color:var(--text-faint);letter-spacing:.22em;text-transform:uppercase;margin-top:2px}
+.spacer{flex:1}
+.content{max-width:1180px;margin:0 auto;padding:30px 24px 42px}
+.page-head{margin-bottom:24px}
+.eyebrow{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.24em;color:var(--cyan);text-transform:uppercase;margin-bottom:8px}
+.page-head h2{font-family:'Space Grotesk';font-size:34px;font-weight:700;line-height:1;letter-spacing:0}
+.page-head p{color:var(--text-dim);font-size:14px;margin-top:9px;max-width:62ch}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;min-width:0}
+.upload-card.drag{border-color:var(--cyan-dim);background:linear-gradient(135deg,var(--surface),rgba(61,217,214,.07))}
+.card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:15px}
+.card-icon{width:40px;height:40px;border-radius:10px;background:var(--raised);border:1px solid var(--border-bright);display:grid;place-items:center;font-size:21px;flex:0 0 auto}
+.card-title{font-family:'Space Grotesk';font-size:17px;font-weight:700;line-height:1.15}
+.card-desc{font-size:12px;color:var(--text-faint);margin-top:4px}
+.count{margin-left:auto;font-family:'JetBrains Mono';font-size:12px;color:var(--text-dim);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:5px 9px;white-space:nowrap}
+.drop{border:1px dashed var(--border-bright);border-radius:var(--r-sm);background:rgba(255,255,255,.015);padding:18px;text-align:center;color:var(--text-dim);font-size:13px;margin-bottom:12px}
+.drop b{display:block;color:var(--text);font-family:'Space Grotesk';font-size:14px;margin-bottom:5px}
+.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.actions input{display:none}
+.file-note{font-family:'JetBrains Mono';font-size:11px;color:var(--text-faint);min-height:16px;flex:1 1 180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.progress{height:7px;background:var(--surface-2);border-radius:5px;overflow:hidden;margin-top:12px;display:none}
+.progress.show{display:block}
+.bar{height:100%;width:0;background:var(--grad);transition:width .2s ease}
+.status{font-family:'JetBrains Mono';font-size:12px;color:var(--text-faint);min-height:18px;margin-top:10px}
+.status.ok{color:var(--green)}
+.status.err{color:var(--red)}
+.files{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+.file{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);overflow:hidden;min-width:0}
+.thumb{aspect-ratio:1/1.18;background:#070809;display:grid;place-items:center}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.meta{padding:10px}
+.filename{font-size:12px;color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:5px}
+.detail{font-family:'JetBrains Mono';font-size:10px;color:var(--text-faint);line-height:1.5}
+.file .secondary{width:100%;margin-top:9px;padding:7px 9px}
+.empty{padding:24px;text-align:center;color:var(--text-faint);font-size:12px;border:1px dashed var(--border);border-radius:var(--r-sm);grid-column:1/-1}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--raised);border:1px solid var(--border-bright);padding:14px 18px;border-radius:12px;font-size:13px;z-index:30;opacity:0;transform:translateY(12px);transition:.25s;max-width:340px}
+.toast.show{opacity:1;transform:none}
+.toast.ok{border-color:var(--cyan-dim)}
+.toast.err{border-color:var(--red)}
+@media(max-width:760px){
+  .topbar-inner{padding:14px 18px}
+  .content{padding:22px 18px 34px}
+  .grid{grid-template-columns:1fr}
+  .page-head h2{font-size:28px}
+  .brand-copy .name{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="gate" id="gate">
+  <form class="box" id="loginForm">
+    <div class="logo">M</div>
+    <h1>Ultra MAX Artwork</h1>
+    <p>Private upload portal for trusted contributors.</p>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" autofocus />
+    <button class="primary" type="submit">Unlock Portal</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</div>
+
+<main class="app" id="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">M</div>
+      <div class="brand-copy">
+        <div class="name">Ultra MAX Artwork Portal</div>
+        <div class="sub">Trusted Contributors</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="secondary" id="refreshBtn" type="button">Refresh</button>
+      <button class="secondary" id="logoutBtn" type="button">Logout</button>
+    </div>
+  </header>
+  <section class="content">
+    <div class="page-head">
+      <div class="eyebrow">Collection Artwork Intake</div>
+      <h2>Upload Studio</h2>
+      <p>Artwork lands in isolated server folders for review and production placement later.</p>
+    </div>
+    <div class="grid" id="cards"></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const categories = [
+  { id:"collections", icon:"🖼", title:"Collections", desc:"Collection posters and artwork" },
+  { id:"movies", icon:"🎬", title:"Movies", desc:"Movie posters and artwork" },
+  { id:"series", icon:"📺", title:"Series", desc:"TV artwork" },
+  { id:"misc", icon:"🏷", title:"Logos & Misc", desc:"Logos, icons and miscellaneous assets" },
+];
+const allowedTypes = new Set(["image/png","image/jpeg","image/webp"]);
+const allowedExt = /\.(png|jpe?g|webp)$/i;
+const maxBytes = 10 * 1024 * 1024;
+const state = Object.fromEntries(categories.map((c) => [c.id, { files: [], selected: [] }]));
+const $ = (selector, root=document) => root.querySelector(selector);
+
+function fmtSize(bytes){
+  if(bytes >= 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + " MB";
+  if(bytes >= 1024) return Math.round(bytes / 1024) + " KB";
+  return bytes + " B";
+}
+
+function fmtDate(value){
+  return new Date(value).toLocaleString([], { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+}
+
+function toast(message, kind=""){
+  const el = $("#toast");
+  el.textContent = message;
+  el.className = "toast show " + kind;
+  setTimeout(() => { el.className = "toast"; }, 3200);
+}
+
+async function jsonFetch(url, options={}){
+  const res = await fetch(url, {
+    credentials: "same-origin",
+    ...options,
+    headers: { "Content-Type":"application/json", ...(options.headers || {}) },
+  });
+  const body = await res.json().catch(() => ({}));
+  if(!res.ok) throw new Error(body.error || "Request failed");
+  return body;
+}
+
+function validateFiles(files){
+  const valid = [];
+  for(const file of files){
+    if(!allowedTypes.has(file.type) || !allowedExt.test(file.name)){
+      throw new Error(file.name + " is not a PNG, JPG, JPEG, or WEBP file");
+    }
+    if(file.size > maxBytes){
+      throw new Error(file.name + " is larger than 10MB");
+    }
+    valid.push(file);
+  }
+  return valid;
+}
+
+function renderShell(){
+  $("#cards").innerHTML = categories.map((category) => `
+    <article class="card upload-card" data-category="${category.id}">
+      <div class="card-head">
+        <div class="card-icon">${category.icon}</div>
+        <div>
+          <div class="card-title">${category.title}</div>
+          <div class="card-desc">${category.desc}</div>
+        </div>
+        <div class="count"><span id="count-${category.id}">0</span> files</div>
+      </div>
+      <div class="drop" data-drop="${category.id}">
+        <b>Drop artwork here</b>
+        PNG, JPG, JPEG, WEBP up to 10MB each
+      </div>
+      <div class="actions">
+        <input id="input-${category.id}" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" multiple />
+        <button class="secondary" type="button" data-browse="${category.id}">Browse</button>
+        <button class="primary" type="button" data-upload="${category.id}">Upload</button>
+        <div class="file-note" id="note-${category.id}">No files selected</div>
+      </div>
+      <div class="progress" id="progress-${category.id}"><div class="bar" id="bar-${category.id}"></div></div>
+      <div class="status" id="status-${category.id}"></div>
+      <div class="files" id="files-${category.id}"></div>
+    </article>
+  `).join("");
+
+  for(const category of categories){
+    const input = $("#input-" + category.id);
+    const card = document.querySelector(`[data-category="${category.id}"]`);
+    const drop = document.querySelector(`[data-drop="${category.id}"]`);
+    document.querySelector(`[data-browse="${category.id}"]`).addEventListener("click", () => input.click());
+    document.querySelector(`[data-upload="${category.id}"]`).addEventListener("click", () => uploadCategory(category.id));
+    input.addEventListener("change", () => selectFiles(category.id, input.files));
+    ["dragenter","dragover"].forEach((eventName) => {
+      drop.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        card.classList.add("drag");
+      });
+    });
+    ["dragleave","drop"].forEach((eventName) => {
+      drop.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        card.classList.remove("drag");
+      });
+    });
+    drop.addEventListener("drop", (event) => selectFiles(category.id, event.dataTransfer.files));
+  }
+}
+
+function selectFiles(category, files){
+  try{
+    state[category].selected = validateFiles(Array.from(files || []));
+    const count = state[category].selected.length;
+    $("#note-" + category).textContent = count ? `${count} selected` : "No files selected";
+    $("#status-" + category).textContent = "";
+  }catch(error){
+    state[category].selected = [];
+    $("#note-" + category).textContent = "No files selected";
+    $("#status-" + category).className = "status err";
+    $("#status-" + category).textContent = error.message;
+  }
+}
+
+function renderFiles(category){
+  const files = state[category].files || [];
+  $("#count-" + category).textContent = files.length;
+  $("#files-" + category).innerHTML = files.length ? files.map((file) => `
+    <div class="file">
+      <div class="thumb"><img src="${file.url}" alt="" loading="lazy" /></div>
+      <div class="meta">
+        <div class="filename" title="${file.name}">${file.name}</div>
+        <div class="detail">${fmtSize(file.size)}</div>
+        <div class="detail">${fmtDate(file.uploadedAt)}</div>
+        <div class="detail" style="color:var(--green)">Upload success</div>
+        <button class="secondary danger" type="button" data-delete="${category}" data-file="${file.name}">Delete</button>
+      </div>
+    </div>
+  `).join("") : '<div class="empty">No artwork uploaded yet</div>';
+  document.querySelectorAll(`[data-delete="${category}"]`).forEach((button) => {
+    button.addEventListener("click", () => deleteFile(category, button.dataset.file));
+  });
+}
+
+async function loadCategories(){
+  const data = await jsonFetch("/api/artwork/categories");
+  for(const category of data.categories){
+    state[category.id].files = category.files;
+    renderFiles(category.id);
+  }
+}
+
+function uploadCategory(category){
+  const files = state[category].selected;
+  const status = $("#status-" + category);
+  const progress = $("#progress-" + category);
+  const bar = $("#bar-" + category);
+  if(!files.length){
+    status.className = "status err";
+    status.textContent = "Choose artwork before uploading.";
+    return;
+  }
+  const form = new FormData();
+  files.forEach((file) => form.append("files", file));
+  status.className = "status";
+  status.textContent = "Uploading...";
+  progress.classList.add("show");
+  bar.style.width = "0%";
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/api/artwork/upload/" + encodeURIComponent(category));
+  xhr.withCredentials = true;
+  xhr.upload.addEventListener("progress", (event) => {
+    if(event.lengthComputable) bar.style.width = Math.round((event.loaded / event.total) * 100) + "%";
+  });
+  xhr.addEventListener("load", async () => {
+    const body = JSON.parse(xhr.responseText || "{}");
+    if(xhr.status >= 200 && xhr.status < 300 && body.ok){
+      bar.style.width = "100%";
+      status.className = "status ok";
+      status.textContent = "Upload Complete";
+      state[category].selected = [];
+      $("#input-" + category).value = "";
+      $("#note-" + category).textContent = "No files selected";
+      await loadCategories();
+      toast("Upload Complete", "ok");
+      return;
+    }
+    status.className = "status err";
+    status.textContent = body.error || "Upload failed";
+    toast(status.textContent, "err");
+  });
+  xhr.addEventListener("error", () => {
+    status.className = "status err";
+    status.textContent = "Upload failed";
+    toast("Upload failed", "err");
+  });
+  xhr.send(form);
+}
+
+async function deleteFile(category, filename){
+  if(!confirm("Delete " + filename + "?")) return;
+  try{
+    await jsonFetch(`/api/artwork/files/${encodeURIComponent(category)}/${encodeURIComponent(filename)}`, { method:"DELETE" });
+    await loadCategories();
+    toast("Artwork deleted", "ok");
+  }catch(error){
+    toast(error.message, "err");
+  }
+}
+
+async function showApp(){
+  $("#gate").classList.add("hidden");
+  $("#app").classList.add("ready");
+  renderShell();
+  await loadCategories();
+}
+
+$("#loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  $("#loginErr").textContent = "";
+  try{
+    await jsonFetch("/api/artwork/login", {
+      method:"POST",
+      body: JSON.stringify({ password: $("#password").value }),
+    });
+    await showApp();
+  }catch(error){
+    $("#password").value = "";
+    $("#loginErr").textContent = "Incorrect password";
+  }
+});
+
+$("#logoutBtn").addEventListener("click", async () => {
+  await jsonFetch("/api/artwork/logout", { method:"POST" }).catch(() => {});
+  location.reload();
+});
+$("#refreshBtn").addEventListener("click", () => loadCategories().catch((error) => toast(error.message, "err")));
+
+jsonFetch("/api/artwork/session")
+  .then(showApp)
+  .catch(() => {
+    $("#gate").classList.remove("hidden");
+    $("#app").classList.remove("ready");
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,996 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "build": "Oluştur",
+    "nuvio": "Nuvio",
+    "updates": "Güncellemeler"
+  },
+  "home": {
+    "tagline": "Katalog, koleksiyon ve keşif merkeziniz",
+    "sectionNewTrending": "Yeni ve Trend",
+    "continue": {
+      "eyebrow": "Devam et",
+      "title": "Kurulumunuza devam edin"
+    },
+    "tiles": {
+      "build": {
+        "name": "Yeni kurulum",
+        "desc": "Sıfırdan yeni bir Ultra MAX kurulumu oluşturun"
+      },
+      "nuvio": {
+        "name": "Nuvio Hesabı",
+        "desc": "Eklentileri doğrudan gönderin ve yönetin"
+      },
+      "avatars": {
+        "name": "Avatar Kasası",
+        "desc": "226 karakter profil resmi"
+      },
+      "badges": {
+        "name": "Yayın Rozetleri",
+        "desc": "Kalite etiketi bindirme paketleri"
+      },
+      "gallery": {
+        "name": "Topluluk Galerisi",
+        "desc": "Diğer kullanıcıların kurulumlarını paylaşın ve içe aktarın"
+      },
+      "whatsNew": {
+        "name": "Yenilikler",
+        "desc": "En son güncellemeler ve özellikler"
+      },
+      "settings": {
+        "name": "Ayarlar ve Hakkında",
+        "desc": "Uygulama sürümü, güncellemeler ve yararlı bağlantılar"
+      },
+      "help": {
+        "name": "Yardım ve Kurtarma",
+        "desc": "Kılavuz, token kurtarma, tanılama ve destek"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "İsteğe bağlı yardımcı",
+      "headline": "Ultra MAX ücretsiz kalıyor. UltraPlay+ bunun böyle kalmasına yardımcı oluyor.",
+      "copy": "Ultra MAX’ten daha fazlasını alın ve sunucu, API ve proje işletim maliyetlerine destek olun.",
+      "featuresAria": "UltraPlay Plus özellikleri",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Tam Arcade",
+      "instantAccess": "Anında erişim",
+      "pricingAria": "UltraPlay Plus fiyatları",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "lifetime": "Ömür boyu",
+      "cta": "UltraPlay+’ı keşfet",
+      "footnote": "UltraPlay+ Ultra MAX’i geliştirir. Ultra MAX ücretsiz kalır."
+    },
+    "stats": {
+      "catalogs": "Kataloglar",
+      "activeUsers": "Aktif Kullanıcılar",
+      "selfHosted": "Kendi Kendine Barındırılan"
+    },
+    "footer": {
+      "website": "Web sitesi",
+      "support": "Destek ol"
+    },
+    "onboarding": {
+      "kicker": "Ultra MAX'e Hoş Geldiniz",
+      "title": "Kurulumunuzu oluşturalım",
+      "copy": "Yeni bir şey oluşturun, mevcut bir kurulumu geri yükleyin veya herhangi bir ayara dokunmadan önce göz atın.",
+      "continueBtn": "Kayıtlı kuruluma devam et",
+      "continueSub": "Tam olarak kaldığınız yerden devam edin",
+      "createBtn": "Yeni bir kurulum oluştur",
+      "createSub": "Katalogları, servisleri ve tercihleri seçin",
+      "restoreBtn": "Bir token ile geri yükle",
+      "restoreSub": "Daha önce oluşturduğunuz bir kurulumu açın",
+      "tokenPlaceholder": "Kurulum tokeni",
+      "tokenError": "Geçerli bir kurulum tokeni girin.",
+      "openBtn": "Aç",
+      "exploreBtn": "Önce uygulamayı keşfet"
+    }
+  },
+  "update": {
+    "kicker": "Güncelleme mevcut",
+    "title": "Yeni bir Ultra MAX hazır",
+    "defaultNotes": "Ultra MAX'in daha yeni bir sürümü mevcut.",
+    "now": "Şimdi güncelle",
+    "viewSettings": "Uygulama ayarlarını görüntüle",
+    "later": "Şimdi değil"
+  },
+  "back": {
+    "exitToast": "Çıkmak için tekrar geri tuşuna basın"
+  },
+  "account": {
+    "subtitle": "Nuvio Hesap Yöneticisi",
+    "backLink": "← Ultra MAX'e Dön",
+    "header": {
+      "title": "Nuvio Hesabı",
+      "backAriaLabel": "Ultra MAX'e Dön"
+    },
+    "login": {
+      "emailPlaceholder": "Nuvio e-postası",
+      "passwordPlaceholder": "Nuvio şifresi",
+      "remember": "Bu cihazda beni hatırla",
+      "continueBtn": "Devam et",
+      "missingFields": "Lütfen Nuvio e-postanızı ve şifrenizi girin.",
+      "loggingIn": "Giriş yapılıyor...",
+      "failed": "Giriş başarısız oldu."
+    },
+    "profilePicker": {
+      "title": "Bir profil seçin"
+    },
+    "status": {
+      "loading": "Yükleniyor...",
+      "loadFailed": "Profil verileri yüklenemedi."
+    },
+    "manager": {
+      "switchBtn": "Değiştir",
+      "addonsTitle": "Eklentiler",
+      "addonsInstalled": "{n} yüklendi",
+      "noAddons": "Bu profilde yüklü eklenti yok.",
+      "addonUrlPlaceholder": "Eklenti manifest URL'sini yapıştırın...",
+      "addBtn": "Ekle",
+      "addonUrlRequired": "Lütfen bir manifest URL'si yapıştırın.",
+      "addonDuplicate": "Bu eklenti zaten listede.",
+      "checkingAddon": "Eklenti kontrol ediliyor...",
+      "addonAdded": "\"{name}\" eklendi — Nuvio'ya göndermek için aşağıdan Kaydet'e tıklayın.",
+      "collectionsTitle": "Koleksiyonlar",
+      "collectionsCount": "{n} koleksiyon",
+      "noCollections": "Bu profilde koleksiyon yok.",
+      "folderSingular": "klasör",
+      "folderPlural": "klasör",
+      "saveBtn": "Değişiklikleri Kaydet",
+      "savingAddons": "Eklentiler kaydediliyor...",
+      "savingCollections": "Koleksiyonlar kaydediliyor...",
+      "saved": "Kaydedildi ✓",
+      "saveFailed": "Değişiklikler kaydedilemedi.",
+      "unnamedAddon": "İsimsiz eklenti",
+      "untitledCollection": "Başlıksız koleksiyon"
+    }
+  },
+  "settings": {
+    "headerTitle": "Ayarlar ve Hakkında",
+    "backAriaLabel": "Ultra MAX'e Dön",
+    "subtitle": "Uygulama bilgileri, güncellemeler ve yararlı bağlantılar",
+    "sections": {
+      "appInfo": "Uygulama bilgileri",
+      "language": "Dil",
+      "updates": "Güncellemeler",
+      "links": "Bağlantılar"
+    },
+    "language": {
+      "title": "Uygulama Dili",
+      "sub": "Uygulama genelindeki metni değiştirir"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "Yüklü sürüm",
+        "detecting": "Uygulama sürümü algılanıyor…",
+        "detectingValue": "Algılanıyor…"
+      },
+      "latestVersion": {
+        "title": "Yayınlanan en son sürüm",
+        "checking": "Sürüm bilgileri kontrol ediliyor…"
+      }
+    },
+    "updates": {
+      "checkBtn": "Güncellemeleri kontrol et",
+      "downloadBtn": "En son APK'yı indir",
+      "statusDefault": "Ultra MAX, yayınlanan sürümü yüklü uygulamayla karşılaştırır."
+    },
+    "links": {
+      "website": {
+        "title": "Ultra MAX web sitesi",
+        "sub": "ultramax.vip'i aç"
+      },
+      "support": {
+        "title": "Ultra MAX'e Destek Ol",
+        "sub": "Ko-fi üzerinden Kris'e bir kahve ısmarlayın"
+      },
+      "community": {
+        "title": "Ultra MAX topluluğu",
+        "sub": "r/Ultra_Max'i ziyaret edin"
+      }
+    },
+    "legal": "Ultra MAX bağımsız bir topluluk projesidir. Nuvio ve diğer bahsedilen hizmetler ilgili sahiplerinin mülkiyetinde kalır.",
+    "showWelcomeAgain": {
+      "title": "Hoş geldiniz ekranını tekrar göster",
+      "sub": "Ana ekrandaki ilk çalıştırma kurulum seçeneklerini yeniden açar"
+    },
+    "buildPrefix": "Yapı {n}",
+    "installedBuildUnavailable": "Yüklü yapı mevcut değil",
+    "couldNotReadBuild": "Yüklü yapı okunamadı",
+    "checkingForUpdates": "Güncellemeler kontrol ediliyor…",
+    "unknownVersion": "Bilinmiyor",
+    "updateAvailable": "Daha yeni bir sürüm mevcut: {name}.",
+    "upToDate": "Ultra MAX güncel.",
+    "latestLoadedNoBuild": "En son sürüm yüklendi. Yüklü yapı algılanamadı.",
+    "latestLoaded": "En son sürüm bilgileri yüklendi.",
+    "unavailable": "Mevcut değil",
+    "couldNotReachUpdateService": "Güncelleme servisine ulaşılamadı",
+    "updateCheckFailed": "Güncelleme kontrolü başarısız oldu. Lütfen tekrar deneyin."
+  },
+  "changelog": {
+    "backToHome": "← Ana sayfaya dön",
+    "heroBadge": "📋 Değişiklik Günlüğü",
+    "heroTitleLine1": "NELER",
+    "heroTitleLine2": "YENİ",
+    "heroSub": "Her güncelleme, iyileştirme ve yeni özellik — en başından beri takip edildi.",
+    "tabs": {
+      "app": "Android Uygulaması"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "Anonim"
+    },
+    "header": {
+      "home": "← Ana Sayfa",
+      "submit": "+ Gönder"
+    },
+    "hero": {
+      "eyebrow": "Topluluk Galerisi",
+      "titlePrefix": "Koleksiyonlarınızı",
+      "titleHighlight": "Paylaşın",
+      "sub": "Toplulukça oluşturulan Nuvio koleksiyon paketlerini indirin. JSON'u doğrudan Nuvio → Koleksiyonlar → İçe Aktar bölümüne aktarın.",
+      "submitBtn": "+ Koleksiyonunuzu Gönderin"
+    },
+    "stats": {
+      "collections": "Koleksiyonlar",
+      "downloads": "İndirmeler",
+      "likes": "Beğeniler"
+    },
+    "search": {
+      "placeholder": "Koleksiyon, etiket, yazar ara…"
+    },
+    "sort": {
+      "recent": "En Yeni",
+      "popular": "En Çok İndirilen",
+      "liked": "En Çok Beğenilen"
+    },
+    "tabs": {
+      "all": "Tümü",
+      "ready": "✅ Eklenti Yok",
+      "needs": "⚠️ Eklenti Gerekli"
+    },
+    "feed": {
+      "loading": "Topluluk koleksiyonları yükleniyor…",
+      "failedTitle": "Yükleme başarısız",
+      "failedSub": "Lütfen sayfayı yenilemeyi deneyin",
+      "emptyTitle": "Koleksiyon bulunamadı",
+      "emptySub": "Bir tane gönderen ilk kişi olun!"
+    },
+    "card": {
+      "noAddons": "✓ Eklenti Yok",
+      "addonsNeeded": "⚠ {n} {addonWord} Gerekli",
+      "byAuthor": "yazar: {author}",
+      "folders": "{n} klasör"
+    },
+    "addon": {
+      "singular": "Eklenti",
+      "plural": "Eklenti"
+    },
+    "time": {
+      "justNow": "az önce",
+      "minutesAgo": "{n} dk önce",
+      "hoursAgo": "{n} sa önce",
+      "daysAgo": "{n} gün önce",
+      "weeksAgo": "{n} hf önce"
+    },
+    "detail": {
+      "about": "Hakkında",
+      "tags": "Etiketler",
+      "requiredAddons": "Gerekli Eklentiler",
+      "addonsHint": "Bu koleksiyonu içe aktarmadan önce bu eklentileri yükleyin.",
+      "extraFiles": "Ekstra Dosyalar",
+      "extraFilesHint": "Bu koleksiyonla birlikte gelen ek yapılandırma dosyaları.",
+      "howToImport": "Nasıl İçe Aktarılır",
+      "step1": "1. Aşağıdaki JSON dosyasını indirin",
+      "step2": "2. Nuvio → Koleksiyonlar → İçe Aktar bölümünü açın",
+      "step3": "3. İndirilen dosyayı seçin",
+      "downloadBtn": "⬇️ JSON'u İndir",
+      "closeBtn": "Kapat",
+      "noAddonsNeeded": "✓ Eklenti Gerekmiyor",
+      "addonsRequired": "⚠ {n} {addonWord} Gerekli",
+      "statFolders": "klasör",
+      "statDownloads": "indirme",
+      "statLikes": "beğeni",
+      "installLink": "Yükle →",
+      "downloadFileBtn": "İndir"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ Bu koleksiyon sabit kodlanmış bir token ({token}) içeriyor.\n\nOlduğu gibi içe aktarırsanız, başka birinin katalog kurulumunu kullanacaktır.\n\nOtomatik olarak düzeltmek için KENDİ Ultra MAX tokeninizi girin veya olduğu gibi indirmek için iptal edin:",
+      "tokenReplaced": "✅ Token {token} ile değiştirildi — düzeltilmiş dosya indiriliyor",
+      "originalToken": "⚠️ Orijinal token ile indiriliyor — klasörler sizin için çalışmayabilir",
+      "downloaded": "İndirildi! Nuvio → Koleksiyonlar → İçe Aktar bölümüne aktarın",
+      "downloadedFile": "{filename} indirildi",
+      "failed": "İndirme başarısız oldu"
+    },
+    "like": {
+      "already": "Zaten beğenildi!",
+      "liked": "Beğenildi! ♥",
+      "failed": "Beğenilemedi"
+    },
+    "submit": {
+      "title": "Koleksiyonunuzu Paylaşın",
+      "sub": "Bir Nuvio koleksiyonları JSON'u yükleyin. Diğerleri onu indirip doğrudan Nuvio'ya aktarabilir.",
+      "nameLabel": "Koleksiyon Adı *",
+      "namePlaceholder": "örn. Yeni Korku Koleksiyonları",
+      "authorLabel": "Adınız",
+      "authorPlaceholder": "Anonim",
+      "descLabel": "Açıklama",
+      "descPlaceholder": "Bu koleksiyonda neler var? Kimin için?",
+      "tagsLabel": "Etiketler",
+      "tagsHint": "(eklemek için Enter'a veya virgüle basın)",
+      "tagsPlaceholder": "korku, filmler, diziler…",
+      "addonsLabel": "Gerekli Eklentiler",
+      "addonsHint": "(gerekli değilse boş bırakın)",
+      "addAddonBtn": "+ Gerekli eklenti ekle",
+      "addonNamePlaceholder": "Eklenti adı (örn. ScaryOnly)",
+      "addonUrlPlaceholder": "Manifest URL'si (isteğe bağlı)",
+      "jsonLabel": "Nuvio Koleksiyonları JSON'u *",
+      "uploadHint": "📂 Yüklemek için tıklayın veya sürükleyip bırakın",
+      "exportHint": "Nuvio → Koleksiyonlar → JSON Dışa Aktar bölümünden dışa aktarın",
+      "extraFilesLabel": "Ekstra Dosyalar",
+      "extraFilesHint": "(isteğe bağlı — örn. AIOMetadata katalog JSON'u)",
+      "extraFileNamePlaceholder": "Dosya adı (örn. aiometadata-catalogs.json)",
+      "uploadLabel": "Yükle",
+      "loadedLabel": "✓ Yüklendi",
+      "addExtraFileBtn": "+ Ekstra dosya ekle",
+      "cancelBtn": "İptal",
+      "submitBtn": "🚀 Galeriye Gönder",
+      "submitting": "Gönderiliyor…",
+      "successBtn": "✅ Gönderildi!",
+      "success": "✅ Gönderildi! Koleksiyonunuz artık galeride yayında.",
+      "failed": "Gönderim başarısız oldu.",
+      "networkError": "Ağ hatası — lütfen tekrar deneyin.",
+      "invalidJsonFile": "Geçersiz JSON dosyası — lütfen dosyayı kontrol edip tekrar deneyin.",
+      "invalidJsonFileNamed": "Geçersiz JSON dosyası: {filename}",
+      "errors": {
+        "nameRequired": "Lütfen bir koleksiyon adı girin.",
+        "fileRequired": "Lütfen Nuvio koleksiyonları JSON'unuzu yükleyin.",
+        "invalidFormat": "JSON bir Nuvio koleksiyonları dizisi olmalıdır (dosya [ ile başlamalıdır)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← Ana sayfaya dön"
+    },
+    "hero": {
+      "eyebrow": "Nuvio Rozetleri",
+      "titleLine1": "YAYIN",
+      "titleLine2": "ROZETLERİ",
+      "sub": "Bir rozet seti seçin ve URL'yi Nuvio'ya yapıştırın. En iyi kapsama alanı için aynı anda 3 sete kadar karıştırıp eşleştirin.",
+      "howToLabel": "Nasıl eklenir:",
+      "howToSteps": "Nuvio → Ayarlar → Yayınlar → Fusion rozetleri URL'si → yapıştır → İçe Aktar"
+    },
+    "sections": {
+      "signature": "İmza Paketleri",
+      "community": "Topluluk Paketleri",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visual"
+    },
+    "preview": {
+      "loading": "Yükleniyor…",
+      "textOnly": "Yalnızca metin",
+      "unavailable": "Önizleme mevcut değil"
+    },
+    "copyBtn": "URL'yi Kopyala",
+    "copiedBtn": "Kopyalandı ✓",
+    "toastCopied": "Kopyalandı ✓",
+    "install": {
+      "title": "Nuvio'ya rozet nasıl eklenir",
+      "stepsHtml": "1. Yukarıdaki setlerden birinde <strong>URL'yi Kopyala</strong>'ya dokunun<br>2. <strong>Nuvio</strong> → <strong>Ayarlar</strong> → <strong>Yayınlar</strong>'ı açın<br>3. <strong>Fusion rozetleri URL'si</strong>'ne kaydırın<br>4. URL alanına dokunun, yapıştırın, ardından <strong>İçe Aktar</strong>'a dokunun<br>5. <strong>\"1/3 URL içe aktarıldı\"</strong> göreceksiniz — işe yaradı!<br>💡 Nuvio aynı anda <strong>3 rozet setine kadar</strong> destekler — en iyi kapsama alanı için setleri birleştirin"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← Ana sayfaya dön"
+    },
+    "hero": {
+      "eyebrow": "Nuvio Profilleri",
+      "titleLine1": "AVATAR",
+      "titleLine2": "KASASI",
+      "sub": "Nuvio profiliniz için 226 karakter avatarı. URL'sini kopyalamak için bir avatara dokunun, ardından Nuvio → Profil → Avatar bölümüne yapıştırın."
+    },
+    "banner": {
+      "linkTitle": "🔗 Nuvio hesabınızı bağlayın",
+      "linkSub": "Avatarları doğrudan ayarlamak için hesabınızı bağlayın — URL'leri manuel olarak kopyalamak yerine aşağıdaki bir avatara dokunmanız yeterli.",
+      "manageLink": "⚙️ Zaten bağlı mı? Eklentilerinizi ve koleksiyonlarınızı yönetin →",
+      "emailPlaceholder": "Nuvio e-postası",
+      "passwordPlaceholder": "Nuvio şifresi",
+      "continueBtn": "Devam et",
+      "selectProfile": "Avatar ayarlamak için bir profil seçin",
+      "logoutBtn": "Çıkış yap",
+      "tapToSet": "Şunun için ayarlamak üzere aşağıdaki bir avatara dokunun:",
+      "changeBtn": "Değiştir",
+      "checkingSession": "Kayıtlı bir Nuvio oturumu aranıyor...",
+      "missingFields": "Lütfen Nuvio e-postanızı ve şifrenizi girin.",
+      "loggingIn": "Giriş yapılıyor...",
+      "loginFailed": "Giriş başarısız oldu."
+    },
+    "search": {
+      "placeholder": "Avatar ara…"
+    },
+    "tabs": {
+      "all": "Tümü ✦",
+      "other": "🎭 Diğer"
+    },
+    "count": "{n} avatar",
+    "copiedBadge": "Kopyalandı ✓",
+    "push": {
+      "settingAvatar": "Avatar ayarlanıyor...",
+      "avatarSet": "Avatar ayarlandı ✓",
+      "setFailed": "Avatar ayarlanamadı."
+    },
+    "uploader": {
+      "kicker": "Özel avatar",
+      "title": "Kendi avatarınızı oluşturun",
+      "sub": "Bir fotoğraf seçin, konumlandırmak için sürükleyin, ardından doğrudan seçilen Nuvio profiline gönderin.",
+      "choosePhotoBtn": "Fotoğraf seç",
+      "zoomLabel": "Yakınlaştırma",
+      "privacyNote": "Yüklenen avatarlar rastgele oluşturulmuş genel bir URL'de saklanır. Görsel, yükleme öncesinde yeniden boyutlandırılır ve yeniden kodlanır; bu işlem orijinal dosya adını ve gömülü meta verileri kaldırır.",
+      "saveBtn": "Yükle ve avatar ayarla",
+      "cancelBtn": "İptal",
+      "uploadYourOwnBtn": "Kendinizinkini yükleyin",
+      "selectProfileFirst": "Önce bir Nuvio profili seçin.",
+      "invalidFileType": "JPG, PNG veya WebP formatında bir görsel seçin.",
+      "fileTooLarge": "12 MB'den küçük bir görsel seçin.",
+      "imageOpenFailed": "Bu görsel açılamadı.",
+      "imageReadFailed": "Seçilen görsel okunamadı.",
+      "dragToPosition": "Konumlandırmak için görseli sürükleyin.",
+      "preparing": "Avatar hazırlanıyor…",
+      "uploading": "Avatar yükleniyor…",
+      "uploadFailed": "Avatar yüklemesi başarısız oldu.",
+      "updatingProfile": "Nuvio profili güncelleniyor…",
+      "uploadedSet": "Avatar yüklendi ve ayarlandı ✓",
+      "customAvatarSetToast": "Özel avatar ayarlandı ✓",
+      "setFailed": "Avatar ayarlanamadı."
+    },
+    "recent": {
+      "title": "Son yüklemeler",
+      "subtitle": "Tekrar kullanmak için birine dokunun",
+      "clearBtn": "Tümünü temizle",
+      "useAriaLabel": "Bu son avatarı kullan",
+      "altText": "Son özel avatar",
+      "removeAriaLabel": "Son avatarlardan kaldır"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "Keşif sağlayıcıları",
+      "atLeastOne": "TMDB veya MDBList gerekli · TVDB ve OMDb isteğe bağlı",
+      "oneRequired": "Temel sağlayıcı gerekli",
+      "atLeastOneShort": "EN AZ BİRİ",
+      "tmdbLabel": "TMDB v3 API anahtarı",
+      "tmdbPlaceholder": "TMDB v3 API anahtarınızı yapıştırın",
+      "tmdbHelp": "TMDB v3 API anahtarı TMDB tabanlı keşfi destekler, ancak MDBList'e özgü katalogları veya araçları açmaz.",
+      "mdblistHelp": "MDBList, MDBList'e özgü katalogları, liste aramayı ve içe aktarma araçlarını etkinleştirir.",
+      "bothHelp": "En eksiksiz Ultra MAX deneyimi için iki sağlayıcıyı da ekleyin.",
+      "getTmdbKey": "TMDB v3 anahtarı al →",
+      "tmdbAttribution": "Bu ürün TMDB API'sini kullanır ancak TMDB tarafından onaylanmaz veya sertifikalandırılmaz.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ Yalnızca TMDB",
+      "statusMdblist": "✓ Yalnızca MDBList",
+      "statusRequired": "TMDB veya MDBList gerekli",
+      "validation": "1. adımda bir TMDB v3 API anahtarı veya MDBList API anahtarı ekleyin.",
+      "savedKey": "Kaydedilmiş anahtar",
+      "mdblistPresetUnavailable": "MDBList API anahtarı gerektirir.",
+      "unsupportedManualImdb": "IMDb kimlikleri (bu oluşturucuda desteklenmez)",
+      "unsupportedManualMdblist": "MDBList URL / kimliği (arama/içe aktarmayı kullanın)",
+      "statusConnectedCount": "{count} bağlı",
+      "statusSupplementalOnly": "{count} bağlı · TMDB veya MDBList ekleyin"
+    },
+    "collectionSync": {
+      "backToStep1": "↤ Adım 1'e dön"
+    },
+    "badge": {
+      "required": "GEREKLİ",
+      "optional": "İsteğe bağlı"
+    },
+    "verifyBtn": "Kontrol Et",
+    "step1": {
+      "eyebrow": "Adım 01 / 04",
+      "title": "Ultra MAX'ını kur",
+      "sub": "Önce temel ayarları tamamla, sonra istediğin her şeyi kişiselleştir."
+    },
+    "modeChooser": {
+      "kicker": "Yolunuzu seçin",
+      "title": "Nasıl başlamak istersiniz?",
+      "copy": "Hızlı yolu seçin, her şeyi kendiniz özelleştirin veya tokeni ile mevcut bir kurulumu yeniden açın.",
+      "quick": {
+        "name": "Hızlı Kurulum",
+        "desc": "Bir stil seçin ve Ultra MAX temiz, dengeli bir satır koleksiyonu seçsin."
+      },
+      "custom": {
+        "name": "Özel Kurulum",
+        "desc": "Anahtarları, katalogları, koleksiyonları, yayınları ve tüm gelişmiş seçenekleri kendiniz seçin."
+      },
+      "kids": {
+        "name": "Çocuk Kurulumu",
+        "desc": "Yaş sınırları, güvenli kataloglar ve izole edilmiş Nuvio eklentileri ile kısıtlı bir Çocuk profili oluşturun."
+      },
+      "restore": {
+        "name": "Mevcut Kurulumu Geri Yükle",
+        "desc": "Bir kurulum tokeni girin ve mevcut bir Ultra MAX yapılandırmasını düzenlemeye devam edin."
+      },
+      "changeRoute": "← Farklı bir kurulum yolu seçin"
+    },
+    "toolbar": {
+      "newSetup": "🚀 Yeni Kurulum",
+      "loadToken": "🔑 Token Yükle",
+      "save": "💾 Kaydet",
+      "draftSaved": "Taslak kaydedildi.",
+      "more": "••• Daha Fazla",
+      "import": "📦 İçe Aktar",
+      "recoverToken": "📧 Tokeni Kurtar",
+      "restore": "↩ Geri Yükle",
+      "help": "❓ Yardım",
+      "assets": "🖼 Kaynaklar",
+      "clear": "🗑 Temizle"
+    },
+    "returning": {
+      "title": "Mevcut Kurulumu Yükle",
+      "placeholder": "Tokeninizi buraya yapıştırın",
+      "loadBtn": "Yükle →"
+    },
+    "quick": {
+      "label": "Hızlı Kurulum",
+      "title": "Saniyeler içinde temiz bir kurulum oluşturun",
+      "sub": "Bir stil seçin — Ultra MAX satırları seçer. Ya da aşağıdaki Gelişmiş Oluşturucu'ya doğrudan geçin.",
+      "balanced": {
+        "name": "Dengeli",
+        "desc": "En iyi varsayılan seçim. Hızlı, düzenli, kullanışlı satırlar."
+      },
+      "movies": {
+        "name": "Film Tutkunu",
+        "desc": "Önce filmler. Trendler, popülerlik, sağlayıcılar ve koleksiyonlar."
+      },
+      "series": {
+        "name": "Dizi Maratoncusu",
+        "desc": "Dizi odaklı. Devam eden diziler ve kutu setleri için harika."
+      },
+      "quality": {
+        "name": "Kalite Kurulumu",
+        "desc": "Daha az karmaşayla daha temiz, premium hissi veren satırlar."
+      },
+      "summaryDefault": "Ultra MAX'in hangi satırları seçeceğini önizlemek için yukarıdan bir stil seçin.",
+      "generateBtn": "🚀 Hızlı Kurulum Oluştur",
+      "advancedBtn": "🔧 Gelişmiş Oluşturucu",
+      "backBtn": "← Hızlı Kuruluma Dön"
+    },
+    "requiredMarker": "● Gerekli",
+    "tiles": {
+      "requiredStatus": "Gerekli",
+      "password": {
+        "name": "Şifre"
+      },
+      "mdblist": {
+        "name": "MDBList Anahtarı"
+      },
+      "optional": {
+        "name": "İsteğe Bağlı Geliştirmeler",
+        "desc": "Posterler, dil, filtreler"
+      },
+      "streams": {
+        "name": "Yayınlar",
+        "desc": "Debrid sağlayıcıları ve manuel bağlantılar"
+      },
+      "backToOverview": "← Genel bakışa dön"
+    },
+    "password": {
+      "label": "🔐 Şifre",
+      "placeholder": "Bir şifre oluşturun",
+      "confirmPlaceholder": "Şifreyi onaylayın",
+      "mismatchError": "Şifreler eşleşmiyor",
+      "hint": "Bunu kaydedin — kurulumunuzu daha sonra düzenlemek için buna ihtiyacınız olacak.",
+      "rememberMe": "Bu cihazda beni hatırla",
+      "forgotQuestion": "Şifrenizi mi unuttunuz?",
+      "resetBtn": "🔑 Şifreyi Sıfırla",
+      "newPlaceholder": "Yeni şifre",
+      "confirmNewPlaceholder": "Yeni şifreyi onaylayın",
+      "setNewBtn": "Yeni Şifre Belirle"
+    },
+    "mdblist": {
+      "label": "MDBList API Anahtarı",
+      "placeholder": "Ücretsiz MDBList API anahtarınızı yapıştırın",
+      "hint": "Tüm derlenmiş listeleri, trend grafiklerini ve yeni çıkanları besler. Ücretsiz, 30 saniye sürer.",
+      "getKeyLink": "Ücretsiz anahtarınızı alın →",
+      "howToGetKey": "ℹ Anahtarı nasıl alırım?",
+      "guide": {
+        "title": "Ücretsiz MDBList API anahtarınızı nasıl alırsınız",
+        "step1Html": "Adım 1 — <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> adresine gidin ve ücretsiz bir hesap oluşturun.",
+        "step2": "Adım 2 — E-postanızı kontrol edin ve hesabınızı onaylayın.",
+        "step3Html": "Adım 3 — <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> adresine gidin ve anahtarınızı kopyalayın.",
+        "step4": "Adım 4 — Yukarı yapıştırın. Bitti!",
+        "freeTier": "Ücretsiz katman: günde 1.000 istek — fazlasıyla yeterli."
+      }
+    },
+    "optional": {
+      "toggle": "İsteğe Bağlı Geliştirmeler",
+      "sub": "Posterler, dil filtresi, kişisel satırlar ve filtreler.",
+      "aiRows": {
+        "summary": "🤖 Yapay Zeka Önerilen Satırlar",
+        "placeholder": "Google Gemini API anahtarınızı yapıştırın",
+        "hint": "Yapay Zeka Önerilen Filmler ve Yapay Zeka Önerilen Diziler satırlarını ekler.",
+        "enableLabel": "Yapay zeka önerilen satırları etkinleştir"
+      },
+      "language": {
+        "summary": "🌐 Meta Veri Dili",
+        "hint": "Başlıklar ve açıklamalar seçtiğiniz dilde görünecektir."
+      },
+      "posterKeys": {
+        "summary": "🖼️ Poster Sağlayıcı Anahtarları"
+      },
+      "rpdb": {
+        "label": "RPDB API Anahtarı",
+        "placeholder": "Derecelendirilmiş posterler için RPDB API anahtarınız",
+        "link": "RPDB anahtarınızı alın →"
+      },
+      "topPosters": {
+        "label": "TOP Posters API Anahtarı",
+        "placeholder": "TOP Posters API anahtarınız",
+        "link": "TOP Posters anahtarınızı alın →"
+      },
+      "fanart": {
+        "label": "Fanart.tv API Anahtarı",
+        "placeholder": "Yüksek kaliteli posterler için Fanart.tv API anahtarı",
+        "link": "Fanart.tv anahtarınızı alın →"
+      },
+      "omdb": {
+        "label": "OMDb API Anahtarı",
+        "placeholder": "OMDb API anahtarı",
+        "link": "OMDb anahtarınızı alın →"
+      },
+      "betterPosters": {
+        "summary": "Daha İyi Posterler ve Entegrasyonlar",
+        "label": "Daha İyi Posterler",
+        "descHtml": "Her postere akıllı bindirmeler ekleyin — puanlar, tür, trend etiketleri, kalite rozetleri ve daha fazlası. <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> tarafından desteklenir <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Yalnızca Nuvio</span>",
+        "enableTitle": "BetterPosters'ı Etkinleştir",
+        "enableSub": "Varsayılan TMDB posterlerini değiştir",
+        "ratingSourceLabel": "⭐ Puan Kaynağı",
+        "noRating": "Puan yok",
+        "overlaysLabel": "🏷️ Bindirmeler",
+        "trendTagsTitle": "Trend Etiketleri",
+        "trendTagsSub": "Trend, Yeni, #3",
+        "qualityTagsTitle": "Kalite Etiketleri",
+        "qualityTagsSub": "4K, DV, Atmos",
+        "genreTitle": "Tür",
+        "genreSub": "Altta etiket",
+        "ageRatingTitle": "Yaş Sınırı",
+        "ageRatingSub": "PG-13, TV-MA, R",
+        "urlPatternLabel": "Oluşturulan poster URL şablonu:",
+        "testUrlBtn": "🧪 URL'yi Test Et",
+        "manualUrlLabelHtml": "🔗 Ya da <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>'den kendi URL'nizi yapıştırın",
+        "manualUrlHint": "Otomatik oluşturulan URL çalışmıyorsa btttr.cc'yi ziyaret edin, stilinizi yapılandırın ve URL şablonunu buraya yapıştırın.",
+        "manualUrlFallback": "Yukarıda otomatik oluşturulan URL'yi kullanmak için boş bırakın.",
+        "disabledPreview": "— devre dışı",
+        "testing": "Test ediliyor...",
+        "testOk": "✅ Çalışıyor! Poster başarıyla yüklendi.",
+        "testFailed": "❌ Yükleme başarısız oldu — URL'nizi kontrol edin veya btttr.cc'yi manuel olarak deneyin."
+      },
+      "languageFilter": {
+        "label": "🌍 Dil Filtresi",
+        "desc": "Orijinal dili eşleşen içeriği gizler. Bollywood, K-dramaları, Tayland içeriği vb. filtrelemek için kullanışlıdır."
+      },
+      "trakt": {
+        "notConnected": "Bağlı değil",
+        "connectBtn": "Trakt ile Bağlan",
+        "disconnectBtn": "Bağlantıyı Kes",
+        "info": "Favorilerinize, İzleme Listenize, Koleksiyonunuza ve Geçmişinize erişmek için Trakt hesabınızı bağlayın. Özel profillerle çalışır."
+      },
+      "simkl": {
+        "notConnected": "Bağlı değil",
+        "connectBtn": "Simkl ile Bağlan",
+        "disconnectBtn": "Bağlantıyı Kes",
+        "info": "İzleme Listenize, Geçmişinize ve Puanlarınıza kişisel kataloglar olarak erişmek için Simkl hesabınızı bağlayın."
+      },
+      "contentFilters": {
+        "summary": "🎚️ İçerik Filtreleri",
+        "hideUnreleasedLabel": "🚫 Yayınlanmamış başlıkları gizle",
+        "hideUnreleasedInfo": "Henüz yayınlanmamış film ve dizileri filtreler.",
+        "preserveKitsuLabel": "🌸 Animeler için orijinal Kitsu kimliklerini koru",
+        "preserveKitsuInfo": "Yalnızca Kitsu ile çalışan yayın eklentilerinin yanıt verebilmesi için desteklenen anime katalogları için orijinal Kitsu kimliklerini yayınlar. Güvenilir bir Kitsu eşleşmesi olmayan başlıklar IMDb kimliklerini kullanmaya devam eder.",
+        "digitalOnlyLabel": "📀 Yalnızca dijital yayınlar",
+        "digitalOnlyInfo": "Yalnızca bugün mevcut olan onaylanmış dijital yayına sahip filmleri gösterir. Diziler etkilenmez.",
+        "hideWatchedLabel": "👁️ İzlenen başlıkları gizle",
+        "hideWatchedInfo": "Bağlı Trakt/Simkl geçmişinize dayanarak izlediğiniz filmleri ve tamamen bitirdiğiniz dizileri gizler.",
+        "includeAdultLabel": "🔞 Yetişkin içeriğini dahil et",
+        "includeAdultInfo": "Kapalıyken, yetişkin ve hentai içerikleri tüm kataloglardan gizlenir. Aile kurulumları için önerilir.",
+        "maxRatingLabel": "👥 Maksimum Yaş Sınırı",
+        "maxRatingInfo": "Bu sınırlamanın üzerindeki içeriği gizler. ABD sertifikalarını kullanır. Ayrıca derecelendirilmemiş içeriği de engeller — yetişkin anime ve hentai içeriğini kataloglardan filtrelemek için önerilir.",
+        "ratingNone": "Kısıtlama yok",
+        "ratingG": "G - Genel İzleyici",
+        "ratingPG": "PG - Ebeveyn Rehberliği Önerilir",
+        "ratingPG13": "PG-13 - Ebeveynler Kesinlikle Uyarılır",
+        "ratingR": "R - Kısıtlı",
+        "ratingNC17": "NC-17 - Yalnızca Yetişkinler İçin"
+      },
+      "timezone": {
+        "label": "🕰️ Saat dilimi",
+        "hint": "Bu cihazdan otomatik olarak algılanır. Bölüm yayınları, prömiyerler ve canlı etkinlikler için kullanılır."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ Yayınlar",
+      "sub": "Debrid sağlayıcıları ve manuel yayın bağlantıları.",
+      "debridLabel": "🎯 Debrid Sağlayıcıları",
+      "addProvider": "Sağlayıcı ekle…",
+      "apiKeyPlaceholder": "API anahtarınızı buraya yapıştırın",
+      "checkAddBtn": "Kontrol Et ve Ekle",
+      "optionsLabel": "Yayın Seçenekleri",
+      "cachedOnlyLabel": "⚡ Yalnızca önbelleğe alınmış",
+      "cachedOnlySub": "(daha hızlı, anlık yayınlar)",
+      "englishOnlyLabel": "🇬🇧 Yalnızca İngilizce yayınlar",
+      "removeTrashLabel": "🗑️ Kötü sonuçları kaldır",
+      "maxQualityLabel": "Maksimum Kalite",
+      "maxFileSizeLabel": "Maksimum Dosya Boyutu",
+      "noLimit": "Sınır yok",
+      "maxSizeHint": "Çözünürlükten bağımsız olarak bu sınırı aşan yayınları gizler.",
+      "poweredByHtml": "Yayınlar <strong>Comet</strong> tarafından desteklenir ve doğrudan Ultra MAX aracılığıyla sunulur. Manifest URL'sine gerek yoktur.",
+      "manualLinksLabel": "🔗 Manuel Yayın Bağlantıları",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "Debrid destekli hepsi bir arada yayın toplayıcı.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "Debrid proxy ve depolama.",
+      "configureLink": "Yapılandır →",
+      "pasteOwnUrl": "Ya da kendi URL'nizi yapıştırın",
+      "wizardUrlPlaceholder": "https://eklentiniz/.../manifest.json",
+      "checkAddonBtn": "Eklentiyi Kontrol Et",
+      "addedAddonsLabel": "Eklenen Eklentiler",
+      "noAddonsYet": "Henüz eklenti eklenmedi.",
+      "torboxTitle": "Debrid servisine mi ihtiyacınız var?",
+      "torboxDescHtml": "TorBox, Ultra MAX'in etrafında inşa edildiği hizmettir. Aşağıdaki bağlantıyı kullanın ve aboneliğinize ek olarak <strong>3 ay ücretsiz</strong> kazanın.",
+      "torboxBtn": "TorBox'ı Al — 3 Ay Ücretsiz →",
+      "preserveSourceBrandingLabel": "Orijinal yayın kaynağını göster",
+      "preserveSourceBrandingInfo": "Comet gibi adları veya orijinal eklenti sağlayıcısını Ultra MAX markasıyla değiştirmek yerine koru."
+    },
+    "nav": {
+      "backHome": "← Ana sayfaya dön",
+      "nextStep2": "Kataloglara devam et →"
+    },
+    "step2": {
+      "eyebrow": "Adım 02",
+      "title": "Ana Ekranınızı Oluşturun",
+      "sub": "Bir başlangıç noktası seçin, ardından kategoriye göre ince ayar yapın. Nuvio ana ekranınız canlı olarak güncellenir.",
+      "startWithPreset": "Bir ön ayarla başlayın",
+      "hideAll": {
+        "title": "Ana ekrandan tümünü gizle",
+        "sub": "Satırları seçili tut ama gizle",
+        "tooltip": "Seçilen satırları korur, ancak onları Nuvio ana ekranınızdan gizler"
+      },
+      "showAll": {
+        "title": "Ana ekranda tümünü göster",
+        "sub": "Seçilen tüm satırları geri yükle",
+        "tooltip": "Seçilen her satırı Nuvio ana ekranınızda görünür yapar"
+      },
+      "clearAll": {
+        "title": "Tüm seçimi temizle",
+        "sub": "Seçilen her satırı kaldır",
+        "tooltip": "Seçilen her satırı kaldırır"
+      },
+      "loading": "Yükleniyor...",
+      "fineTune": "Kategoriye göre ince ayar yap",
+      "searchPlaceholder": "Tüm kataloglarda ara...",
+      "manageSetup": "Kurulumunuzu yönetin",
+      "showAllRows": {
+        "title": "Tüm satırları göster",
+        "sub": "Mevcut tüm katalogları göz atın"
+      },
+      "allRows": "Tüm satırlar",
+      "reorder": {
+        "title": "Satırları Yeniden Sırala",
+        "sub": "Nuvio ve Stremio'da gösterilen sırayı kontrol edin",
+        "note": "Satırları tercih ettiğiniz sıraya sürükleyin."
+      },
+      "customRows": {
+        "title": "Özel Satırlar",
+        "sub": "IMDb, MDBList, Trakt veya TMDB'den satırlar oluşturun",
+        "note": "Dahili kataloglarda yer almayan diziler, franchise'lar ve listeler ekleyin."
+      },
+      "preview": {
+        "mobile": "📱 Mobil",
+        "desktop": "🖥️ Masaüstü",
+        "deviceGroupLabel": "Önizleme cihazı",
+        "modalLabel": "Nuvio ana ekran önizlemesi",
+        "closeLabel": "Önizlemeyi kapat"
+      },
+      "review": {
+        "kicker": "Son kontrol",
+        "title": "Ana ekranınızı gözden geçirin",
+        "sub": "Seçilen satırlarınızı kontrol edin veya Nuvio'da nasıl görüneceklerini önizleyin."
+      },
+      "stremioWarning": {
+        "prefix": "Stremio kullanıcıları:",
+        "textHtml": "200'den fazla katalog, Stremio'nun manifest boyutu sınırını aşabilir. Nuvio daha büyük kurulumu kaldırabilir. Kullanılmayan satırları kaldırmak yerine gizlemeyi düşünün."
+      },
+      "summaryBtn": "📋 Özet",
+      "previewBtn": "📺 Önizleme",
+      "back": {
+        "title": "Geri",
+        "sub": "Kuruluma dön"
+      },
+      "selection": {
+        "title": "Seçilen satırlar",
+        "sub": "Ana ekranınız için hazır"
+      },
+      "next": {
+        "title": "Koleksiyonlar",
+        "sub": "Adım 03'e devam et"
+      }
+    },
+    "step3": {
+      "eyebrow": "Adım 03",
+      "title": "Koleksiyonlar",
+      "sub": "Ana ekran satırlarınızı Nuvio koleksiyonlarında gruplandırın",
+      "quickStart": "⚡ Hızlı başlangıç — koleksiyon eklemek için dokunun",
+      "tapToExpand": "genişletmek için dokunun",
+      "quickStartLabel": "Hızlı başlangıç — koleksiyon eklemek için dokunun",
+      "quickStartDesc": "Her ön ayar aşağıda anında yeni bir koleksiyon oluşturur. İstediğiniz kadarına dokunun — birer birer.",
+      "addCollectionBtn": "+ Koleksiyon ekle",
+      "presets": {
+        "streaming": "Yayın",
+        "trending": "Trendler",
+        "genres": "Türler",
+        "themed": "Temalı",
+        "filmCollections": "Film Koleksiyonları",
+        "studios": "Stüdyolar",
+        "directors": "Yönetmenler",
+        "actors": "Oyuncular",
+        "trakt": "Trakt",
+        "byDecade": "On Yıla Göre",
+        "kidsFamily": "Çocuk ve Aile",
+        "uk": "Birleşik Krallık",
+        "anime": "Anime",
+        "documentaries": "Belgeseller",
+        "bollywood": "Bollywood",
+        "sports": "Spor",
+        "universes": "Evrenler"
+      },
+      "displayStyle": "Görüntüleme stili",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "Sekmeli Izgara",
+          "desc": "Önerilen"
+        },
+        "grid": {
+          "name": "Izgara",
+          "desc": "Basit düzen"
+        },
+        "rows": {
+          "name": "Satırlar",
+          "desc": "Liste görünümü"
+        }
+      },
+      "yourCollections": "Koleksiyonlarınız",
+      "searchPlaceholder": "Koleksiyon ve klasör ara…",
+      "importJsonBtn": "📦 JSON İçe Aktar",
+      "addCollectionMainBtn": "+ Koleksiyon Ekle",
+      "backToCollections": "← Koleksiyonlara Dön",
+      "emptyState": {
+        "textHtml": "Henüz koleksiyon yok<br>Hemen başlamak için yukarıdaki bir ön ayara dokunun,<br>ya da sıfırdan bir tane oluşturmak için <strong style=\"color:var(--text);\">+ Koleksiyon Ekle</strong>'ye tıklayın."
+      },
+      "back": "← Geri",
+      "collectionsLabel": "koleksiyon",
+      "foldersLabel": "klasör",
+      "next": "İleri — Tamamla →",
+      "finaliseGenerateBtn": "Sonlandır / Oluştur →",
+      "artworkCreditHtml": "Ultra MAX genelinde kullanılan koleksiyon görselleri için Reddit’teki <strong style=\"color:var(--text);\">Shadowfrom88</strong> kullanıcısına özel teşekkürler."
+    },
+    "step4": {
+      "title": "🚀 Tamamla",
+      "installInstructions": {
+        "label": "Önemli Kurulum Talimatları",
+        "html": "<strong style=\"color:#fff;\">Ultra MAX'in iki ayrı bölümü vardır:</strong><br><br><strong style=\"color:#fff;\">1. Eklenti URL'si</strong><br><strong>🚀 Nihai<br>Kurulumu Oluştur</strong>'a tıkladıktan sonra, nihai kurulum URL'sini kopyalayın ve Ultra MAX'i Nuvio veya Stremio'ya eklemek/yüklemek için kullanın.<br><br><strong style=\"color:#fff;\">2. Nuvio Koleksiyonları JSON'u</strong><br>Koleksiyon dosyanızı indirmek için <strong>📦 Nuvio<br>JSON'unu Dışa Aktar</strong>'a tıklayın. Ardından Nuvio'yu açın, Koleksiyonlar sayfasına gidin ve o JSON dosyasını orada içe aktarın.<br><br><strong style=\"color:#fff;\">Basit kural:</strong><br>Eklenti URL'si = kataloglar. Nuvio JSON'u = klasörler ve koleksiyonlar."
+      },
+      "summary": {
+        "label": "Nihai Kurulum Özeti",
+        "homeRowsKept": "Korunan ana ekran satırları:",
+        "hiddenFromHome": "Ana ekrandan gizlenen:",
+        "collectionsCreated": "Oluşturulan koleksiyonlar:",
+        "rowsMovedToCollections": "Koleksiyonlara taşınan satırlar:",
+        "performance": "Performans:",
+        "perf": {
+          "excellent": "Mükemmel",
+          "good": "İyi",
+          "heavy": "Ağır",
+          "veryHeavy": "Çok Ağır"
+        },
+        "hint": {
+          "excellent": "Sade ana ekran düzeni. Mobil, TV ve hızlı gezinme için harika.",
+          "good": "Dengeli kurulum. Çoğu cihazda iyi çalışmalıdır.",
+          "heavy": "Ana ekranınızda çok fazla satır var. Adım 3 oluşturulduğunda koleksiyonlar yardımcı olacak.",
+          "veryHeavy": "Bu kurulum yoğun hissettirebilir. Daha fazla satırı Koleksiyonlara taşımak isteyebilirsiniz."
+        }
+      },
+      "generateBtn": "🚀 Nihai Kurulumu Oluştur",
+      "generating": "Eklentiniz oluşturuluyor...",
+      "part1": {
+        "stepLabel": "Adım 1 · Kurulum",
+        "title": "📡 Eklenti URL'si",
+        "desc": "Bu URL'yi kopyalayın ve Nuvio veya Stremio'ya yükleyin. Bu size tüm katalog satırlarınızı verir.",
+        "copyBtn": "📋 URL'yi Kopyala",
+        "stremioInstallBtn": "Stremio Kurulumu",
+        "stremioInstallTitle": "Doğrudan Stremio uygulamasına yükleyin"
+      },
+      "part2": {
+        "stepLabel": "Adım 2 · Koleksiyonlar",
+        "title": "🗂 Nuvio JSON",
+        "desc": "Bu dosyayı dışa aktarın ve Nuvio'nun Koleksiyonlar sayfasına içe aktarın. Bu size klasörler ve koleksiyonlar verir.",
+        "exportBtn": "📦 Nuvio JSON'unu Dışa Aktar"
+      },
+      "pushCard": {
+        "title": "🚀 Doğrudan Nuvio'ya Gönder",
+        "desc": "Manuel adımları atlayın — Nuvio hesabınızı bağlayın, Ultra MAX'i ve koleksiyonlarınızı doğrudan bir profile ekleyelim.",
+        "manageLink": "⚙️ Zaten bağlı mı? Eklentilerinizi ve koleksiyonlarınızı yönetin →",
+        "emailPlaceholder": "Nuvio e-postası",
+        "passwordPlaceholder": "Nuvio şifresi",
+        "continueBtn": "Devam et",
+        "profileStageNote": "Bu, eklentiyi yükler ve seçilen profildeki koleksiyonları değiştirir.",
+        "catalogsCheckbox": "Kataloglar",
+        "collectionsCheckbox": "Koleksiyonlar",
+        "cancelBtn": "İptal",
+        "pushBtn": "Nuvio'ya Gönder",
+        "pushBtnMulti": "Nuvio'ya Gönder ({n} profil)",
+        "selectAll": "Tümünü Seç",
+        "selectNone": "Hiçbirini Seçme"
+      },
+      "qrCard": {
+        "title": "📱 Telefonunuzdan Gönderin",
+        "desc": "Hiçbir şey yazmadan doğrudan göndermek için bunu telefonunuzun kamerasıyla tarayın.",
+        "showBtn": "QR Kodunu Göster"
+      },
+      "token": {
+        "saveHint": "Tokeniniz — bunu kaydedin!",
+        "copyBtn": "Tokeni Kopyala"
+      },
+      "registerEmail": {
+        "label": "📧 E-postanızı kaydedin",
+        "desc": "Böylece tokeninizi kaybederseniz kurtarabilirsiniz. Asla pazarlama için kullanılmaz.",
+        "placeholder": "sizin@eposta.com",
+        "registerBtn": "Kaydet"
+      },
+      "exports": {
+        "projectFile": "💾 Proje Dosyası",
+        "catalogCsv": "📊 Katalog CSV"
+      },
+      "back": "← Geri"
+    },
+    "nuvioPush": {
+      "missingFields": "Lütfen Nuvio e-postanızı ve şifrenizi girin.",
+      "generateFirst": "Nuvio'ya göndermeden önce lütfen kurulumunuzu oluşturun.",
+      "loggingIn": "Giriş yapılıyor...",
+      "selectProfiles": "Göndermek istediğiniz profil(ler)i seçin.",
+      "loginFailed": "Giriş başarısız oldu.",
+      "selectAtLeastOne": "Göndermek için en az Kataloglar veya Koleksiyonlar'ı seçin.",
+      "selectAtLeastOneProfile": "En az bir profil seçin.",
+      "somethingWrong": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "Altı Nuvio profil yuvasının tamamı zaten kullanımda.",
+      "profileNotVerified": "Nuvio profil güncellemesini kabul etti, ancak Çocuk profili doğrulanamadı.",
+      "notIsolated": "Çocuk profili mevcut, ancak ana profilden izole edilmemiş.",
+      "noKidsCollection": "Oluşturulan kurulum Ultra MAX Çocuk koleksiyonunu içermiyor.",
+      "generateFirst": "Nuvio'ya göndermeden önce Çocuk kurulumunu oluşturun.",
+      "confirmPrompt": "İzole edilmiş bir Nuvio Çocuk profili kurulsun mu?\n\nUltra MAX, Çocuk profilini oluşturacak veya güncelleyecek, paylaşılan eklentileri ve eklenti modüllerini kapatacak, ardından o profilin eklentilerini ve koleksiyonlarını kısıtlı Çocuk kurulumuyla değiştirecektir.\n\nMevcut Çocuk eklentilerinin ve koleksiyonlarının bir yedeği önce bu tarayıcıda kaydedilecektir.",
+      "cancelled": "Çocuk profili kurulumu iptal edildi. Herhangi bir değişiklik yapılmadı.",
+      "creatingProfile": "İzole edilmiş Çocuk profili oluşturuluyor veya doğrulanıyor...",
+      "backingUp": "Mevcut Çocuk profili yedekleniyor...",
+      "addonNotVerified": "Çocuk eklentisi gönderimi tamamlandı, ancak doğrulama oluşturulan manifestle eşleşmedi.",
+      "installingAddon": "Kısıtlı Ultra MAX Çocuk eklentisi yükleniyor...",
+      "installingCollection": "Ultra MAX Çocuk koleksiyonu yükleniyor...",
+      "collectionsNotVerified": "Çocuk koleksiyonları gönderildi, ancak doğrulama sonucu eşleşmedi.",
+      "verifying": "Çocuk profili doğrulanıyor...",
+      "ready": "Çocuk profili hazır. İzole edilmiş durumda ve yalnızca Ultra MAX Çocuk içeriyor."
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "UltraPlay+ bu Ultra MAX kurulumu için doğrulandı",
+      "aria": "UltraPlay Plus doğrulandı"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "Kurulumunuzu oluşturmak için 500'den fazla katalog"
+    }
+  }
+}

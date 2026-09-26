@@ -1,0 +1,575 @@
+/* Ultra MAX Step 2 preset experience selector */
+#step-2 #s2PresetsGrid.s2-presets-experience {
+  display: block !important;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+#step-2 .s2-preset-primary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#step-2 .s2-preset {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(157,104,255,.28);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(123,47,255,.13), transparent 42%),
+    linear-gradient(150deg, rgba(24,22,48,.98), rgba(12,12,26,.99));
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.035);
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+#step-2 .s2-preset:hover {
+  transform: translateY(-2px);
+  border-color: rgba(174,114,255,.68);
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.29),
+    0 0 28px rgba(123,47,255,.10),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+#step-2 .s2-preset:focus-visible {
+  outline: 2px solid #a978ff;
+  outline-offset: 3px;
+}
+
+#step-2 .s2-preset.s2-active {
+  border-color: rgba(183,131,255,.95);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(123,47,255,.28), transparent 45%),
+    linear-gradient(150deg, rgba(34,25,66,.99), rgba(14,12,32,.99));
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.32),
+    0 0 0 2px rgba(123,47,255,.12),
+    0 0 34px rgba(123,47,255,.20),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+#step-2 .s2-preset-primary {
+  min-height: 240px;
+}
+
+#step-2 .s2-preset-strip {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  width: 100%;
+  height: 112px;
+  overflow: hidden;
+  background: #101021;
+}
+
+#step-2 .s2-preset-strip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 52%, rgba(14,13,30,.88) 100%);
+}
+
+#step-2 .s2-preset-art-cell {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,.035);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(123,47,255,.28), transparent 45%),
+    linear-gradient(155deg, #24203f, #10101e);
+}
+
+#step-2 .s2-preset-art-cell:last-child {
+  border-right: 0;
+}
+
+#step-2 .s2-preset-art-cell::after {
+  content: attr(data-fallback-icon);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 0;
+  color: rgba(255,255,255,.48);
+  font-size: 24px;
+}
+
+#step-2 .s2-preset-art-cell img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scale(1.01);
+}
+
+#step-2 .s2-preset-art-cell.is-failed img {
+  display: none !important;
+}
+
+#step-2 .s2-preset-body {
+  min-height: 128px;
+  padding: 14px 15px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#step-2 .s2-preset-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+#step-2 .s2-preset-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 10px;
+  background:
+    linear-gradient(145deg, rgba(123,47,255,.42), rgba(255,61,90,.12));
+  font-size: 16px;
+  box-shadow: 0 7px 18px rgba(0,0,0,.18);
+}
+
+#step-2 .s2-preset-name {
+  min-width: 0;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+#step-2 .s2-preset-desc {
+  min-height: 32px;
+  color: rgba(255,255,255,.50);
+  font-size: 10.5px;
+  line-height: 1.48;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#step-2 .s2-preset-meta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#step-2 .s2-preset-tag,
+#step-2 .s2-preset-count {
+  min-width: 0;
+  padding: 4px 7px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#step-2 .s2-preset-tag {
+  color: #c9b3ff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#step-2 .s2-preset-count {
+  flex: 0 0 auto;
+  color: rgba(255,255,255,.44);
+}
+
+#step-2 .s2-preset-tick {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+  display: none;
+  padding: 5px 8px;
+  border: 1px solid rgba(202,177,255,.36);
+  border-radius: 999px;
+  background: rgba(67,33,126,.88);
+  color: #f0e9ff;
+  font-size: 9px;
+  font-weight: 800;
+  box-shadow: 0 7px 20px rgba(0,0,0,.30);
+  backdrop-filter: blur(8px);
+}
+
+#step-2 .s2-preset.s2-active .s2-preset-tick {
+  display: inline-flex;
+}
+
+#step-2 .s2-preset-drawer {
+  margin-top: 12px;
+  border: 1px solid rgba(123,47,255,.20);
+  border-radius: 17px;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(123,47,255,.045), rgba(255,255,255,.012));
+}
+
+#step-2 .s2-preset-drawer > summary {
+  min-height: 68px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+#step-2 .s2-preset-drawer > summary::-webkit-details-marker {
+  display: none;
+}
+
+#step-2 .s2-preset-drawer > summary:hover {
+  background: rgba(123,47,255,.055);
+}
+
+#step-2 .s2-preset-drawer-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 11px;
+  background: rgba(123,47,255,.11);
+  font-size: 16px;
+}
+
+#step-2 .s2-preset-drawer-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#step-2 .s2-preset-drawer-copy strong {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#step-2 .s2-preset-drawer-copy small {
+  color: rgba(255,255,255,.42);
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+
+#step-2 .s2-preset-drawer-count {
+  min-width: 28px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  color: #b991ff;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+}
+
+#step-2 .s2-preset-drawer-chev {
+  color: rgba(255,255,255,.42);
+  font-size: 18px;
+  transition: transform .2s ease;
+}
+
+#step-2 .s2-preset-drawer[open] .s2-preset-drawer-chev {
+  transform: rotate(180deg);
+}
+
+#step-2 .s2-preset-specialist-grid {
+  padding: 0 12px 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#step-2 .s2-preset-specialist {
+  min-height: 178px;
+  border-radius: 15px;
+}
+
+#step-2 .s2-preset-specialist .s2-preset-strip {
+  height: 72px;
+}
+
+#step-2 .s2-preset-specialist .s2-preset-body {
+  min-height: 104px;
+  padding: 10px 11px 11px;
+  gap: 6px;
+}
+
+#step-2 .s2-preset-specialist .s2-preset-icon {
+  width: 27px;
+  height: 27px;
+  flex-basis: 27px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+#step-2 .s2-preset-specialist .s2-preset-name {
+  font-size: 12px;
+}
+
+#step-2 .s2-preset-specialist .s2-preset-desc {
+  min-height: 28px;
+  font-size: 9.5px;
+}
+
+#step-2 .s2-preset-advanced-drawer {
+  border-color: rgba(255,178,80,.16);
+  background: linear-gradient(145deg, rgba(255,178,80,.035), rgba(255,255,255,.008));
+}
+
+#step-2 .s2-preset-advanced-grid {
+  padding: 0 12px 12px;
+}
+
+#step-2 .s2-preset-advanced {
+  min-height: 88px;
+  display: grid;
+  grid-template-columns: 92px minmax(0,1fr);
+  border-color: rgba(255,178,80,.20);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(255,178,80,.10), transparent 32%),
+    linear-gradient(145deg, rgba(28,23,32,.98), rgba(13,12,24,.99));
+}
+
+#step-2 .s2-preset-advanced .s2-preset-strip {
+  height: 100%;
+  min-height: 88px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+#step-2 .s2-preset-advanced .s2-preset-art-cell:nth-child(n+3) {
+  display: none;
+}
+
+#step-2 .s2-preset-advanced .s2-preset-body {
+  min-height: 88px;
+  padding: 11px 13px;
+  gap: 5px;
+}
+
+#step-2 .s2-preset-advanced .s2-preset-desc {
+  min-height: 0;
+  color: rgba(255,205,139,.62);
+}
+
+body.light-mode #step-2 .s2-preset,
+body.light-mode #step-2 .s2-preset-drawer {
+  color: var(--text);
+  border-color: var(--border2);
+  background: linear-gradient(145deg, #fff, var(--card2));
+  box-shadow: 0 10px 28px var(--shadow);
+}
+
+body.light-mode #step-2 .s2-preset-desc,
+body.light-mode #step-2 .s2-preset-drawer-copy small,
+body.light-mode #step-2 .s2-preset-count {
+  color: var(--text2);
+}
+
+@media (max-width: 900px) {
+  #step-2 .s2-preset-primary-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 10px;
+  }
+
+  #step-2 .s2-preset-specialist-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  #step-2 #s2PresetsGrid.s2-presets-experience {
+    max-width: none;
+  }
+
+  #step-2 .s2-preset-primary {
+    min-height: 218px;
+    border-radius: 17px;
+  }
+
+  #step-2 .s2-preset-strip {
+    height: 92px;
+  }
+
+  #step-2 .s2-preset-body {
+    min-height: 124px;
+    padding: 11px 11px 12px;
+    gap: 6px;
+  }
+
+  #step-2 .s2-preset-icon {
+    width: 29px;
+    height: 29px;
+    flex-basis: 29px;
+    font-size: 14px;
+  }
+
+  #step-2 .s2-preset-name {
+    font-size: 13px;
+  }
+
+  #step-2 .s2-preset-desc {
+    min-height: 30px;
+    font-size: 9.5px;
+  }
+
+  #step-2 .s2-preset-tag,
+  #step-2 .s2-preset-count {
+    padding: 4px 6px;
+    font-size: 8px;
+  }
+
+  #step-2 .s2-preset-drawer > summary {
+    min-height: 64px;
+    padding: 10px 11px;
+  }
+
+  #step-2 .s2-preset-specialist-grid {
+    grid-template-columns: 1fr;
+    padding: 0 10px 10px;
+  }
+
+  #step-2 .s2-preset-specialist {
+    min-height: 112px;
+    display: grid;
+    grid-template-columns: 104px minmax(0,1fr);
+  }
+
+  #step-2 .s2-preset-specialist .s2-preset-strip {
+    height: 100%;
+    min-height: 112px;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  #step-2 .s2-preset-specialist .s2-preset-art-cell:nth-child(n+3) {
+    display: none;
+  }
+
+  #step-2 .s2-preset-specialist .s2-preset-body {
+    min-height: 112px;
+    padding: 10px 11px;
+  }
+}
+
+/* Native/mobile setup.css has older !important poster sizing rules.
+   Override them here so the experience cards keep the intended artwork. */
+@media (max-width: 700px) {
+  #step-2 .s2-preset-primary-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 9px;
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset {
+    min-height: 0 !important;
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset-primary {
+    min-height: 184px !important;
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset-strip {
+    height: 78px !important;
+    min-height: 78px !important;
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset-art-cell img {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: scale(1.03);
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset-body {
+    min-height: 104px !important;
+    padding: 10px !important;
+    gap: 5px;
+  }
+
+  #step-2 .s2-preset-heading {
+    gap: 7px;
+  }
+
+  #step-2 .s2-preset-name {
+    font-size: 12px;
+  }
+
+  #step-2 .s2-preset-desc {
+    min-height: 26px;
+    font-size: 8.8px;
+    line-height: 1.4;
+  }
+
+  #step-2 .s2-preset-tag,
+  #step-2 .s2-preset-count {
+    padding: 3px 5px;
+    font-size: 7.5px;
+  }
+
+  #step-2 .s2-preset-icon {
+    width: 27px;
+    height: 27px;
+    flex-basis: 27px;
+    border-radius: 9px;
+    font-size: 13px;
+  }
+
+  .um-app-mode #step-2 #s2PresetsGrid.s2-presets-experience .s2-preset-specialist .s2-preset-strip {
+    height: 100% !important;
+    min-height: 112px !important;
+  }
+}
+
+@media (max-width: 340px) {
+  #step-2 .s2-preset-primary-grid {
+    gap: 7px;
+  }
+
+  #step-2 .s2-preset-desc {
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #step-2 .s2-preset,
+  #step-2 .s2-preset-drawer-chev {
+    transition: none !important;
+  }
+}

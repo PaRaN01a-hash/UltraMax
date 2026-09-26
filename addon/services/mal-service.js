@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { loadConfigs, saveConfigs } = require("../utils/config-store");
+const { mutateAccount, MUTATION_REASONS = { OAUTH_INTEGRATION: "oauth-integration" } } = require("../utils/config-store");
 const { getImdbId } = require("./metadata-service");
 
 const MAL_CLIENT_ID = process.env.MAL_CLIENT_ID;
@@ -27,21 +27,22 @@ async function refreshMalToken(userToken, config) {
     const data = res.data;
     if (!data.access_token) return null;
 
-    const configs = loadConfigs();
-    if (!configs[userToken]) return data.access_token;
-    configs[userToken].malAccessToken = data.access_token;
-    configs[userToken].malRefreshToken = data.refresh_token || config.malRefreshToken;
-    configs[userToken].malTokenExpiry = Date.now() + (data.expires_in * 1000);
-    saveConfigs(configs);
-    console.log('[MAL] Token refreshed for:', userToken.slice(0, 8));
+    const committed = await mutateAccount(userToken, account => {
+      account.malAccessToken = data.access_token;
+      account.malRefreshToken = data.refresh_token || config.malRefreshToken;
+      account.malTokenExpiry = Date.now() + (data.expires_in * 1000);
+    }, { reason: MUTATION_REASONS.OAUTH_INTEGRATION });
+    if (!committed) return data.access_token;
+    console.log('[MAL] Token refresh persisted');
     return data.access_token;
   } catch (e) {
+    if (e && e.code === "PROFILE_STORE_MIRROR_FAILED") throw e;
     const status = e.response && e.response.status;
     if (status === 400 || status === 401) {
       _malRefreshBlacklist.set(userToken, Date.now());
-      console.error('[MAL] Refresh permanently failed for', userToken.slice(0, 8), '— blacklisted 24h:', e.message);
+      console.error('[MAL] Refresh permanently failed — blacklisted 24h');
     } else {
-      console.error('[MAL] Refresh failed:', e.message);
+      console.error('[MAL] Refresh failed');
     }
     return null;
   }

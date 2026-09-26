@@ -1,12 +1,11 @@
 const fs   = require("fs");
 const path = require("path");
 
-const DATA_DIR = process.env.DATA_DIR || __dirname;
+const DATA_DIR    = process.env.DATA_DIR || __dirname;
 const EMAILS_FILE = path.join(DATA_DIR, "token-emails.json");
 const RATE_FILE   = path.join(DATA_DIR, "recovery-rate.json");
 const RESEND_KEY  = process.env.RESEND_API_KEY;
-const FROM        = process.env.RESEND_FROM || "Ultra MAX <noreply@example.com>";
-const BASE_URL    = process.env.BASE_URL || `http://localhost:${process.env.PORT || 7000}`;
+const FROM        = "Ultra MAX <noreply@ultramax.vip>";
 
 function loadEmails() {
   try { return JSON.parse(fs.readFileSync(EMAILS_FILE, "utf8")); }
@@ -43,15 +42,15 @@ function wrap(content) {
   return `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#080810;color:#e8e8f0;padding:32px;border-radius:12px;"><h2 style="color:#9B5FFF;margin:0 0 20px;">ULTRA MAX</h2>${content}<p style="font-size:11px;color:#44445a;margin:20px 0 0;border-top:1px solid #1e1e36;padding-top:12px;">Automated message from Ultra MAX.</p></div>`;
 }
 
-function registerEmail(loadConfigs) {
+function registerEmail(readConfig) {
   return async (req, res) => {
     try {
       const { token, email, confirm = false } = req.body || {};
       if (!token || !email) return res.status(400).json({ error: "Token and email required" });
       const normEmail = normaliseEmail(email);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normEmail)) return res.status(400).json({ error: "Invalid email address" });
-      const configs = loadConfigs();
-      if (!configs[token]) return res.status(404).json({ error: "Token not found" });
+      const config = await readConfig(token);
+      if (!config) return res.status(404).json({ error: "Token not found" });
       const emails = loadEmails();
       const existing = emails[normEmail];
       if (existing && existing !== token && !confirm) {
@@ -62,10 +61,10 @@ function registerEmail(loadConfigs) {
       emails[normEmail] = token;
       saveEmails(emails);
       if (isUpdate) {
-        await sendEmail(normEmail, "Ultra MAX — Token registration updated", wrap(`<p>Your token registration has been updated.</p><p style="color:#8888aa;font-size:13px;">New token:</p>${tokenBox(token)}<p style="color:#f87171;font-size:12px;">Previous token (${oldToken}) is no longer linked. If this wasn't you, create a new setup at ${BASE_URL}/setup.html</p>`));
+        await sendEmail(normEmail, "Ultra MAX — Token registration updated", wrap(`<p>Your token registration has been updated.</p><p style="color:#8888aa;font-size:13px;">New token:</p>${tokenBox(token)}<p style="color:#f87171;font-size:12px;">Previous token (${oldToken}) is no longer linked. If this wasn't you, create a new setup at ultramax.vip/setup.html</p>`));
         return res.json({ ok: true, message: "Registration updated. Check your inbox." });
       }
-      await sendEmail(normEmail, "Ultra MAX — Email registered", wrap(`<p>Your email has been registered against your Ultra MAX token.</p><p style="color:#8888aa;font-size:13px;">Your token:</p>${tokenBox(token)}<p style="color:#8888aa;font-size:13px;">To recover: <a href="${BASE_URL}/recover" style="color:#9B5FFF;">${BASE_URL.replace(/^https?:\/\//, '')}/recover</a></p>`));
+      await sendEmail(normEmail, "Ultra MAX — Email registered", wrap(`<p>Your email has been registered against your Ultra MAX token.</p><p style="color:#8888aa;font-size:13px;">Your token:</p>${tokenBox(token)}<p style="color:#8888aa;font-size:13px;">To recover: <a href="https://ultramax.vip/recover" style="color:#9B5FFF;">ultramax.vip/recover</a></p>`));
       res.json({ ok: true, message: "Email registered. Check your inbox for confirmation." });
     } catch (err) {
       console.error("[token-recovery] register error:", err.message);
@@ -86,7 +85,7 @@ function recoverToken() {
       const token = emails[normEmail];
       if (!token) return res.json({ ok: true, message: "If that email is registered, you'll receive your token shortly." });
       const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.ip || "unknown";
-      await sendEmail(normEmail, "Ultra MAX — Your token", wrap(`<p>Here is your Ultra MAX install token:</p>${tokenBox(token)}<p style="color:#8888aa;font-size:13px;">To reinstall: go to <a href="${BASE_URL}/setup.html" style="color:#9B5FFF;">${BASE_URL.replace(/^https?:\/\//, '')}/setup.html</a> → Load Token → paste above.</p><p style="font-size:11px;color:#44445a;">Requested from IP: ${ip}</p>`));
+      await sendEmail(normEmail, "Ultra MAX — Your token", wrap(`<p>Here is your Ultra MAX install token:</p>${tokenBox(token)}<p style="color:#8888aa;font-size:13px;">To reinstall: go to <a href="https://ultramax.vip/setup.html" style="color:#9B5FFF;">ultramax.vip/setup.html</a> → Load Token → paste above.</p><p style="font-size:11px;color:#44445a;">Requested from IP: ${ip}</p>`));
       res.json({ ok: true, message: "If that email is registered, you'll receive your token shortly." });
     } catch (err) {
       console.error("[token-recovery] recover error:", err.message);
@@ -95,4 +94,34 @@ function recoverToken() {
   };
 }
 
-module.exports = { registerEmail, recoverToken };
+function deleteEmailRegistrationsForToken(token) {
+  const needle = String(token || "").trim();
+  if (!needle) return [];
+
+  const emails = loadEmails();
+  const removed = [];
+
+  for (const [email, mappedToken] of Object.entries(emails)) {
+    if (String(mappedToken) !== needle) continue;
+    removed.push(email);
+    delete emails[email];
+  }
+
+  if (removed.length) saveEmails(emails);
+
+  if (removed.length) {
+    const rate = loadRate();
+    let changed = false;
+    for (const email of removed) {
+      if (Object.prototype.hasOwnProperty.call(rate, email)) {
+        delete rate[email];
+        changed = true;
+      }
+    }
+    if (changed) saveRate(rate);
+  }
+
+  return removed;
+}
+
+module.exports = { registerEmail, recoverToken, deleteEmailRegistrationsForToken };

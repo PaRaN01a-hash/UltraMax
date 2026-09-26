@@ -1,0 +1,1011 @@
+{
+  "nav": {
+    "home": "Hem",
+    "build": "Bygg",
+    "nuvio": "Nuvio",
+    "updates": "Uppdateringar"
+  },
+  "home": {
+    "tagline": "Ditt nav för kataloger, samlingar och upptäckter",
+    "sectionNewTrending": "Nytt & Trendande",
+    "continue": {
+      "eyebrow": "Fortsätt",
+      "title": "Återuppta din installation"
+    },
+    "tiles": {
+      "build": {
+        "name": "Ny installation",
+        "desc": "Skapa en ny Ultra MAX-installation från grunden"
+      },
+      "nuvio": {
+        "name": "Nuvio-konto",
+        "desc": "Hantera och lägg till tillägg direkt"
+      },
+      "avatars": {
+        "name": "Avatarvalv",
+        "desc": "226 karaktärsprofilbilder"
+      },
+      "badges": {
+        "name": "Streambrickor",
+        "desc": "Kvalitetsmärken som overlay"
+      },
+      "gallery": {
+        "name": "Communitygalleri",
+        "desc": "Dela och importera installationer från andra användare"
+      },
+      "whatsNew": {
+        "name": "Nyheter",
+        "desc": "Senaste uppdateringarna och funktionerna"
+      },
+      "settings": {
+        "name": "Inställningar & Om",
+        "desc": "Appversion, uppdateringar och användbara länkar"
+      },
+      "help": {
+        "name": "Hjälp & återställning",
+        "desc": "Guide, tokenåterställning, diagnostik och support"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "Valfritt tillägg",
+      "headline": "Ultra MAX förblir gratis. UltraPlay+ hjälper till att hålla det så.",
+      "copy": "Få ut mer av Ultra MAX samtidigt som du hjälper till att täcka servrar, API:er och projektets löpande kostnader.",
+      "featuresAria": "UltraPlay Plus-funktioner",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Full Arcade",
+      "instantAccess": "Direkt åtkomst",
+      "pricingAria": "UltraPlay Plus-priser",
+      "monthly": "Månadsvis",
+      "yearly": "Årsvis",
+      "lifetime": "Livstid",
+      "cta": "Utforska UltraPlay+",
+      "footnote": "UltraPlay+ förbättrar Ultra MAX. Ultra MAX förblir gratis."
+    },
+    "stats": {
+      "catalogs": "Kataloger",
+      "activeUsers": "Aktiva användare",
+      "selfHosted": "Självhostat"
+    },
+    "footer": {
+      "website": "Webbplats",
+      "support": "Stöd"
+    },
+    "onboarding": {
+      "kicker": "Välkommen till Ultra MAX",
+      "title": "Låt oss bygga din installation",
+      "copy": "Skapa något nytt, återställ en befintlig installation eller titta dig omkring innan du rör några inställningar.",
+      "continueBtn": "Fortsätt sparad installation",
+      "continueSub": "Fortsätt precis där du slutade",
+      "createBtn": "Skapa en ny installation",
+      "createSub": "Välj kataloger, tjänster och inställningar",
+      "restoreBtn": "Återställ med en token",
+      "restoreSub": "Öppna en installation du skapat tidigare",
+      "tokenPlaceholder": "Installationstoken",
+      "tokenError": "Ange en giltig installationstoken.",
+      "openBtn": "Öppna",
+      "exploreBtn": "Utforska appen först"
+    }
+  },
+  "update": {
+    "kicker": "Uppdatering tillgänglig",
+    "title": "En ny version av Ultra MAX är redo",
+    "defaultNotes": "En nyare version av Ultra MAX är tillgänglig.",
+    "now": "Uppdatera nu",
+    "viewSettings": "Visa appinställningar",
+    "later": "Inte nu"
+  },
+  "back": {
+    "exitToast": "Tryck bakåt igen för att avsluta"
+  },
+  "account": {
+    "subtitle": "Nuvio kontohantering",
+    "backLink": "← Tillbaka till Ultra MAX",
+    "header": {
+      "title": "Nuvio-konto",
+      "backAriaLabel": "Tillbaka till Ultra MAX"
+    },
+    "login": {
+      "emailPlaceholder": "Nuvio-e-post",
+      "passwordPlaceholder": "Nuvio-lösenord",
+      "remember": "Kom ihåg mig på den här enheten",
+      "continueBtn": "Fortsätt",
+      "missingFields": "Ange din Nuvio-e-post och ditt lösenord.",
+      "loggingIn": "Loggar in...",
+      "failed": "Inloggningen misslyckades."
+    },
+    "profilePicker": {
+      "title": "Välj en profil"
+    },
+    "status": {
+      "loading": "Laddar...",
+      "loadFailed": "Det gick inte att läsa in profildata."
+    },
+    "manager": {
+      "switchBtn": "Byt",
+      "addonsTitle": "Tillägg",
+      "addonsInstalled": "{n} installerade",
+      "noAddons": "Inga tillägg installerade på den här profilen.",
+      "addonUrlPlaceholder": "Klistra in tilläggets manifest-URL...",
+      "addBtn": "Lägg till",
+      "addonUrlRequired": "Klistra in en manifest-URL.",
+      "addonDuplicate": "Det tillägget finns redan i listan.",
+      "checkingAddon": "Kontrollerar tillägg...",
+      "addonAdded": "Lade till \"{name}\" — klicka på Spara nedan för att skicka det till Nuvio.",
+      "collectionsTitle": "Samlingar",
+      "collectionsCount": "{n} samlingar",
+      "noCollections": "Inga samlingar på den här profilen.",
+      "folderSingular": "mapp",
+      "folderPlural": "mappar",
+      "saveBtn": "Spara ändringar",
+      "savingAddons": "Sparar tillägg...",
+      "savingCollections": "Sparar samlingar...",
+      "saved": "Sparat ✓",
+      "saveFailed": "Det gick inte att spara ändringarna.",
+      "unnamedAddon": "Namnlöst tillägg",
+      "untitledCollection": "Namnlös samling"
+    }
+  },
+  "settings": {
+    "headerTitle": "Inställningar & Om",
+    "backAriaLabel": "Tillbaka till Ultra MAX",
+    "subtitle": "Appinformation, uppdateringar och användbara länkar",
+    "sections": {
+      "appInfo": "Appinformation",
+      "language": "Språk",
+      "updates": "Uppdateringar",
+      "links": "Länkar"
+    },
+    "language": {
+      "title": "Appspråk",
+      "sub": "Ändrar texten i hela appen"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "Installerad version",
+        "detecting": "Identifierar appversion…",
+        "detectingValue": "Identifierar…"
+      },
+      "latestVersion": {
+        "title": "Senast publicerade version",
+        "checking": "Kontrollerar versionsinformation…"
+      }
+    },
+    "updates": {
+      "checkBtn": "Sök efter uppdateringar",
+      "downloadBtn": "Ladda ner senaste APK",
+      "statusDefault": "Ultra MAX kontrollerar den publicerade versionen mot den installerade appen."
+    },
+    "links": {
+      "website": {
+        "title": "Ultra MAX-webbplats",
+        "sub": "Öppna ultramax.vip"
+      },
+      "support": {
+        "title": "Stöd Ultra MAX",
+        "sub": "Bjud Kris på en kaffe via Ko-fi"
+      },
+      "community": {
+        "title": "Ultra MAX-community",
+        "sub": "Besök r/Ultra_Max"
+      }
+    },
+    "legal": "Ultra MAX är ett oberoende community-projekt. Nuvio och andra nämnda tjänster tillhör respektive ägare.",
+    "showWelcomeAgain": {
+      "title": "Visa välkomstskärmen igen",
+      "sub": "Öppna förstagångsvalen igen på hemskärmen"
+    },
+    "buildPrefix": "Bygge {n}",
+    "installedBuildUnavailable": "Installerat bygge ej tillgängligt",
+    "couldNotReadBuild": "Kunde inte läsa installerat bygge",
+    "checkingForUpdates": "Söker efter uppdateringar…",
+    "unknownVersion": "Okänd",
+    "updateAvailable": "En nyare version är tillgänglig: {name}.",
+    "upToDate": "Ultra MAX är uppdaterad.",
+    "latestLoadedNoBuild": "Senaste versionen inläst. Installerat bygge kunde inte identifieras.",
+    "latestLoaded": "Information om senaste versionen inläst.",
+    "unavailable": "Ej tillgängligt",
+    "couldNotReachUpdateService": "Kunde inte nå uppdateringstjänsten",
+    "updateCheckFailed": "Uppdateringskontrollen misslyckades. Försök igen."
+  },
+  "changelog": {
+    "backToHome": "← Tillbaka till start",
+    "heroBadge": "📋 Ändringslogg",
+    "heroTitleLine1": "NYHETER",
+    "heroTitleLine2": "",
+    "heroSub": "Varje uppdatering, förbättring och ny funktion — spårad från början.",
+    "tabs": {
+      "app": "Android-app"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "Anonym"
+    },
+    "header": {
+      "home": "← Hem",
+      "submit": "+ Skicka in"
+    },
+    "hero": {
+      "eyebrow": "Communitygalleri",
+      "titlePrefix": "Dela dina",
+      "titleHighlight": "Samlingar",
+      "sub": "Ladda ner Nuvio-samlingspaket byggda av communityn. Importera JSON-filen direkt i Nuvio → Samlingar → Importera.",
+      "submitBtn": "+ Skicka in din samling"
+    },
+    "stats": {
+      "collections": "Samlingar",
+      "downloads": "Nedladdningar",
+      "likes": "Gillningar"
+    },
+    "search": {
+      "placeholder": "Sök samlingar, taggar, upphovspersoner…"
+    },
+    "sort": {
+      "recent": "Senaste",
+      "popular": "Mest nedladdade",
+      "liked": "Mest gillade"
+    },
+    "tabs": {
+      "all": "Alla",
+      "ready": "✅ Inga tillägg",
+      "needs": "⚠️ Kräver tillägg"
+    },
+    "feed": {
+      "loading": "Laddar communitysamlingar…",
+      "failedTitle": "Kunde inte läsa in",
+      "failedSub": "Försök att uppdatera sidan",
+      "emptyTitle": "Inga samlingar hittades",
+      "emptySub": "Bli den första att skicka in en!"
+    },
+    "card": {
+      "noAddons": "✓ Inga tillägg",
+      "addonsNeeded": "ℹ {n} tredjepartstillägg",
+      "byAuthor": "av {author}",
+      "folders": "{n} mappar"
+    },
+    "addon": {
+      "singular": "Tillägg",
+      "plural": "Tillägg"
+    },
+    "time": {
+      "justNow": "just nu",
+      "minutesAgo": "{n} min sedan",
+      "hoursAgo": "{n} tim sedan",
+      "daysAgo": "{n} d sedan",
+      "weeksAgo": "{n} v sedan"
+    },
+    "detail": {
+      "about": "Om",
+      "tags": "Taggar",
+      "requiredAddons": "Tredjepartstillägg",
+      "addonsHint": "Valfritt — den här samlingen refererar till dessa tillägg. Du kan fortfarande ladda ner och importera den utan dem; rader som är beroende av dem fylls bara inte i.",
+      "extraFiles": "Extra filer",
+      "extraFilesHint": "Ytterligare konfigurationsfiler som ingår i den här samlingen.",
+      "howToImport": "Så importerar du",
+      "step1": "1. Ladda ner JSON-filen nedan",
+      "step2": "2. Öppna Nuvio → Samlingar → Importera",
+      "step3": "3. Välj den nedladdade filen",
+      "downloadBtn": "⬇️ Ladda ner JSON",
+      "closeBtn": "Stäng",
+      "noAddonsNeeded": "✓ Inga tillägg krävs",
+      "addonsRequired": "ℹ {n} tredjepartstillägg",
+      "statFolders": "mappar",
+      "statDownloads": "nedladdningar",
+      "statLikes": "gillningar",
+      "installLink": "Installera →",
+      "downloadFileBtn": "Ladda ner"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ Den här samlingen har en hårdkodad token ({token}) inbäddad.\n\nOm du importerar den som den är kommer den att använda någon annans kataloginstallation.\n\nAnge DIN Ultra MAX-token för att åtgärda det automatiskt, eller avbryt för att ladda ner som den är:",
+      "tokenReplaced": "✅ Token ersatt med {token} — laddar ner åtgärdad fil",
+      "originalToken": "⚠️ Laddar ner med ursprunglig token — mappar kanske inte fungerar för dig",
+      "downloaded": "Nedladdad! Importera i Nuvio → Samlingar → Importera",
+      "downloadedFile": "Laddade ner {filename}",
+      "failed": "Nedladdningen misslyckades"
+    },
+    "like": {
+      "already": "Redan gillad!",
+      "liked": "Gillad! ♥",
+      "failed": "Det gick inte att gilla"
+    },
+    "submit": {
+      "title": "Dela din samling",
+      "sub": "Ladda upp en Nuvio-samlings-JSON. Andra kan ladda ner och importera den direkt i Nuvio.",
+      "nameLabel": "Samlingens namn *",
+      "namePlaceholder": "t.ex. Nya skräcksamlingar",
+      "authorLabel": "Ditt namn",
+      "authorPlaceholder": "Anonym",
+      "descLabel": "Beskrivning",
+      "descPlaceholder": "Vad finns i den här samlingen? Vem är den till för?",
+      "tagsLabel": "Taggar",
+      "tagsHint": "(tryck Enter eller komma för att lägga till)",
+      "tagsPlaceholder": "skräck, filmer, serier…",
+      "addonsLabel": "Nödvändiga tillägg",
+      "addonsHint": "(lämna tomt om inga behövs)",
+      "addAddonBtn": "+ Lägg till nödvändigt tillägg",
+      "addonNamePlaceholder": "Tilläggets namn (t.ex. ScaryOnly)",
+      "addonUrlPlaceholder": "Manifest-URL (valfritt)",
+      "jsonLabel": "Nuvio-samlings-JSON *",
+      "uploadHint": "📂 Klicka för att ladda upp eller dra och släpp",
+      "exportHint": "Exportera från Nuvio → Samlingar → Exportera JSON",
+      "extraFilesLabel": "Extra filer",
+      "extraFilesHint": "(valfritt — t.ex. AIOMetadata-katalog-JSON)",
+      "extraFileNamePlaceholder": "Filnamn (t.ex. aiometadata-catalogs.json)",
+      "uploadLabel": "Ladda upp",
+      "loadedLabel": "✓ Inläst",
+      "addExtraFileBtn": "+ Lägg till extra fil",
+      "cancelBtn": "Avbryt",
+      "submitBtn": "🚀 Skicka till galleriet",
+      "submitting": "Skickar in…",
+      "successBtn": "✅ Inskickad!",
+      "success": "✅ Inskickad! Din samling finns nu live i galleriet.",
+      "failed": "Inskickningen misslyckades.",
+      "networkError": "Nätverksfel — försök igen.",
+      "invalidJsonFile": "Ogiltig JSON-fil — kontrollera filen och försök igen.",
+      "invalidJsonFileNamed": "Ogiltig JSON-fil: {filename}",
+      "errors": {
+        "nameRequired": "Ange ett namn på samlingen.",
+        "fileRequired": "Ladda upp din Nuvio-samlings-JSON.",
+        "invalidFormat": "JSON måste vara en Nuvio-samlingsmatris (filen ska börja med [)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← Tillbaka till start"
+    },
+    "hero": {
+      "eyebrow": "Nuvio-brickor",
+      "titleLine1": "STREAM",
+      "titleLine2": "BRICKOR",
+      "sub": "Välj ett brickset och klistra in URL:en i Nuvio. Blanda upp till 3 set samtidigt för bästa täckning.",
+      "howToLabel": "Så lägger du till:",
+      "howToSteps": "Nuvio → Inställningar → Streams → Fusion badges URL → klistra in → Importera"
+    },
+    "sections": {
+      "signature": "Signaturpaket",
+      "community": "Community-paket",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visuell"
+    },
+    "preview": {
+      "loading": "Laddar…",
+      "textOnly": "Endast text",
+      "unavailable": "Förhandsgranskning ej tillgänglig"
+    },
+    "copyBtn": "Kopiera URL",
+    "copiedBtn": "Kopierad ✓",
+    "toastCopied": "Kopierad ✓",
+    "install": {
+      "title": "Så lägger du till brickor i Nuvio",
+      "stepsHtml": "1. Tryck på <strong>Kopiera URL</strong> på valfritt set ovan<br>2. Öppna <strong>Nuvio</strong> → <strong>Inställningar</strong> → <strong>Streams</strong><br>3. Bläddra till <strong>Fusion badges URL</strong><br>4. Tryck på URL-fältet, klistra in och tryck sedan på <strong>Importera</strong><br>5. Du ser <strong>\"1/3 URLs imported\"</strong> — det fungerade!<br>💡 Nuvio stöder upp till <strong>3 brickset samtidigt</strong> — kombinera set för bästa täckning"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← Tillbaka till start"
+    },
+    "hero": {
+      "eyebrow": "Nuvio-profiler",
+      "titleLine1": "AVATAR",
+      "titleLine2": "VALV",
+      "sub": "226 karaktärsavatarer för din Nuvio-profil. Tryck på valfri avatar för att kopiera dess URL, klistra sedan in den i Nuvio → Profil → Avatar."
+    },
+    "banner": {
+      "linkTitle": "🔗 Länka ditt Nuvio-konto",
+      "linkSub": "Länka ditt konto för att ställa in avatarer direkt — tryck bara på en avatar nedan istället för att kopiera URL:er manuellt.",
+      "manageLink": "⚙️ Redan länkad? Hantera dina tillägg och samlingar →",
+      "emailPlaceholder": "Nuvio-e-post",
+      "passwordPlaceholder": "Nuvio-lösenord",
+      "continueBtn": "Fortsätt",
+      "selectProfile": "Välj en profil att ställa in avatarer för",
+      "logoutBtn": "Logga ut",
+      "tapToSet": "Tryck på en avatar nedan för att ställa in den för",
+      "changeBtn": "Byt",
+      "checkingSession": "Kontrollerar sparad Nuvio-session...",
+      "missingFields": "Ange din Nuvio-e-post och ditt lösenord.",
+      "loggingIn": "Loggar in...",
+      "loginFailed": "Inloggningen misslyckades."
+    },
+    "search": {
+      "placeholder": "Sök avatarer…"
+    },
+    "tabs": {
+      "all": "Alla ✦",
+      "other": "🎭 Övrigt"
+    },
+    "count": "{n} avatarer",
+    "copiedBadge": "Kopierad ✓",
+    "push": {
+      "settingAvatar": "Ställer in avatar...",
+      "avatarSet": "Avatar inställd ✓",
+      "setFailed": "Det gick inte att ställa in avataren."
+    },
+    "uploader": {
+      "kicker": "Anpassad avatar",
+      "title": "Skapa din egen",
+      "sub": "Välj ett foto, dra det till rätt läge och skicka det sedan direkt till den valda Nuvio-profilen.",
+      "choosePhotoBtn": "Välj foto",
+      "zoomLabel": "Zoom",
+      "privacyNote": "Uppladdade avatarer lagras på en offentlig, slumpmässigt genererad URL. Bilden ändras i storlek och kodas om innan uppladdning, vilket tar bort det ursprungliga filnamnet och inbäddade metadata.",
+      "saveBtn": "Ladda upp och ställ in avatar",
+      "cancelBtn": "Avbryt",
+      "uploadYourOwnBtn": "Ladda upp din egen",
+      "selectProfileFirst": "Välj en Nuvio-profil först.",
+      "invalidFileType": "Välj en JPG-, PNG- eller WebP-bild.",
+      "fileTooLarge": "Välj en bild mindre än 12 MB.",
+      "imageOpenFailed": "Den bilden kunde inte öppnas.",
+      "imageReadFailed": "Den valda bilden kunde inte läsas.",
+      "dragToPosition": "Dra bilden för att positionera den.",
+      "preparing": "Förbereder avatar…",
+      "uploading": "Laddar upp avatar…",
+      "uploadFailed": "Uppladdningen av avataren misslyckades.",
+      "updatingProfile": "Uppdaterar Nuvio-profil…",
+      "uploadedSet": "Avatar uppladdad och inställd ✓",
+      "customAvatarSetToast": "Anpassad avatar inställd ✓",
+      "setFailed": "Avataren kunde inte ställas in."
+    },
+    "recent": {
+      "title": "Senaste uppladdningar",
+      "subtitle": "Tryck på en för att använda den igen",
+      "clearBtn": "Rensa alla",
+      "useAriaLabel": "Använd den här senaste avataren",
+      "altText": "Senaste anpassade avatar",
+      "removeAriaLabel": "Ta bort från senaste avatarer"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "Upptäcktsleverantörer",
+      "atLeastOne": "TMDB eller MDBList krävs · TVDB och OMDb är valfria",
+      "oneRequired": "Kärnleverantör krävs",
+      "atLeastOneShort": "MINST EN",
+      "tmdbLabel": "TMDB v3 API-nyckel",
+      "tmdbPlaceholder": "Klistra in din TMDB v3 API-nyckel",
+      "tmdbHelp": "En TMDB v3 API-nyckel stöder TMDB-baserad upptäckt men låser inte upp MDBList-specifika kataloger eller verktyg.",
+      "mdblistHelp": "MDBList aktiverar MDBList-specifika kataloger, listsökning och importverktyg.",
+      "bothHelp": "Lägg till båda leverantörerna för den mest kompletta Ultra MAX-upplevelsen.",
+      "getTmdbKey": "Hämta en TMDB v3-nyckel →",
+      "tmdbAttribution": "Den här produkten använder TMDB API men stöds eller certifieras inte av TMDB.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ Endast TMDB",
+      "statusMdblist": "✓ Endast MDBList",
+      "statusRequired": "TMDB eller MDBList krävs",
+      "validation": "Lägg till en TMDB v3 API-nyckel eller MDBList API-nyckel i steg 1.",
+      "savedKey": "Sparad nyckel",
+      "mdblistPresetUnavailable": "Kräver en MDBList API-nyckel.",
+      "unsupportedManualImdb": "IMDb-ID:n (stöds inte i den här byggaren)",
+      "unsupportedManualMdblist": "MDBList-URL / ID (använd sökning/import)",
+      "statusConnectedCount": "{count} anslutna",
+      "statusSupplementalOnly": "{count} anslutna · lägg till TMDB eller MDBList"
+    },
+    "collectionSync": {
+      "backToStep1": "↤ Tillbaka till steg 1"
+    },
+    "badge": {
+      "required": "OBLIGATORISK",
+      "optional": "Valfritt"
+    },
+    "verifyBtn": "Kontrollera",
+    "step1": {
+      "eyebrow": "Steg 01 av 04",
+      "title": "Konfigurera Ultra MAX",
+      "sub": "Slutför det viktigaste och anpassa sedan det du vill."
+    },
+    "modeChooser": {
+      "kicker": "Välj din väg",
+      "title": "Hur vill du börja?",
+      "copy": "Ta snabbvägen, anpassa allt själv, eller öppna en befintlig installation med dess token.",
+      "quick": {
+        "name": "Snabbinstallation",
+        "desc": "Välj en stil och låt Ultra MAX välja ett rent, balanserat urval av rader."
+      },
+      "custom": {
+        "name": "Anpassad installation",
+        "desc": "Välj nycklar, kataloger, samlingar, streams och alla avancerade alternativ själv."
+      },
+      "kids": {
+        "name": "Barninstallation",
+        "desc": "Bygg en begränsad barnprofil med åldersgränser, säkra kataloger och isolerade Nuvio-tillägg."
+      },
+      "restore": {
+        "name": "Återställ befintlig",
+        "desc": "Ange en installationstoken och fortsätt redigera en befintlig Ultra MAX-konfiguration."
+      },
+      "changeRoute": "← Välj en annan installationsväg"
+    },
+    "toolbar": {
+      "newSetup": "🚀 Ny installation",
+      "loadToken": "🔑 Läs in token",
+      "save": "💾 Spara",
+      "draftSaved": "Utkast sparat.",
+      "more": "••• Mer",
+      "import": "📦 Importera",
+      "recoverToken": "📧 Återställ token",
+      "restore": "↩ Återställ",
+      "help": "❓ Hjälp",
+      "assets": "🖼 Resurser",
+      "clear": "🗑 Rensa"
+    },
+    "returning": {
+      "title": "Läs in befintlig installation",
+      "placeholder": "Klistra in din token här",
+      "loadBtn": "Läs in →"
+    },
+    "quick": {
+      "label": "Snabbinstallation",
+      "title": "Bygg en ren installation på några sekunder",
+      "sub": "Välj en stil — Ultra MAX väljer raderna. Eller hoppa till Avancerad byggare nedan.",
+      "balanced": {
+        "name": "Balanserad",
+        "desc": "Bästa standard. Snabba, prydliga, användbara rader."
+      },
+      "movies": {
+        "name": "Filmälskare",
+        "desc": "Filmer i fokus. Trendande, populära, leverantörer och samlingar."
+      },
+      "series": {
+        "name": "Seriemarathon",
+        "desc": "Seriefokuserad. Bra för pågående serier och boxar."
+      },
+      "quality": {
+        "name": "Kvalitetsinstallation",
+        "desc": "Renare rader med premiumkänsla och mindre röran."
+      },
+      "summaryDefault": "Välj en stil ovan för att förhandsgranska vilka rader Ultra MAX kommer att välja.",
+      "generateBtn": "🚀 Skapa snabbinstallation",
+      "advancedBtn": "🔧 Avancerad byggare",
+      "backBtn": "← Tillbaka till snabbinstallation"
+    },
+    "requiredMarker": "● Obligatorisk",
+    "tiles": {
+      "requiredStatus": "Obligatorisk",
+      "password": {
+        "name": "Lösenord"
+      },
+      "mdblist": {
+        "name": "MDBList-nyckel"
+      },
+      "optional": {
+        "name": "Valfria tillägg",
+        "desc": "Bilder, språk, filter"
+      },
+      "streams": {
+        "name": "Streams",
+        "desc": "Debrid-leverantörer och manuella länkar"
+      },
+      "backToOverview": "← Tillbaka till översikt"
+    },
+    "password": {
+      "label": "🔐 Lösenord",
+      "placeholder": "Skapa ett lösenord",
+      "confirmPlaceholder": "Bekräfta lösenord",
+      "mismatchError": "Lösenorden matchar inte",
+      "hint": "Spara det här — du behöver det för att redigera din installation senare.",
+      "rememberMe": "Kom ihåg mig på den här enheten",
+      "forgotQuestion": "Glömt ditt lösenord?",
+      "resetBtn": "🔑 Återställ lösenord",
+      "newPlaceholder": "Nytt lösenord",
+      "confirmNewPlaceholder": "Bekräfta nytt lösenord",
+      "setNewBtn": "Ställ in nytt lösenord"
+    },
+    "mdblist": {
+      "label": "MDBList API-nyckel",
+      "placeholder": "Klistra in din gratis MDBList API-nyckel",
+      "hint": "Driver alla kurerade listor, trendlistor och nya utgåvor. Gratis, tar 30 sekunder.",
+      "getKeyLink": "Skaffa din gratis nyckel →",
+      "howToGetKey": "ℹ Hur skaffar jag en nyckel?",
+      "guide": {
+        "title": "Så skaffar du din gratis MDBList API-nyckel",
+        "step1Html": "Steg 1 — Gå till <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> och skapa ett gratiskonto.",
+        "step2": "Steg 2 — Kontrollera din e-post och bekräfta ditt konto.",
+        "step3Html": "Steg 3 — Gå till <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> och kopiera din nyckel.",
+        "step4": "Steg 4 — Klistra in den ovan. Klart!",
+        "freeTier": "Gratisnivå: 1 000 förfrågningar/dag — mer än tillräckligt."
+      }
+    },
+    "optional": {
+      "toggle": "Valfria tillägg",
+      "sub": "Bilder, språkfilter, personliga rader och filter.",
+      "aiRows": {
+        "summary": "🤖 AI-rekommenderade rader",
+        "placeholder": "Klistra in din Google Gemini API-nyckel",
+        "hint": "Lägger till raderna AI-rekommenderade filmer och AI-rekommenderade serier.",
+        "enableLabel": "Aktivera AI-rekommenderade rader"
+      },
+      "language": {
+        "summary": "🌐 Metadataspråk",
+        "hint": "Titlar och beskrivningar visas på ditt valda språk."
+      },
+      "posterKeys": {
+        "summary": "🖼️ API-nycklar för affischleverantörer"
+      },
+      "rpdb": {
+        "label": "RPDB API-nyckel",
+        "placeholder": "Din RPDB API-nyckel för betygsatta affischer",
+        "link": "Skaffa din RPDB-nyckel →"
+      },
+      "topPosters": {
+        "label": "TOP Posters API-nyckel",
+        "placeholder": "Din TOP Posters API-nyckel",
+        "link": "Skaffa din TOP Posters-nyckel →"
+      },
+      "fanart": {
+        "label": "Fanart.tv API-nyckel",
+        "placeholder": "Fanart.tv API-nyckel för högkvalitativa affischer",
+        "link": "Skaffa din Fanart.tv-nyckel →"
+      },
+      "omdb": {
+        "label": "OMDb API-nyckel",
+        "placeholder": "OMDb API-nyckel",
+        "link": "Skaffa din OMDb-nyckel →"
+      },
+      "betterPosters": {
+        "summary": "Bättre affischer & integrationer",
+        "label": "Bättre affischer",
+        "descHtml": "Lägg till smarta overlays på varje affisch — betyg, genre, trendtaggar, kvalitetsmärken och mer. Drivs av <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Endast Nuvio</span>",
+        "enableTitle": "Aktivera BetterPosters",
+        "enableSub": "Ersätt standard-TMDB-affischer",
+        "ratingSourceLabel": "⭐ Betygskälla",
+        "noRating": "Inget betyg",
+        "overlaysLabel": "🏷️ Overlays",
+        "trendTagsTitle": "Trendtaggar",
+        "trendTagsSub": "Trendande, Nytt, #3",
+        "qualityTagsTitle": "Kvalitetstaggar",
+        "qualityTagsSub": "4K, DV, Atmos",
+        "genreTitle": "Genre",
+        "genreSub": "Etikett längst ner",
+        "ageRatingTitle": "Åldersgräns",
+        "ageRatingSub": "PG-13, TV-MA, R",
+        "urlPatternLabel": "Genererat affisch-URL-mönster:",
+        "testUrlBtn": "🧪 Testa URL",
+        "manualUrlLabelHtml": "🔗 Eller klistra in din egen URL från <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>",
+        "manualUrlHint": "Om den automatiskt genererade URL:en inte fungerar, besök btttr.cc, konfigurera din stil och klistra in URL-mönstret här.",
+        "manualUrlFallback": "Lämna tomt för att använda den automatiskt genererade URL:en ovan.",
+        "disabledPreview": "— inaktiverad",
+        "testing": "Testar...",
+        "testOk": "✅ Fungerar! Affischen lästes in korrekt.",
+        "testFailed": "❌ Det gick inte att läsa in — kontrollera din URL eller prova btttr.cc manuellt."
+      },
+      "languageFilter": {
+        "label": "🌍 Språkfilter",
+        "desc": "Dölj innehåll där originalspråket matchar. Praktiskt för att filtrera bort Bollywood, K-dramer, thailändskt innehåll osv."
+      },
+      "trakt": {
+        "notConnected": "Inte ansluten",
+        "connectBtn": "Anslut med Trakt",
+        "disconnectBtn": "Koppla från",
+        "info": "Anslut ditt Trakt-konto för att komma åt dina Favoriter, Bevakningslista, Samling och Historik. Fungerar med privata profiler."
+      },
+      "simkl": {
+        "notConnected": "Inte ansluten",
+        "connectBtn": "Anslut med Simkl",
+        "disconnectBtn": "Koppla från",
+        "info": "Anslut ditt Simkl-konto för att komma åt din Bevakningslista, Historik och Betyg som personliga kataloger."
+      },
+      "mal": {
+        "notConnected": "Inte ansluten",
+        "connectBtn": "Anslut med MyAnimeList",
+        "disconnectBtn": "Koppla från",
+        "info": "Anslut ditt MyAnimeList-konto för att lägga till rader för Tittar på, Planerar att titta och Nyligen klara anime."
+      },
+      "anilist": {
+        "notConnected": "Inte ansluten",
+        "connectBtn": "Anslut med AniList",
+        "disconnectBtn": "Koppla från",
+        "info": "Anslut ditt AniList-konto för att lägga till rader för Tittar på och Planerar att titta. AniList Trendande och Denna säsong fungerar utan anslutning."
+      },
+      "contentFilters": {
+        "summary": "🎚️ Innehållsfilter",
+        "hideUnreleasedLabel": "🚫 Dölj ej utgivna titlar",
+        "hideUnreleasedInfo": "Filtrerar bort filmer och serier som ännu inte har släppts.",
+        "preserveKitsuLabel": "🌸 Behåll ursprungliga Kitsu-ID:n för anime",
+        "preserveKitsuInfo": "Publicerar ursprungliga Kitsu-ID:n för anime-kataloger som stöds så att Kitsu-endast-strömningstillägg kan svara. Titlar utan en säker Kitsu-matchning fortsätter att använda IMDb-ID:n.",
+        "digitalOnlyLabel": "📀 Endast digitala utgåvor",
+        "digitalOnlyInfo": "Visar bara filmer med en bekräftad digital utgåva tillgänglig idag. Serier påverkas inte.",
+        "hideWatchedLabel": "👁️ Dölj sedda titlar",
+        "hideWatchedInfo": "Döljer filmer du har sett och serier du har sett klart, baserat på din anslutna Trakt/Simkl-historik.",
+        "includeAdultLabel": "🔞 Inkludera vuxeninnehåll",
+        "includeAdultInfo": "När av döljs vuxen- och hentai-innehåll från alla kataloger. Rekommenderas för familjeinstallationer.",
+        "maxRatingLabel": "👥 Högsta åldersgräns",
+        "maxRatingInfo": "Dölj innehåll över den här gränsen. Använder amerikanska åldersgränser. Blockerar även obetygsatt innehåll — rekommenderas för att filtrera bort vuxen-anime och hentai från kataloger.",
+        "ratingNone": "Ingen begränsning",
+        "ratingG": "G - Alla åldrar",
+        "ratingPG": "PG - Föräldravägledning",
+        "ratingPG13": "PG-13 - Starkt föräldraansvar",
+        "ratingR": "R - Begränsad",
+        "ratingNC17": "NC-17 - Endast vuxna"
+      },
+      "timezone": {
+        "label": "🕰️ Tidszon",
+        "hint": "Identifieras automatiskt från den här enheten. Används för avsnittssläpp, premiärer och liveevenemang."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ Streams",
+      "sub": "Debrid-leverantörer och manuella streamlänkar.",
+      "debridLabel": "🎯 Debrid-leverantörer",
+      "addProvider": "Lägg till leverantör…",
+      "apiKeyPlaceholder": "Klistra in din API-nyckel här",
+      "checkAddBtn": "Kontrollera och lägg till",
+      "optionsLabel": "Streamalternativ",
+      "cachedOnlyLabel": "⚡ Endast cachade",
+      "cachedOnlySub": "(snabbare, direkta streams)",
+      "englishOnlyLabel": "🇬🇧 Endast engelska streams",
+      "removeTrashLabel": "🗑️ Ta bort skräpresultat",
+      "maxQualityLabel": "Högsta kvalitet",
+      "maxFileSizeLabel": "Maximal filstorlek",
+      "noLimit": "Ingen gräns",
+      "maxSizeHint": "Döljer streams som är större än den här gränsen, oavsett upplösning.",
+      "poweredByHtml": "Streams drivs av <strong>Comet</strong> och levereras direkt genom Ultra MAX. Inga manifest-URL:er behövs.",
+      "manualLinksLabel": "🔗 Manuella streamlänkar",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "Allt-i-ett-aggregator för streams med debrid-stöd.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "Debrid-proxy och lager.",
+      "configureLink": "Konfigurera →",
+      "pasteOwnUrl": "Eller klistra in din egen URL",
+      "wizardUrlPlaceholder": "https://ditt-tillägg/.../manifest.json",
+      "checkAddonBtn": "Kontrollera tillägg",
+      "addedAddonsLabel": "Tillagda tillägg",
+      "noAddonsYet": "Inga tillägg tillagda ännu.",
+      "torboxTitle": "Behöver du en debrid-tjänst?",
+      "torboxDescHtml": "TorBox är vad Ultra MAX är byggt kring. Använd länken nedan och få <strong>3 månader gratis</strong> utöver din prenumeration.",
+      "torboxBtn": "Skaffa TorBox — 3 månader gratis →",
+      "preserveSourceBrandingLabel": "Visa ursprunglig streamkälla",
+      "preserveSourceBrandingInfo": "Behåll namn som Comet eller den ursprungliga addon-leverantören i stället för att ersätta dem med Ultra MAX-varumärket."
+    },
+    "nav": {
+      "backHome": "← Tillbaka till start",
+      "nextStep2": "Fortsätt till kataloger →"
+    },
+    "step2": {
+      "eyebrow": "Steg 02",
+      "title": "Bygg din hemskärm",
+      "sub": "Välj en utgångspunkt och finjustera sedan per kategori. Din Nuvio-hemskärm uppdateras live.",
+      "startWithPreset": "Börja med en förinställning",
+      "hideAll": {
+        "title": "Dölj alla från hem",
+        "sub": "Behåll rader valda men dolda",
+        "tooltip": "Behåll valda rader, men dölj dem från din Nuvio-hemskärm"
+      },
+      "showAll": {
+        "title": "Visa alla på hem",
+        "sub": "Återställ alla valda rader",
+        "tooltip": "Gör varje vald rad synlig på din Nuvio-hemskärm"
+      },
+      "clearAll": {
+        "title": "Rensa alla valda",
+        "sub": "Ta bort varje vald rad",
+        "tooltip": "Ta bort varje vald rad"
+      },
+      "loading": "Laddar...",
+      "fineTune": "Finjustera per kategori",
+      "searchPlaceholder": "Sök alla kataloger...",
+      "manageSetup": "Hantera din installation",
+      "showAllRows": {
+        "title": "Visa alla rader",
+        "sub": "Bläddra bland alla tillgängliga kataloger"
+      },
+      "allRows": "Alla rader",
+      "reorder": {
+        "title": "Ändra radordning",
+        "sub": "Styr ordningen som visas i Nuvio och Stremio",
+        "note": "Dra rader till din önskade ordning."
+      },
+      "customRows": {
+        "title": "Anpassade rader",
+        "sub": "Skapa rader från IMDb, MDBList, Trakt eller TMDB",
+        "note": "Lägg till serier, franchiser och listor som inte täcks av de inbyggda katalogerna."
+      },
+      "preview": {
+        "mobile": "📱 Mobil",
+        "desktop": "🖥️ Skrivbord",
+        "deviceGroupLabel": "Förhandsgranska enhet",
+        "modalLabel": "Förhandsgranskning av Nuvio-hem",
+        "closeLabel": "Stäng förhandsgranskning"
+      },
+      "review": {
+        "kicker": "Sista kontroll",
+        "title": "Granska din hemskärm",
+        "sub": "Kontrollera dina valda rader eller förhandsgranska hur de visas i Nuvio."
+      },
+      "stremioWarning": {
+        "prefix": "Stremio-användare:",
+        "textHtml": "200+ kataloger kan överskrida Stremios gräns för manifeststorlek. Nuvio klarar den större installationen. Överväg att dölja oanvända rader istället för att ta bort dem."
+      },
+      "summaryBtn": "📋 Sammanfattning",
+      "previewBtn": "📺 Förhandsgranska",
+      "back": {
+        "title": "Tillbaka",
+        "sub": "Återgå till installationen"
+      },
+      "selection": {
+        "title": "Rader valda",
+        "sub": "Redo för din hemskärm"
+      },
+      "next": {
+        "title": "Samlingar",
+        "sub": "Fortsätt till steg 03"
+      }
+    },
+    "step3": {
+      "eyebrow": "Steg 03",
+      "title": "Samlingar",
+      "sub": "Gruppera dina hemrader i Nuvio-samlingar",
+      "quickStart": "⚡ Snabbstart — tryck för att lägga till en samling",
+      "tapToExpand": "tryck för att expandera",
+      "quickStartLabel": "Snabbstart — tryck för att lägga till en samling",
+      "quickStartDesc": "Varje förinställning skapar direkt en ny samling nedan. Tryck på så många du vill — en i taget.",
+      "addCollectionBtn": "+ Lägg till samling",
+      "presets": {
+        "streaming": "Streaming",
+        "trending": "Trendande",
+        "genres": "Genrer",
+        "themed": "Tema",
+        "filmCollections": "Filmsamlingar",
+        "studios": "Studior",
+        "directors": "Regissörer",
+        "actors": "Skådespelare",
+        "trakt": "Trakt",
+        "byDecade": "Efter årtionde",
+        "kidsFamily": "Barn & Familj",
+        "uk": "Storbritannien",
+        "anime": "Anime",
+        "documentaries": "Dokumentärer",
+        "bollywood": "Bollywood",
+        "sports": "Sport",
+        "universes": "Universum"
+      },
+      "displayStyle": "Visningsstil",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "Flikgaller",
+          "desc": "Rekommenderas"
+        },
+        "grid": {
+          "name": "Rutnät",
+          "desc": "Enkel layout"
+        },
+        "rows": {
+          "name": "Rader",
+          "desc": "Listvy"
+        }
+      },
+      "yourCollections": "Dina samlingar",
+      "searchPlaceholder": "Sök samlingar och mappar…",
+      "importJsonBtn": "📦 Importera JSON",
+      "addCollectionMainBtn": "+ Lägg till samling",
+      "backToCollections": "← Tillbaka till samlingar",
+      "emptyState": {
+        "textHtml": "Inga samlingar ännu<br>Tryck på en förinställning ovan för att komma igång direkt,<br>eller klicka på <strong style=\"color:var(--text);\">+ Lägg till samling</strong> för att bygga en från grunden."
+      },
+      "back": "← Tillbaka",
+      "collectionsLabel": "samlingar",
+      "foldersLabel": "mappar",
+      "next": "Nästa — Slutför →",
+      "finaliseGenerateBtn": "Slutför / Skapa →",
+      "artworkCreditHtml": "Ett särskilt tack till <strong style=\"color:var(--text);\">Shadowfrom88</strong> på Reddit för samlingsgrafiken som används i Ultra MAX."
+    },
+    "step4": {
+      "title": "🚀 Slutför",
+      "cacheWarm": {
+        "message": "Värmer upp dina kataloger…"
+      },
+      "installInstructions": {
+        "label": "Viktiga installationsinstruktioner",
+        "html": "<strong style=\"color:#fff;\">Ultra MAX har två separata delar:</strong><br><br><strong style=\"color:#fff;\">1. Tilläggs-URL</strong><br>Efter att du klickat på <strong>🚀 Skapa<br>slutlig installation</strong>, kopiera den slutliga installations-URL:en och använd den för att lägga till/installera Ultra MAX i Nuvio eller Stremio.<br><br><strong style=\"color:#fff;\">2. Nuvio-samlings-JSON</strong><br>Klicka på <strong>📦 Exportera<br>Nuvio-JSON</strong> för att ladda ner din samlingsfil. Öppna sedan Nuvio, gå till samlingssidan och importera den JSON-filen där.<br><br><strong style=\"color:#fff;\">Enkel regel:</strong><br>Tilläggs-URL = kataloger. Nuvio-JSON = mappar och samlingar."
+      },
+      "summary": {
+        "label": "Sammanfattning av slutlig installation",
+        "homeRowsKept": "Hemrader behållna:",
+        "hiddenFromHome": "Dolda från hem:",
+        "collectionsCreated": "Samlingar skapade:",
+        "rowsMovedToCollections": "Rader flyttade till samlingar:",
+        "performance": "Prestanda:",
+        "perf": {
+          "excellent": "Utmärkt",
+          "good": "Bra",
+          "heavy": "Tung",
+          "veryHeavy": "Mycket tung"
+        },
+        "hint": {
+          "excellent": "Mager hemlayout. Utmärkt för mobil, TV och snabb bläddring.",
+          "good": "Balanserad installation. Bör fungera bra på de flesta enheter.",
+          "heavy": "Du har många hemrader. Samlingar hjälper när steg 3 är byggt.",
+          "veryHeavy": "Den här installationen kan kännas rörig. Du bör flytta fler rader till Samlingar."
+        }
+      },
+      "generateBtn": "🚀 Skapa slutlig installation",
+      "generating": "Skapar ditt tillägg...",
+      "part1": {
+        "stepLabel": "Steg 1 · Installera",
+        "title": "📡 Tilläggs-URL",
+        "desc": "Kopiera den här URL:en och installera den i Nuvio eller Stremio. Det ger dig alla dina katalograder.",
+        "copyBtn": "📋 Kopiera URL",
+        "stremioInstallBtn": "Stremio-installation",
+        "stremioInstallTitle": "Installera direkt i Stremio-appen"
+      },
+      "part2": {
+        "stepLabel": "Steg 2 · Samlingar",
+        "title": "🗂 Nuvio-JSON",
+        "desc": "Exportera den här filen och importera den på Nuvios samlingssida. Det ger dig mappar och samlingar.",
+        "exportBtn": "📦 Exportera Nuvio-JSON"
+      },
+      "pushCard": {
+        "title": "🚀 Skicka direkt till Nuvio",
+        "desc": "Hoppa över de manuella stegen — länka ditt Nuvio-konto så lägger vi till Ultra MAX och dina samlingar direkt på en profil.",
+        "manageLink": "⚙️ Redan länkad? Hantera dina tillägg och samlingar →",
+        "emailPlaceholder": "Nuvio-e-post",
+        "passwordPlaceholder": "Nuvio-lösenord",
+        "continueBtn": "Fortsätt",
+        "profileStageNote": "Detta installerar tillägget och ersätter samlingarna på den valda profilen.",
+        "catalogsCheckbox": "Kataloger",
+        "collectionsCheckbox": "Samlingar",
+        "cancelBtn": "Avbryt",
+        "pushBtn": "Skicka till Nuvio",
+        "pushBtnMulti": "Skicka till Nuvio ({n} profiler)",
+        "selectAll": "Välj alla",
+        "selectNone": "Välj inga"
+      },
+      "qrCard": {
+        "title": "📱 Skicka från din telefon",
+        "desc": "Skanna den här med din telefonkamera för att skicka direkt, ingen inmatning krävs.",
+        "showBtn": "Visa QR-kod"
+      },
+      "token": {
+        "saveHint": "Din token — spara den här!",
+        "copyBtn": "Kopiera token"
+      },
+      "registerEmail": {
+        "label": "📧 Registrera din e-post",
+        "desc": "Så att du kan återställa din token om du tappar bort den. Används aldrig för marknadsföring.",
+        "placeholder": "din@epost.com",
+        "registerBtn": "Registrera"
+      },
+      "exports": {
+        "projectFile": "💾 Projektfil",
+        "catalogCsv": "📊 Katalog-CSV"
+      },
+      "back": "← Tillbaka"
+    },
+    "nuvioPush": {
+      "missingFields": "Ange din Nuvio-e-post och ditt lösenord.",
+      "generateFirst": "Skapa din installation innan du skickar till Nuvio.",
+      "loggingIn": "Loggar in...",
+      "selectProfiles": "Välj vilka profiler du vill skicka till.",
+      "loginFailed": "Inloggningen misslyckades.",
+      "selectAtLeastOne": "Välj minst Kataloger eller Samlingar att skicka.",
+      "selectAtLeastOneProfile": "Välj minst en profil.",
+      "somethingWrong": "Något gick fel. Försök igen."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "Alla sex Nuvio-profilplatser används redan.",
+      "profileNotVerified": "Nuvio accepterade profiluppdateringen, men barnprofilen kunde inte verifieras.",
+      "notIsolated": "Barnprofilen finns, men den är inte isolerad från huvudprofilen.",
+      "noKidsCollection": "Den skapade installationen innehåller inte Ultra MAX barnsamlingen.",
+      "generateFirst": "Skapa barninstallationen innan du skickar den till Nuvio.",
+      "confirmPrompt": "Konfigurera en isolerad Nuvio-barnprofil?\n\nUltra MAX kommer att skapa eller uppdatera barnprofilen, stänga av delade tillägg och plugins, och sedan ersätta profilens tillägg och samlingar med den begränsade barninstallationen.\n\nEn säkerhetskopia av de befintliga barntilläggen och samlingarna sparas i webbläsaren först.",
+      "cancelled": "Konfiguration av barnprofil avbruten. Inga ändringar gjordes.",
+      "creatingProfile": "Skapar eller verifierar den isolerade barnprofilen...",
+      "backingUp": "Säkerhetskopierar den aktuella barnprofilen...",
+      "addonNotVerified": "Barntilläggets överföring slutfördes, men verifieringen matchade inte det skapade manifestet.",
+      "installingAddon": "Installerar det begränsade Ultra MAX-barntillägget...",
+      "installingCollection": "Installerar Ultra MAX-barnsamlingen...",
+      "collectionsNotVerified": "Barnsamlingarna skickades, men verifieringsresultatet matchade inte.",
+      "verifying": "Verifierar barnprofilen...",
+      "ready": "Barnprofilen är redo. Den är isolerad och innehåller endast Ultra MAX Kids."
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "UltraPlay+ verifierat för den här Ultra MAX-installationen",
+      "aria": "UltraPlay Plus verifierat"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "Över 500 kataloger för att bygga din installation"
+    }
+  }
+}

@@ -11,6 +11,17 @@ const {
   executeMergedCatalog
 } = require("./merged-catalog-service");
 const { shouldIncludeAnimeRow, isAnimeCatalog, shouldIncludeIndianCinemaRow } = require("./content-filter-service");
+const { getSportsCatalogMetas } = require("./sports-catalog-service");
+const { getSportsDiscoveryCatalogMetas } = require("./sports-discovery-catalog-service");
+const { getSportsFixtureCatalogMetas } = require("./sports-fixture-catalog-service");
+const { getF1HistoryCatalogMetas } = require("./f1-history-service");
+const {
+  getNuvioSportsCatalogMetas
+} = require("./nuvio-live-sports-service");
+const { isUnsupportedCustomCatalog } = require("./provider-capability-service");
+const { resolveStreamingProviderValue } = require("./streaming-provider-service");
+const { getPremiumizeCatalogMetas } = require("./premiumize-library-service");
+const { getTorboxCatalogMetas } = require("./torbox-library-service");
 
 /**
  * Convert a string into a stable unsigned 32-bit seed.
@@ -83,6 +94,32 @@ function shouldShuffleCatalog(catalogId, extra) {
   return !protectedTerms.some(term => normalizedId.includes(term));
 }
 
+function shouldBypassLegacyLanguageFilter(def, isDedicatedAnimeRow) {
+  return Boolean(
+    isDedicatedAnimeRow ||
+    (
+      def?.handler === "tmdb_discover" &&
+      def.originalLanguage
+    )
+  );
+}
+
+function resolveCatalogIncludeAdult(catalogId, includeAdult) {
+  return String(catalogId || "").startsWith("theme_kids_")
+    ? false
+    : includeAdult;
+}
+
+function shouldPreserveKitsuIds(catalogId, userConfig) {
+  const animePresentationMode =
+    userConfig?.animePresentationMode === "anisync" ? "anisync" : "unified";
+
+  return Boolean(
+    (animePresentationMode === "anisync" || userConfig?.preserveKitsuIds) &&
+    isAnimeCatalog(catalogId)
+  );
+}
+
 /**
  * UTC date makes the daily order independent of server locale.
  */
@@ -91,12 +128,66 @@ function getDailyShuffleKey() {
 }
 
 /**
+ * Return a stable UTC rotation key for supported catalog rotation modes.
+ */
+function getCatalogRotationKey(rotation) {
+  if (rotation === "daily") {
+    return getDailyShuffleKey();
+  }
+
+  if (rotation === "weekly") {
+    const now = new Date();
+
+    const date = new Date(Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate()
+    ));
+
+    const day = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - day);
+
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+    const week = Math.ceil(
+      (((date - yearStart) / 86400000) + 1) / 7
+    );
+
+    return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+  }
+
+  return null;
+}
+
+/**
+ * Return a stable TMDB page-block offset for explicitly rotating catalogs.
+ * Rotation blocks stay 5 TMDB pages apart so existing daily/weekly pools remain stable.
+ */
+function getCatalogRotationBlock(catalogId, rotation, rotationBlocks = 8) {
+  const rotationKey = getCatalogRotationKey(rotation);
+
+  if (!rotationKey) {
+    return 0;
+  }
+
+  const blockCount = Math.max(
+    1,
+    Math.min(8, Number(rotationBlocks) || 8)
+  );
+
+  const seed = createShuffleSeed(
+    `${catalogId}:${rotationKey}`
+  );
+
+  return seed % blockCount;
+}
+
+/**
  * Applies a Step 2 per-row override (config.catalogOverrides[catalogId]) to
  * raw TMDB results before they're converted to metas — filters first, then
  * sorts, so a sort choice always applies to the already-filtered set.
  *
  * Shape: { sortBy, minRating, minVotes, yearFrom, yearTo, excludeAnimation,
- *          excludeDocumentary, includeAdult }
+ *          excludeDocumentary, excludeTalk, includeAdult }
  */
 function applyCatalogOverride(results, override) {
   let out = results.slice();
@@ -130,6 +221,10 @@ function applyCatalogOverride(results, override) {
 
   if (override.excludeDocumentary) {
     out = out.filter(item => !(item.genre_ids || []).includes(99));
+  }
+
+  if (override.excludeTalk) {
+    out = out.filter(item => !(item.genre_ids || []).includes(10767));
   }
 
   // Row-level adult toggle only ever tightens the global Step 1 setting —
@@ -229,34 +324,38 @@ async function handleCatalog(
     mdblistToMetas
   } = deps;
 
-  const kitsuCatalogIds = new Set([
-    "anime_movies",
-    "anime_series",
-    "crunchyroll_movies",
-    "crunchyroll_series",
-    "hidive_movies",
-    "hidive_series"
-  ]);
-
   const animePresentationMode =
     userConfig?.animePresentationMode === "anisync" ? "anisync" : "unified";
-  const preserveKitsuIds =
-    (animePresentationMode === "anisync" || !!userConfig?.preserveKitsuIds) &&
-    kitsuCatalogIds.has(catalogId);
+  const preserveKitsuIds = shouldPreserveKitsuIds(catalogId, userConfig);
 
   // Content filters (anime/Indian-cinema/rating/year/country) are applied
-  // uniformly here so every caller downstream (search, quick picks, related
-  // content, simkl, the default tmdb path, etc — anything using this local
-  // resultsToMetas) gets them for free. skipAnimeFilter keeps a dedicated
-  // anime row's items intact under animeFilter:"reduce" — the row is 100%
-  // anime by definition, so item-filtering it would just empty it out.
-  const resultsToMetas = (...args) =>
-    baseResultsToMetas(
-      ...args,
+  // uniformly to discovery/catalog rows. Explicit user searches are different:
+  // hiding Anime or Indian cinema from discovery must not make those titles
+  // impossible to find on purpose.
+  //
+  // Some older call sites omit trailing optional resultsToMetas arguments.
+  // Pad through digitalReleaseOnly before appending our request-scoped filter
+  // arguments so preserveKitsuIds/filterConfig never slide into the wrong
+  // positional slots.
+  const isExplicitSearch = Boolean(extra?.search);
+  const resultsToMetas = (...args) => {
+    const normalizedArgs = args.slice(0, 11);
+
+    while (normalizedArgs.length < 11) {
+      normalizedArgs.push(undefined);
+    }
+
+    return baseResultsToMetas(
+      ...normalizedArgs,
       preserveKitsuIds,
       userConfig,
-      { skipAnimeFilter: isDedicatedAnimeRow }
+      {
+        skipAnimeFilter: isDedicatedAnimeRow || isExplicitSearch,
+        skipIndianCinemaFilter: isExplicitSearch,
+        skipContentExclusions: isExplicitSearch
+      }
     );
+  };
 
   const mergedRoute = resolveMergedCatalogRoute(
     catalogId,
@@ -326,6 +425,7 @@ const searchableCatalogs = new Set([
     return { metas: [] };
   }
 if (extra && extra.search) {
+  if (userConfig?.searchEnabled === false) return { metas: [] };
   if (
     animePresentationMode === "anisync" &&
     type === "series" &&
@@ -356,14 +456,16 @@ if (extra && extra.search) {
     traktUser,
     excludeUnreleased,
     maxRating,
+    includeAdult,
     customCatalogs,
     googleAiKey,
     fanartKey,
     omdbKey,
-    digitalReleaseOnly,
+    digitalReleaseOnly: digitalReleaseOnly || !!userConfig?.hideUnreleasedDigitalSearch,
     TMDB_KEY,
     resultsToMetas,
-    handleCatalog
+    handleCatalog,
+    deps
   });
 }
 
@@ -390,25 +492,13 @@ if (extra && extra.search) {
     excludeUnreleased,
     fanartKey,
     omdbKey,
-    digitalReleaseOnly
+    digitalReleaseOnly,
+    { tmdbKey: TMDB_KEY, resultsToMetas, bpStyle }
   );
 
     return { metas };
   }
   if (catalogId === "ai_anime_anilist") {
-
-  // self-host's index.js does not (yet) wire geminiAnimeAnilistRecommendations
-  // into deps — the supporting AniList-history lookup it depends on
-  // (getAnilistAiHistory) doesn't exist in self-host's anilist-service.js,
-  // so the dependency isn't safely portable here. Guard instead of letting
-  // a missing dependency throw a TypeError for any user who has connected
-  // AniList; degrade to an empty row rather than crashing the request.
-  if (typeof geminiAnimeAnilistRecommendations !== "function") {
-    console.warn(
-      "[Anime For You] geminiAnimeAnilistRecommendations unavailable in this self-host build — returning empty row"
-    );
-    return { metas: [] };
-  }
 
   const items = await geminiAnimeAnilistRecommendations({
     googleAiKey,
@@ -435,7 +525,7 @@ if (extra && extra.search) {
       fanartKey,
       omdbKey,
       digitalReleaseOnly,
-      { anime: true }
+      { anime: true, tmdbKey: TMDB_KEY, resultsToMetas, bpStyle }
     );
   }
 
@@ -565,11 +655,20 @@ if (hour >= 6 && hour < 12) {
     : null;
 
   if (customCat) {
+    if (isUnsupportedCustomCatalog(customCat)) {
+      return { metas: [] };
+    }
     const tmdbType = (customCat.type || type) === 'series' ? 'tv' : 'movie';
     const page = extra && extra.skip ? Math.floor(parseInt(extra.skip) / 20) + 1 : 1;
+    const allowedCustomSorts = new Set([
+      'popularity.desc','popularity.asc','vote_average.desc','vote_count.desc',
+      'primary_release_date.desc','first_air_date.desc'
+    ]);
+    const requestedSort = String(customCat.sortBy || (customCat.config && customCat.config.sortBy) || 'popularity.desc').trim();
+    const sortBy = allowedCustomSorts.has(requestedSort) ? requestedSort : 'popularity.desc';
     const params = new URLSearchParams({
       api_key: TMDB_KEY,
-      sort_by: 'popularity.desc',
+      sort_by: sortBy,
       include_adult: 'false',
       page: String(page)
     });
@@ -582,10 +681,16 @@ if (hour >= 6 && hour < 12) {
       (customCat.config && customCat.config.genre) ||
       '';
     const minR = customCat.minRating || (customCat.config && customCat.config.minRating) || '';
+    const minVotes = customCat.minVotes || (customCat.config && customCat.config.minVotes) || '';
+    const maxVotes = customCat.maxVotes || (customCat.config && customCat.config.maxVotes) || '';
+    const maxRuntime = customCat.maxRuntime || (customCat.config && customCat.config.maxRuntime) || '';
     const yFrom = customCat.yearFrom || (customCat.config && customCat.config.yearFrom) || '';
     const yTo = customCat.yearTo || (customCat.config && customCat.config.yearTo) || '';
 
     if (minR) params.append('vote_average.gte', minR);
+    if (minVotes) params.append('vote_count.gte', minVotes);
+    if (maxVotes) params.append('vote_count.lte', maxVotes);
+    if (maxRuntime) params.append('with_runtime.lte', maxRuntime);
     if (yFrom) params.append(tmdbType === 'tv' ? 'first_air_date.gte' : 'primary_release_date.gte', yFrom + '-01-01');
     if (yTo) params.append(tmdbType === 'tv' ? 'first_air_date.lte' : 'primary_release_date.lte', yTo + '-12-31');
 
@@ -594,9 +699,12 @@ if (hour >= 6 && hour < 12) {
       params.append('with_genres', val);
       url = `https://api.themoviedb.org/3/discover/${tmdbType}?${params}`;
     } else if (src === 'streaming' && val) {
-      params.append('with_watch_providers', val);
-      const ukProviders = ['38','103','41','11'];
-      params.append('watch_region', customCat.region || (ukProviders.includes(String(val)) ? 'GB' : 'US'));
+      const region = String(customCat.region || '').trim().toUpperCase() || 'US';
+      const numericProvider = /^\d+(?:[|,]\d+)*$/.test(String(val)) ? String(val) : null;
+      const providerValue = numericProvider || await resolveStreamingProviderValue(val, region, TMDB_KEY, fetchCached);
+      if (!providerValue) return { metas: [] };
+      params.append('with_watch_providers', providerValue);
+      params.append('watch_region', region);
       url = `https://api.themoviedb.org/3/discover/${tmdbType}?${params}`;
     } else if (src === 'decade' && val) {
       const from = val; const to = String(parseInt(val) + 9);
@@ -684,9 +792,10 @@ if (hour >= 6 && hour < 12) {
     : null;
 
   if (customMdbList) {
+    if (!mdbKey) return { metas: [] };
     return {
       metas: await mdblistToMetas(
-        customMdbList.listId,
+        customMdbList.listPath || customMdbList.listId,
         customMdbList.type || type,
         mdbKey,
         rpdbKey,
@@ -703,8 +812,54 @@ if (hour >= 6 && hour < 12) {
   }
   // ────────────────────────────────────────────────────────────────
 
+  // ── User-added public Trakt list rows ───────────────────────────
+  const customTraktList = Array.isArray(userConfig?.customTraktLists)
+    ? userConfig.customTraktLists.find(l => l?.id === catalogId && l.enabled !== false)
+    : null;
+
+  if (customTraktList) {
+    return await handleTraktCatalog(
+      "trakt_public_list",
+      customTraktList.type || type,
+      traktUser,
+      language,
+      rpdbKey,
+      tpKey,
+      excludeUnreleased,
+      TRAKT_CLIENT_ID,
+      traktAccessToken,
+      userToken,
+      userConfig,
+      bpStyle,
+      { traktToMetas: deps.traktToMetas, publicList: customTraktList, skip: extra?.skip }
+    );
+  }
+  // ────────────────────────────────────────────────────────────────
+
   const def = CATALOG_DEFS[catalogId];
   if (!def) return { metas: [] };
+
+  if (def.handler === "premiumize_library") {
+    return getPremiumizeCatalogMetas({
+      catalogId,
+      type,
+      extra,
+      token: userToken,
+      config: userConfig,
+      tmdbKey: TMDB_KEY
+    });
+  }
+
+  if (def.handler === "torbox_library") {
+    return getTorboxCatalogMetas({
+      catalogId,
+      type,
+      extra,
+      token: userToken,
+      config: userConfig,
+      tmdbKey: TMDB_KEY
+    });
+  }
 
   if (def.handler === "merged") {
     const sourceIds = Array.isArray(def.sources) ? def.sources : [];
@@ -788,12 +943,15 @@ if (hour >= 6 && hour < 12) {
         fanartKey,
         omdbKey,
         bpStyle,
-        digitalReleaseOnly
+        def.handler === "tmdb_actor"
+          ? false
+          : digitalReleaseOnly
       )
     };
   }
 
   if (def.handler ==="mdb") {
+    if (!mdbKey) return { metas: [] };
     const listId = def.listId || catalogId.replace("mdb_","");
     const effectiveType = def.type || type;
 
@@ -814,6 +972,66 @@ if (hour >= 6 && hour < 12) {
       )
     };
   }
+  if (def.handler === "sports_events") {
+    return {
+      metas: await getSportsCatalogMetas(def.sportsCatalog)
+    };
+  }
+
+  if (def.handler === "sports_discovery") {
+    return {
+      metas: await getSportsDiscoveryCatalogMetas(
+        def.sportsCatalog,
+        type
+      )
+    };
+  }
+
+  if (def.handler === "sports_fixtures") {
+    const metas =
+      await getSportsFixtureCatalogMetas(
+        def.sportsCatalog
+      );
+
+    /*
+     * Fixture data is cached independently of its
+     * catalogue presentation type.
+     *
+     * Expose each fixture using the type declared
+     * by this catalogue without mutating the
+     * shared fixture cache.
+     */
+    return {
+      metas: metas.map(meta => ({
+        ...meta,
+        type: def.type || meta.type
+      }))
+    };
+  }
+
+  if (def.handler === "nuvio_live_sports") {
+    return {
+      metas: await getNuvioSportsCatalogMetas(
+        catalogId,
+        def.type || "tv"
+      )
+    };
+  }
+
+  if (def.handler === "f1_history") {
+    const metas =
+      await getF1HistoryCatalogMetas(
+        def.year
+      );
+
+    return {
+      metas: metas.map(meta => ({
+        ...meta,
+        type: def.type || meta.type
+      }))
+    };
+  }
+
   let url = buildTmdbCatalogUrl({
   def,
   type,
@@ -823,14 +1041,14 @@ if (hour >= 6 && hour < 12) {
   ratingParam,
   languageParam,
   TMDB_KEY,
-  includeAdult
+  includeAdult: resolveCatalogIncludeAdult(catalogId, includeAdult)
 });
 switch(def.handler) {
     case"tmdb_collection": {
       let parts = (await fetchCached(`https://api.themoviedb.org/3/collection/${def.collectionId}?api_key=${TMDB_KEY}`)).parts || [];
       if(extra?.sort === "release_date_desc") parts = parts.slice().sort((a,b) => (b.release_date||"").localeCompare(a.release_date||""));
       else parts = parts.slice().sort((a,b) => (a.release_date||"").localeCompare(b.release_date||""));
-      return { metas: await resultsToMetas(parts, type, filterLang, language, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, bpStyle) };
+      return { metas: await resultsToMetas(parts, type, isDedicatedAnimeRow ? false : filterLang, language, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, bpStyle) };
     }
     case"tmdb_multi_collection": {
       let allParts = [];
@@ -842,7 +1060,7 @@ switch(def.handler) {
       }
       if(extra?.sort === "release_date_desc") allParts = allParts.sort((a,b) => (b.release_date||"").localeCompare(a.release_date||""));
       else allParts = allParts.sort((a,b) => (a.release_date||"").localeCompare(b.release_date||""));
-      return { metas: await resultsToMetas(allParts, type, filterLang, language, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, bpStyle) };
+      return { metas: await resultsToMetas(allParts, type, isDedicatedAnimeRow ? false : filterLang, language, rpdbKey, tpKey, excludeUnreleased, fanartKey, omdbKey, bpStyle) };
     }
     case "simkl_watchlist":
     case "simkl_completed":
@@ -872,6 +1090,7 @@ switch(def.handler) {
         { fetchCached, TMDB_KEY },
         animePresentationMode
       );
+    case "trakt_recommendations":
     case "trakt_trending":
     case "trakt_popular":
     case "trakt_anticipated":
@@ -888,10 +1107,11 @@ switch(def.handler) {
          excludeUnreleased,
          TRAKT_CLIENT_ID,
          traktAccessToken,
-         userToken,
-         userConfig,
-         bpStyle
-  );
+	         userToken,
+	         userConfig,
+	         bpStyle,
+	         { traktToMetas: deps.traktToMetas }
+	  );
     case"tmdb_anime":
       url = `https://api.themoviedb.org/3/discover/${tmdbType}?api_key=${TMDB_KEY}&include_adult=${includeAdult?"true":"false"}&with_genres=16&with_original_language=ja&sort_by=popularity.desc&page=${page}${ratingParam}`;
       break;
@@ -903,18 +1123,21 @@ switch(def.handler) {
       break;
     case "tmdb_ids": {
       const useChronological = extra?.sort === "chronological" && Array.isArray(def.chronologicalIds);
-      const ids = useChronological ? def.chronologicalIds : (Array.isArray(def.ids) ? def.ids : []);
-      const results = [];
-
-      for (const tmdbId of ids) {
+      const allIds = useChronological ? def.chronologicalIds : (Array.isArray(def.ids) ? def.ids : []);
+      const configuredPageSize = Number.parseInt(def.pageSize, 10);
+      const paginateIds = Number.isInteger(configuredPageSize) && configuredPageSize > 0;
+      const pageSize = paginateIds ? Math.min(configuredPageSize, 100) : allIds.length;
+      const start = paginateIds ? Math.max(0, Number.parseInt(extra?.skip, 10) || 0) : 0;
+      const ids = paginateIds ? allIds.slice(start, start + pageSize) : allIds;
+      const results = (await Promise.all(ids.map(async tmdbId => {
         try {
-
-       const item = await fetchCached(`https://api.themoviedb.org/3/${tmdbType}/${tmdbId}?api_key=${TMDB_KEY}&language=${language}`);
-          if(item && item.id) results.push(item);
+          const item = await fetchCached(`https://api.themoviedb.org/3/${tmdbType}/${tmdbId}?api_key=${TMDB_KEY}&language=${language}&append_to_response=external_ids`);
+          return item && item.id ? item : null;
         } catch(e) {
           console.log("tmdb_ids error", catalogId, tmdbId, e.message);
+          return null;
         }
-      }
+      }))).filter(Boolean);
       return {
         metas: await resultsToMetas(
           results,
@@ -971,15 +1194,58 @@ default:
     break;
 }
   if (language && language !== "en-US") url += `&language=${language}`;
-  const batchSize = 100; // 5 pages x 20 results per TMDB page
-  const startPage = Math.floor((extra?.skip || 0) / batchSize) * 5 + 1;
+  // Return a useful first screen quickly. Nuvio/Stremio can request more with
+  // `skip`, so there is no benefit in resolving 100 IMDb ids before the row
+  // can render. Two TMDB pages = up to 40 items per catalog response.
+  const batchSize = 40;
+  const tmdbPagesPerBatch = 2;
+  const rotationPageSpan = 5;
+  const baseStartPage =
+    Math.floor((extra?.skip || 0) / batchSize) * tmdbPagesPerBatch + 1;
+
+  const rotationBlock = getCatalogRotationBlock(
+      catalogId,
+      def.rotation,
+      def.rotationBlocks
+    );
+
+  const startPage = baseStartPage + (rotationBlock * rotationPageSpan);
   const pages = await Promise.all(
-    Array.from({length: 5}, (_, i) =>
+    Array.from({length: tmdbPagesPerBatch}, (_, i) =>
       fetchCached(url.replace(`page=${page}`, `page=${startPage + i}`))
         .catch(() => ({ results: [] }))
     )
   );
   let allResults = pages.flatMap(d => d.results || []);
+
+  /*
+   * Small TMDB provider catalogs may not have enough pages for the
+   * selected rotation block. If an explicitly rotated batch is wholly
+   * empty, fall back to the normal batch instead of returning an empty
+   * catalog.
+   *
+   * Large catalogs keep their normal rotation. This fallback only runs
+   * when the selected rotated block produced no results at all.
+   */
+  if (
+    allResults.length === 0 &&
+    rotationBlock > 0
+  ) {
+    const fallbackPages = await Promise.all(
+      Array.from({ length: tmdbPagesPerBatch }, (_, i) =>
+        fetchCached(
+          url.replace(
+            `page=${page}`,
+            `page=${baseStartPage + i}`
+          )
+        ).catch(() => ({ results: [] }))
+      )
+    );
+
+    allResults = fallbackPages.flatMap(
+      data => data.results || []
+    );
+  }
 
   // TMDB popularity results can shift while adjacent pages are fetched.
   // Preserve first-seen ordering and remove repeated TMDB IDs.
@@ -1010,9 +1276,9 @@ default:
   appendUniqueTmdbResults(initialResults);
 
   // Refill a deduplicated batch from the next TMDB page.
-  // This keeps standard catalog rows at up to 100 unique results.
+  // Keep the requested page full after de-duplicating shifting TMDB results.
   if (allResults.length < batchSize) {
-    const refillPage = startPage + 5;
+    const refillPage = startPage + tmdbPagesPerBatch;
 
     try {
       const refillData = await fetchCached(
@@ -1047,7 +1313,11 @@ default:
 
   // An explicit sort override is a deliberate user choice — the daily
   // shuffle would just scramble it right back out again.
-  if (!rowOverride?.sortBy && shouldShuffleCatalog(catalogId, extra)) {
+  if (
+    def.handler !== "tmdb_discover" &&
+    !rowOverride?.sortBy &&
+    shouldShuffleCatalog(catalogId, extra)
+  ) {
     const shuffleSeed = [
       catalogId,
       type,
@@ -1062,7 +1332,12 @@ default:
     metas: await resultsToMetas(
       allResults,
       type,
-      filterLang,
+      // An explicit original-language discover row is a dedicated language
+      // destination. Do not let the legacy general-row ja/hi suppression
+      // erase Japanese (or future explicitly scoped) international rows.
+      shouldBypassLegacyLanguageFilter(def, isDedicatedAnimeRow)
+        ? false
+        : filterLang,
       language,
       rpdbKey,
       tpKey,
@@ -1070,12 +1345,17 @@ default:
       fanartKey,
       omdbKey,
       bpStyle,
-      digitalReleaseOnly
+      def.handler === "tmdb_actor"
+        ? false
+        : digitalReleaseOnly
     )
   };
 }
 
 
 module.exports = {
-  handleCatalog
+  handleCatalog,
+  resolveCatalogIncludeAdult,
+  shouldBypassLegacyLanguageFilter,
+  shouldPreserveKitsuIds
 };

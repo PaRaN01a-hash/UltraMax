@@ -1,3 +1,23 @@
+const crypto = require("crypto");
+const { normalizeEpisodeReleaseDelayHours } = require("./episode-release-delay-service");
+const { normalizeSearchCatalogNames } = require("./search-catalog-name-service");
+const { MUTATION_REASONS } = require("../utils/config-store");
+const { normalizeCollectionCatalogs } = require("./collection-normalize-service");
+const {
+  applyCatalogSelection,
+  applyProfileCatalogSelection
+} = require("./catalog-selection-service");
+const {
+  assertDiscoveryProvider,
+  applyProviderCredentialPatch,
+  getProviderCapabilities,
+  createEffectiveDiscoveryConfig
+} = require("./provider-capability-service");
+const {
+  resolveStreamLanguageSettings
+} = require("./stream-language-service");
+const { resolveTorboxLibraryApiKey } = require("./torbox-library-service");
+
 function normalizeAnimePresentationMode(value) {
   return value === "anisync" ? "anisync" : "unified";
 }
@@ -10,9 +30,71 @@ function normalizeIndianCinemaFilter(value) {
   return value === "hide" ? "hide" : "allow";
 }
 
+const CONTENT_EXCLUSION_KEYS = new Set([
+  "talk",
+  "reality",
+  "news",
+  "soap"
+]);
+
+function normalizeContentExclusions(value) {
+  if (!Array.isArray(value)) return [];
+
+  return Array.from(new Set(
+    value
+      .map(key => String(key || "").trim().toLowerCase())
+      .filter(key => CONTENT_EXCLUSION_KEYS.has(key))
+  ));
+}
+
 function normalizeYear(value) {
   const n = Number(value);
   return Number.isFinite(n) && n > 1888 && n < 2200 ? Math.round(n) : 0;
+}
+
+function normalizeStreamSizeGb(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? Math.min(n, 500) : 0;
+}
+
+function normalizeStreamSortMode(value) {
+  return ["source", "quality", "size-desc", "size-asc"].includes(value)
+    ? value
+    : "source";
+}
+
+function normalizeStreamAddonList(value) {
+  if (!Array.isArray(value)) return [];
+
+  const seen = new Set();
+  const addons = [];
+  for (const item of value) {
+    const url = String(item || "").trim();
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    addons.push(url);
+    if (addons.length >= 8) break;
+  }
+  return addons;
+}
+
+function normalizeStreamAddonLabels(value, streamAddons = []) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+
+  const allowed = new Set(
+    (Array.isArray(streamAddons) ? streamAddons : [])
+      .map(item => String(item || "").trim())
+      .filter(Boolean)
+      .slice(0, 8)
+  );
+
+  const labels = {};
+  for (const [url, rawLabel] of Object.entries(value).slice(0, 8)) {
+    if (!allowed.has(url)) continue;
+    const label = String(rawLabel || "").trim().slice(0, 60);
+    if (label) labels[url] = label;
+  }
+  return labels;
 }
 
 const COLLECTIONS_SCHEMA_VERSION = 2;
@@ -20,6 +102,7 @@ const COLLECTIONS_SCHEMA_VERSION = 2;
 function registerConfigRoutes(app, deps) {
 const { getWatchedIds, filterWatched } = require("./watched-filter");
   const { sanitizeStreamFormat } = require("./stream-formatter");
+  const { normalizeTimeZone } = require("./timezone-service");
   const { sanitiseProfileOverrides, resolveConfigForProfile, ProfileOverridesTooLargeError } = require("../utils/profiles");
   const { CATALOG_DEFS, resolveCatalogId } = require("../catalogs/catalog-defs");
   const {
@@ -42,7 +125,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     generateToken,
     rateLimit,
     checkAndRecord,
-    clearKey
+    clearKey,
+    readConfig = async (token) => loadConfigs()[token],
+    hasAccount,
+    createAccount,
+    mutateAccount
   } = deps;
 
   const MAX_PROFILES_PER_TOKEN = 8;
@@ -55,11 +142,13 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
   // (API keys, filters, poster style, etc.) provably can't affect
   // installation status, because it never reaches the manifest builder.
   const MANIFEST_RELEVANT_FIELDS = [
-    "catalogs", "catalogOrder", "hiddenCatalogs", "mergedCatalogs",
-    "customCatalogs", "customMdbLists", "excludeUnreleased",
+    "catalogs", "catalogOrder", "hiddenCatalogs", "mergedCatalogs", "language",
+    "customCatalogs", "customMdbLists", "customTraktLists", "excludeUnreleased", "searchEnabled", "searchCatalogNames",
     "enableAiRecommended", "anilistAccessToken", "preserveKitsuIds",
     "animePresentationMode", "streamAddons", "debridServices",
-    "debridService", "debridApiKey", "animeFilter", "indianCinemaFilter"
+    "debridService", "debridApiKey", "animeFilter", "indianCinemaFilter",
+    "mdblistKey", "tmdbKey", "premiumizeLibraryEnabled", "premiumizeApiKey",
+    "torboxLibraryEnabled", "torboxLibraryApiKey"
   ];
 
   // Computes the manifest-contract fingerprint for an already
@@ -103,54 +192,26 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         candidate[field] = patch[field];
       }
     });
+    const providerCredentials = applyProviderCredentialPatch(baseConfig, patch || {});
+    candidate.tmdbKey = providerCredentials.tmdbKey;
+    candidate.mdblistKey = providerCredentials.mdblistKey;
     return candidate;
   }
 
-  function normalizeCollectionCatalogs(collections) {
-    if (!Array.isArray(collections)) return [];
-
-    const normalizeSource = source => {
-      if (!source || typeof source !== "object" || !source.catalogId) return source;
-      const catalogId = resolveCatalogId(String(source.catalogId));
-      const def = CATALOG_DEFS[catalogId];
-      return {
-        ...source,
-        catalogId,
-        ...(def && (def.type === "movie" || def.type === "series")
-          ? { type: def.type }
-          : {})
-      };
-    };
-
-    return collections.map(collection => ({
-      ...collection,
-      folders: Array.isArray(collection?.folders)
-        ? collection.folders.map(folder => ({
-            ...folder,
-            rows: Array.isArray(folder?.rows)
-              ? [...new Set(folder.rows.map(id => resolveCatalogId(String(id))))]
-              : folder?.rows,
-            sources: Array.isArray(folder?.sources)
-              ? folder.sources.map(normalizeSource)
-              : folder?.sources,
-            catalogSources: Array.isArray(folder?.catalogSources)
-              ? folder.catalogSources.map(normalizeSource)
-              : folder?.catalogSources
-          }))
-        : collection?.folders
-    }));
-  }
 
   // Verifies `provided` against configs[token]'s stored hash. On success
   // against a legacy SHA-256 hash, transparently rehashes with bcrypt so
   // the config migrates off the weaker scheme on next successful auth.
-  function verifyStoredPassword(configs, token, provided) {
-    const config = configs[token];
+  async function verifyStoredPassword(token, provided, authoritativeAccount) {
+    const config = authoritativeAccount;
     if (!config || !verifyPassword(provided, config.passwordHash)) return false;
 
     if (config.passwordHash.startsWith("$2") === false) {
-      config.passwordHash = hashPassword(provided);
-      saveConfigs(configs);
+      const replacement = hashPassword(provided);
+      await mutateAccount(token, current => {
+        if (current.passwordHash === config.passwordHash) current.passwordHash = replacement;
+      }, { reason: MUTATION_REASONS.PASSWORD_AUTH });
+      config.passwordHash = replacement;
     }
 
     return true;
@@ -167,7 +228,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     return false;
   }
 
-  app.post("/c/create", (req, res) => {
+  app.post("/c/create", async (req, res) => {
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
     if (rateLimit(ip, 5, 60000)) {
@@ -178,22 +239,34 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       password,
       catalogs,
       mdblistKey,
+      tvdbKey,
+      tvdbPin,
       language,
+        timezone,
       rpdbKey,
       tpKey,
       fanartKey,
       omdbKey,
       traktUser,
       excludeUnreleased,
+      episodeReleaseDelayHours,
       digitalReleaseOnly,
+      searchEnabled,
+      searchCatalogNames,
+      hideUnreleasedDigitalSearch,
       preserveKitsuIds,
       animePresentationMode,
       maxRating,
       excludeLanguages,
       betterPostersStyle,
       streamAddons,
+      streamAddonLabels,
+      streamMinSizeGb,
+      streamSortMode,
+      hideStreamNotices,
       customCatalogs,
       customMdbLists,
+      customTraktLists,
       mergedCatalogs,
       catalogOverrides,
       googleAiKey,
@@ -202,8 +275,10 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       hiddenCatalogs,
       catalogOrder,
       hideWatched,
+      hideUnavailableStreams,
       animeFilter,
       indianCinemaFilter,
+      contentExclusions,
       minRating,
       minVotes,
       minYear,
@@ -214,6 +289,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridApiKey,
       debridCachedOnly,
       debridEnglishOnly,
+      streamLanguages,
+      streamLanguageMode,
       debridRemoveTrash,
       debridRes4k,
       debridRes1080,
@@ -221,7 +298,12 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes480,
       debridMaxSizeGb,
       streamFormat,
+      preserveStreamSourceBranding,
       tmdbKey,
+      premiumizeApiKey,
+      premiumizeLibraryEnabled,
+      torboxLibraryApiKey,
+      torboxLibraryEnabled,
       collectionsSchemaVersion
     } = req.body;
 
@@ -231,23 +313,50 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       });
     }
 
-    const configs = loadConfigs();
+    const providerCredentials = applyProviderCredentialPatch({}, {
+      mdblistKey,
+      tmdbKey,
+      tvdbKey,
+      tvdbPin
+    });
+    try {
+      assertDiscoveryProvider(providerCredentials);
+    } catch (error) {
+      return res.status(error.statusCode || 400).json({
+        error: error.message,
+        code: error.code
+      });
+    }
 
     let token = generateToken();
-    while (configs[token]) token = generateToken();
+    while (await hasAccount(token)) token = generateToken();
+
+    const normalizedStreamAddons = normalizeStreamAddonList(streamAddons);
+    const streamLanguageSettings = resolveStreamLanguageSettings({
+      streamLanguages,
+      streamLanguageMode,
+      debridEnglishOnly
+    });
 
     const pendingConfig = {
       passwordHash: hashPassword(password),
       catalogs,
-      mdblistKey: mdblistKey || null,
+      mdblistKey: providerCredentials.mdblistKey,
+      tvdbKey: providerCredentials.tvdbKey,
+      tvdbPin: providerCredentials.tvdbPin,
       language: language || "en-US",
+        timezone: normalizeTimeZone(timezone),
       rpdbKey: rpdbKey || null,
       tpKey: tpKey || null,
       fanartKey: fanartKey || null,
       omdbKey: omdbKey || null,
       traktUser: traktUser || null,
       excludeUnreleased: !!excludeUnreleased,
+      episodeReleaseDelayHours: normalizeEpisodeReleaseDelayHours(episodeReleaseDelayHours),
       digitalReleaseOnly: !!digitalReleaseOnly,
+      searchEnabled: searchEnabled !== false,
+      searchCatalogNames: normalizeSearchCatalogNames(searchCatalogNames),
+      hideUnreleasedDigitalSearch: !!hideUnreleasedDigitalSearch,
       preserveKitsuIds: !!preserveKitsuIds,
       // Existing/missing configs remain unified. The setup UI recommends
       // AniSync-compatible for a deliberate new selection, never silently.
@@ -255,14 +364,22 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       maxRating: maxRating || null,
       excludeLanguages: excludeLanguages || [],
       betterPostersStyle: betterPostersStyle || null,
-      streamAddons: Array.isArray(streamAddons)
-        ? streamAddons.filter(Boolean)
-        : [],
+      streamAddons: normalizedStreamAddons,
+      streamAddonLabels: normalizeStreamAddonLabels(
+        streamAddonLabels,
+        normalizedStreamAddons
+      ),
+      streamMinSizeGb: normalizeStreamSizeGb(streamMinSizeGb),
+      streamSortMode: normalizeStreamSortMode(streamSortMode),
+      hideStreamNotices: hideStreamNotices === true,
       customCatalogs: Array.isArray(customCatalogs)
         ? customCatalogs.filter(Boolean)
         : [],
       customMdbLists: Array.isArray(customMdbLists)
         ? customMdbLists.filter(Boolean)
+        : [],
+      customTraktLists: Array.isArray(customTraktLists)
+        ? customTraktLists.filter(Boolean)
         : [],
       catalogOverrides: (catalogOverrides && typeof catalogOverrides === "object" && !Array.isArray(catalogOverrides))
         ? catalogOverrides
@@ -274,7 +391,12 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridService: debridService || null,
       debridApiKey: debridApiKey || null,
       debridCachedOnly: !!debridCachedOnly,
-      debridEnglishOnly: debridEnglishOnly !== false,
+      streamLanguages: streamLanguageSettings.languages,
+      streamLanguageMode: streamLanguageSettings.mode,
+      debridEnglishOnly:
+        streamLanguageSettings.mode === "only" &&
+        streamLanguageSettings.languages.length === 1 &&
+        streamLanguageSettings.languages[0] === "en",
       debridRemoveTrash: debridRemoveTrash !== false,
       debridRes4k: debridRes4k !== false,
       debridRes1080: debridRes1080 !== false,
@@ -291,8 +413,10 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         : [],
       catalogOrder: Array.isArray(catalogOrder) ? catalogOrder.filter(Boolean) : [],
       hideWatched: !!hideWatched,
+      hideUnavailableStreams: !!hideUnavailableStreams,
       animeFilter: normalizeAnimeFilter(animeFilter),
       indianCinemaFilter: normalizeIndianCinemaFilter(indianCinemaFilter),
+      contentExclusions: normalizeContentExclusions(contentExclusions),
       minRating: Number.isFinite(Number(minRating)) ? Math.min(Math.max(Number(minRating), 0), 10) : 0,
       minVotes: Number.isFinite(Number(minVotes)) && Number(minVotes) > 0 ? Math.round(Number(minVotes)) : 0,
       minYear: normalizeYear(minYear),
@@ -305,9 +429,17 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
           ? COLLECTIONS_SCHEMA_VERSION
           : 1,
       streamFormat: sanitizeStreamFormat(streamFormat),
-      tmdbKey: tmdbKey || null,
+      preserveStreamSourceBranding: !!preserveStreamSourceBranding,
+      tmdbKey: providerCredentials.tmdbKey,
+      tvdbKey: providerCredentials.tvdbKey,
+      tvdbPin: providerCredentials.tvdbPin,
+      premiumizeApiKey: typeof premiumizeApiKey === "string" && premiumizeApiKey.trim() ? premiumizeApiKey.trim() : null,
+      premiumizeLibraryEnabled: !!premiumizeLibraryEnabled && !!(typeof premiumizeApiKey === "string" && premiumizeApiKey.trim()),
+      torboxLibraryApiKey: typeof torboxLibraryApiKey === "string" && torboxLibraryApiKey.trim() ? torboxLibraryApiKey.trim() : null,
+      torboxLibraryEnabled: false,
       createdAt: new Date().toISOString()
     };
+    pendingConfig.torboxLibraryEnabled = !!torboxLibraryEnabled && !!resolveTorboxLibraryApiKey(pendingConfig);
     try {
       pendingConfig.mergedCatalogs = validateMergedCatalogs(mergedCatalogs, {
         config: pendingConfig,
@@ -320,6 +452,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       }
       throw error;
     }
+    applyCatalogSelection(pendingConfig);
     // First-time setup for this token always has no prior fingerprint, so
     // this trivially classifies as first-install — computed here (rather
     // than hardcoded) so the response shape and reason-summarization logic
@@ -329,34 +462,44 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       pendingConfig.installFingerprint = installResult.fingerprint;
     }
 
-    configs[token] = pendingConfig;
-
-    saveConfigs(configs);
+    await createAccount(token, pendingConfig);
 
     res.json({ token, installStatus: installResult.installStatus });
   });
 
-  app.post("/c/:token/update", (req, res) => {
+  app.post("/c/:token/update", async (req, res) => {
     const { token } = req.params;
 
     const {
       password,
       catalogs,
       mdblistKey,
+      tvdbKey,
+      tvdbPin,
       language,
+        timezone,
       rpdbKey,
       tpKey,
       fanartKey,
       omdbKey,
       traktUser,
       excludeUnreleased,
+      episodeReleaseDelayHours,
       digitalReleaseOnly,
+      searchEnabled,
+      searchCatalogNames,
+      hideUnreleasedDigitalSearch,
       preserveKitsuIds,
       animePresentationMode,
       maxRating,
       streamAddons,
+      streamAddonLabels,
+      streamMinSizeGb,
+      streamSortMode,
+      hideStreamNotices,
       customCatalogs,
       customMdbLists,
+      customTraktLists,
       mergedCatalogs,
       catalogOverrides,
       googleAiKey,
@@ -367,8 +510,10 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeLanguages,
       betterPostersStyle,
       hideWatched,
+      hideUnavailableStreams,
       animeFilter,
       indianCinemaFilter,
+      contentExclusions,
       minRating,
       minVotes,
       minYear,
@@ -379,6 +524,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridApiKey,
       debridCachedOnly,
       debridEnglishOnly,
+      streamLanguages,
+      streamLanguageMode,
       debridRemoveTrash,
       debridRes4k,
       debridRes1080,
@@ -386,15 +533,35 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes480,
       debridMaxSizeGb,
       streamFormat,
+      preserveStreamSourceBranding,
       tmdbKey,
+      premiumizeApiKey,
+      premiumizeLibraryEnabled,
+      premiumizeDisconnect,
+      torboxLibraryApiKey,
+      torboxLibraryEnabled,
+      torboxDisconnect,
       collectionsSchemaVersion
     } = req.body;
 
-    const configs = loadConfigs();
-
-    if (!configs[token]) {
+    const authoritativeConfig = await readConfig(token);
+    if (!authoritativeConfig) {
       return res.status(404).json({
         error: "Config not found"
+      });
+    }
+    const configs = { [token]: authoritativeConfig };
+
+    const providerCredentials = applyProviderCredentialPatch(
+      configs[token],
+      req.body || {}
+    );
+    try {
+      assertDiscoveryProvider(providerCredentials);
+    } catch (error) {
+      return res.status(error.statusCode || 400).json({
+        error: error.message,
+        code: error.code
       });
     }
 
@@ -402,7 +569,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const isPreauth = configs[token].preauth === true;
     if (!isPreauth) {
       if (passwordRateLimited(req, res, token)) return;
-      if (!verifyStoredPassword(configs, token, password)) {
+      if (!await verifyStoredPassword(token, password, authoritativeConfig)) {
         return res.status(401).json({
           error: "Incorrect password"
         });
@@ -423,7 +590,10 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
           : (configs[token].customCatalogs || []),
         customMdbLists: Array.isArray(customMdbLists)
           ? customMdbLists.filter(Boolean)
-          : (configs[token].customMdbLists || [])
+          : (configs[token].customMdbLists || []),
+        customTraktLists: Array.isArray(customTraktLists)
+          ? customTraktLists.filter(Boolean)
+          : (configs[token].customTraktLists || [])
       };
       validatedMergedCatalogs = mergedCatalogs !== undefined
         ? validateMergedCatalogs(mergedCatalogs, {
@@ -439,14 +609,57 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       throw error;
     }
 
-    configs[token].catalogs = catalogs;
+    configs[token].catalogs = Array.isArray(catalogs)
+      ? catalogs
+      : (configs[token].catalogs || []);
     configs[token].language = language || configs[token].language || "en-US";
-    configs[token].rpdbKey = rpdbKey || configs[token].rpdbKey || null;
-    configs[token].tpKey = tpKey || configs[token].tpKey || null;
-    configs[token].fanartKey = fanartKey || configs[token].fanartKey || null;
-    configs[token].omdbKey = omdbKey || configs[token].omdbKey || null;
-    configs[token].mdblistKey = mdblistKey || configs[token].mdblistKey || null;
-    configs[token].tmdbKey = tmdbKey || configs[token].tmdbKey || null;
+      configs[token].timezone =
+        timezone !== undefined
+          ? normalizeTimeZone(timezone)
+          : normalizeTimeZone(configs[token].timezone);
+    // Optional poster/metadata credentials use patch semantics: an omitted
+    // field preserves the stored value, while an explicit null/blank clears it.
+    // Using `incoming || stored` here made a deleted RPDB key resurrect on the
+    // next token load because the setup page intentionally sends null for an
+    // empty field.
+    for (const field of ["rpdbKey", "tpKey", "fanartKey", "omdbKey"]) {
+      if (Object.prototype.hasOwnProperty.call(req.body || {}, field)) {
+        const incoming = req.body[field];
+        configs[token][field] =
+          typeof incoming === "string" && incoming.trim()
+            ? incoming.trim()
+            : null;
+      }
+    }
+    // Preserve historical object shape for old tokens while allowing each
+    // optional provider credential to be added, updated or explicitly cleared.
+    for (const field of ["mdblistKey", "tmdbKey", "tvdbKey", "tvdbPin"]) {
+      if (
+        Object.prototype.hasOwnProperty.call(configs[token], field) ||
+        Object.prototype.hasOwnProperty.call(req.body || {}, field)
+      ) {
+        configs[token][field] = providerCredentials[field];
+      }
+    }
+    if (premiumizeDisconnect === true) {
+      configs[token].premiumizeApiKey = null;
+      configs[token].premiumizeLibraryEnabled = false;
+      const premiumizeIds = new Set(["premiumize_movies", "premiumize_series"]);
+      configs[token].catalogs = (configs[token].catalogs || []).filter(id => !premiumizeIds.has(id));
+      configs[token].catalogOrder = (configs[token].catalogOrder || []).filter(id => !premiumizeIds.has(id));
+      configs[token].hiddenCatalogs = (configs[token].hiddenCatalogs || []).filter(id => !premiumizeIds.has(id));
+    } else {
+      if (typeof premiumizeApiKey === "string" && premiumizeApiKey.trim()) {
+        configs[token].premiumizeApiKey = premiumizeApiKey.trim();
+      }
+      if (premiumizeLibraryEnabled !== undefined) {
+        if (premiumizeLibraryEnabled && !configs[token].premiumizeApiKey) {
+          return res.status(400).json({ error: "Connect Premiumize before enabling Cloud Library." });
+        }
+        configs[token].premiumizeLibraryEnabled = !!premiumizeLibraryEnabled;
+      }
+    }
+
     configs[token].traktUser =
       traktUser !== undefined
         ? traktUser
@@ -457,10 +670,30 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         ? !!excludeUnreleased
         : (configs[token].excludeUnreleased || false);
 
+    configs[token].episodeReleaseDelayHours =
+      episodeReleaseDelayHours !== undefined
+        ? normalizeEpisodeReleaseDelayHours(episodeReleaseDelayHours)
+        : normalizeEpisodeReleaseDelayHours(configs[token].episodeReleaseDelayHours);
+
     configs[token].digitalReleaseOnly =
       digitalReleaseOnly !== undefined
         ? !!digitalReleaseOnly
         : (configs[token].digitalReleaseOnly || false);
+
+    configs[token].searchEnabled =
+      searchEnabled !== undefined
+        ? searchEnabled !== false
+        : (configs[token].searchEnabled !== false);
+
+    configs[token].searchCatalogNames =
+      searchCatalogNames !== undefined
+        ? normalizeSearchCatalogNames(searchCatalogNames)
+        : normalizeSearchCatalogNames(configs[token].searchCatalogNames);
+
+    configs[token].hideUnreleasedDigitalSearch =
+      hideUnreleasedDigitalSearch !== undefined
+        ? !!hideUnreleasedDigitalSearch
+        : !!configs[token].hideUnreleasedDigitalSearch;
 
     configs[token].preserveKitsuIds =
       preserveKitsuIds !== undefined
@@ -486,20 +719,86 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         : (configs[token].betterPostersStyle || null);
 
     configs[token].streamAddons = Array.isArray(streamAddons)
-      ? streamAddons.filter(Boolean)
-      : (configs[token].streamAddons || []);
+      ? normalizeStreamAddonList(streamAddons)
+      : normalizeStreamAddonList(configs[token].streamAddons || []);
+
+    configs[token].streamAddonLabels =
+      streamAddonLabels !== undefined
+        ? normalizeStreamAddonLabels(streamAddonLabels, configs[token].streamAddons)
+        : normalizeStreamAddonLabels(
+            configs[token].streamAddonLabels,
+            configs[token].streamAddons
+          );
+    configs[token].streamMinSizeGb =
+      streamMinSizeGb !== undefined
+        ? normalizeStreamSizeGb(streamMinSizeGb)
+        : normalizeStreamSizeGb(configs[token].streamMinSizeGb);
+    configs[token].streamSortMode =
+      streamSortMode !== undefined
+        ? normalizeStreamSortMode(streamSortMode)
+        : normalizeStreamSortMode(configs[token].streamSortMode);
+    configs[token].hideStreamNotices =
+      hideStreamNotices !== undefined
+        ? !!hideStreamNotices
+        : !!configs[token].hideStreamNotices;
 
     if(debridServices !== undefined) configs[token].debridServices = Array.isArray(debridServices) ? debridServices : [];
     configs[token].debridService = debridService !== undefined ? debridService : (configs[token].debridService || null);
     configs[token].debridApiKey = debridApiKey !== undefined ? debridApiKey : (configs[token].debridApiKey || null);
+
+    if (torboxDisconnect === true) {
+      configs[token].torboxLibraryApiKey = null;
+      configs[token].torboxLibraryEnabled = false;
+      const torboxIds = new Set(["torbox_movies", "torbox_series"]);
+      configs[token].catalogs = (configs[token].catalogs || []).filter(id => !torboxIds.has(id));
+      configs[token].catalogOrder = (configs[token].catalogOrder || []).filter(id => !torboxIds.has(id));
+      configs[token].hiddenCatalogs = (configs[token].hiddenCatalogs || []).filter(id => !torboxIds.has(id));
+    } else {
+      if (typeof torboxLibraryApiKey === "string" && torboxLibraryApiKey.trim()) {
+        configs[token].torboxLibraryApiKey = torboxLibraryApiKey.trim();
+      }
+      if (torboxLibraryEnabled !== undefined) {
+        if (torboxLibraryEnabled && !resolveTorboxLibraryApiKey(configs[token])) {
+          return res.status(400).json({ error: "Add a TorBox API key or connect TorBox under Streams before enabling Cloud Library." });
+        }
+        configs[token].torboxLibraryEnabled = !!torboxLibraryEnabled;
+      }
+    }
+
     configs[token].debridCachedOnly =
       debridCachedOnly !== undefined
         ? !!debridCachedOnly
         : (configs[token].debridCachedOnly || false);
-    configs[token].debridEnglishOnly =
-      debridEnglishOnly !== undefined
-        ? !!debridEnglishOnly
-        : (configs[token].debridEnglishOnly !== false);
+    {
+      let nextLanguageSettings;
+      if (streamLanguages !== undefined || streamLanguageMode !== undefined) {
+        const currentLanguageSettings = resolveStreamLanguageSettings(configs[token]);
+        nextLanguageSettings = resolveStreamLanguageSettings({
+          streamLanguages:
+            streamLanguages !== undefined
+              ? streamLanguages
+              : currentLanguageSettings.languages,
+          streamLanguageMode:
+            streamLanguageMode !== undefined
+              ? streamLanguageMode
+              : currentLanguageSettings.mode,
+          debridEnglishOnly: configs[token].debridEnglishOnly
+        });
+      } else if (debridEnglishOnly !== undefined) {
+        nextLanguageSettings = resolveStreamLanguageSettings({
+          debridEnglishOnly: !!debridEnglishOnly
+        });
+      } else {
+        nextLanguageSettings = resolveStreamLanguageSettings(configs[token]);
+      }
+
+      configs[token].streamLanguages = nextLanguageSettings.languages;
+      configs[token].streamLanguageMode = nextLanguageSettings.mode;
+      configs[token].debridEnglishOnly =
+        nextLanguageSettings.mode === "only" &&
+        nextLanguageSettings.languages.length === 1 &&
+        nextLanguageSettings.languages[0] === "en";
+    }
     configs[token].debridRemoveTrash =
       debridRemoveTrash !== undefined
         ? !!debridRemoveTrash
@@ -526,6 +825,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     configs[token].customMdbLists = Array.isArray(customMdbLists)
       ? customMdbLists.filter(Boolean)
       : (configs[token].customMdbLists || []);
+    configs[token].customTraktLists = Array.isArray(customTraktLists)
+      ? customTraktLists.filter(Boolean)
+      : (configs[token].customTraktLists || []);
     configs[token].mergedCatalogs = validatedMergedCatalogs;
 
     configs[token].catalogOverrides =
@@ -558,6 +860,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         ? !!hideWatched
         : (configs[token].hideWatched || false);
 
+    configs[token].hideUnavailableStreams =
+      hideUnavailableStreams !== undefined
+        ? !!hideUnavailableStreams
+        : !!configs[token].hideUnavailableStreams;
+
     configs[token].animeFilter =
       animeFilter !== undefined
         ? normalizeAnimeFilter(animeFilter)
@@ -567,6 +874,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       indianCinemaFilter !== undefined
         ? normalizeIndianCinemaFilter(indianCinemaFilter)
         : normalizeIndianCinemaFilter(configs[token].indianCinemaFilter);
+
+    configs[token].contentExclusions =
+      contentExclusions !== undefined
+        ? normalizeContentExclusions(contentExclusions)
+        : normalizeContentExclusions(configs[token].contentExclusions);
 
     configs[token].minRating =
       minRating !== undefined
@@ -592,6 +904,12 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       configs[token].streamFormat = sanitizeStreamFormat(streamFormat);
     }
 
+    if (preserveStreamSourceBranding !== undefined) {
+      configs[token].preserveStreamSourceBranding =
+        !!preserveStreamSourceBranding;
+    }
+
+    applyCatalogSelection(configs[token]);
     configs[token].updatedAt = new Date().toISOString();
 
     // The base config's own previous fingerprint (never a device profile's
@@ -604,13 +922,16 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       configs[token].installFingerprint = installResult.fingerprint;
     }
 
-    saveConfigs(configs);
+    const committedConfig = await mutateAccount(token, current => {
+      for (const key of Object.keys(current)) delete current[key];
+      Object.assign(current, configs[token]);
+    }, { reason: MUTATION_REASONS.EXPLICIT_CONFIG });
 
-    if (configs[token].hideWatched && (configs[token].traktAccessToken || configs[token].simklAccessToken)) {
+    if (committedConfig.hideWatched && (committedConfig.traktAccessToken || committedConfig.simklAccessToken)) {
       getWatchedIds(
         token,
-        configs[token].traktAccessToken || null,
-        configs[token].simklAccessToken || null,
+        committedConfig.traktAccessToken || null,
+        committedConfig.simklAccessToken || null,
         process.env.TRAKT_CLIENT_ID,
         process.env.SIMKL_CLIENT_ID
       ).catch(e => console.error('[watched-filter] prewarm failed:', e.message));
@@ -619,10 +940,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     res.json({ token, installStatus: installResult.installStatus });
   });
 
-  app.get("/c/:token/config", (req, res) => {
+  app.get("/c/:token/config", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-    const baseConfig = configs[token];
+    const baseConfig = await readConfig(token, req.query.profile);
 
     if (!baseConfig) {
       return res.status(404).json({
@@ -639,7 +959,7 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         return res.status(401).json({ error: "Password required" });
       }
       if (passwordRateLimited(req, res, token)) return;
-      if (!verifyStoredPassword(configs, token, provided)) {
+      if (!await verifyStoredPassword(token, provided, baseConfig)) {
         return res.status(401).json({ error: "Incorrect password" });
       }
       clearKey(token);
@@ -657,17 +977,29 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       collectionsSchemaVersion: config.collectionsSchemaVersion || 1,
       mdblistKey: config.mdblistKey,
       tmdbKey: config.tmdbKey || null,
+      tvdbKey: config.tvdbKey || null,
+      tvdbPin: config.tvdbPin || null,
+      premiumizeConnected: !!config.premiumizeApiKey,
+      premiumizeLibraryEnabled: !!config.premiumizeLibraryEnabled,
+      torboxLibraryConnected: !!resolveTorboxLibraryApiKey(config),
+      torboxLibraryEnabled: !!config.torboxLibraryEnabled,
       language: config.language,
+        timezone: normalizeTimeZone(config.timezone),
       rpdbKey: config.rpdbKey,
       tpKey: config.tpKey,
       fanartKey: config.fanartKey || null,
       omdbKey: config.omdbKey || null,
       traktUser: config.traktUser,
       excludeUnreleased: config.excludeUnreleased || false,
+      episodeReleaseDelayHours: normalizeEpisodeReleaseDelayHours(config.episodeReleaseDelayHours),
       digitalReleaseOnly: config.digitalReleaseOnly || false,
+      searchEnabled: config.searchEnabled !== false,
+      searchCatalogNames: normalizeSearchCatalogNames(config.searchCatalogNames),
+      hideUnreleasedDigitalSearch: !!config.hideUnreleasedDigitalSearch,
       preserveKitsuIds: config.preserveKitsuIds || false,
       animeFilter: normalizeAnimeFilter(config.animeFilter),
       indianCinemaFilter: normalizeIndianCinemaFilter(config.indianCinemaFilter),
+      contentExclusions: normalizeContentExclusions(config.contentExclusions),
       minRating: Number(config.minRating) || 0,
       minVotes: Number(config.minVotes) || 0,
       minYear: normalizeYear(config.minYear),
@@ -678,8 +1010,16 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       excludeLanguages: config.excludeLanguages || [],
       betterPostersStyle: config.betterPostersStyle || null,
       streamAddons: config.streamAddons || [],
+      streamAddonLabels: normalizeStreamAddonLabels(
+        config.streamAddonLabels,
+        config.streamAddons || []
+      ),
+      streamMinSizeGb: normalizeStreamSizeGb(config.streamMinSizeGb),
+      streamSortMode: normalizeStreamSortMode(config.streamSortMode),
+      hideStreamNotices: !!config.hideStreamNotices,
       customCatalogs: config.customCatalogs || [],
       customMdbLists: config.customMdbLists || [],
+      customTraktLists: config.customTraktLists || [],
       mergedCatalogs: config.mergedCatalogs || [],
       catalogOverrides: config.catalogOverrides || {},
       googleAiKey: config.googleAiKey || null,
@@ -687,9 +1027,15 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       includeAdult: !!config.includeAdult,
       hiddenCatalogs: config.hiddenCatalogs || [],
       hideWatched: !!config.hideWatched,
+      hideUnavailableStreams: !!config.hideUnavailableStreams,
       debridServices: config.debridServices || [],
       debridCachedOnly: !!config.debridCachedOnly,
-      debridEnglishOnly: config.debridEnglishOnly !== false,
+      streamLanguages: resolveStreamLanguageSettings(config).languages,
+      streamLanguageMode: resolveStreamLanguageSettings(config).mode,
+      debridEnglishOnly:
+        resolveStreamLanguageSettings(config).mode === "only" &&
+        resolveStreamLanguageSettings(config).languages.length === 1 &&
+        resolveStreamLanguageSettings(config).languages[0] === "en",
       debridRemoveTrash: config.debridRemoveTrash !== false,
       debridRes4k: config.debridRes4k !== false,
       debridRes1080: config.debridRes1080 !== false,
@@ -697,6 +1043,8 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       debridRes480: !!config.debridRes480,
       debridMaxSizeGb: Number(config.debridMaxSizeGb) || 0,
       streamFormat: config.streamFormat || null,
+      preserveStreamSourceBranding:
+        !!config.preserveStreamSourceBranding,
       // Profile listing always reflects the base config, never a resolved one.
       profiles: Object.entries(baseConfig.profiles || {}).map(([id, p]) => ({
         id,
@@ -724,10 +1072,9 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
   // itself.
   const MAX_PREVIEW_BODY_BYTES = 200 * 1024;
 
-  app.post("/c/:token/install-status/preview", (req, res) => {
+  app.post("/c/:token/install-status/preview", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-    const baseConfig = configs[token];
+    const baseConfig = await readConfig(token, req.body.profile || null);
 
     if (!baseConfig) return res.status(404).json({ error: "Not found" });
 
@@ -774,16 +1121,28 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
   // manifest URL with no ?profile= query param keeps behaving exactly as
   // it always has.
 
-  app.post("/c/:token/profiles", (req, res) => {
+  function publicProfileOverrides(overrides) {
+    const publicOverrides = { ...(overrides || {}) };
+    for (const field of [
+      "profileTraktToken",
+      "profileTraktRefreshToken",
+      "profileTraktTokenExpiry",
+      "profileSimklToken"
+    ]) {
+      delete publicOverrides[field];
+    }
+    return publicOverrides;
+  }
+
+  app.post("/c/:token/profiles", async (req, res) => {
     const { token } = req.params;
     const { password, name, overrides } = req.body;
 
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) return res.status(404).json({ error: "Not found" });
     if (passwordRateLimited(req, res, token)) return;
-    if (!verifyStoredPassword(configs, token, password)) {
+    if (!await verifyStoredPassword(token, password, config)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
     clearKey(token);
@@ -804,6 +1163,13 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
 
     try {
       const safeOverrides = sanitiseProfileOverrides(overrides);
+      const resolvedProviderCredentials = applyProviderCredentialPatch(config, safeOverrides);
+      for (const field of ["tmdbKey", "mdblistKey", "tvdbKey", "tvdbPin"]) {
+        if (Object.prototype.hasOwnProperty.call(safeOverrides, field)) {
+          safeOverrides[field] = resolvedProviderCredentials[field];
+        }
+      }
+      assertDiscoveryProvider(resolvedProviderCredentials);
       if (safeOverrides.mergedCatalogs !== undefined) {
         safeOverrides.mergedCatalogs = validateMergedCatalogs(safeOverrides.mergedCatalogs, {
           config: { ...config, ...safeOverrides },
@@ -817,10 +1183,12 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         createdAt: new Date().toISOString()
       };
     } catch (e) {
-      if (e instanceof ProfileOverridesTooLargeError) return res.status(400).json({ error: e.message });
+      if (e instanceof ProfileOverridesTooLargeError || e.code === "DISCOVERY_PROVIDER_REQUIRED") return res.status(400).json({ error: e.message, code: e.code });
       if (e instanceof MergedCatalogValidationError) return res.status(400).json({ error: e.message });
       throw e;
     }
+
+    applyProfileCatalogSelection(config, profileId);
 
     // A newly-created profile has no prior fingerprint of its own — always
     // first-install, and always compared against this profile's own
@@ -831,43 +1199,96 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       config.profiles[profileId].installFingerprint = installResult.fingerprint;
     }
 
-    saveConfigs(configs);
+    const committed = await mutateAccount(token, current => {
+      for (const key of Object.keys(current)) delete current[key];
+      Object.assign(current, config);
+    }, { reason: MUTATION_REASONS.PROFILE_COLLECTION });
 
     res.json({
       id: profileId,
-      name: config.profiles[profileId].name,
-      overrides: config.profiles[profileId].overrides,
+      name: committed.profiles[profileId].name,
+      overrides: publicProfileOverrides(committed.profiles[profileId].overrides),
       installStatus: installResult.installStatus
     });
   });
 
-  app.get("/c/:token/profiles", (req, res) => {
+  app.get("/c/:token/profiles", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) return res.status(404).json({ error: "Not found" });
 
-    const profiles = Object.entries(config.profiles || {}).map(([id, p]) => ({
-      id,
-      name: p.name,
-      overrides: p.overrides || {},
-      createdAt: p.createdAt || null
-    }));
+    const profiles = Object.entries(config.profiles || {}).map(([id, p]) => {
+      const storedOverrides = p.overrides || {};
+      const publicOverrides = { ...storedOverrides };
+
+      // OAuth tokens are server-owned secrets. The profile manager only needs
+      // public account identity/status, never the raw access/refresh tokens.
+      for (const field of [
+        "profileTraktToken",
+        "profileTraktRefreshToken",
+        "profileTraktTokenExpiry",
+        "profileSimklToken"
+      ]) {
+        delete publicOverrides[field];
+      }
+
+      return {
+        id,
+        name: p.name,
+        overrides: publicOverrides,
+        accounts: {
+          trakt: storedOverrides.profileTraktToken
+            ? {
+                connected: true,
+                scope: "profile",
+                username: storedOverrides.profileTraktUser || null
+              }
+            : config.traktAccessToken
+              ? {
+                  connected: true,
+                  scope: "base",
+                  username: config.traktUser || null
+                }
+              : {
+                  connected: false,
+                  scope: "none",
+                  username: null
+                },
+          simkl: storedOverrides.profileSimklToken
+            ? {
+                connected: true,
+                scope: "profile",
+                username: storedOverrides.profileSimklUser || null
+              }
+            : config.simklAccessToken
+              ? {
+                  connected: true,
+                  scope: "base",
+                  username: config.simklUser || null
+                }
+              : {
+                  connected: false,
+                  scope: "none",
+                  username: null
+                }
+        },
+        createdAt: p.createdAt || null
+      };
+    });
 
     res.json({ profiles });
   });
 
-  app.post("/c/:token/profiles/:profileId/update", (req, res) => {
+  app.post("/c/:token/profiles/:profileId/update", async (req, res) => {
     const { token, profileId } = req.params;
     const { password, name, overrides } = req.body;
 
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) return res.status(404).json({ error: "Not found" });
     if (passwordRateLimited(req, res, token)) return;
-    if (!verifyStoredPassword(configs, token, password)) {
+    if (!await verifyStoredPassword(token, password, config)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
     clearKey(token);
@@ -884,6 +1305,16 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     if (overrides !== undefined) {
       try {
         const safeOverrides = sanitiseProfileOverrides(overrides);
+        const resolvedProviderCredentials = applyProviderCredentialPatch(
+          config,
+          safeOverrides
+        );
+        for (const field of ["tmdbKey", "mdblistKey", "tvdbKey", "tvdbPin"]) {
+          if (Object.prototype.hasOwnProperty.call(safeOverrides, field)) {
+            safeOverrides[field] = resolvedProviderCredentials[field];
+          }
+        }
+        assertDiscoveryProvider(resolvedProviderCredentials);
         if (safeOverrides.mergedCatalogs !== undefined) {
           safeOverrides.mergedCatalogs = validateMergedCatalogs(safeOverrides.mergedCatalogs, {
             config: { ...config, ...safeOverrides },
@@ -891,14 +1322,37 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
             resolveCatalogId
           });
         }
+
+        // Normal profile edits replace the configurable override snapshot, but
+        // OAuth credentials are managed by their own connect/disconnect routes.
+        // Preserve those provider-owned fields unless an OAuth route has already
+        // removed them from the stored profile.
+        const previousOverrides = config.profiles[profileId].overrides || {};
+        for (const field of [
+          "profileTraktToken",
+          "profileTraktRefreshToken",
+          "profileTraktTokenExpiry",
+          "profileTraktUser",
+          "profileSimklToken",
+          "profileSimklUser"
+        ]) {
+          if (
+            !Object.prototype.hasOwnProperty.call(safeOverrides, field) &&
+            Object.prototype.hasOwnProperty.call(previousOverrides, field)
+          ) {
+            safeOverrides[field] = previousOverrides[field];
+          }
+        }
+
         config.profiles[profileId].overrides = safeOverrides;
       } catch (e) {
-        if (e instanceof ProfileOverridesTooLargeError) return res.status(400).json({ error: e.message });
+        if (e instanceof ProfileOverridesTooLargeError || e.code === "DISCOVERY_PROVIDER_REQUIRED") return res.status(400).json({ error: e.message, code: e.code });
         if (e instanceof MergedCatalogValidationError) return res.status(400).json({ error: e.message });
         throw e;
       }
     }
 
+    applyProfileCatalogSelection(config, profileId);
     config.profiles[profileId].updatedAt = new Date().toISOString();
 
     const previousFingerprint = config.profiles[profileId].installFingerprint;
@@ -908,26 +1362,28 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       config.profiles[profileId].installFingerprint = installResult.fingerprint;
     }
 
-    saveConfigs(configs);
+    const committed = await mutateAccount(token, current => {
+      for (const key of Object.keys(current)) delete current[key];
+      Object.assign(current, config);
+    }, { reason: MUTATION_REASONS.PROFILE_COLLECTION });
 
     res.json({
       id: profileId,
-      name: config.profiles[profileId].name,
-      overrides: config.profiles[profileId].overrides,
+      name: committed.profiles[profileId].name,
+      overrides: publicProfileOverrides(committed.profiles[profileId].overrides),
       installStatus: installResult.installStatus
     });
   });
 
-  app.post("/c/:token/profiles/:profileId/delete", (req, res) => {
+  app.post("/c/:token/profiles/:profileId/delete", async (req, res) => {
     const { token, profileId } = req.params;
     const { password } = req.body;
 
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) return res.status(404).json({ error: "Not found" });
     if (passwordRateLimited(req, res, token)) return;
-    if (!verifyStoredPassword(configs, token, password)) {
+    if (!await verifyStoredPassword(token, password, config)) {
       return res.status(401).json({ error: "Incorrect password" });
     }
     clearKey(token);
@@ -936,15 +1392,16 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     }
 
     delete config.profiles[profileId];
-    saveConfigs(configs);
+    await mutateAccount(token, current => {
+      if (current.profiles) delete current.profiles[profileId];
+    }, { reason: MUTATION_REASONS.PROFILE_COLLECTION });
 
     res.json({ ok: true });
   });
 
-  app.get("/debug/config/:token", (req, res) => {
+  app.get("/debug/config/:token", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) {
       return res.status(404).json({
@@ -953,16 +1410,6 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         token
       });
     }
-
-    const redact = value => {
-      if (!value) return null;
-
-      const text = String(value);
-
-      if (text.length <= 6) return "***";
-
-      return `${text.slice(0,3)}...${text.slice(-3)}`;
-    };
 
     const catalogs = Array.isArray(config.catalogs) ? config.catalogs : [];
     const streamAddons = Array.isArray(config.streamAddons) ? config.streamAddons : [];
@@ -987,7 +1434,11 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
       settings: {
         language: config.language || "en-US",
         excludeUnreleased: !!config.excludeUnreleased,
+        episodeReleaseDelayHours: normalizeEpisodeReleaseDelayHours(config.episodeReleaseDelayHours),
         digitalReleaseOnly: !!config.digitalReleaseOnly,
+        searchEnabled: config.searchEnabled !== false,
+        searchCatalogNames: normalizeSearchCatalogNames(config.searchCatalogNames),
+        hideUnreleasedDigitalSearch: !!config.hideUnreleasedDigitalSearch,
         preserveKitsuIds: !!config.preserveKitsuIds,
         animePresentationMode:
           config.animePresentationMode === "anisync" ? "anisync" : "unified",
@@ -998,35 +1449,38 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         traktUser: config.traktUser || null
       },
 
-      keys: {
-        mdblistKey: redact(config.mdblistKey),
-        rpdbKey: redact(config.rpdbKey),
-        tpKey: redact(config.tpKey),
-        fanartKey: redact(config.fanartKey),
-        omdbKey: redact(config.omdbKey),
-        googleAiKey: redact(config.googleAiKey)
-      }
+      keys: (() => {
+        const capabilities = getProviderCapabilities(config);
+        return {
+          hasTmdb: capabilities.hasTmdb,
+          hasMdblist: capabilities.hasMdblist,
+          hasRpdb: !!config.rpdbKey,
+          hasTopPosters: !!config.tpKey,
+          hasFanart: !!config.fanartKey,
+          hasOmdb: !!config.omdbKey,
+          hasGoogleAi: !!config.googleAiKey
+        };
+      })()
     });
   });
 
   // Reset password — token proves ownership, no old password needed
-  app.post("/c/:token/reset-password", (req, res) => {
+  app.post("/c/:token/reset-password", async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
     if(!newPassword || newPassword.length < 4) {
       return res.status(400).json({ error: "Password must be at least 4 characters" });
     }
-    const configs = loadConfigs();
-    if(!configs[token]) return res.status(404).json({ error: "Token not found" });
-    configs[token].passwordHash = hashPassword(newPassword);
-    saveConfigs(configs);
+    const committed = await mutateAccount(token, config => {
+      config.passwordHash = hashPassword(newPassword);
+    }, { reason: MUTATION_REASONS.PASSWORD_AUTH });
+    if (!committed) return res.status(404).json({ error: "Token not found" });
     res.json({ ok: true });
   });
 
-  app.post("/c/:token/collections", (req, res) => {
+  app.post("/c/:token/collections", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-    const config = configs[token];
+    const config = await readConfig(token);
 
     if (!config) {
       return res.status(404).json({
@@ -1051,8 +1505,45 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
     const normalizedCollections = normalizeCollectionCatalogs(collections);
     const existing = normalizeCollectionCatalogs(target.collections);
 
+    console.log(
+      "[COLLECTION-WRITE]",
+      {
+        tokenFingerprint: crypto.createHash("sha256").update(token).digest("hex").slice(0, 12),
+        profileId: profileId || null,
+        replace: replace === true,
+        incomingCount: normalizedCollections.length,
+        incomingTitles: normalizedCollections.map(collection =>
+          collection && (collection.title || collection.name || "")
+        ),
+        sports: normalizedCollections
+          .filter(collection =>
+            collection &&
+            (collection.title || collection.name || "") === "Sports"
+          )
+          .map(collection => ({
+            title: collection.title || collection.name,
+            folders: Array.isArray(collection.folders)
+              ? collection.folders.map(folder => ({
+                  title: folder && folder.title,
+                  rows: Array.isArray(folder && folder.rows)
+                    ? folder.rows.length
+                    : 0,
+                  sources: Array.isArray(folder && folder.sources)
+                    ? folder.sources.length
+                    : 0,
+                  catalogSources: Array.isArray(folder && folder.catalogSources)
+                    ? folder.catalogSources.length
+                    : 0
+                }))
+              : []
+          }))
+      }
+    );
+
+    let nextCollections;
+
     if (replace === true) {
-      target.collections = normalizedCollections;
+      nextCollections = normalizedCollections;
     } else {
       const keyOf = c =>
         String(
@@ -1083,44 +1574,78 @@ const { getWatchedIds, filterWatched } = require("./watched-filter");
         }
       }
 
-      target.collections = merged;
+      nextCollections = merged;
     }
-    target.collectionsSchemaVersion = COLLECTIONS_SCHEMA_VERSION;
 
-    saveConfigs(configs);
+    /*
+     * Collection pushes can be repeated by setup/Nuvio clients even when
+     * nothing has changed. With a large config store, rewriting every config
+     * for an identical payload is extremely expensive.
+     *
+     * Only persist when this config actually changed.
+     */
+    const collectionsChanged =
+      JSON.stringify(existing) !==
+      JSON.stringify(nextCollections);
+
+    const schemaChanged =
+      target.collectionsSchemaVersion !==
+      COLLECTIONS_SCHEMA_VERSION;
+
+    if (collectionsChanged) {
+      target.collections = nextCollections;
+    }
+
+    if (schemaChanged) {
+      target.collectionsSchemaVersion =
+        COLLECTIONS_SCHEMA_VERSION;
+    }
+
+    if (collectionsChanged || schemaChanged) {
+      await mutateAccount(token, current => {
+        const currentProfile = profileId && current.profiles && current.profiles[profileId];
+        const currentTarget = currentProfile
+          ? (currentProfile.overrides || (currentProfile.overrides = {}))
+          : current;
+        currentTarget.collections = nextCollections;
+        currentTarget.collectionsSchemaVersion = COLLECTIONS_SCHEMA_VERSION;
+      }, { reason: MUTATION_REASONS.PROFILE_COLLECTION });
+    }
 
     res.json({
       ok: true,
       mode: replace === true ? "replace" : "merge",
       before: existing.length,
       incoming: normalizedCollections.length,
-      after: target.collections.length
+      after: nextCollections.length,
+      unchanged: !collectionsChanged && !schemaChanged
     });
   });
 
-  app.post("/c/:token/verify-password", (req, res) => {
+  app.post("/c/:token/verify-password", async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
-    const configs = loadConfigs();
-    if (!configs[token]) return res.status(404).json({ error: "Not found" });
+    const config = await readConfig(token);
+    if (!config) return res.status(404).json({ error: "Not found" });
     if (passwordRateLimited(req, res, token)) return;
-    if (verifyStoredPassword(configs, token, password)) {
+    if (await verifyStoredPassword(token, password, config)) {
       clearKey(token);
       return res.json({ ok: true });
     }
     return res.status(401).json({ error: "Incorrect password" });
   });
 
-  app.get("/c/:token/collections.json", (req, res) => {
+  app.get("/c/:token/collections.json", async (req, res) => {
     const { token } = req.params;
-    const configs = loadConfigs();
-
-    if (!configs[token]) {
+    const baseConfig = await readConfig(token, req.query.profile);
+    if (!baseConfig) {
       return res.status(404).json([]);
     }
 
-    const config = resolveConfigForProfile(configs[token], req.query.profile);
-    res.json(normalizeCollectionCatalogs(config.collections));
+    const resolvedConfig = resolveConfigForProfile(baseConfig, req.query.profile);
+    const effectiveConfig = createEffectiveDiscoveryConfig(resolvedConfig);
+    res.setHeader("Cache-Control", "no-store");
+    res.json(normalizeCollectionCatalogs(effectiveConfig.collections));
   });
 }
 

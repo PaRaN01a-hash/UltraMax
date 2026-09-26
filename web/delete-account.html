@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Delete Ultra MAX setup</title>
+  <meta name="description" content="Delete an Ultra MAX setup and its associated account data.">
+  <style>
+    :root{color-scheme:dark;--bg:#080810;--card:#12121f;--line:#292941;--text:#eeeef6;--muted:#9998ad;--danger:#ff667d;--violet:#8b5cf6;--ok:#34d399}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#171126 0,#080810 36rem);color:var(--text);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    main{width:min(620px,calc(100% - 28px));margin:0 auto;padding:38px 0 70px}
+    a{color:#c6b0ff}
+    .brand{font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;color:#c9b6ff;font-weight:800}
+    h1{font-size:clamp(2rem,8vw,3.1rem);line-height:1.05;margin:.45rem 0 .7rem}
+    .lead{color:#c8c7d4;margin:0 0 1.4rem}
+    .card{background:rgba(18,18,31,.95);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:16px}
+    .warning{border-color:rgba(255,102,125,.35);background:rgba(255,102,125,.05)}
+    h2{font-size:1.05rem;margin:0 0 .7rem}
+    p,li{color:var(--muted)}
+    ul{padding-left:1.2rem;margin-bottom:0}
+    li+li{margin-top:.4rem}
+    label{display:block;margin:14px 0 6px;font-weight:700;font-size:.9rem}
+    input{width:100%;border:1px solid var(--line);border-radius:11px;background:#0c0c16;color:#fff;padding:13px 14px;font:inherit;outline:none}
+    input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(139,92,246,.13)}
+    button{width:100%;margin-top:18px;border:0;border-radius:11px;padding:14px;font:700 15px inherit;background:linear-gradient(135deg,#d9455d,#ff667d);color:#fff;cursor:pointer}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    .small{font-size:.82rem;color:#77758a}
+    #status{min-height:24px;margin-top:14px;font-weight:650}
+    #status.ok{color:var(--ok)}
+    #status.err{color:var(--danger)}
+    .back{display:inline-flex;margin-top:18px;text-decoration:none;color:#aaa9bd}
+  </style>
+<link rel="stylesheet" href="/app-v2-global.css?v=20260922-global2">
+</head>
+<body>
+<main>
+  <div class="brand">Ultra MAX</div>
+  <h1>Delete your setup</h1>
+  <p class="lead">Permanently delete an Ultra MAX setup and the active account data associated with its token.</p>
+
+  <section class="card">
+    <h2>What is deleted</h2>
+    <ul>
+      <li>Your Ultra MAX setup, profiles and saved configuration.</li>
+      <li>Stored API/OAuth credentials and connected-service settings held with that setup.</li>
+      <li>The recovery-email link registered to that token.</li>
+      <li>Install fingerprints and UltraPlay Plus/supporter entitlement associated with that token.</li>
+    </ul>
+  </section>
+
+  <section class="card warning">
+    <h2>This cannot be undone</h2>
+    <p>After deletion, the token will stop working and the setup cannot be recovered from the live service. Limited information can remain temporarily in protected server logs or disaster-recovery backups and is not used for normal service operation.</p>
+
+    <form id="deleteForm" autocomplete="off">
+      <label for="token">Ultra MAX token</label>
+      <input id="token" name="token" inputmode="text" maxlength="8" autocapitalize="characters" spellcheck="false" placeholder="8-character token" required>
+
+      <label for="password">Setup password</label>
+      <input id="password" name="password" type="password" placeholder="Your setup password" required>
+
+      <label for="confirmation">Type DELETE to confirm</label>
+      <input id="confirmation" name="confirmation" maxlength="6" autocapitalize="characters" spellcheck="false" placeholder="DELETE" required>
+
+      <button id="deleteButton" type="submit">Permanently delete my Ultra MAX setup</button>
+      <div id="status" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <p class="small">If you cannot access the setup password, contact <a href="mailto:support@ultramax.vip">support@ultramax.vip</a> for a manual deletion request. Privacy details are available in the <a href="/privacy.html">Ultra MAX Privacy Policy</a>.</p>
+  <a class="back" href="/settings.html">← Back to Settings</a>
+</main>
+
+<script>
+(function () {
+  var form = document.getElementById('deleteForm');
+  var button = document.getElementById('deleteButton');
+  var status = document.getElementById('status');
+  var tokenInput = document.getElementById('token');
+  var confirmInput = document.getElementById('confirmation');
+
+  function setStatus(message, ok) {
+    status.textContent = message || '';
+    status.className = ok === true ? 'ok' : ok === false ? 'err' : '';
+  }
+
+  tokenInput.addEventListener('input', function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+  });
+  confirmInput.addEventListener('input', function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 6);
+  });
+
+  form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    setStatus('', null);
+
+    var token = tokenInput.value.trim().toUpperCase();
+    var password = document.getElementById('password').value;
+    var confirmation = confirmInput.value.trim().toUpperCase();
+
+    if (!/^[A-Z0-9]{8}$/.test(token)) {
+      setStatus('Enter a valid 8-character Ultra MAX token.', false);
+      return;
+    }
+    if (!password) {
+      setStatus('Enter your setup password.', false);
+      return;
+    }
+    if (confirmation !== 'DELETE') {
+      setStatus('Type DELETE exactly to confirm.', false);
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Deleting…';
+
+    try {
+      var response = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        cache: 'no-store',
+        body: JSON.stringify({ token: token, password: password, confirmation: confirmation })
+      });
+      var data = await response.json().catch(function () { return {}; });
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || 'Deletion failed. Please try again.');
+      }
+
+      try {
+        Object.keys(localStorage).forEach(function (key) {
+          if (/ultra|max|token|setup/i.test(key)) localStorage.removeItem(key);
+        });
+        Object.keys(sessionStorage).forEach(function (key) {
+          if (/ultra|max|token|setup/i.test(key)) sessionStorage.removeItem(key);
+        });
+      } catch (error) {}
+
+      form.reset();
+      setStatus('Your Ultra MAX setup has been permanently deleted from the live service.', true);
+      button.textContent = 'Deleted';
+    } catch (error) {
+      setStatus(error.message || 'Deletion failed. Please try again.', false);
+      button.disabled = false;
+      button.textContent = 'Permanently delete my Ultra MAX setup';
+    }
+  });
+})();
+</script>
+</body>
+</html>

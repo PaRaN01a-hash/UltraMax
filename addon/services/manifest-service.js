@@ -3,8 +3,17 @@ const { buildMergedManifestCatalogs } = require("./merged-catalog-service");
 
 function getStaticIds(CATALOG_DEFS, FILTER_ENABLED) {
   return Object.keys(CATALOG_DEFS).filter(id => {
+    const def = CATALOG_DEFS[id];
+
+    if (def?.manifest === false) {
+      return false;
+    }
+
     if (!FILTER_ENABLED) return true;
-    return !["crunchyroll","hidive","anime","bollywood"].some(x => id.includes(x));
+
+    return !["crunchyroll","hidive","anime","bollywood"].some(
+      x => id.includes(x)
+    );
   });
 }
 
@@ -75,7 +84,7 @@ function buildCatalogsFromIds(
         id: quick.id,
         name: quick.name,
         showInHome: !isHidden,
-        extra: [{ name:"skip", isRequired: isHidden ? true : false }]
+        extra: [{ name:"skip", isRequired: false }]
       };
     }
 
@@ -85,7 +94,7 @@ function buildCatalogsFromIds(
       return {
         ...merged,
         showInHome: !isHidden,
-        extra: [{ name: "skip", isRequired: isHidden }]
+        extra: [{ name: "skip", isRequired: false }]
       };
     }
 
@@ -98,7 +107,7 @@ function buildCatalogsFromIds(
       id,
       name: def.name,
       showInHome: !isHidden,
-      extra: buildCatalogExtra(def, isHidden)
+      extra: buildCatalogExtra(def, false)
     };
   }).filter(Boolean);
 }

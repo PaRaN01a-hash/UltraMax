@@ -1,0 +1,996 @@
+{
+  "nav": {
+    "home": "Start",
+    "build": "Bouwen",
+    "nuvio": "Nuvio",
+    "updates": "Updates"
+  },
+  "home": {
+    "tagline": "Jouw hub voor catalogi, collecties en ontdekking",
+    "sectionNewTrending": "Nieuw & trending",
+    "continue": {
+      "eyebrow": "Doorgaan",
+      "title": "Hervat je configuratie"
+    },
+    "tiles": {
+      "build": {
+        "name": "Nieuwe configuratie",
+        "desc": "Maak een nieuwe Ultra MAX-configuratie vanaf nul"
+      },
+      "nuvio": {
+        "name": "Nuvio-account",
+        "desc": "Verstuur en beheer addons rechtstreeks"
+      },
+      "avatars": {
+        "name": "Avatarkluis",
+        "desc": "226 profielfoto's van personages"
+      },
+      "badges": {
+        "name": "Streambadges",
+        "desc": "Kwaliteitsoverlaypakketten"
+      },
+      "gallery": {
+        "name": "Communitygalerij",
+        "desc": "Deel en importeer configuraties van andere gebruikers"
+      },
+      "whatsNew": {
+        "name": "Wat is er nieuw",
+        "desc": "Laatste updates en functies"
+      },
+      "settings": {
+        "name": "Instellingen & info",
+        "desc": "App-versie, updates en nuttige links"
+      },
+      "help": {
+        "name": "Hulp & herstel",
+        "desc": "Handleiding, tokenherstel, diagnose en ondersteuning"
+      }
+    },
+    "playPlusPromo": {
+      "kicker": "Optionele aanvulling",
+      "headline": "Ultra MAX blijft gratis. UltraPlay+ helpt dat zo te houden.",
+      "copy": "Haal meer uit Ultra MAX en help tegelijk de servers, API’s en lopende projectkosten te betalen.",
+      "featuresAria": "UltraPlay Plus functies",
+      "finder": "Finder",
+      "nuvioManager": "Nuvio Manager",
+      "maxPicks": "Max Picks",
+      "watchHub": "Watch Hub",
+      "arcade": "Volledige Arcade",
+      "instantAccess": "Directe toegang",
+      "pricingAria": "UltraPlay Plus prijzen",
+      "monthly": "Maandelijks",
+      "yearly": "Jaarlijks",
+      "lifetime": "Levenslang",
+      "cta": "Ontdek UltraPlay+",
+      "footnote": "UltraPlay+ breidt Ultra MAX uit. Ultra MAX zelf blijft gratis."
+    },
+    "stats": {
+      "catalogs": "Catalogi",
+      "activeUsers": "Actieve gebruikers",
+      "selfHosted": "Zelf gehost"
+    },
+    "footer": {
+      "website": "Website",
+      "support": "Steunen"
+    },
+    "onboarding": {
+      "kicker": "Welkom bij Ultra MAX",
+      "title": "Laten we je configuratie opzetten",
+      "copy": "Maak iets nieuws, herstel een bestaande configuratie, of kijk eerst rond voordat je iets aanpast.",
+      "continueBtn": "Onthouden configuratie voortzetten",
+      "continueSub": "Ga precies verder waar je gebleven was",
+      "createBtn": "Nieuwe configuratie maken",
+      "createSub": "Kies catalogi, diensten en voorkeuren",
+      "restoreBtn": "Herstellen met een token",
+      "restoreSub": "Open een eerder gemaakte configuratie",
+      "tokenPlaceholder": "Configuratietoken",
+      "tokenError": "Voer een geldig configuratietoken in.",
+      "openBtn": "Openen",
+      "exploreBtn": "Eerst de app verkennen"
+    }
+  },
+  "update": {
+    "kicker": "Update beschikbaar",
+    "title": "Een nieuwe Ultra MAX is klaar",
+    "defaultNotes": "Er is een nieuwere versie van Ultra MAX beschikbaar.",
+    "now": "Nu updaten",
+    "viewSettings": "App-instellingen bekijken",
+    "later": "Niet nu"
+  },
+  "back": {
+    "exitToast": "Druk nogmaals op terug om af te sluiten"
+  },
+  "account": {
+    "subtitle": "Nuvio-accountbeheer",
+    "backLink": "← Terug naar Ultra MAX",
+    "header": {
+      "title": "Nuvio-account",
+      "backAriaLabel": "Terug naar Ultra MAX"
+    },
+    "login": {
+      "emailPlaceholder": "Nuvio-e-mail",
+      "passwordPlaceholder": "Nuvio-wachtwoord",
+      "remember": "Onthoud mij op dit apparaat",
+      "continueBtn": "Doorgaan",
+      "missingFields": "Voer je Nuvio-e-mail en wachtwoord in.",
+      "loggingIn": "Bezig met inloggen...",
+      "failed": "Inloggen mislukt."
+    },
+    "profilePicker": {
+      "title": "Selecteer een profiel"
+    },
+    "status": {
+      "loading": "Laden...",
+      "loadFailed": "Profielgegevens konden niet worden geladen."
+    },
+    "manager": {
+      "switchBtn": "Wisselen",
+      "addonsTitle": "Addons",
+      "addonsInstalled": "{n} geïnstalleerd",
+      "noAddons": "Geen addons geïnstalleerd op dit profiel.",
+      "addonUrlPlaceholder": "Plak de manifest-URL van de addon...",
+      "addBtn": "Toevoegen",
+      "addonUrlRequired": "Plak een manifest-URL.",
+      "addonDuplicate": "Deze addon staat al in de lijst.",
+      "checkingAddon": "Addon wordt gecontroleerd...",
+      "addonAdded": "\"{name}\" toegevoegd — klik hieronder op Opslaan om het naar Nuvio te sturen.",
+      "collectionsTitle": "Collecties",
+      "collectionsCount": "{n} collecties",
+      "noCollections": "Geen collecties op dit profiel.",
+      "folderSingular": "map",
+      "folderPlural": "mappen",
+      "saveBtn": "Wijzigingen opslaan",
+      "savingAddons": "Addons worden opgeslagen...",
+      "savingCollections": "Collecties worden opgeslagen...",
+      "saved": "Opgeslagen ✓",
+      "saveFailed": "Wijzigingen konden niet worden opgeslagen.",
+      "unnamedAddon": "Naamloze addon",
+      "untitledCollection": "Naamloze collectie"
+    }
+  },
+  "settings": {
+    "headerTitle": "Instellingen & info",
+    "backAriaLabel": "Terug naar Ultra MAX",
+    "subtitle": "App-informatie, updates en nuttige links",
+    "sections": {
+      "appInfo": "App-informatie",
+      "language": "Taal",
+      "updates": "Updates",
+      "links": "Links"
+    },
+    "language": {
+      "title": "App-taal",
+      "sub": "Wijzigt de tekst in de hele app"
+    },
+    "rows": {
+      "installedVersion": {
+        "title": "Geïnstalleerde versie",
+        "detecting": "App-versie wordt gedetecteerd…",
+        "detectingValue": "Detecteren…"
+      },
+      "latestVersion": {
+        "title": "Nieuwste gepubliceerde versie",
+        "checking": "Versie-informatie wordt gecontroleerd…"
+      }
+    },
+    "updates": {
+      "checkBtn": "Controleren op updates",
+      "downloadBtn": "Nieuwste APK downloaden",
+      "statusDefault": "Ultra MAX vergelijkt de gepubliceerde versie met de geïnstalleerde app."
+    },
+    "links": {
+      "website": {
+        "title": "Ultra MAX-website",
+        "sub": "ultramax.vip openen"
+      },
+      "support": {
+        "title": "Ultra MAX steunen",
+        "sub": "Trakteer Kris op een koffie via Ko-fi"
+      },
+      "community": {
+        "title": "Ultra MAX-community",
+        "sub": "Bezoek r/Ultra_Max"
+      }
+    },
+    "legal": "Ultra MAX is een onafhankelijk communityproject. Nuvio en andere genoemde diensten blijven eigendom van hun respectievelijke eigenaars.",
+    "showWelcomeAgain": {
+      "title": "Welkomstscherm opnieuw tonen",
+      "sub": "Opent de eerste configuratiekeuzes opnieuw op het startscherm"
+    },
+    "buildPrefix": "Build {n}",
+    "installedBuildUnavailable": "Geïnstalleerde build niet beschikbaar",
+    "couldNotReadBuild": "Kon geïnstalleerde build niet lezen",
+    "checkingForUpdates": "Controleren op updates…",
+    "unknownVersion": "Onbekend",
+    "updateAvailable": "Er is een nieuwere versie beschikbaar: {name}.",
+    "upToDate": "Ultra MAX is up-to-date.",
+    "latestLoadedNoBuild": "Nieuwste release geladen. Geïnstalleerde build kon niet worden gedetecteerd.",
+    "latestLoaded": "Informatie over de nieuwste release geladen.",
+    "unavailable": "Niet beschikbaar",
+    "couldNotReachUpdateService": "Kon de updateservice niet bereiken",
+    "updateCheckFailed": "Controleren op updates mislukt. Probeer het opnieuw."
+  },
+  "changelog": {
+    "backToHome": "← Terug naar start",
+    "heroBadge": "📋 Wijzigingslogboek",
+    "heroTitleLine1": "WAT IS ER",
+    "heroTitleLine2": "NIEUW",
+    "heroSub": "Elke update, verbetering en nieuwe functie — bijgehouden vanaf het begin.",
+    "tabs": {
+      "app": "Android-app"
+    }
+  },
+  "gallery": {
+    "common": {
+      "anonymous": "Anoniem"
+    },
+    "header": {
+      "home": "← Start",
+      "submit": "+ Indienen"
+    },
+    "hero": {
+      "eyebrow": "Communitygalerij",
+      "titlePrefix": "Deel je",
+      "titleHighlight": "Collecties",
+      "sub": "Download door de community gemaakte Nuvio-collectiepakketten. Importeer het JSON-bestand rechtstreeks in Nuvio → Collecties → Importeren.",
+      "submitBtn": "+ Jouw collectie indienen"
+    },
+    "stats": {
+      "collections": "Collecties",
+      "downloads": "Downloads",
+      "likes": "Likes"
+    },
+    "search": {
+      "placeholder": "Zoek collecties, tags, auteurs…"
+    },
+    "sort": {
+      "recent": "Meest recent",
+      "popular": "Meest gedownload",
+      "liked": "Meest geliket"
+    },
+    "tabs": {
+      "all": "Alle",
+      "ready": "✅ Geen addons",
+      "needs": "⚠️ Addon vereist"
+    },
+    "feed": {
+      "loading": "Communitycollecties worden geladen…",
+      "failedTitle": "Laden mislukt",
+      "failedSub": "Vernieuw de pagina",
+      "emptyTitle": "Geen collecties gevonden",
+      "emptySub": "Wees de eerste om er een in te dienen!"
+    },
+    "card": {
+      "noAddons": "✓ Geen addons",
+      "addonsNeeded": "⚠ {n} {addonWord} vereist",
+      "byAuthor": "door {author}",
+      "folders": "{n} mappen"
+    },
+    "addon": {
+      "singular": "Addon",
+      "plural": "Addons"
+    },
+    "time": {
+      "justNow": "zojuist",
+      "minutesAgo": "{n}m geleden",
+      "hoursAgo": "{n}u geleden",
+      "daysAgo": "{n}d geleden",
+      "weeksAgo": "{n}w geleden"
+    },
+    "detail": {
+      "about": "Over",
+      "tags": "Tags",
+      "requiredAddons": "Vereiste addons",
+      "addonsHint": "Installeer deze addons voordat je deze collectie importeert.",
+      "extraFiles": "Extra bestanden",
+      "extraFilesHint": "Extra configuratiebestanden inbegrepen bij deze collectie.",
+      "howToImport": "Zo importeer je",
+      "step1": "1. Download het JSON-bestand hieronder",
+      "step2": "2. Open Nuvio → Collecties → Importeren",
+      "step3": "3. Selecteer het gedownloade bestand",
+      "downloadBtn": "⬇️ JSON downloaden",
+      "closeBtn": "Sluiten",
+      "noAddonsNeeded": "✓ Geen addons vereist",
+      "addonsRequired": "⚠ {n} {addonWord} vereist",
+      "statFolders": "mappen",
+      "statDownloads": "downloads",
+      "statLikes": "likes",
+      "installLink": "Installeren →",
+      "downloadFileBtn": "Downloaden"
+    },
+    "download": {
+      "tokenPrompt": "⚠️ Deze collectie bevat een vastgecodeerd token ({token}).\n\nAls je deze zo importeert, wordt de catalogusconfiguratie van iemand anders gebruikt.\n\nVoer JOUW Ultra MAX-token in om dit automatisch te corrigeren, of annuleer om ongewijzigd te downloaden:",
+      "tokenReplaced": "✅ Token vervangen door {token} — gecorrigeerd bestand wordt gedownload",
+      "originalToken": "⚠️ Downloaden met origineel token — mappen werken mogelijk niet voor jou",
+      "downloaded": "Gedownload! Importeer in Nuvio → Collecties → Importeren",
+      "downloadedFile": "{filename} gedownload",
+      "failed": "Download mislukt"
+    },
+    "like": {
+      "already": "Al geliket!",
+      "liked": "Geliket! ♥",
+      "failed": "Liken mislukt"
+    },
+    "submit": {
+      "title": "Deel jouw collectie",
+      "sub": "Upload een Nuvio-collecties-JSON. Anderen kunnen het downloaden en rechtstreeks in Nuvio importeren.",
+      "nameLabel": "Collectienaam *",
+      "namePlaceholder": "bijv. Nieuwe horrorcollecties",
+      "authorLabel": "Jouw naam",
+      "authorPlaceholder": "Anoniem",
+      "descLabel": "Beschrijving",
+      "descPlaceholder": "Wat zit er in deze collectie? Voor wie is deze bedoeld?",
+      "tagsLabel": "Tags",
+      "tagsHint": "(druk op Enter of komma om toe te voegen)",
+      "tagsPlaceholder": "horror, films, series…",
+      "addonsLabel": "Vereiste addons",
+      "addonsHint": "(laat leeg indien niet nodig)",
+      "addAddonBtn": "+ Vereiste addon toevoegen",
+      "addonNamePlaceholder": "Addonnaam (bijv. ScaryOnly)",
+      "addonUrlPlaceholder": "Manifest-URL (optioneel)",
+      "jsonLabel": "Nuvio-collecties-JSON *",
+      "uploadHint": "📂 Klik om te uploaden of sleep hierheen",
+      "exportHint": "Exporteer via Nuvio → Collecties → JSON exporteren",
+      "extraFilesLabel": "Extra bestanden",
+      "extraFilesHint": "(optioneel — bijv. AIOMetadata-catalogus-JSON)",
+      "extraFileNamePlaceholder": "Bestandsnaam (bijv. aiometadata-catalogs.json)",
+      "uploadLabel": "Uploaden",
+      "loadedLabel": "✓ Geladen",
+      "addExtraFileBtn": "+ Extra bestand toevoegen",
+      "cancelBtn": "Annuleren",
+      "submitBtn": "🚀 Indienen bij galerij",
+      "submitting": "Bezig met indienen…",
+      "successBtn": "✅ Ingediend!",
+      "success": "✅ Ingediend! Jouw collectie is nu zichtbaar in de galerij.",
+      "failed": "Indienen mislukt.",
+      "networkError": "Netwerkfout — probeer het opnieuw.",
+      "invalidJsonFile": "Ongeldig JSON-bestand — controleer het bestand en probeer het opnieuw.",
+      "invalidJsonFileNamed": "Ongeldig JSON-bestand: {filename}",
+      "errors": {
+        "nameRequired": "Voer een collectienaam in.",
+        "fileRequired": "Upload je Nuvio-collecties-JSON.",
+        "invalidFormat": "Het JSON-bestand moet een Nuvio-collecties-array zijn (het bestand moet beginnen met [)."
+      }
+    }
+  },
+  "badges": {
+    "nav": {
+      "backToHome": "← Terug naar start"
+    },
+    "hero": {
+      "eyebrow": "Nuvio-badges",
+      "titleLine1": "STREAM-",
+      "titleLine2": "BADGES",
+      "sub": "Kies een badgeset en plak de URL in Nuvio. Combineer maximaal 3 sets tegelijk voor de beste dekking.",
+      "howToLabel": "Zo voeg je ze toe:",
+      "howToSteps": "Nuvio → Instellingen → Streams → Fusion-badges-URL → plakken → Importeren"
+    },
+    "sections": {
+      "signature": "Signatuurpakketten",
+      "community": "Communitypakketten",
+      "ultramaxOriginal": "Ultra MAX Original",
+      "ultramaxVisual": "Ultra MAX Visual"
+    },
+    "preview": {
+      "loading": "Laden…",
+      "textOnly": "Alleen tekst",
+      "unavailable": "Voorbeeld niet beschikbaar"
+    },
+    "copyBtn": "URL kopiëren",
+    "copiedBtn": "Gekopieerd ✓",
+    "toastCopied": "Gekopieerd ✓",
+    "install": {
+      "title": "Zo voeg je badges toe in Nuvio",
+      "stepsHtml": "1. Tik op <strong>URL kopiëren</strong> bij een van de sets hierboven<br>2. Open <strong>Nuvio</strong> → <strong>Instellingen</strong> → <strong>Streams</strong><br>3. Scroll naar <strong>Fusion-badges-URL</strong><br>4. Tik op het URL-veld, plak, en tik dan op <strong>Importeren</strong><br>5. Je ziet <strong>\"1/3 URL's geïmporteerd\"</strong> — het werkte!<br>💡 Nuvio ondersteunt maximaal <strong>3 badgesets tegelijk</strong> — combineer sets voor de beste dekking"
+    }
+  },
+  "avatars": {
+    "nav": {
+      "backToHome": "← Terug naar start"
+    },
+    "hero": {
+      "eyebrow": "Nuvio-profielen",
+      "titleLine1": "AVATAR-",
+      "titleLine2": "KLUIS",
+      "sub": "226 personageavatars voor jouw Nuvio-profiel. Tik op een avatar om de URL te kopiëren en plak deze vervolgens in Nuvio → Profiel → Avatar."
+    },
+    "banner": {
+      "linkTitle": "🔗 Koppel je Nuvio-account",
+      "linkSub": "Koppel je account om avatars rechtstreeks in te stellen — tik hieronder gewoon op een avatar in plaats van URL's handmatig te kopiëren.",
+      "manageLink": "⚙️ Al gekoppeld? Beheer je addons en collecties →",
+      "emailPlaceholder": "Nuvio-e-mail",
+      "passwordPlaceholder": "Nuvio-wachtwoord",
+      "continueBtn": "Doorgaan",
+      "selectProfile": "Selecteer een profiel om avatars voor in te stellen",
+      "logoutBtn": "Uitloggen",
+      "tapToSet": "Tik hieronder op een avatar om deze in te stellen voor",
+      "changeBtn": "Wijzigen",
+      "checkingSession": "Zoeken naar een opgeslagen Nuvio-sessie...",
+      "missingFields": "Voer je Nuvio-e-mail en wachtwoord in.",
+      "loggingIn": "Bezig met inloggen...",
+      "loginFailed": "Inloggen mislukt."
+    },
+    "search": {
+      "placeholder": "Avatars zoeken…"
+    },
+    "tabs": {
+      "all": "Alle ✦",
+      "other": "🎭 Overige"
+    },
+    "count": "{n} avatars",
+    "copiedBadge": "Gekopieerd ✓",
+    "push": {
+      "settingAvatar": "Avatar wordt ingesteld...",
+      "avatarSet": "Avatar ingesteld ✓",
+      "setFailed": "Avatar instellen mislukt."
+    },
+    "uploader": {
+      "kicker": "Aangepaste avatar",
+      "title": "Maak je eigen avatar",
+      "sub": "Kies een foto, sleep deze in positie en stuur deze vervolgens rechtstreeks naar het geselecteerde Nuvio-profiel.",
+      "choosePhotoBtn": "Foto kiezen",
+      "zoomLabel": "Zoom",
+      "privacyNote": "Geüploade avatars worden opgeslagen op een openbare, willekeurig gegenereerde URL. De afbeelding wordt vóór het uploaden verkleind en opnieuw gecodeerd, waarbij de oorspronkelijke bestandsnaam en ingesloten metadata worden verwijderd.",
+      "saveBtn": "Uploaden en avatar instellen",
+      "cancelBtn": "Annuleren",
+      "uploadYourOwnBtn": "Je eigen uploaden",
+      "selectProfileFirst": "Selecteer eerst een Nuvio-profiel.",
+      "invalidFileType": "Kies een JPG-, PNG- of WebP-afbeelding.",
+      "fileTooLarge": "Kies een afbeelding kleiner dan 12 MB.",
+      "imageOpenFailed": "Deze afbeelding kon niet worden geopend.",
+      "imageReadFailed": "De geselecteerde afbeelding kon niet worden gelezen.",
+      "dragToPosition": "Sleep de afbeelding om deze te positioneren.",
+      "preparing": "Avatar wordt voorbereid…",
+      "uploading": "Avatar wordt geüpload…",
+      "uploadFailed": "Uploaden van avatar mislukt.",
+      "updatingProfile": "Nuvio-profiel wordt bijgewerkt…",
+      "uploadedSet": "Avatar geüpload en ingesteld ✓",
+      "customAvatarSetToast": "Aangepaste avatar ingesteld ✓",
+      "setFailed": "De avatar kon niet worden ingesteld."
+    },
+    "recent": {
+      "title": "Recente uploads",
+      "subtitle": "Tik op één om deze opnieuw te gebruiken",
+      "clearBtn": "Alles wissen",
+      "useAriaLabel": "Deze recente avatar gebruiken",
+      "altText": "Recente aangepaste avatar",
+      "removeAriaLabel": "Verwijderen uit recente avatars"
+    }
+  },
+  "setup": {
+    "discoveryProviders": {
+      "title": "Ontdekkingsproviders",
+      "atLeastOne": "TMDB of MDBList vereist · TVDB en OMDb optioneel",
+      "oneRequired": "Kernprovider vereist",
+      "atLeastOneShort": "MINSTENS ÉÉN",
+      "tmdbLabel": "TMDB v3-API-sleutel",
+      "tmdbPlaceholder": "Plak je TMDB v3-API-sleutel",
+      "tmdbHelp": "Een TMDB v3-API-sleutel ondersteunt TMDB-ontdekking, maar ontgrendelt geen MDBList-specifieke catalogi of hulpmiddelen.",
+      "mdblistHelp": "MDBList activeert MDBList-specifieke catalogi, lijstzoeken en importhulpmiddelen.",
+      "bothHelp": "Voeg beide providers toe voor de volledigste Ultra MAX-ervaring.",
+      "getTmdbKey": "TMDB v3-sleutel ophalen →",
+      "tmdbAttribution": "Dit product gebruikt de TMDB-API, maar wordt niet door TMDB onderschreven of gecertificeerd.",
+      "statusBoth": "✓ TMDB + MDBList",
+      "statusTmdb": "✓ Alleen TMDB",
+      "statusMdblist": "✓ Alleen MDBList",
+      "statusRequired": "TMDB of MDBList vereist",
+      "validation": "Voeg in stap 1 een TMDB v3-API-sleutel of MDBList-API-sleutel toe.",
+      "savedKey": "Opgeslagen sleutel",
+      "mdblistPresetUnavailable": "Vereist een MDBList-API-sleutel.",
+      "unsupportedManualImdb": "IMDb-ID's (niet ondersteund in deze builder)",
+      "unsupportedManualMdblist": "MDBList-URL / ID (gebruik zoeken/importeren)",
+      "statusConnectedCount": "{count} verbonden",
+      "statusSupplementalOnly": "{count} verbonden · voeg TMDB of MDBList toe"
+    },
+    "collectionSync": {
+      "backToStep1": "↤ Terug naar stap 1"
+    },
+    "badge": {
+      "required": "VEREIST",
+      "optional": "Optioneel"
+    },
+    "verifyBtn": "Controleren",
+    "step1": {
+      "eyebrow": "Stap 01 van 04",
+      "title": "Stel je Ultra MAX in",
+      "sub": "Rond eerst de basis af en pas daarna aan wat je wilt."
+    },
+    "modeChooser": {
+      "kicker": "Kies jouw route",
+      "title": "Hoe wil je beginnen?",
+      "copy": "Kies de snelle route, pas alles zelf aan, of open een bestaande configuratie opnieuw met het bijbehorende token.",
+      "quick": {
+        "name": "Snelle configuratie",
+        "desc": "Kies een stijl en laat Ultra MAX een nette, evenwichtige selectie rijen kiezen."
+      },
+      "custom": {
+        "name": "Aangepaste configuratie",
+        "desc": "Kies zelf sleutels, catalogi, collecties, streams en alle geavanceerde opties."
+      },
+      "kids": {
+        "name": "Kinderconfiguratie",
+        "desc": "Bouw een beperkt kinderprofiel met leeftijdsgrenzen, veilige catalogi en geïsoleerde Nuvio-addons."
+      },
+      "restore": {
+        "name": "Bestaande herstellen",
+        "desc": "Voer een configuratietoken in en ga verder met het bewerken van een bestaande Ultra MAX-configuratie."
+      },
+      "changeRoute": "← Kies een andere configuratieroute"
+    },
+    "toolbar": {
+      "newSetup": "🚀 Nieuwe configuratie",
+      "loadToken": "🔑 Token laden",
+      "save": "💾 Opslaan",
+      "draftSaved": "Concept opgeslagen.",
+      "more": "••• Meer",
+      "import": "📦 Importeren",
+      "recoverToken": "📧 Token herstellen",
+      "restore": "↩ Herstellen",
+      "help": "❓ Help",
+      "assets": "🖼 Assets",
+      "clear": "🗑 Wissen"
+    },
+    "returning": {
+      "title": "Bestaande configuratie laden",
+      "placeholder": "Plak hier je token",
+      "loadBtn": "Laden →"
+    },
+    "quick": {
+      "label": "Snelle configuratie",
+      "title": "Maak in seconden een nette configuratie",
+      "sub": "Kies een stijl — Ultra MAX selecteert de rijen. Of ga direct naar de geavanceerde bouwer hieronder.",
+      "balanced": {
+        "name": "Evenwichtig",
+        "desc": "Beste standaardkeuze. Snelle, nette, nuttige rijen."
+      },
+      "movies": {
+        "name": "Filmliefhebber",
+        "desc": "Films eerst. Trending, populair, providers en collecties."
+      },
+      "series": {
+        "name": "Serie-marathon",
+        "desc": "Gericht op series. Ideaal voor lopende series en boxsets."
+      },
+      "quality": {
+        "name": "Kwaliteitsconfiguratie",
+        "desc": "Netter, premium aanvoelende rijen met minder rommel."
+      },
+      "summaryDefault": "Kies hierboven een stijl om een voorbeeld te zien van welke rijen Ultra MAX zal selecteren.",
+      "generateBtn": "🚀 Snelle configuratie genereren",
+      "advancedBtn": "🔧 Geavanceerde bouwer",
+      "backBtn": "← Terug naar snelle configuratie"
+    },
+    "requiredMarker": "● Vereist",
+    "tiles": {
+      "requiredStatus": "Vereist",
+      "password": {
+        "name": "Wachtwoord"
+      },
+      "mdblist": {
+        "name": "MDBList-sleutel"
+      },
+      "optional": {
+        "name": "Optionele verbeteringen",
+        "desc": "Posters, taal, filters"
+      },
+      "streams": {
+        "name": "Streams",
+        "desc": "Debridproviders & handmatige links"
+      },
+      "backToOverview": "← Terug naar overzicht"
+    },
+    "password": {
+      "label": "🔐 Wachtwoord",
+      "placeholder": "Maak een wachtwoord",
+      "confirmPlaceholder": "Bevestig wachtwoord",
+      "mismatchError": "Wachtwoorden komen niet overeen",
+      "hint": "Bewaar dit — je hebt het later nodig om je configuratie te bewerken.",
+      "rememberMe": "Onthoud mij op dit apparaat",
+      "forgotQuestion": "Wachtwoord vergeten?",
+      "resetBtn": "🔑 Wachtwoord resetten",
+      "newPlaceholder": "Nieuw wachtwoord",
+      "confirmNewPlaceholder": "Bevestig nieuw wachtwoord",
+      "setNewBtn": "Nieuw wachtwoord instellen"
+    },
+    "mdblist": {
+      "label": "MDBList API-sleutel",
+      "placeholder": "Plak je gratis MDBList API-sleutel",
+      "hint": "Voedt alle samengestelde lijsten, trendcharts en nieuwe releases. Gratis, kost 30 seconden.",
+      "getKeyLink": "Haal je gratis sleutel op →",
+      "howToGetKey": "ℹ Hoe krijg ik een sleutel?",
+      "guide": {
+        "title": "Zo krijg je je gratis MDBList API-sleutel",
+        "step1Html": "Stap 1 — Ga naar <a href=\"https://mdblist.com/register\" target=\"_blank\">mdblist.com/register</a> en maak een gratis account aan.",
+        "step2": "Stap 2 — Controleer je e-mail en bevestig je account.",
+        "step3Html": "Stap 3 — Ga naar <a href=\"https://mdblist.com/api/\" target=\"_blank\">mdblist.com/api</a> en kopieer je sleutel.",
+        "step4": "Stap 4 — Plak deze hierboven. Klaar!",
+        "freeTier": "Gratis tarief: 1.000 verzoeken/dag — meer dan genoeg."
+      }
+    },
+    "optional": {
+      "toggle": "Optionele verbeteringen",
+      "sub": "Posters, taalfilter, persoonlijke rijen en filters.",
+      "aiRows": {
+        "summary": "🤖 Door AI aanbevolen rijen",
+        "placeholder": "Plak je Google Gemini API-sleutel",
+        "hint": "Voegt de rijen Door AI aanbevolen films en Door AI aanbevolen series toe.",
+        "enableLabel": "Door AI aanbevolen rijen inschakelen"
+      },
+      "language": {
+        "summary": "🌐 Metadatataal",
+        "hint": "Titels en beschrijvingen verschijnen in de gekozen taal."
+      },
+      "posterKeys": {
+        "summary": "🖼️ Sleutels van posterproviders"
+      },
+      "rpdb": {
+        "label": "RPDB API-sleutel",
+        "placeholder": "Jouw RPDB API-sleutel voor beoordeelde posters",
+        "link": "Haal je RPDB-sleutel op →"
+      },
+      "topPosters": {
+        "label": "TOP Posters API-sleutel",
+        "placeholder": "Jouw TOP Posters API-sleutel",
+        "link": "Haal je TOP Posters-sleutel op →"
+      },
+      "fanart": {
+        "label": "Fanart.tv API-sleutel",
+        "placeholder": "Fanart.tv API-sleutel voor hoogwaardige posters",
+        "link": "Haal je Fanart.tv-sleutel op →"
+      },
+      "omdb": {
+        "label": "OMDb API-sleutel",
+        "placeholder": "OMDb API-sleutel",
+        "link": "Haal je OMDb-sleutel op →"
+      },
+      "betterPosters": {
+        "summary": "Betere posters & integraties",
+        "label": "Betere posters",
+        "descHtml": "Voeg slimme overlays toe aan elke poster — beoordelingen, genre, trendtags, kwaliteitsbadges en meer. Mogelijk gemaakt door <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a> <span style=\"font-size:11px;color:var(--text2);margin-left:4px;\">· Alleen Nuvio</span>",
+        "enableTitle": "BetterPosters inschakelen",
+        "enableSub": "Standaard TMDB-posters vervangen",
+        "ratingSourceLabel": "⭐ Beoordelingsbron",
+        "noRating": "Geen beoordeling",
+        "overlaysLabel": "🏷️ Overlays",
+        "trendTagsTitle": "Trendtags",
+        "trendTagsSub": "Trending, Nieuw, #3",
+        "qualityTagsTitle": "Kwaliteitstags",
+        "qualityTagsSub": "4K, DV, Atmos",
+        "genreTitle": "Genre",
+        "genreSub": "Label onderaan",
+        "ageRatingTitle": "Leeftijdsclassificatie",
+        "ageRatingSub": "PG-13, TV-MA, R",
+        "urlPatternLabel": "Gegenereerd poster-URL-patroon:",
+        "testUrlBtn": "🧪 URL testen",
+        "manualUrlLabelHtml": "🔗 Of plak je eigen URL van <a href=\"https://btttr.cc\" target=\"_blank\" style=\"color:var(--accent)\">btttr.cc</a>",
+        "manualUrlHint": "Als de automatisch gegenereerde URL niet werkt, ga dan naar btttr.cc, configureer je stijl en plak hier het URL-patroon.",
+        "manualUrlFallback": "Laat leeg om de hierboven automatisch gegenereerde URL te gebruiken.",
+        "disabledPreview": "— uitgeschakeld",
+        "testing": "Bezig met testen...",
+        "testOk": "✅ Het werkt! Poster succesvol geladen.",
+        "testFailed": "❌ Laden mislukt — controleer je URL of probeer het handmatig via btttr.cc."
+      },
+      "languageFilter": {
+        "label": "🌍 Taalfilter",
+        "desc": "Verbergt inhoud waarvan de originele taal overeenkomt. Handig om Bollywood, K-drama's, Thaise content enz. te filteren."
+      },
+      "trakt": {
+        "notConnected": "Niet verbonden",
+        "connectBtn": "Verbinden met Trakt",
+        "disconnectBtn": "Verbinding verbreken",
+        "info": "Verbind je Trakt-account om toegang te krijgen tot je Favorieten, Kijklijst, Collectie en Geschiedenis. Werkt met privéprofielen."
+      },
+      "simkl": {
+        "notConnected": "Niet verbonden",
+        "connectBtn": "Verbinden met Simkl",
+        "disconnectBtn": "Verbinding verbreken",
+        "info": "Verbind je Simkl-account om toegang te krijgen tot je Kijklijst, Geschiedenis en Beoordelingen als persoonlijke catalogi."
+      },
+      "contentFilters": {
+        "summary": "🎚️ Inhoudsfilters",
+        "hideUnreleasedLabel": "🚫 Nog niet uitgebrachte titels verbergen",
+        "hideUnreleasedInfo": "Filtert films en series die nog niet zijn uitgebracht.",
+        "preserveKitsuLabel": "🌸 Originele Kitsu-ID's behouden voor anime",
+        "preserveKitsuInfo": "Publiceert de originele Kitsu-ID's voor ondersteunde animecatalogi, zodat streaming-addons die alleen Kitsu gebruiken kunnen reageren. Titels zonder betrouwbare Kitsu-match blijven IMDb-ID's gebruiken.",
+        "digitalOnlyLabel": "📀 Alleen digitale releases",
+        "digitalOnlyInfo": "Toont alleen films met een bevestigde digitale release die vandaag beschikbaar is. Series worden niet beïnvloed.",
+        "hideWatchedLabel": "👁️ Bekeken titels verbergen",
+        "hideWatchedInfo": "Verbergt films die je hebt bekeken en series die je volledig hebt afgemaakt, op basis van je gekoppelde Trakt-/Simkl-geschiedenis.",
+        "includeAdultLabel": "🔞 Volwassen inhoud opnemen",
+        "includeAdultInfo": "Wanneer uitgeschakeld, wordt volwassen en hentai-inhoud verborgen uit alle catalogi. Aanbevolen voor gezinsconfiguraties.",
+        "maxRatingLabel": "👥 Maximale leeftijdsclassificatie",
+        "maxRatingInfo": "Verbergt inhoud boven deze classificatie. Gebruikt Amerikaanse certificeringen. Blokkeert ook ongeclassificeerde inhoud — aanbevolen om volwassen anime en hentai uit catalogi te filteren.",
+        "ratingNone": "Geen beperking",
+        "ratingG": "G - Algemeen publiek",
+        "ratingPG": "PG - Ouderlijke begeleiding aanbevolen",
+        "ratingPG13": "PG-13 - Ouders sterk gewaarschuwd",
+        "ratingR": "R - Beperkt",
+        "ratingNC17": "NC-17 - Alleen voor volwassenen"
+      },
+      "timezone": {
+        "label": "🕰️ Tijdzone",
+        "hint": "Automatisch gedetecteerd vanaf dit apparaat. Wordt gebruikt voor afleveringsreleases, premières en live-evenementen."
+      }
+    },
+    "streams": {
+      "toggle": "⚡ Streams",
+      "sub": "Debridproviders en handmatige streamlinks.",
+      "debridLabel": "🎯 Debridproviders",
+      "addProvider": "Provider toevoegen…",
+      "apiKeyPlaceholder": "Plak hier je API-sleutel",
+      "checkAddBtn": "Controleren & toevoegen",
+      "optionsLabel": "Streamopties",
+      "cachedOnlyLabel": "⚡ Alleen gecachet",
+      "cachedOnlySub": "(sneller, directe streams)",
+      "englishOnlyLabel": "🇬🇧 Alleen Engelse streams",
+      "removeTrashLabel": "🗑️ Slechte resultaten verwijderen",
+      "maxQualityLabel": "Max. kwaliteit",
+      "maxFileSizeLabel": "Maximale bestandsgrootte",
+      "noLimit": "Geen limiet",
+      "maxSizeHint": "Verbergt streams die deze limiet overschrijden, ongeacht de resolutie.",
+      "poweredByHtml": "Streams worden mogelijk gemaakt door <strong>Comet</strong> en rechtstreeks via Ultra MAX geleverd. Geen manifest-URL's nodig.",
+      "manualLinksLabel": "🔗 Handmatige streamlinks",
+      "aioTitle": "AIOStreams",
+      "aioDesc": "All-in-one streamaggregator met debridondersteuning.",
+      "stremthruTitle": "StremThru",
+      "stremthruDesc": "Debridproxy en -opslag.",
+      "configureLink": "Configureren →",
+      "pasteOwnUrl": "Of plak je eigen URL",
+      "wizardUrlPlaceholder": "https://jouw-addon/.../manifest.json",
+      "checkAddonBtn": "Addon controleren",
+      "addedAddonsLabel": "Toegevoegde addons",
+      "noAddonsYet": "Nog geen addons toegevoegd.",
+      "torboxTitle": "Heb je een debriddienst nodig?",
+      "torboxDescHtml": "TorBox is waar Ultra MAX omheen is gebouwd. Gebruik de link hieronder en krijg <strong>3 maanden gratis</strong> bovenop je abonnement.",
+      "torboxBtn": "TorBox krijgen — 3 maanden gratis →",
+      "preserveSourceBrandingLabel": "Originele streambron tonen",
+      "preserveSourceBrandingInfo": "Behoud namen zoals Comet of de oorspronkelijke addonprovider in plaats van ze te vervangen door Ultra MAX-branding."
+    },
+    "nav": {
+      "backHome": "← Terug naar start",
+      "nextStep2": "Verder naar Catalogi →"
+    },
+    "step2": {
+      "eyebrow": "Stap 02",
+      "title": "Bouw jouw startscherm",
+      "sub": "Kies een startpunt en verfijn dan per categorie. Je Nuvio-startscherm wordt live bijgewerkt.",
+      "startWithPreset": "Begin met een voorinstelling",
+      "hideAll": {
+        "title": "Alles verbergen van start",
+        "sub": "Rijen geselecteerd houden maar verborgen",
+        "tooltip": "Houdt geselecteerde rijen, maar verbergt ze van je Nuvio-start"
+      },
+      "showAll": {
+        "title": "Alles tonen in start",
+        "sub": "Alle geselecteerde rijen herstellen",
+        "tooltip": "Maakt elke geselecteerde rij zichtbaar op je Nuvio-start"
+      },
+      "clearAll": {
+        "title": "Alle selecties wissen",
+        "sub": "Elke gekozen rij verwijderen",
+        "tooltip": "Verwijdert elke geselecteerde rij"
+      },
+      "loading": "Laden...",
+      "fineTune": "Verfijnen per categorie",
+      "searchPlaceholder": "Zoek in alle catalogi...",
+      "manageSetup": "Beheer je configuratie",
+      "showAllRows": {
+        "title": "Alle rijen tonen",
+        "sub": "Blader door alle beschikbare catalogi"
+      },
+      "allRows": "Alle rijen",
+      "reorder": {
+        "title": "Rijen herschikken",
+        "sub": "Bepaal de volgorde die wordt getoond in Nuvio en Stremio",
+        "note": "Sleep rijen naar de gewenste volgorde."
+      },
+      "customRows": {
+        "title": "Aangepaste rijen",
+        "sub": "Maak rijen van IMDb, MDBList, Trakt of TMDB",
+        "note": "Voeg series, franchises en lijsten toe die niet door de ingebouwde catalogi worden gedekt."
+      },
+      "preview": {
+        "mobile": "📱 Mobiel",
+        "desktop": "🖥️ Desktop",
+        "deviceGroupLabel": "Voorbeeldapparaat",
+        "modalLabel": "Voorbeeld van Nuvio-startscherm",
+        "closeLabel": "Voorbeeld sluiten"
+      },
+      "review": {
+        "kicker": "Laatste controle",
+        "title": "Controleer je startscherm",
+        "sub": "Controleer je geselecteerde rijen of bekijk een voorbeeld van hoe ze in Nuvio zullen verschijnen."
+      },
+      "stremioWarning": {
+        "prefix": "Stremio-gebruikers:",
+        "textHtml": "Meer dan 200 catalogi kunnen de manifestgroottelimiet van Stremio overschrijden. Nuvio kan de grotere configuratie aan. Overweeg ongebruikte rijen te verbergen in plaats van ze te verwijderen."
+      },
+      "summaryBtn": "📋 Samenvatting",
+      "previewBtn": "📺 Voorbeeld",
+      "back": {
+        "title": "Terug",
+        "sub": "Terug naar configuratie"
+      },
+      "selection": {
+        "title": "Geselecteerde rijen",
+        "sub": "Klaar voor je startscherm"
+      },
+      "next": {
+        "title": "Collecties",
+        "sub": "Ga verder naar Stap 03"
+      }
+    },
+    "step3": {
+      "eyebrow": "Stap 03",
+      "title": "Collecties",
+      "sub": "Groepeer je startrijen in Nuvio-collecties",
+      "quickStart": "⚡ Snelstart — tik om een collectie toe te voegen",
+      "tapToExpand": "tik om uit te vouwen",
+      "quickStartLabel": "Snelstart — tik om een collectie toe te voegen",
+      "quickStartDesc": "Elke voorinstelling maakt direct een nieuwe collectie hieronder. Tik er zoveel je wilt — één voor één.",
+      "addCollectionBtn": "+ Collectie toevoegen",
+      "presets": {
+        "streaming": "Streaming",
+        "trending": "Trending",
+        "genres": "Genres",
+        "themed": "Thematisch",
+        "filmCollections": "Filmcollecties",
+        "studios": "Studio's",
+        "directors": "Regisseurs",
+        "actors": "Acteurs",
+        "trakt": "Trakt",
+        "byDecade": "Per decennium",
+        "kidsFamily": "Kinderen & familie",
+        "uk": "VK",
+        "anime": "Anime",
+        "documentaries": "Documentaires",
+        "bollywood": "Bollywood",
+        "sports": "Sport",
+        "universes": "Universums"
+      },
+      "displayStyle": "Weergavestijl",
+      "viewModes": {
+        "tabbedGrid": {
+          "name": "Rasterlayout met tabbladen",
+          "desc": "Aanbevolen"
+        },
+        "grid": {
+          "name": "Raster",
+          "desc": "Eenvoudige lay-out"
+        },
+        "rows": {
+          "name": "Rijen",
+          "desc": "Lijstweergave"
+        }
+      },
+      "yourCollections": "Jouw collecties",
+      "searchPlaceholder": "Zoek collecties en mappen…",
+      "importJsonBtn": "📦 JSON importeren",
+      "addCollectionMainBtn": "+ Collectie toevoegen",
+      "backToCollections": "← Terug naar collecties",
+      "emptyState": {
+        "textHtml": "Nog geen collecties<br>Tik hierboven op een voorinstelling om direct te beginnen,<br>of klik op <strong style=\"color:var(--text);\">+ Collectie toevoegen</strong> om er zelf een te bouwen."
+      },
+      "back": "← Terug",
+      "collectionsLabel": "collecties",
+      "foldersLabel": "mappen",
+      "next": "Volgende — Voltooien →",
+      "finaliseGenerateBtn": "Afronden / Genereren →",
+      "artworkCreditHtml": "Speciale dank aan <strong style=\"color:var(--text);\">Shadowfrom88</strong> op Reddit voor de collectie-afbeeldingen die in Ultra MAX worden gebruikt."
+    },
+    "step4": {
+      "title": "🚀 Voltooien",
+      "installInstructions": {
+        "label": "Belangrijke installatie-instructies",
+        "html": "<strong style=\"color:#fff;\">Ultra MAX bestaat uit twee aparte onderdelen:</strong><br><br><strong style=\"color:#fff;\">1. Addon-URL</strong><br>Nadat je op <strong>🚀 Genereer<br>eindconfiguratie</strong> hebt geklikt, kopieer je de uiteindelijke configuratie-URL en gebruik je deze om Ultra MAX toe te voegen/installeren in Nuvio of Stremio.<br><br><strong style=\"color:#fff;\">2. Nuvio-collecties-JSON</strong><br>Klik op <strong>📦 Nuvio-JSON<br>exporteren</strong> om je collectiebestand te downloaden. Open dan Nuvio, ga naar de pagina Collecties en importeer dat JSON-bestand daar.<br><br><strong style=\"color:#fff;\">Simpele regel:</strong><br>Addon-URL = catalogi. Nuvio-JSON = mappen en collecties."
+      },
+      "summary": {
+        "label": "Samenvatting eindconfiguratie",
+        "homeRowsKept": "Behouden startrijen:",
+        "hiddenFromHome": "Verborgen van start:",
+        "collectionsCreated": "Aangemaakte collecties:",
+        "rowsMovedToCollections": "Rijen verplaatst naar Collecties:",
+        "performance": "Prestaties:",
+        "perf": {
+          "excellent": "Uitstekend",
+          "good": "Goed",
+          "heavy": "Zwaar",
+          "veryHeavy": "Zeer zwaar"
+        },
+        "hint": {
+          "excellent": "Slanke startlay-out. Uitstekend voor mobiel, tv en snel bladeren.",
+          "good": "Evenwichtige configuratie. Zou goed moeten werken op de meeste apparaten.",
+          "heavy": "Je hebt veel startrijen. Collecties helpen zodra Stap 3 is voltooid.",
+          "veryHeavy": "Deze configuratie kan druk aanvoelen. Je wilt waarschijnlijk meer rijen naar Collecties verplaatsen."
+        }
+      },
+      "generateBtn": "🚀 Eindconfiguratie genereren",
+      "generating": "Je addon wordt gegenereerd...",
+      "part1": {
+        "stepLabel": "Stap 1 · Installatie",
+        "title": "📡 Addon-URL",
+        "desc": "Kopieer deze URL en installeer deze in Nuvio of Stremio. Dit geeft je al je catalogusrijen.",
+        "copyBtn": "📋 URL kopiëren",
+        "stremioInstallBtn": "Stremio-installatie",
+        "stremioInstallTitle": "Rechtstreeks installeren in de Stremio-app"
+      },
+      "part2": {
+        "stepLabel": "Stap 2 · Collecties",
+        "title": "🗂 Nuvio-JSON",
+        "desc": "Exporteer dit bestand en importeer het op de Collecties-pagina van Nuvio. Dit geeft je mappen en collecties.",
+        "exportBtn": "📦 Nuvio-JSON exporteren"
+      },
+      "pushCard": {
+        "title": "🚀 Rechtstreeks naar Nuvio sturen",
+        "desc": "Sla de handmatige stappen over — koppel je Nuvio-account en wij voegen Ultra MAX en je collecties rechtstreeks toe aan een profiel.",
+        "manageLink": "⚙️ Al gekoppeld? Beheer je addons en collecties →",
+        "emailPlaceholder": "Nuvio-e-mail",
+        "passwordPlaceholder": "Nuvio-wachtwoord",
+        "continueBtn": "Doorgaan",
+        "profileStageNote": "Dit installeert de addon en vervangt de collecties op het geselecteerde profiel.",
+        "catalogsCheckbox": "Catalogi",
+        "collectionsCheckbox": "Collecties",
+        "cancelBtn": "Annuleren",
+        "pushBtn": "Naar Nuvio sturen",
+        "pushBtnMulti": "Naar Nuvio sturen ({n} profielen)",
+        "selectAll": "Alles selecteren",
+        "selectNone": "Niets selecteren"
+      },
+      "qrCard": {
+        "title": "📱 Vanaf je telefoon sturen",
+        "desc": "Scan dit met de camera van je telefoon om rechtstreeks te versturen, zonder iets te typen.",
+        "showBtn": "QR-code tonen"
+      },
+      "token": {
+        "saveHint": "Jouw token — bewaar dit!",
+        "copyBtn": "Token kopiëren"
+      },
+      "registerEmail": {
+        "label": "📧 Registreer je e-mail",
+        "desc": "Zodat je je token kunt herstellen als je deze kwijtraakt. Nooit gebruikt voor marketing.",
+        "placeholder": "jouw@email.com",
+        "registerBtn": "Registreren"
+      },
+      "exports": {
+        "projectFile": "💾 Projectbestand",
+        "catalogCsv": "📊 Catalogus-CSV"
+      },
+      "back": "← Terug"
+    },
+    "nuvioPush": {
+      "missingFields": "Voer je Nuvio-e-mail en wachtwoord in.",
+      "generateFirst": "Genereer eerst je configuratie voordat je naar Nuvio stuurt.",
+      "loggingIn": "Bezig met inloggen...",
+      "selectProfiles": "Selecteer het/de profiel(en) om naartoe te sturen.",
+      "loginFailed": "Inloggen mislukt.",
+      "selectAtLeastOne": "Selecteer minimaal Catalogi of Collecties om te versturen.",
+      "selectAtLeastOneProfile": "Selecteer minimaal één profiel.",
+      "somethingWrong": "Er is iets misgegaan. Probeer het opnieuw."
+    },
+    "kidsPush": {
+      "allSlotsUsed": "Alle zes Nuvio-profielplekken zijn al in gebruik.",
+      "profileNotVerified": "Nuvio heeft de profielupdate geaccepteerd, maar het kinderprofiel kon niet worden geverifieerd.",
+      "notIsolated": "Het kinderprofiel bestaat, maar is niet geïsoleerd van het hoofdprofiel.",
+      "noKidsCollection": "De gegenereerde configuratie bevat niet de Ultra MAX Kinder-collectie.",
+      "generateFirst": "Genereer de kinderconfiguratie voordat je deze naar Nuvio stuurt.",
+      "confirmPrompt": "Een geïsoleerd Nuvio-kinderprofiel instellen?\n\nUltra MAX maakt of werkt het kinderprofiel bij, schakelt gedeelde addons en plug-ins uit, en vervangt vervolgens de addons en collecties van dat profiel door de beperkte kinderconfiguratie.\n\nEr wordt eerst een back-up van de bestaande kinder-addons en -collecties in deze browser opgeslagen.",
+      "cancelled": "Instellen van kinderprofiel geannuleerd. Er zijn geen wijzigingen aangebracht.",
+      "creatingProfile": "Geïsoleerd kinderprofiel wordt aangemaakt of gecontroleerd...",
+      "backingUp": "Back-up van huidig kinderprofiel wordt gemaakt...",
+      "addonNotVerified": "Het versturen van de kinderaddon is voltooid, maar de verificatie kwam niet overeen met het gegenereerde manifest.",
+      "installingAddon": "Beperkte Ultra MAX Kinder-addon wordt geïnstalleerd...",
+      "installingCollection": "Ultra MAX Kinder-collectie wordt geïnstalleerd...",
+      "collectionsNotVerified": "De kindercollecties zijn verstuurd, maar het verificatieresultaat kwam niet overeen.",
+      "verifying": "Kinderprofiel wordt geverifieerd...",
+      "ready": "Kinderprofiel gereed. Het is geïsoleerd en bevat alleen Ultra MAX Kinderen."
+    },
+    "playPlusBadge": {
+      "label": "PLAY+",
+      "title": "UltraPlay+ geverifieerd voor deze Ultra MAX-configuratie",
+      "aria": "UltraPlay Plus geverifieerd"
+    },
+    "landing": {
+      "n500CatalogsForNuvioStremio": "Meer dan 500 catalogi om je setup te bouwen"
+    }
+  }
+}
